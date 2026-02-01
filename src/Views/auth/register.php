@@ -1,5 +1,8 @@
+<?php use App\Core\Csrf; ?>
+
 <h1>Register</h1>
 <form method="POST" action="/register">
+    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
     <input type="text" name="username" placeholder="Username" required><br>
     <input type="email" name="email" placeholder="Email" required><br>
     <input type="password" name="password" placeholder="Password" required><br>

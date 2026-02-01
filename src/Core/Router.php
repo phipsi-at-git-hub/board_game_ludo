@@ -6,22 +6,23 @@ class Router
 {
     private array $routes = [];
 
-    public function get(string $path, array $handler): void
+    public function get(string $path, array $handler, array $middlewares = []): void
     {
-        $this->addRoute('GET', $path, $handler);
+        $this->addRoute('GET', $path, $handler, $middlewares);
     }
 
-    public function post(string $path, array $handler): void
+    public function post(string $path, array $handler, array $middlewares = []): void
     {
-        $this->addRoute('POST', $path, $handler);
+        $this->addRoute('POST', $path, $handler, $middlewares);
     }
 
-    private function addRoute(string $method, string $path, array $handler): void
+    private function addRoute(string $method, string $path, array $handler, array $middlewares = []): void
     {
         $this->routes[] = [
             'method' => $method,
             'path' => $this->normalize($path),
             'handler' => $handler,
+            'middlewares' => $middlewares, 
         ];
     }
 
@@ -40,6 +41,12 @@ class Router
 
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
+
+                // Execute Middlewar
+                foreach ($route['middlewares'] as $middleware) {
+                    $middleware();
+                }
+
                 [$class, $methodName] = $route['handler'];
                 (new $class())->$methodName(...$matches);
                 return;

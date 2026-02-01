@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Models\UserModel;
 
 class AuthController {
@@ -15,6 +16,11 @@ class AuthController {
     }
 
     public function login() {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -31,6 +37,11 @@ class AuthController {
     }
 
     public function register() {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+        
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
