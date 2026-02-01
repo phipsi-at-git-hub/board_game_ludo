@@ -1,0 +1,11 @@
+{
+  "name": "myproject/board-game-ludo",
+  "description": "Multiplayer Board Game Ludo with PHP & THREE.js",
+  "type": "project",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
