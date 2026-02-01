@@ -1,5 +1,5 @@
 # Base PHP-FPM Image
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
 # PHP Extensions
 RUN apt-get update && apt-get install -y \

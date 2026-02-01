@@ -5,7 +5,7 @@ services:
     build: .
     container_name: bgl-app
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
       - ./composer.json:/var/www/html/composer.json
       - ./vendor:/var/www/html/vendor
     working_dir: /var/www/html
