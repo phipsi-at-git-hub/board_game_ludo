@@ -20,9 +20,9 @@ class Middleware {
         }
     }
 
-    public static function csrf(array $request): void{
+    public static function csrf(array $request): void {
         $method = $_SERVER['REQUEST_METHOD'];
-        // POST, PUT, DELETE prüfen
+        // Check POST, PUT, DELETE
         if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
             $token = $request['_csrf_token'] ?? '';
             if (!Csrf::validate($token)) {
@@ -31,12 +31,4 @@ class Middleware {
             }
         }
     }
-    /*
-    public static function csrf(array $post_data): void {
-        if (!Csrf::validate($post_data['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-    }
-    */
 }
