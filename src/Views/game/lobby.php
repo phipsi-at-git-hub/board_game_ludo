@@ -1,3 +1,5 @@
+<?php use App\Core\Csrf; ?>
+
 <h1>🎮 Game Lobby</h1>
 
 <p>Welcome, <?= htmlspecialchars(\App\Core\Auth::user()->getUsername()) ?>!</p>
@@ -8,4 +10,7 @@
     <li><a href="/account">📜 Mein User Profil anzeigen</a></li>
 </ul>
 
-<p><a href="/logout">Logout</a></p>
+<form action="/logout" method="POST">
+    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+    <button type="submit">Logout</button>
+</form>

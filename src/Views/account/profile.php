@@ -2,7 +2,8 @@
 
 <h1>Account</h1>
 
-<form method="POST" action="/account/update">
+<form action="/account" method="POST">
+    <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
     <input type="text" name="username" value="<?= htmlspecialchars(Auth::user()->getUsername()) ?>" required><br>
     <input type="email" name="email" value="<?= htmlspecialchars(Auth::user()->getEmail()) ?>" required><br>
@@ -11,6 +12,7 @@
 
 <h2>Change Password</h2>
 <form method="POST" action="/account/password">
+    <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
     <input type="password" name="current_password" placeholder="Current password" required><br>
     <input type="password" name="new_password" placeholder="New password" required><br>
@@ -19,9 +21,10 @@
 </form>
 
 <h2>Danger Zone</h2>
-<form method="POST" action="/account/delete" onsubmit="return confirm('Are you sure? This cannot be undone.')">
+<form action="/account" method="POST" onsubmit="return confirm('Are you sure? This cannot be undone.')">
+    <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-    <button type="submit" style="color:red;">Delete Account</button>
+    <button type="submit">Delete Account</button>
 </form>
 
 <p><a href="/lobby">Back to Lobby</a></p>
