@@ -5,6 +5,7 @@
 <ul>
     <li><a href="/game/create">➕ Neues Spiel erstellen</a></li>
     <li><a href="/games">📜 Offene Spiele anzeigen</a></li>
+    <li><a href="/account">📜 Mein User Profil anzeigen</a></li>
 </ul>
 
 <p><a href="/logout">Logout</a></p>

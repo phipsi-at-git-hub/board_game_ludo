@@ -13,6 +13,7 @@ class UserModel {
     private string $email;
     private string $password_hash;
 
+    // Profile - Find profile by email
     public static function findByEmail(string $email): ?self {
         $db = Database::getInstance();
         $stmt = $db->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
@@ -24,6 +25,7 @@ class UserModel {
         return self::fromArray($data);
     }
 
+    // Profile - Create profile
     public static function create(string $username, string $email, string $password): self {
         $db = Database::getInstance();
         $id = self::generateUUID();
@@ -40,12 +42,97 @@ class UserModel {
         return self::findByEmail($email);
     }
 
+    // Profile - Update profile
+    public function updateProfile(string $username, string $email): void {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("UPDATE users SET username = :username, email = :email WHERE id = :id");
+        $stmt->execute([
+            'username' => $username, 
+            'email' => $email, 
+            'id' => $this->id,
+        ]);
+
+        $this->username = $username;
+        $this->email = $email;
+    }
+
+    // Profile - Delete profile
+    public function delete(): void {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("DELETE FROM users WHERE id = :id");
+        $stmt->execute([
+            'id' => $this->id
+        ]);
+    }
+
+    // Password - Verify user and password
     public static function verify(string $email, string $password): ?self {
         $user = self::findByEmail($email);
         if ($user && password_verify($password, $user->password_hash)) {
             return $user;
         }
         return null;
+    }
+
+    // Password - Verify password
+    public function verifyPassword(string $password): bool {
+        return password_verify($password, $this->password_hash);
+    }
+
+    // Password - Update password
+    public function updatePassword(string $new_password): void {
+        $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+        $db = Database::getInstance();
+        $stmt = $db->prepare("UPDATE users SET password_hash = :hash WHERE id = :id");
+        $stmt->execute([
+            'hash' => $password_hash, 
+            'id' => $this->id,
+        ]);
+
+        $this->password_hash = $password_hash;
+    }
+
+    // Reset password - Create reset token
+    public static function createPasswordResetToken(string $email): ?string {
+        $user = self::findByEmail($email);
+        if (!$user) {
+            return null;
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $expires_at = date('Y-m-d H:i:s', time() + 3600);
+
+        $db = Database::getInstance();
+        $stmt = $db->prepare("UPDATE users SET reset_token = :token, reset_token_expires_at = :expires WHERE id = :id");
+        $stmt->execute([
+            'token' => $token,
+            'expires' => $expires_at, 
+            'id' => $user->id,
+        ]);
+
+        return $token;
+    }
+
+    // Reset password - Find reset token
+    public static function findByResetToken(string $token): ?self {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1");
+        $stmt->execute([
+            'token' => $token, 
+        ]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) return null;
+        return self::fromArray($data);
+    }
+
+    // Reset password - Clear reset token
+    public function clearResetToken(): void {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("UPDATE users SET reset_token = NULL, reset_token_expires_at = NULL WHERE id = :id");
+        $stmt->execute([
+            'id' => $this->id, 
+        ]);
     }
 
     private static function fromArray(array $data): self {

@@ -7,6 +7,7 @@ use App\Core\Middleware;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\GameController;
+use App\Controllers\AccountController;
 
 $router = new Router();
 
@@ -21,6 +22,18 @@ $router->post('/register', [AuthController::class, 'register'], [fn() => Middlew
 
 // Logout: For logged in user only
 $router->get('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth()]);
+
+// Profile and Account
+$router->get('/account', [AccountController::class, 'profile'], [fn() => Middleware::auth()]);
+$router->post('/account/update', [AccountController::class, 'updateProfile'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->post('/account/password', [AccountController::class, 'changePassword'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->post('/account/delete', [AccountController::class, 'deleteAccount'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+
+// Password - Forgot password and reset
+$router->get('/forgot-password', [AccountController::class, 'showForgotPassword'], [fn() => Middleware::guest()]);
+$router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
+$router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
+$router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
 
 // Game - Lobby
 $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
