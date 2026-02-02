@@ -9,3 +9,4 @@
     <button type="submit">Login</button>
 </form>
 <p>No account? <a href="/register">Register</a></p>
+<p>Forgot your password? <a href="/forgot-password">Request Reset Token</a></p>

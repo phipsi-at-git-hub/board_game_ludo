@@ -72,7 +72,7 @@ class AccountController {
 
     // Reset password - Reset form
     public function showResetForm(string $token) {
-        require __DIR__ . '/../Views/account/reset-password.php';
+        require __DIR__ . '/../Views/account/reset_password.php';
     }
 
     // Reset password - reset password

@@ -6,15 +6,19 @@ use App\Models\UserModel;
 
 class Auth {
     public static function user(): ?UserModel {
-        return $_SESSION['user'] ?? null;
+        if (!self::check()) {
+            return null;
+        }
+
+        return UserModel::findById($_SESSION['user_id']);
     }
 
     public static function check(): bool {
-        return isset($_SESSION['user']);
+        return isset($_SESSION['user_id']);
     }
 
     public static function login(UserModel $user): void {
-        $_SESSION['user'] = $user;
+        $_SESSION['user_id'] = $user->getId();
     }
 
     public static function logout(): void {
