@@ -2,22 +2,18 @@
 // Router.php
 namespace App\Core;
 
-class Router
-{
+class Router {
     private array $routes = [];
 
-    public function get(string $path, array $handler, array $middlewares = []): void
-    {
+    public function get(string $path, array $handler, array $middlewares = []): void {
         $this->addRoute('GET', $path, $handler, $middlewares);
     }
 
-    public function post(string $path, array $handler, array $middlewares = []): void
-    {
+    public function post(string $path, array $handler, array $middlewares = []): void {
         $this->addRoute('POST', $path, $handler, $middlewares);
     }
 
-    private function addRoute(string $method, string $path, array $handler, array $middlewares = []): void
-    {
+    private function addRoute(string $method, string $path, array $handler, array $middlewares = []): void {
         $this->routes[] = [
             'method' => $method,
             'path' => $this->normalize($path),
@@ -26,8 +22,7 @@ class Router
         ];
     }
 
-    public function dispatch(string $uri, string $method): void
-    {
+    public function dispatch(string $uri, string $method): void {
         $uri = parse_url($uri, PHP_URL_PATH);
         $uri = $this->normalize($uri);
 
@@ -42,7 +37,7 @@ class Router
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches);
 
-                // Execute Middlewar
+                // Execute Middleware
                 foreach ($route['middlewares'] as $middleware) {
                     $middleware();
                 }
@@ -57,8 +52,7 @@ class Router
         echo "404 Not Found";
     }
 
-    private function normalize(string $path): string
-    {
+    private function normalize(string $path): string {
         $path = '/' . trim($path, '/');
         return $path === '//' ? '/' : $path;
     }
