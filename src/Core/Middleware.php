@@ -20,6 +20,13 @@ class Middleware {
         }
     }
 
+    public static function admin(): void {
+        if (!Auth::check() || !Auth::user()->isAdmin()) {
+            http_response_code(403);
+            die('Access denied');
+        }
+    }
+
     public static function csrf(array $request): void {
         $method = $_SERVER['REQUEST_METHOD'];
         // Check POST, PUT, DELETE

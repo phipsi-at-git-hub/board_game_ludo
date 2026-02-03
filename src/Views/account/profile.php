@@ -27,4 +27,4 @@
     <button type="submit">Delete Account</button>
 </form>
 
-<p><a href="/lobby">Back to Lobby</a></p>
+<p><a href="/menu">Back to Main Menu</a></p>

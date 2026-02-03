@@ -10,9 +10,14 @@ class GameController {
         require __DIR__ . '/../Views/game/lobby.php';
     }
 
-    public function create() {
+    public function store() {
         // Create a new game via POST
         echo 'Game created';
+    }
+
+    public function show(string $game_id) {
+        // View aa existing game
+        echo 'Viewing game: ' . htmlspecialchars($game_id);
     }
 
     public function join(string $game_id) {
@@ -20,8 +25,9 @@ class GameController {
         echo 'Joining game: ' . htmlspecialchars($game_id);
     }
 
-    public function view(string $game_id) {
-        // View aa existing game
-        echo 'Viewing game: ' . htmlspecialchars($game_id);
-    }
+    public function leave(string $game_id) {}
+
+    public function start (string $game_id) {}
+
+    public function destroy(string $game_id) {}
 }

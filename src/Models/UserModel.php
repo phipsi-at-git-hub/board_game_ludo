@@ -11,6 +11,7 @@ class UserModel extends BaseModel {
     private string $last_name;
     private string $email;
     private string $password_hash;
+    private string $role;
     private ?string $reset_token = null;
     private ?string $reset_expires_at = null;
 
@@ -38,15 +39,6 @@ class UserModel extends BaseModel {
         );
 
         return $row ? self::fromArray($row) : null;
-        /*
-        $stmt = $db->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
-        $stmt->execute(['email' => $email]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$data) return null;
-
-        return self::fromArray($data);
-        */
     }
 
     // Profile - Create profile
@@ -66,18 +58,6 @@ class UserModel extends BaseModel {
         );
 
         return self::findByEmail($email);
-
-        /*
-        $stmt = $db->prepare("INSERT INTO users (id, username, email, password_hash) VALUES (:id, :username, :email, :password_hash)");
-        $stmt->execute([
-            'id' => $id, 
-            'username' => $username, 
-            'email' => $email, 
-            'password_hash' => $hash, 
-        ]);
-
-        return self::findByEmail($email);
-        */
     }
 
     // Profile - Update profile
@@ -93,18 +73,6 @@ class UserModel extends BaseModel {
                 'id' => $this->id,
             ]
         );
-        /*
-        $db = Database::getInstance();
-        $stmt = $db->prepare("UPDATE users SET username = :username, email = :email WHERE id = :id");
-        $stmt->execute([
-            'username' => $username, 
-            'email' => $email, 
-            'id' => $this->id,
-        ]);
-
-        $this->username = $username;
-        $this->email = $email;
-        */
     }
 
     // Profile - Delete profile
@@ -115,13 +83,6 @@ class UserModel extends BaseModel {
                 'id' => $this->id
             ]
         );
-        /*
-        $db = Database::getInstance();
-        $stmt = $db->prepare("DELETE FROM users WHERE id = :id");
-        $stmt->execute([
-            'id' => $this->id
-        ]);
-        */
     }
 
     // Password - Verify user and password
@@ -184,16 +145,6 @@ class UserModel extends BaseModel {
         );
 
         return $row ? self::fromArray($row) : null;
-        /*
-        $stmt = $db->prepare("SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1");
-        $stmt->execute([
-            'token' => $token, 
-        ]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$data) return null;
-        return self::fromArray($data);
-        */
     }
 
     // Reset password - Clear reset token
@@ -207,13 +158,6 @@ class UserModel extends BaseModel {
                 'id' => $this->id
             ]
         );
-        /*
-        $db = Database::getInstance();
-        $stmt = $db->prepare("UPDATE users SET reset_token = NULL, reset_token_expires_at = NULL WHERE id = :id");
-        $stmt->execute([
-            'id' => $this->id, 
-        ]);
-        */
     }
 
     private static function fromArray(array $data): self {
@@ -222,6 +166,7 @@ class UserModel extends BaseModel {
         $user->username = $data['username'];
         $user->email = $data['email'];
         $user->password_hash = $data['password_hash'];
+        $user->role = $data['role'] ?? 'user';
         return $user;
     }
 
@@ -236,43 +181,38 @@ class UserModel extends BaseModel {
         );
     }
 
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
+    // Get the value of id 
+    public function getId(): string {
         return $this->id;
     }
 
-    /**
-     * Get the value of username
-     */ 
-    public function getUsername()
-    {
+    // Get the value of username 
+    public function getUsername(): string {
         return $this->username;
     }
 
-    /**
-     * Get the value of first_name
-     */ 
-    public function getFirst_name()
-    {
+    // Get the value of first_name
+    public function getFirst_name(): string {
         return $this->first_name;
     }
 
-    /**
-     * Get the value of last_name
-     */ 
-    public function getLast_name()
-    {
+    // Get the value of last_name
+    public function getLast_name(): string {
         return $this->last_name;
     }
 
-    /**
-     * Get the value of email
-     */ 
-    public function getEmail()
-    {
+    // Get the value of email
+    public function getEmail(): string {
         return $this->email;
+    }
+
+    // Get the value of role
+    public function getRole(): string {
+        return $this->role;
+    }
+
+    // Check if User is Admin
+    public function isAdmin(): bool {
+        return $this->role === 'admin';
     }
 }

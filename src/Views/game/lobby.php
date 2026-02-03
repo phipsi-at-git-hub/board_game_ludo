@@ -5,12 +5,7 @@
 <p>Welcome, <?= htmlspecialchars(\App\Core\Auth::user()->getUsername()) ?>!</p>
 
 <ul>
-    <li><a href="/game/create">➕ Neues Spiel erstellen</a></li>
-    <li><a href="/games">📜 Offene Spiele anzeigen</a></li>
-    <li><a href="/account">📜 Mein User Profil anzeigen</a></li>
+    <li><a href="/game/create">➕ Create new Game</a></li>
+    <li><a href="/games">📜 Show open Games</a></li>
+    <li><a href="/menu">Back to Main Menu</a></li>
 </ul>
-
-<form action="/logout" method="POST">
-    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-    <button type="submit">Logout</button>
-</form>

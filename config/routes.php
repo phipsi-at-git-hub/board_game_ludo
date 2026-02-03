@@ -8,6 +8,7 @@ use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\GameController;
 use App\Controllers\AccountController;
+use App\Controllers\MenuController;
 
 $router = new Router();
 
@@ -19,7 +20,7 @@ $router->get('/login', [AuthController::class, 'showLogin'], [fn() => Middleware
 $router->post('/login', [AuthController::class, 'login'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
 $router->get('/register', [AuthController::class, 'showRegister'], [fn() => Middleware::guest()]);
 $router->post('/register', [AuthController::class, 'register'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
-$router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth()]); // jetzt POST statt GET
+$router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
 // Account & Profile
 $router->get('/account', [AccountController::class, 'profile'], [fn() => Middleware::auth()]);
@@ -33,16 +34,29 @@ $router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [
 $router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
 $router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
 
+// Main menu
+$router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
+
 // Game - Lobby
 $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
 
-// Game - CRUD
-$router->get('/game/create', [GameController::class, 'create'], [fn() => Middleware::auth()]);
-$router->post('/game', [GameController::class, 'create'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+// Game - Games
+$router->post('/games', [GameController::class, 'store'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->get('/games/{id}', [GameController::class, 'show'], [fn() => Middleware::auth()]);
+$router->delete('/games/{id}', [GameController::class, 'destroy'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
-$router->get('/game/{id}', [GameController::class, 'view'], [fn() => Middleware::auth()]);
-$router->post('/game/{id}/join', [GameController::class, 'join'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-$router->put('/game/{id}', [GameController::class, 'update'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-$router->delete('/game/{id}', [GameController::class, 'delete'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+// Games - Player actions
+$router->post('/games/{id}/join', [GameController::class, 'join'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->post('/games/{id}/leave', [GameController::class, 'leave'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->post('/games/{id}/start', [GameController::class, 'start'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+
+// Game - CRUD
+//$router->get('/game/create', [GameController::class, 'create'], [fn() => Middleware::auth()]);
+//$router->post('/game', [GameController::class, 'create'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+
+//$router->get('/game/{id}', [GameController::class, 'view'], [fn() => Middleware::auth()]);
+//$router->post('/game/{id}/join', [GameController::class, 'join'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+//$router->put('/game/{id}', [GameController::class, 'update'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+//$router->delete('/game/{id}', [GameController::class, 'delete'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
 return $router;

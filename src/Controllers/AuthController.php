@@ -28,7 +28,7 @@ class AuthController {
 
         if ($user) {
             Auth::login($user);
-            header('Location: /lobby');
+            header('Location: /menu');
             exit;
         }
 
