@@ -12,42 +12,44 @@ class UserModel extends BaseModel {
     private string $email;
     private string $password_hash;
     private string $role;
+    private string $created_at;
+    private string $updated_at;
     private ?string $reset_token = null;
     private ?string $reset_expires_at = null;
 
     // Profile - Find profile by id (UUID)
     public static function findById(string $id): ?self {
-        $db = Database::getInstance();
-        $row = $db->fetch(
+        $row = static::fetchOne(
             "SELECT * FROM users WHERE id = :id LIMIT 1", 
             [
                 'id' => $id
             ]
         );
-
-        return $row ? self::fromArray($row) : null;
+        return $row ? static::fromArray($row) : null;
     }
 
     // Profile - Find profile by email
     public static function findByEmail(string $email): ?self {
-        $db = Database::getInstance();
-        $row = $db->fetch(
+        $row = static::fetchOne(
             "SELECT * FROM users WHERE email = :email LIMIT 1", 
             [
                 'email' => $email
             ]
         );
+        return $row ? static::fromArray($row) : null;
+    }
 
-        return $row ? self::fromArray($row) : null;
+    // Profile - Get all users
+    public static function all(): array {
+        $rows = static::fetchAll("SELECT * FROM users ORDER BY created_at DESC");
+        return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
     // Profile - Create profile
     public static function create(string $username, string $email, string $password): self {
-        $db = Database::getInstance();
         $id = self::generateUUID();
         $hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $db->execute(
+        static::execute(
             "INSERT INTO users (id, username, email, password_hash) VALUES (:id, :username, :email, :password_hash)", 
             [
                 'id' => $id, 
@@ -56,7 +58,6 @@ class UserModel extends BaseModel {
                 'password_hash' => $hash, 
             ]
         );
-
         return self::findByEmail($email);
     }
 
@@ -65,7 +66,7 @@ class UserModel extends BaseModel {
         $this->username = $username;
         $this->email = $email;
 
-        return $this->db->execute(
+        return static::execute(
             "UPDATE users SET username = :username, email = :email WHERE id = :id", 
             [
                 'username' => $username, 
@@ -77,7 +78,7 @@ class UserModel extends BaseModel {
 
     // Profile - Delete profile
     public function delete(): bool {
-        return $this->db->execute(
+        return static::execute(
             "DELETE FROM users WHERE id = :id", 
             [
                 'id' => $this->id
@@ -102,7 +103,7 @@ class UserModel extends BaseModel {
     // Password - Update password
     public function updatePassword(string $new_password): bool {
         $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
-        return $this->db->execute(
+        return static::execute(
             "UPDATE users SET password_hash = :hash WHERE id = :id", 
             [
                 'hash' => $password_hash, 
@@ -120,9 +121,8 @@ class UserModel extends BaseModel {
 
         $token = bin2hex(random_bytes(32));
         $expires_at = date('Y-m-d H:i:s', time() + 3600);
-
         
-        $user->db->execute(
+        static::execute(
             "UPDATE users SET reset_token = :token, reset_token_expires_at = :expires WHERE id = :id", 
             [
                 'token' => $token,
@@ -130,20 +130,18 @@ class UserModel extends BaseModel {
                 'id' => $user->id,
             ]
         );
-
         return $token;
     }
 
     // Reset password - Find reset token
     public static function findByResetToken(string $token): ?self {
         $db = Database::getInstance();
-        $row = $db->fetch(
+        $row = static::fetchOne(
             "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1", 
             [
                 'token' => $token
             ]
         );
-
         return $row ? self::fromArray($row) : null;
     }
 
@@ -152,7 +150,7 @@ class UserModel extends BaseModel {
         $this->reset_token = null;
         $this->reset_expires_at = null;
 
-        return $this->db->execute(
+        return static::execute(
             "UPDATE users SET reset_token = NULL, reset_token_expires_at = NULL WHERE id = :id", 
             [
                 'id' => $this->id
@@ -167,6 +165,8 @@ class UserModel extends BaseModel {
         $user->email = $data['email'];
         $user->password_hash = $data['password_hash'];
         $user->role = $data['role'] ?? 'user';
+        $user->created_at = $data['created_at'];
+        $user->updated_at = $data['updated_at'];
         return $user;
     }
 
@@ -214,5 +214,25 @@ class UserModel extends BaseModel {
     // Check if User is Admin
     public function isAdmin(): bool {
         return $this->role === 'admin';
+    }
+
+    // Check if User is Moderator
+    public function isModerator(): bool {
+        return $this->role === 'moderator';
+    }
+
+    // Check if User is Game Master
+    public function isGameMaster(): bool {
+        return $this->role === 'game_master';
+    }
+
+     // Get the value of created_at
+    public function getCreated_at() {
+        return $this->created_at;
+    }
+
+    // Get the value of updated_at
+    public function getUpdated_at() {
+        return $this->updated_at;
     }
 }

@@ -9,6 +9,7 @@ use App\Controllers\HomeController;
 use App\Controllers\GameController;
 use App\Controllers\AccountController;
 use App\Controllers\MenuController;
+use App\Controllers\AdminController;
 
 $router = new Router();
 
@@ -34,6 +35,40 @@ $router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [
 $router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
 $router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
 
+// Admin 
+$router->group('/admin', function($admin) {
+
+    // Dashboard
+    $admin->get('/', [AdminController::class, 'dashboard']);
+
+    // --- Users ---
+    $admin->get('/users', [AdminController::class, 'listUsers']);
+    $admin->delete('/users/{id}', [AdminController::class, 'deleteUser']);
+    $admin->get('/users/edit/{id}', [AdminController::class, 'editUser']);
+    $admin->post('/users/edit/{id}', [AdminController::class, 'updateUser']);
+
+    // --- Games ---
+    $admin->get('/games', [AdminController::class, 'listGames']);
+    $admin->get('/games/create', [AdminController::class, 'createGame']);
+    $admin->post('/games/create', [AdminController::class, 'createGame']);
+    $admin->get('/games/edit/{id}', [AdminController::class, 'editGame']);
+    $admin->post('/games/edit/{id}', [AdminController::class, 'updateGame']);
+    $admin->delete('/games/{id}', [AdminController::class, 'deleteGame']);
+
+}, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
+/*
+$router->group('/admin', fn($router) => [
+    // Dashboard
+    $router->get('/', [AdminController::class, 'dashboard']),
+
+    // User-Administration
+    $router->get('/users', [AdminController::class, 'listUsers']),
+    $router->delete('/users/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf($_POST)]),
+    $router->get('/users/edit/{id}', [AdminController::class, 'editUser']),
+    $router->post('/users/edit/{id}', [AdminController::class, 'updateUser'], [fn() => Middleware::csrf($_POST)]),
+], [fn() => Middleware::admin()]);
+*/
+
 // Main menu
 $router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
 
@@ -49,14 +84,5 @@ $router->delete('/games/{id}', [GameController::class, 'destroy'], [fn() => Midd
 $router->post('/games/{id}/join', [GameController::class, 'join'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 $router->post('/games/{id}/leave', [GameController::class, 'leave'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 $router->post('/games/{id}/start', [GameController::class, 'start'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-
-// Game - CRUD
-//$router->get('/game/create', [GameController::class, 'create'], [fn() => Middleware::auth()]);
-//$router->post('/game', [GameController::class, 'create'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-
-//$router->get('/game/{id}', [GameController::class, 'view'], [fn() => Middleware::auth()]);
-//$router->post('/game/{id}/join', [GameController::class, 'join'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-//$router->put('/game/{id}', [GameController::class, 'update'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
-//$router->delete('/game/{id}', [GameController::class, 'delete'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
 return $router;

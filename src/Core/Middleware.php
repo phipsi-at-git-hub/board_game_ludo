@@ -20,8 +20,31 @@ class Middleware {
         }
     }
 
+    public static function anyRole(array $roles): void {
+        $user = Auth::user();
+
+        if (!$user || !in_array($user->getRole(), $roles, true)) {
+            http_response_code(403);
+            die('Access denied');
+        }
+    }
+
     public static function admin(): void {
         if (!Auth::check() || !Auth::user()->isAdmin()) {
+            http_response_code(403);
+            die('Access denied');
+        }
+    }
+
+    public static function moderator(): void {
+        if (!Auth::check() || !Auth::user()->isModerator()) {
+            http_response_code(403);
+            die('Access denied');
+        }
+    }
+
+    public static function gameMaster(): void {
+        if (!Auth::check() || !Auth::user()->isGameMaster()) {
             http_response_code(403);
             die('Access denied');
         }
