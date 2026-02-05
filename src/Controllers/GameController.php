@@ -5,6 +5,11 @@ namespace App\Controllers;
 use App\Core\Auth;
 
 class GameController {
+    public function single() {
+        // View aa existing game
+        echo 'Single';
+    }
+
     public function lobby() {
         // Only for logged in users (secured through middleware)
         require __DIR__ . '/../Views/game/lobby.php';

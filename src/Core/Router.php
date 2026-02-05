@@ -77,7 +77,8 @@ class Router {
         $routeFound = false;
         foreach ($this->routes[$method] ?? [] as $path => $route) {
             $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $path);
-            $pattern = "#^" . $pattern . "$#";
+            //$pattern = "#^" . $pattern . "$#";
+            $pattern = "#^" . rtrim($pattern, '/') . "/?$#";
 
             if (preg_match($pattern, $uri, $matches)) {
                 array_shift($matches); 
@@ -93,7 +94,7 @@ class Router {
                 if (is_array($action)) {
                     [$controllerClass, $methodName] = $action;
                     $controller = new $controllerClass();
-                    $controller->$methodName(...$matches); // Variablen übergeben
+                    $controller->$methodName(...$matches); 
                 } else {
                     $action(...$matches);
                 }

@@ -1,0 +1,41 @@
+; php.ini.prod - Production configuration
+
+; ----------------------
+; Display & error reporting
+; ----------------------
+display_errors = Off
+display_startup_errors = Off
+error_reporting = E_ALL & ~E_NOTICE & ~E_DEPRECATED
+log_errors = On
+error_log = /var/log/php/error.log
+
+; ----------------------
+; Sessions
+; ----------------------
+session.use_strict_mode = 1
+session.use_cookies = 1
+session.use_only_cookies = 1
+session.cookie_httponly = 1
+session.cookie_secure = 1
+session.cookie_samesite = "Strict"
+
+; ----------------------
+; Opcache
+; ----------------------
+opcache.enable = 1
+opcache.enable_cli = 0
+opcache.validate_timestamps = 0
+opcache.revalidate_freq = 60
+opcache.memory_consumption = 128
+opcache.interned_strings_buffer = 16
+opcache.max_accelerated_files = 10000
+opcache.save_comments = 1
+opcache.fast_shutdown = 1
+
+; ----------------------
+; Other recommended settings
+; ----------------------
+max_execution_time = 30
+memory_limit = 256M
+upload_max_filesize = 10M
+post_max_size = 12M

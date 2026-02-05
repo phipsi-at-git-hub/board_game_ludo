@@ -1,0 +1,10 @@
+; Common settings
+display_errors = On
+display_startup_errors = On
+error_reporting = E_ALL
+
+; Opcache
+opcache.enable=0
+opcache.enable_cli=1
+opcache.validate_timestamps=1
+opcache.revalidate_freq=0
