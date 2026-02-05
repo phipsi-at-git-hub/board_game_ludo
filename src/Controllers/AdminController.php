@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Core\Middleware;
 use App\Core\Csrf;
+use App\Domain\UserRole;
+use App\Domain\GameStatus;
 use App\Models\UserModel;
 use App\Models\GameModel;
 
@@ -17,11 +19,11 @@ class AdminController {
     public function dashboard(): void {
         $stats = [
             'users_total' => UserModel::countAll(), 
-            'admins_total' => UserModel::countByRole('admin'), 
+            'admins_total' => UserModel::countByRole(UserRole::ADMIN), 
             'games_total' => GameModel::countAll(), 
-            'games_waiting' => GameModel::countByStatus('waiting'), 
-            'games_active' => GameModel::countByStatus('active'), 
-            'games_finished' => GameModel::countByStatus('finished'), 
+            'games_waiting' => GameModel::countByStatus(GameStatus::WAITING), 
+            'games_active' => GameModel::countByStatus(GameStatus::ACTIVE), 
+            'games_finished' => GameModel::countByStatus(GameStatus::FINISHED), 
         ];
         require __DIR__ . '/../Views/admin/dashboard.php';
     }

@@ -67,6 +67,7 @@ class AccountController {
         $token = UserModel::createPasswordResetToken($email);
 
         // Send Email for password reset
+        // ToDo
         echo "Reset link: http://localhost:8080/reset_password.php/$token";
     }
 
