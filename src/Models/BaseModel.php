@@ -27,6 +27,12 @@ abstract class BaseModel {
         $stmt = static::db()->prepare($sql);
         return $stmt->execute($params);
     }
+
+    protected static function count(string $sql, array $params = []): int {
+        $stmt = static::db()->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
     /*
     protected Database $db;
 

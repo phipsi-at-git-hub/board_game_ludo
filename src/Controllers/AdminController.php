@@ -15,6 +15,14 @@ class AdminController {
 
     // Dashboard
     public function dashboard(): void {
+        $stats = [
+            'users_total' => UserModel::countAll(), 
+            'admins_total' => UserModel::countByRole('admin'), 
+            'games_total' => GameModel::countAll(), 
+            'games_waiting' => GameModel::countByStatus('waiting'), 
+            'games_active' => GameModel::countByStatus('active'), 
+            'games_finished' => GameModel::countByStatus('finished'), 
+        ];
         require __DIR__ . '/../Views/admin/dashboard.php';
     }
 

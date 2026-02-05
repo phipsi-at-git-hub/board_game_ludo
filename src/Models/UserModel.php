@@ -17,7 +17,7 @@ class UserModel extends BaseModel {
     private ?string $reset_token = null;
     private ?string $reset_expires_at = null;
 
-    // Profile - Find profile by id (UUID)
+    // User - Find user by id (UUID)
     public static function findById(string $id): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE id = :id LIMIT 1", 
@@ -28,7 +28,7 @@ class UserModel extends BaseModel {
         return $row ? static::fromArray($row) : null;
     }
 
-    // Profile - Find profile by email
+    // User - Find user by email
     public static function findByEmail(string $email): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE email = :email LIMIT 1", 
@@ -39,13 +39,26 @@ class UserModel extends BaseModel {
         return $row ? static::fromArray($row) : null;
     }
 
-    // Profile - Get all users
+    // User - Get all users
     public static function all(): array {
         $rows = static::fetchAll("SELECT * FROM users ORDER BY created_at DESC");
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
-    // Profile - Create profile
+    // User - Count all users
+    public static function countAll(): int {
+        return static::count("SELECT COUNT(*) FROM users");
+    }
+
+    // User - Count all users with specific role
+    public static function countByRole(string $role): int {
+        return static::count(
+            "SELECT COUNT(*) FROM users WHERE role = :role",
+            ['role' => $role]
+        );
+    }
+
+    // User - Create user
     public static function create(string $username, string $email, string $password): self {
         $id = self::generateUUID();
         $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -61,7 +74,7 @@ class UserModel extends BaseModel {
         return self::findByEmail($email);
     }
 
-    // Profile - Update profile
+    // User - Update user
     public function updateProfile(string $username, string $email): bool {
         $this->username = $username;
         $this->email = $email;
@@ -76,7 +89,7 @@ class UserModel extends BaseModel {
         );
     }
 
-    // Profile - Delete profile
+    // User - Delete user
     public function delete(): bool {
         return static::execute(
             "DELETE FROM users WHERE id = :id", 

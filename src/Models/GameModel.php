@@ -26,6 +26,19 @@ class GameModel extends BaseModel {
         return $row ? self::fromArray($row) : null;
     }
 
+    // Games - Count all games
+    public static function countAll() : int {
+        return static::count("SELECT COUNT(*) FROM games");
+    }
+
+    // Games - Count all games with specific status
+    public static function countByStatus(string $status): int {
+        return static::count(
+            "SELECT COUNT(*) FROM games WHERE status = :status",
+            ['status' => $status]
+        );
+    }
+
     // Games - Create new game
     public static function create(string $name, string $status = 'waiting'): self {
         $game_id = self::generateUUID();
