@@ -49,7 +49,7 @@ class AuthController {
         $user = UserModel::create($username, $email, $password);
         Auth::login($user);
 
-        header('Location: /');
+        header('Location: /menu');
         exit;
     }
 

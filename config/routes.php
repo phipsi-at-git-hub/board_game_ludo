@@ -1,5 +1,5 @@
 <?php
-// routes.php
+// config/routes.php
 // Routes Config
 
 use App\Core\Router;
@@ -26,7 +26,8 @@ $router->post('/reset-password/{token}', [AccountController::class, 'resetPasswo
 // --- Authenticated routes ---
 $router->get('/', [HomeController::class, 'index'], [fn() => Middleware::auth()]);
 $router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
-$router->get('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth()]);
+//$router->get('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth()]);
+$router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
 $router->group('/account', function($group) {
     $group->get('', [AccountController::class, 'profile']);

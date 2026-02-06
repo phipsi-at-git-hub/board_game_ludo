@@ -4,6 +4,10 @@
 // 1. Paths
 require __DIR__ . '/paths.php';
 
+// 1.1
+use App\Core\Env;
+Env::get();
+
 // 2. Composer Autoload
 require BASE_PATH . '/vendor/autoload.php';
 

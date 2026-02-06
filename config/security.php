@@ -1,5 +1,5 @@
 <?php
-// security.php
+// config/security.php
 
 // Security settings
 if (session_status() === PHP_SESSION_NONE) {
