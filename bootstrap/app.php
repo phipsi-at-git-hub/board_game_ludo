@@ -5,6 +5,7 @@
 require __DIR__ . '/paths.php';
 
 // 1.1
+use App\Core\Debug;
 use App\Core\Env;
 Env::get();
 
@@ -19,14 +20,21 @@ $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->load();
 
 // 4. Set error reporting based on environment
-if ($_ENV['APP_ENV'] === 'development') {
+//if ($_ENV['APP_ENV'] === 'development') {
+if (Env::isDev()) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    // Add Debug in DEV
+    Debug::start();
 } else {
     ini_set('display_errors', 0);
     error_reporting(0);
 }
+
+// 4.1 Load helpers
+require BASE_PATH . '/src/Core/helpers.php';
 
 // 5. Load Localization
 Localization::load(TRANSLATIONS_PATH, 'en-us');

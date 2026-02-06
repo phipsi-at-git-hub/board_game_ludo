@@ -2,6 +2,8 @@
 // Router.php
 namespace App\Core;
 
+use \App\Core\Debug;
+
 class Router {
     private array $routes = [];
 
@@ -95,12 +97,23 @@ class Router {
                     [$controllerClass, $methodName] = $action;
                     $controller = new $controllerClass();
                     $controller->$methodName(...$matches); 
+
+                    // Debug in DEV
+                    Debug::setRoute($method, $path, get_class($controller) . '@' . $methodName, $route['middleware']);
                 } else {
                     $action(...$matches);
+
+                    // Debug in DEV
+                    Debug::setRoute($method, $path, 'Closure', $route['middleware']);
                 }
 
                 break;
             }
+
+            // Debug in DEV
+            Debug::set('route', $path);
+            Debug::set('method', $method);
+            Debug::set('uri', $uri);
         }
 
         if (!$routeFound) {

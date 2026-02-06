@@ -20,3 +20,7 @@ use App\Core\Router;
 //$router = require CONFIG_PATH . '/routes.php';
 $router = require BASE_PATH . '/bootstrap/routes.php';
 $router->dispatch();
+
+// 6. Debug in DEV
+use App\Core\Debug;
+Debug::render();

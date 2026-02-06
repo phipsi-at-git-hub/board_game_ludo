@@ -53,7 +53,7 @@ $router->group('/admin', function($group) {
     $group->get('/users/edit/{id}', [AdminController::class, 'editUser']);
     $group->post('/users/edit/{id}', [AdminController::class, 'updateUser'], [fn() => Middleware::csrf($_POST)]);
     $group->delete('/users/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf($_POST)]);
-    $group->get('/games', [AdminController::class, 'listGames']);
+    $group->get('/games/list', [AdminController::class, 'listGames']);
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 return $router;
 
