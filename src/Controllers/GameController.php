@@ -6,7 +6,6 @@ use App\Core\Auth;
 
 class GameController {
     public function single() {
-        // View aa existing game
         echo 'Single';
     }
 
@@ -30,9 +29,15 @@ class GameController {
         echo 'Joining game: ' . htmlspecialchars($game_id);
     }
 
-    public function leave(string $game_id) {}
+    public function leave(string $game_id) {
+        echo 'leave';
+    }
 
-    public function start (string $game_id) {}
+    public function start (string $game_id) {
+        echo 'Start';
+    }
 
-    public function destroy(string $game_id) {}
+    public function destroy(string $game_id) {
+        echo 'destroy';
+    }
 }

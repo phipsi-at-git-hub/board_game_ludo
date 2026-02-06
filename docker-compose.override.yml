@@ -1,0 +1,10 @@
+services:
+  app:
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: dev
+
+  web:
+    volumes:
+      - ./public:/var/www/html/public
