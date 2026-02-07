@@ -3,6 +3,10 @@
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Domain\Game\Game;
+use App\Domain\Game\Rules\GameRules;
+use InvalidArgumentException;
+use Throwable;
 
 class GameController {
     public function single() {
@@ -12,6 +16,21 @@ class GameController {
     public function lobby() {
         // Only for logged in users (secured through middleware)
         require __DIR__ . '/../Views/game/lobby.php';
+    }
+
+    public function create() {
+        echo "create";
+        try {
+            $rules = new GameRules($_POST);
+            $game = Game::create($rules);
+
+            // ToDo - persist game (Session / DB)
+            flash('success', 'Game created successfully');
+            redirect('/game/' .  $game->getId());
+        } catch (Throwable $e) {
+            flash('error', $e->getMessage());
+            back();
+        }
     }
 
     public function store() {
@@ -33,7 +52,7 @@ class GameController {
         echo 'leave';
     }
 
-    public function start (string $game_id) {
+    public function start(string $game_id) {
         echo 'Start';
     }
 

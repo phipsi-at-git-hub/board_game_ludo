@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Core\Middleware;
 use App\Core\Csrf;
 use App\Domain\UserRole;
-use App\Domain\GameStatus;
+use App\Domain\Game\GameStatus;
 use App\Models\UserModel;
 use App\Models\GameModel;
 

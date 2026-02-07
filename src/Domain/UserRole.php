@@ -1,5 +1,5 @@
 <?php
-// UserRole.php
+// src/Domain/UserRole.php
 namespace App\Domain;
 
 final class UserRole {

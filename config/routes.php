@@ -26,7 +26,6 @@ $router->post('/reset-password/{token}', [AccountController::class, 'resetPasswo
 // --- Authenticated routes ---
 $router->get('/', [HomeController::class, 'index'], [fn() => Middleware::auth()]);
 $router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
-//$router->get('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth()]);
 $router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
 
 $router->group('/account', function($group) {
@@ -40,9 +39,9 @@ $router->group('/account', function($group) {
 $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
 $router->group('/game', function($group) {
     $group->get('/single', [GameController::class, 'single']);
-    $group->get('/create', [GameController::class, 'start']);
-    $group->post('/create', [GameController::class, 'start'], [fn() => Middleware::csrf($_POST)]);
-    $group->get('/{id}', [GameController::class, 'view']);
+    $group->get('/create', [GameController::class, 'create']);
+    $group->post('/create', [GameController::class, 'store'], [fn() => Middleware::csrf($_POST)]);
+    $group->get('/{id}', [GameController::class, 'show']);
     $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf($_POST)]);
 }, [fn() => Middleware::auth()]);
 

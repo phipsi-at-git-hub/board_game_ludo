@@ -78,7 +78,8 @@ class Router {
 
         $routeFound = false;
         foreach ($this->routes[$method] ?? [] as $path => $route) {
-            $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $path);
+            //$pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $path);
+            $pattern = preg_replace('#\{id\}#', '([0-9a-f]{32})', $path);
             //$pattern = "#^" . $pattern . "$#";
             $pattern = "#^" . rtrim($pattern, '/') . "/?$#";
 
