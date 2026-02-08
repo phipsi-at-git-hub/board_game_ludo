@@ -9,36 +9,35 @@ use InvalidArgumentException;
 
 final class Game {
     private string $id;
-    private int $creator_user_id;
-    private GameRules $rules;
+    private string $created_by_user_id;
     private GameStatus $status;
+    private GameRules $rules;
+    private GameState $state;
 
     /** @var Player[] */
     private $players = [];
 
-    private function __construct(string $id, /* int $creator_user_id, */ GameRules $rules) {
+    private function __construct(string $id, string $created_by_user_id, GameStatus $status, GameRules $rules, GameState $state) {
         $this->id = $id;
-        //$this->creator_user_id = $creator_user_id;
+        $this->created_by_user_id = $created_by_user_id;
+        $this->status = $status;
         $this->rules = $rules;
-        $this->status = GameStatus::WAITING;
+        $this->state = $state;
     }
 
     // Factory method – the ONLY way to create a Game
-    /*
-    public static function create(int $creator_user_id, GameRules $rules): self {
-        return new self(
-            id: self::generateId(),
-            creator_user_id: $creator_user_id,
-            rules: $rules,
-            status: GameStatus::WAITING
-        );
-    }
-    */
-    public static function create(GameRules $rules): self {
+    public static function create(int $created_by_user_id, GameRules $rules): self {
         return new self(
             id: self::generateId(), 
+            created_by_user_id: $created_by_user_id, 
+            status: GameStatus::WAITING,
             rules: $rules,
+            state: GameState::initial($rules), 
         );
+    }
+
+    public static function restore(string $id, string $created_by_user_id, GameStatus $status, GameRules $rules, GameState $state): self {
+        return new self($id, $created_by_user_id, $status, $rules, $state);
     }
 
     private static function generateId(): string {
@@ -83,11 +82,19 @@ final class Game {
         return $this->id;
     }
 
+    public function getCreatedByUserId(): string {
+        return $this->created_by_user_id;
+    }
+
     public function getRules(): GameRules {
         return $this->rules;
     }
 
     public function getStatus(): GameStatus {
         return $this->status;
+    }
+
+    public function getState(): GameState {
+        return $this->state;
     }
 }

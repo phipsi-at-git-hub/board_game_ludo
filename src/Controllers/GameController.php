@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\Auth;
 use App\Domain\Game\Game;
 use App\Domain\Game\Rules\GameRules;
+use App\Infrastructure\Game\SessionGameRepository;
 use InvalidArgumentException;
 use Throwable;
 
@@ -33,9 +34,15 @@ class GameController {
         }
     }
 
+    // Create a new game via POST
     public function store() {
-        // Create a new game via POST
-        echo 'Game created';
+        $rules = new GameRules($_POST['rules'] ?? []);
+        $game = Game::create($rules);
+
+        $repo = new SessionGameRepository();
+        $repo->save($game);
+
+        return redirect('/game/' . $game->getId());
     }
 
     public function show(string $game_id) {
