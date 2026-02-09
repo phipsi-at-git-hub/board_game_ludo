@@ -9,6 +9,9 @@ use App\Domain\Game\State\GameState;
 use InvalidArgumentException;
 
 final class Game {
+    public const MIN_PLAYERS = 2;
+    public const MAX_PLAYER = 4;
+
     private string $id;
     private string $created_by_user_id;
     private GameStatus $status;
@@ -51,7 +54,7 @@ final class Game {
             throw new InvalidArgumentException('Cannot join a running game');
         }
 
-        if (count($this->players) >= $this->rules->getMaxPlayers()) {
+        if (count($this->players) >= self::MAX_PLAYER) {
             throw new InvalidArgumentException('Game is full');
         }
         $this->players[] = $player;
@@ -63,7 +66,7 @@ final class Game {
             throw new InvalidArgumentException('Game already started');
         }
 
-        if (count($this->players) < $this->rules->getMinPlayers()) {
+        if (count($this->players) < self::MIN_PLAYERS) {
             throw new InvalidArgumentException('Not enough players');
         }
 

@@ -19,8 +19,6 @@ final class GameRules {
 
     // Game rule defaults
     private const DEFAULTS = [
-        GameRuleKey::MIN_PLAYERS => 2, 
-        GameRuleKey::MAX_PLAYERS => 4, 
         GameRuleKey::ALLOW_BOTS => true, 
         GameRuleKey::EXTRA_ROLL_ON_SIX => true, 
         GameRuleKey::ALLOW_STACK_OWN_FIGURES => false, 
@@ -36,8 +34,6 @@ final class GameRules {
         GameRuleArrayValidator::validate($config);
 
         // Setup game rules
-        $this->min_players = (int) ($config[GameRuleKey::MIN_PLAYERS] ?? 2);
-        $this->max_players = (int) ($config[GameRuleKey::MAX_PLAYERS] ?? 4);
         $this->allow_bots = (bool) ($config[GameRuleKey::ALLOW_BOTS] ?? true);
 
         // Setup Mechanics
@@ -59,8 +55,6 @@ final class GameRules {
         GameRuleArrayValidator::validate($normalized);
 
         return new self([
-            GameRuleKey::MIN_PLAYERS => $normalized[GameRuleKey::MIN_PLAYERS] ?? 2, 
-            GameRuleKey::MAX_PLAYERS => $normalized[GameRuleKey::MAX_PLAYERS] ?? 4, 
             GameRuleKey::ALLOW_BOTS => $normalized[GameRuleKey::ALLOW_BOTS] ?? 4, 
             GameRuleKey::EXTRA_ROLL_ON_SIX => $normalized[GameRuleKey::EXTRA_ROLL_ON_SIX] ?? 4, 
             GameRuleKey::ALLOW_STACK_OWN_FIGURES => $normalized[GameRuleKey::ALLOW_STACK_OWN_FIGURES] ?? 4, 
@@ -72,8 +66,6 @@ final class GameRules {
     // Convert GameRules to array
     public function toArray(): array {
         return [
-            GameRuleKey::MIN_PLAYERS => $this->min_players, 
-            GameRuleKey::MAX_PLAYERS => $this->max_players, 
             GameRuleKey::ALLOW_BOTS => $this->allow_bots, 
             GameRuleKey::EXTRA_ROLL_ON_SIX => $this->extra_roll_on_six, 
             GameRuleKey::ALLOW_STACK_OWN_FIGURES => $this->allow_stack_own_figures, 
@@ -88,13 +80,6 @@ final class GameRules {
     }
 
     // Getter
-    public function getMinPlayers(): int {
-        return $this->min_players;
-    }
-
-    public function getMaxPlayers(): int {
-        return $this->max_players;
-    }
 
     public function getAllowBots(): bool {
         return $this->allow_bots;

@@ -4,8 +4,6 @@ namespace App\Domain\Game\Rules;
 
 final class GameRuleKey {
     // Setup rules
-    public const MIN_PLAYERS = 'min_players';
-    public const MAX_PLAYERS = 'max_players';
     public const ALLOW_BOTS = 'allow_bots';
 
     // Game mechanics
@@ -16,8 +14,6 @@ final class GameRuleKey {
 
     public static function all(): array {
         return [
-            self::MIN_PLAYERS, 
-            self::MAX_PLAYERS, 
             self::ALLOW_BOTS, 
             self::EXTRA_ROLL_ON_SIX, 
             self::ALLOW_STACK_OWN_FIGURES, 

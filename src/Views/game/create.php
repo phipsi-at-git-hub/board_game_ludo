@@ -10,14 +10,6 @@ use App\Domain\Game\Rules\GameRuleKey;
     <fieldset>
         <legend>Game Options</legend>
         <label>
-            Max Players
-            <select name="rules[<?php echo GameRuleKey::MAX_PLAYERS; ?>]">
-                <option value="2">2</option>
-                <option value="4" selected>4</option>
-            </select>
-        </label>
-        <br><br>
-        <label>
             Allow Bots
             <select name="rules[<?php echo GameRuleKey::ALLOW_BOTS; ?>]">
                 <option value="0">No</option>

@@ -7,22 +7,10 @@ use InvalidArgumentException;
 
 class GameRuleArrayValidator {
     public static function validate(array $all_rules): void {
-        // min_players & max_players
-        $min = $all_rules[GameRuleKey::MIN_PLAYERS] ?? 2;
-        $max = $all_rules[GameRuleKey::MAX_PLAYERS] ?? 4;
-
-        if (!is_int($min) || $min < 2) {
-            throw new InvalidArgumentException("Minimum players must be >= 2");
-        }
-
-        if (!is_int($max) || $max > 4 || $max < $min) {
-            throw new InvalidArgumentException("Maximum players must be between min players and 4");
-        }
-
-        // Bots allows only if min_players < max_players
-        $allow_bots = $all_rules[GameRuleKey::ALLOW_BOTS] ?? false;
-        if ($allow_bots && $min === $max) {
-            throw new InvalidArgumentException("Bots cannot be used if all players are human");
+        // Allow bots
+        $allow_bots = $all_rules[GameRuleKey::ALLOW_BOTS] ?? true;
+        if (!is_bool($allow_bots)) {
+            throw new InvalidArgumentException("Allow bots must be boolean");
         }
 
         // Extra roll on six

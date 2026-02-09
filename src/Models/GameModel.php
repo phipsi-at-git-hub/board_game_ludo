@@ -9,6 +9,8 @@ class GameModel extends BaseModel {
     private string $id;
     private string $name;
     private string $status;
+    private string $rules;
+    private string $state;
     private string $created_at;
     private string $updated_at;
 

@@ -6,6 +6,6 @@
 
 <ul>
     <li><a href="/game/create">➕ Create new Game</a></li>
-    <li><a href="/games">📜 Show open Games</a></li>
+    <li><a href="/game/list">📜 Show open Games</a></li>
     <li><a href="/menu">Back to Main Menu</a></li>
 </ul>

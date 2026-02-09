@@ -2,7 +2,7 @@
 // src/Domain/Game/Rules/RuleDefinition.php
 namespace App\Domain\Game\Rules;
 
-use App\Domain\Game\GameRuleKey;
+use App\Domain\Game\Rules\GameRuleKey;
 use App\Domain\Game\Rules\RuleType;
 
 class RuleDefinition {
@@ -10,12 +10,10 @@ class RuleDefinition {
     public static function all(): array {
         return [
             new RuleOption(
-                key: GameRuleKey::MAX_PLAYERS, 
-                label_key: 'rules.max_players.label', 
-                type: RuleType::SELECT, 
-                default: 4, 
-                choices: [2,3,4], 
-                description_key: 'rules.max_players.description'
+                key: GameRuleKey::ALLOW_BOTS, 
+                label_key: 'rules.allow_bots.label', 
+                type: RuleType::BOOL, 
+                default: true
             ), 
             new RuleOption(
                 key: GameRuleKey::EXTRA_ROLL_ON_SIX,

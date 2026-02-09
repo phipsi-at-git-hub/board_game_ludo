@@ -40,6 +40,7 @@ $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::au
 $router->group('/game', function($group) {
     $group->get('/single', [GameController::class, 'single']);
     $group->get('/create', [GameController::class, 'create']);
+    $group->get('/list', [GameController::class, 'list']);
     $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf($_POST)]);
     $group->get('/{id}', [GameController::class, 'show']);
     $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf($_POST)]);

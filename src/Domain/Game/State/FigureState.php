@@ -3,24 +3,40 @@
 namespace App\Domain\Game\State;
 
 final class FigureState {
+    private readonly FigureArea $area;
     private readonly int $position;
-    private readonly bool $is_home;
 
-    public function __construct(int $position, bool $is_home) {
+    public function __construct(FigureArea $area, int $position) {
+        $this->area = $area;
         $this->position = $position;
-        $this->is_home = $is_home;
     }
 
     public static function initial(): self {
-        return new self(-1, true);
+        return new self(
+            FigureArea::HOME, 
+            0
+        );
     }
 
     // Getters
+    public function getArea(): FigureArea {
+        return $this->area;
+    }
+
     public function getPosition(): int {
         return $this->position;
     }
 
-    public function isHome(): bool {
-        return $this->is_home;
+    // Helpers
+    public function isInHome(): bool {
+        return $this->area === FigureArea::HOME;
+    }
+
+    public function isOnBoard(): bool {
+        return $this->area === FigureArea::BOARD;
+    }
+
+    public function isInGoal(): bool {
+        return $this->area === FigureArea::GOAL;
     }
 }

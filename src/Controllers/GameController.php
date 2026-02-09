@@ -8,10 +8,7 @@ use App\Domain\Game\Game;
 use App\Domain\Game\Rules\GameRules;
 use App\Domain\Game\Rules\GameRuleArrayNormalizer;
 use App\Infrastructure\Game\Persistence\MySqlGameRepository;
-use App\Infrastructure\Game\Persistence\SessionGameRepository;
-use App\Models\UserModel;
-use InvalidArgumentException;
-use Throwable;
+use App\Models\GameModel;
 
 class GameController {
     public function single() {
@@ -61,6 +58,11 @@ class GameController {
         $repo->save($game);
 
         redirect('/game/' . $game->getId());
+    }
+
+    public function list() {
+        $games = GameModel::all();
+        require __DIR__ . '/../Views/game/list.php';
     }
 
     public function show(string $game_id) {
