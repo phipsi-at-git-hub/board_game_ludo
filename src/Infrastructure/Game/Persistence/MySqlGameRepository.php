@@ -2,25 +2,26 @@
 // Infrastructure/Game/Persistence/MySqlGameRepository.php
 namespace App\Infrastructure\Game\Persistence;
 
+use App\Core\Database;
 use App\Domain\Game\Game;
 use App\Domain\Game\GameStatus;
-use App\Domain\Game\GameState;
+use App\Domain\Game\State\GameState;
 use App\Domain\Game\Rules\GameRules;
 use App\Domain\Game\Persistence\GameRepository;
 use App\Domain\Game\Persistence\GameSnapshotKey;
 use PDO;
 
 final class MySqlGameRepository implements GameRepository {
-    private PDO $pdo;
+    private Database $db;
 
-    public function __construct(PDO $pdo) {
-        $this->pdo = $pdo;
+    public function __construct() {
+        $this->db = Database::getInstance();
     }
 
     public function save(Game $game): void {
-        $stmt = $this->pdo->prepare(
-            "INSERT INTO games (id, status, rules, state)
-             VALUES (:id, :status, :rules, :state)"
+        $stmt = $this->db->prepare(
+            "INSERT INTO games (id, created_by_user_id, status, rules, state)
+             VALUES (:id, :created_by_user_id, :status, :rules, :state)"
         );
 
         $stmt->execute([
@@ -33,7 +34,7 @@ final class MySqlGameRepository implements GameRepository {
     }
 
     public function find(string $game_id): ?Game {
-        $stmt = $this->pdo->prepare("SELECT * FROM games WHERE id = :id");
+        $stmt = $this->db->prepare("SELECT * FROM games WHERE id = :id");
         $stmt->execute([GameSnapshotKey::ID => $game_id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

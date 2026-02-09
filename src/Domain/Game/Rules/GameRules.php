@@ -2,7 +2,7 @@
 // src/Domain/Game/Rules/GameRules.php
 namespace App\Domain\Game\Rules;
 
-use App\Domain\Game\GameRuleKey;
+use App\Domain\Game\Rules\GameRuleKey;
 use InvalidArgumentException;
 
 final class GameRules {
@@ -50,6 +50,23 @@ final class GameRules {
     // Create an instance with default rules
     public static function fromDefaults(): self {
         return new self([]);
+    }
+
+    // Convert from array to GameRules
+    public static function fromArray(array $input): self {
+        $normalized = GameRuleArrayNormalizer::normalize($input);
+
+        GameRuleArrayValidator::validate($normalized);
+
+        return new self([
+            GameRuleKey::MIN_PLAYERS => $normalized[GameRuleKey::MIN_PLAYERS] ?? 2, 
+            GameRuleKey::MAX_PLAYERS => $normalized[GameRuleKey::MAX_PLAYERS] ?? 4, 
+            GameRuleKey::ALLOW_BOTS => $normalized[GameRuleKey::ALLOW_BOTS] ?? 4, 
+            GameRuleKey::EXTRA_ROLL_ON_SIX => $normalized[GameRuleKey::EXTRA_ROLL_ON_SIX] ?? 4, 
+            GameRuleKey::ALLOW_STACK_OWN_FIGURES => $normalized[GameRuleKey::ALLOW_STACK_OWN_FIGURES] ?? 4, 
+            GameRuleKey::STRICT_GOAL_ORDER => $normalized[GameRuleKey::STRICT_GOAL_ORDER] ?? 4, 
+            GameRuleKey::START_FIELD_MUST_BE_CLEARED => $normalized[GameRuleKey::START_FIELD_MUST_BE_CLEARED] ?? 4, 
+        ]);
     }
 
     // Convert GameRules to array

@@ -33,11 +33,4 @@ abstract class BaseModel {
         $stmt->execute($params);
         return (int) $stmt->fetchColumn();
     }
-    /*
-    protected Database $db;
-
-    public function __construct() {
-        $this->db = Database::getInstance();
-    }
-    */
 }

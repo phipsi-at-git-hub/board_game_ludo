@@ -2,7 +2,7 @@
 // src/Domain/Games/Rules/GameRuleValidator.php
 namespace App\Domain\Game\Rules;
 
-use App\Domain\Game\GameRuleKey;
+use App\Domain\Game\Rules\GameRuleKey;
 use InvalidArgumentException;
 
 class GameRuleArrayValidator {

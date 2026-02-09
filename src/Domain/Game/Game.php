@@ -5,6 +5,7 @@ namespace App\Domain\Game;
 use App\Domain\Game\GameStatus;
 use App\Domain\Game\Player\Player;
 use App\Domain\Game\Rules\GameRules;
+use App\Domain\Game\State\GameState;
 use InvalidArgumentException;
 
 final class Game {
@@ -26,7 +27,7 @@ final class Game {
     }
 
     // Factory method – the ONLY way to create a Game
-    public static function create(int $created_by_user_id, GameRules $rules): self {
+    public static function create(string $created_by_user_id, GameRules $rules): self {
         return new self(
             id: self::generateId(), 
             created_by_user_id: $created_by_user_id, 

@@ -3,9 +3,13 @@
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Csrf;
 use App\Domain\Game\Game;
 use App\Domain\Game\Rules\GameRules;
-use App\Infrastructure\Game\SessionGameRepository;
+use App\Domain\Game\Rules\GameRuleArrayNormalizer;
+use App\Infrastructure\Game\Persistence\MySqlGameRepository;
+use App\Infrastructure\Game\Persistence\SessionGameRepository;
+use App\Models\UserModel;
 use InvalidArgumentException;
 use Throwable;
 
@@ -20,33 +24,48 @@ class GameController {
     }
 
     public function create() {
-        echo "create";
+        require __DIR__ . '/../Views/game/create.php';
+        /*
         try {
             $rules = new GameRules($_POST);
-            $game = Game::create($rules);
+            $user_id = Auth::user()->getId();
+            $game = Game::create($user_id, $rules);
 
             // ToDo - persist game (Session / DB)
             flash('success', 'Game created successfully');
             redirect('/game/' .  $game->getId());
         } catch (Throwable $e) {
+            echo "error";
             flash('error', $e->getMessage());
             back();
         }
+            */
     }
 
     // Create a new game via POST
     public function store() {
-        $rules = new GameRules($_POST['rules'] ?? []);
-        $game = Game::create($rules);
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
 
-        $repo = new SessionGameRepository();
+        //var_dump($_POST);
+
+        $rules_array_from_post = $_POST['rules'];
+        $normalized_rules_array = GameRuleArrayNormalizer::normalize($rules_array_from_post);
+        $rules = new GameRules($normalized_rules_array ?? []);
+        $user_id = Auth::user()->getId();
+        $game = Game::create($user_id, $rules);
+
+        $repo = new MySqlGameRepository();
         $repo->save($game);
 
-        return redirect('/game/' . $game->getId());
+        redirect('/game/' . $game->getId());
     }
 
     public function show(string $game_id) {
         // View aa existing game
+        echo "Game created<br/>";
         echo 'Viewing game: ' . htmlspecialchars($game_id);
     }
 

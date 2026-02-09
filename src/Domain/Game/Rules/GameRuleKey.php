@@ -1,6 +1,6 @@
 <?php 
 // src/Domain/Game/GameRuleKey.php
-namespace App\Domain\Game;
+namespace App\Domain\Game\Rules;
 
 final class GameRuleKey {
     // Setup rules

@@ -1,6 +1,6 @@
 <?php
 // src/Domain/Game/GameState.php
-namespace App\Domain\Game;
+namespace App\Domain\Game\State;
 
 use App\Domain\Game\Rules\GameRules;
 use App\Domain\Game\State\GameStateKey;
