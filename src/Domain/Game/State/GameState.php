@@ -52,4 +52,9 @@ final class GameState {
     public function getFigures(): array {
         return $this->figures;
     }
+
+    // Helpers
+    public function hasPlayers(): bool {
+        return (is_array($this->players) && !empty($this->players));
+    }
 }

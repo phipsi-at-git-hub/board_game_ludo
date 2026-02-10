@@ -55,7 +55,7 @@ class GameController {
         $game = Game::create($user_id, $rules);
 
         $repo = new MySqlGameRepository();
-        $repo->save($game);
+        $repo->store($game);
 
         redirect('/game/' . $game->getId());
     }
