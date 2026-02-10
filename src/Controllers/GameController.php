@@ -22,21 +22,6 @@ class GameController {
 
     public function create() {
         require __DIR__ . '/../Views/game/create.php';
-        /*
-        try {
-            $rules = new GameRules($_POST);
-            $user_id = Auth::user()->getId();
-            $game = Game::create($user_id, $rules);
-
-            // ToDo - persist game (Session / DB)
-            flash('success', 'Game created successfully');
-            redirect('/game/' .  $game->getId());
-        } catch (Throwable $e) {
-            echo "error";
-            flash('error', $e->getMessage());
-            back();
-        }
-            */
     }
 
     // Create a new game via POST
@@ -45,8 +30,6 @@ class GameController {
             http_response_code(403);
             die('Invalid CSRF token');
         }
-
-        //var_dump($_POST);
 
         $rules_array_from_post = $_POST['rules'];
         $normalized_rules_array = GameRuleArrayNormalizer::normalize($rules_array_from_post);
@@ -66,7 +49,7 @@ class GameController {
     }
 
     public function show(string $game_id) {
-        // View aa existing game
+        // View an existing game
         echo "Game created<br/>";
         echo 'Viewing game: ' . htmlspecialchars($game_id);
     }
