@@ -3,7 +3,7 @@
 namespace App\Domain\Game\State;
 
 final class FigureStateKey {
+    public const FIGURE_INDEX = 'figure_index';
     public const POSITION = 'position';
-    public const IS_HOME = 'is_home';
-    public const IS_GOAL = 'is_goal';
+    public const AREA = 'area';
 }

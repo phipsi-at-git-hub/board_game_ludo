@@ -21,7 +21,7 @@ final class Game {
     /** @var Player[] */
     private $players = [];
 
-    private function __construct(string $id, string $created_by_user_id, GameStatus $status, GameRules $rules, GameState $state) {
+    public function __construct(string $id, string $created_by_user_id, GameStatus $status, GameRules $rules, GameState $state) {
         $this->id = $id;
         $this->created_by_user_id = $created_by_user_id;
         $this->status = $status;

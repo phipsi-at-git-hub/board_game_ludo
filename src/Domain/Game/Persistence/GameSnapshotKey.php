@@ -9,4 +9,7 @@ final class GameSnapshotKey {
     public const STATUS = 'status'; 
     public const RULES = 'rules'; 
     public const STATE = 'state';
+
+    public const GAME_ID = 'game_id';
+    public const USER_ID = 'user_id';
 }

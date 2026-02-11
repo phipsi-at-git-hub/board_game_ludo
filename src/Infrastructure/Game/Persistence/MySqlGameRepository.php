@@ -9,6 +9,11 @@ use App\Domain\Game\State\GameState;
 use App\Domain\Game\Rules\GameRules;
 use App\Domain\Game\Persistence\GameRepository;
 use App\Domain\Game\Persistence\GameSnapshotKey;
+use App\Domain\Game\Rules\GameRuleKey;
+use App\Domain\Game\State\FigureArea;
+use App\Domain\Game\State\FigureState;
+use App\Domain\Game\State\FigureStateKey;
+use App\Domain\Game\State\GameStateKey;
 use PDO;
 use Throwable;
 
@@ -150,20 +155,80 @@ final class MySqlGameRepository implements GameRepository {
     }
 
     public function find(string $game_id): ?Game {
-        $stmt = $this->db->prepare("SELECT * FROM games WHERE id = :id");
+        // Load base game
+        $stmt = $this->db->prepare("SELECT * FROM games WHERE id = :id LIMIT 1");
         $stmt->execute([GameSnapshotKey::ID => $game_id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row_game = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$row) {
+        if (!$row_game) {
             return null;
         }
 
+        // Load game rule set
+        $stmt = $this->db->prepare("SELECT * FROM game_rule_set WHERE game_id = :game_id LIMIT 1");
+        $stmt->execute([GameSnapshotKey::GAME_ID => $game_id]);
+        $row_rule_set = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        // Load game state
+        $stmt = $this->db->prepare("SELECT * FROM game_state WHERE game_id = :game_id LIMIT 1");
+        $stmt->execute([GameSnapshotKey::GAME_ID => $game_id]);
+        $row_state = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        // Load game players
+        $stmt = $this->db->prepare("SELECT * FROM game_state_players WHERE game_id = :game_id ORDER BY created_at ASC");
+        $stmt->execute([GameSnapshotKey::GAME_ID => $game_id]);
+        $row_players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Load game figures
+        $stmt = $this->db->prepare("SELECT * FROM game_state_figures WHERE game_id = :game_id");
+        $stmt->execute([GameSnapshotKey::GAME_ID => $game_id]);
+        $row_figures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $this->hydrateGame(
+            $row_game, 
+            $row_rule_set, 
+            $row_state, 
+            $row_players, 
+            $row_figures
+        );
+    }
+
+    private function hydrateGame(array $row_game, array $row_rule_set, array $row_state, array $row_players, array $row_figures): Game {
+        // GameRules
+        $rules = new GameRules([
+            GameRuleKey::ALLOW_BOTS => (bool) $row_rule_set[GameRuleKey::ALLOW_BOTS], 
+            GameRuleKey::EXTRA_ROLL_ON_SIX => (bool) $row_rule_set[GameRuleKey::EXTRA_ROLL_ON_SIX], 
+            GameRuleKey::ALLOW_STACK_OWN_FIGURES => (bool) $row_rule_set[GameRuleKey::ALLOW_STACK_OWN_FIGURES], 
+            GameRuleKey::STRICT_GOAL_ORDER => (bool) $row_rule_set[GameRuleKey::STRICT_GOAL_ORDER], 
+            GameRuleKey::START_FIELD_MUST_BE_CLEARED => (bool) $row_rule_set[GameRuleKey::START_FIELD_MUST_BE_CLEARED], 
+        ]);
+
+        // Players
+        $players = array_map(fn($row) => $row[GameSnapshotKey::USER_ID], $row_players);
+
+        // Figures
+        $figures = array_map(function ($row) {
+            return new FigureState(
+                figure_index: (int) $row[FigureStateKey::FIGURE_INDEX], 
+                player_id: $row[GameSnapshotKey::USER_ID], 
+                position: (int) $row[FigureStateKey::POSITION], 
+                area: FigureArea::from($row[FigureStateKey::AREA]),
+            );
+        }, $row_figures);
+
+        // GameState
+        $state = new GameState(
+            players: $players, 
+            figures: $figures, 
+            current_player_index: (int) ($row_state[GameStateKey::CURRENT_PLAYER_INDEX] ?? 0)
+        );
+
         return new Game(
-            id: $row[GameSnapshotKey::ID], 
-            created_by_user_id: $row[GameSnapshotKey::CREATED_BY_USER_ID], 
-            status: GameStatus::from($row[GameSnapshotKey::STATUS]), 
-            rules: new GameRules(json_decode($row[GameSnapshotKey::RULES], true)), 
-            state: GameState::fromArray(json_decode($row[GameSnapshotKey::STATE], true)), 
+            id: $row_game[GameSnapshotKey::ID], 
+            created_by_user_id: $row_game[GameSnapshotKey::CREATED_BY_USER_ID], 
+            status: GameStatus::from($row_game[GameSnapshotKey::STATUS]), 
+            rules: $rules, 
+            state: $state, 
         );
     }
 }

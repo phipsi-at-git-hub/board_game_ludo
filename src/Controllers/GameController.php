@@ -40,6 +40,8 @@ class GameController {
         $repo = new MySqlGameRepository();
         $repo->store($game);
 
+        $created_game = $repo->find($game->getId());
+
         redirect('/game/' . $game->getId());
     }
 

@@ -2,29 +2,45 @@
 // src/Domain/Game/State/FigureState.php
 namespace App\Domain\Game\State;
 
-final class FigureState {
-    private readonly FigureArea $area;
-    private readonly int $position;
+use App\Domain\Game\Figure;
 
-    public function __construct(FigureArea $area, int $position) {
-        $this->area = $area;
+final class FigureState {
+    private int $figure_index;
+    private string $player_id;
+    private readonly int $position;
+    private readonly FigureArea $area;
+
+    public function __construct(int $figure_index, string $player_id, int $position, FigureArea $area) {
+        $this->figure_index = $figure_index;
+        $this->player_id = $player_id;
         $this->position = $position;
+        $this->area = $area;
     }
 
-    public static function initial(): self {
+    public static function initial(int $figure_index, string $player_id): self {
         return new self(
-            FigureArea::HOME, 
-            0
+            figure_index: $figure_index, 
+            player_id: $player_id, 
+            position: -1, 
+            area: FigureArea::HOME
         );
     }
 
     // Getters
-    public function getArea(): FigureArea {
-        return $this->area;
+    public function getFigureIndex(): int {
+        return $this->figure_index;
+    }
+
+    public function getPlayerId(): string {
+        return $this->player_id;
     }
 
     public function getPosition(): int {
         return $this->position;
+    }
+    
+    public function getArea(): FigureArea {
+        return $this->area;
     }
 
     // Helpers
