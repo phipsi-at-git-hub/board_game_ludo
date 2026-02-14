@@ -1,0 +1,62 @@
+<?php
+// src/Constants/Application.php
+namespace App\Constants;
+
+class Application {
+    // Database tables
+    public const TABLE_GAMES = 'games';
+    public const TABLE_RULES = 'game_rule_set';
+    public const TABLE_STATE = 'game_state';
+    public const TABLE_PLAYERS = 'game_state_players';
+    public const TABLE_FIGURES = 'game_state_figure';
+
+    // Database field names - common
+    public const ID = 'id';
+    public const GAME_ID = 'game_id';
+    public const USER_ID = 'user_id';
+    public const STATUS = 'status';
+    public const CREATED_BY_USER_ID = 'created_by_user_id';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
+
+    // Database field name - game_rule_set
+    public const ALLOW_BOTS = 'allows_bots';
+    public const EXTRA_ROLL_ON_SIX = 'extra_roll_on_six';
+    public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
+    public const STRICT_GOAL_ORDER = 'strict_goal_order';
+    public const START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';
+
+    // Database field names - game_state
+    public const CURRENT_PLAYER_INDEX = 'current_player_index';
+
+    // database field names - game_state_figures
+    public const FIGURE_INDEX = 'figure_index';
+    public const POSITION = 'position';
+    public const AREA = 'area';
+
+    // Database field names - users
+    public const USERNAME = 'username';
+    public const FIRSTNAME = 'firstname';
+    public const LASTNAME = 'lastname';
+    public const EMAIL = 'email';
+    public const ROLE = 'role';
+    public const PASSWORD_HASH = 'password_hash';
+    public const RESET_TOKEN = 'reset_token';
+    public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
+
+    // User roles
+    public const USER = 'user';
+    public const ADMIN = 'admin';
+    public const MODERATOR = 'moderator';
+    public const GAME_MASTER = 'game_master';
+
+    // Game status
+    public const STATUS_WAITING  = 'waiting';
+    public const STATUS_RUNNING  = 'running';
+    public const STATUS_FINISHED = 'finished';
+
+    // Figure Areas
+    public const AREA_HOME  = 'home';
+    public const AREA_FIELD = 'field';
+    public const AREA_GOAL  = 'goal';
+}

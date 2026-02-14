@@ -17,8 +17,8 @@ final class GameStateModel extends BaseModel {
             "INSERT INTO game_state
             (game_id, current_player_index, created_at, updated_at)
             VALUES
-            (:gid, 0, NOW(), NOW())",
-            ['gid' => $game_id]
+            (:game_id, 0, NOW(), NOW())",
+            ['game_id' => $game_id]
         );
     }
 
@@ -28,8 +28,8 @@ final class GameStateModel extends BaseModel {
     // Delete game state for given game
     public static function delete(string $game_id): bool {
         return static::execute(
-            "DELETE FROM game_state WHERE game_id = :gid",
-            ['gid' => $game_id]
+            "DELETE FROM game_state WHERE game_id = :game_id",
+            ['game_id' => $game_id]
         );
     }
 }

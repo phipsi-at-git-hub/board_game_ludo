@@ -2,6 +2,8 @@
 // GameModel.php
 namespace App\Models;
 
+use Exception;
+
 final class GameModel extends BaseModel {
     private string $id;
     private string $name;
@@ -52,18 +54,36 @@ final class GameModel extends BaseModel {
     }
 
     // Games - Create new game
-    public static function create(string $name, string $status = 'waiting'): self {
+    public function create(string $user_id, array $rules): ?string {
         $game_id = self::generateUUID();
 
-        static::execute(
-            "INSERT INTO games (id, name, status) VALUES (:id, :name, :status, :created_at)",
-            [
-                'id' => $game_id,
-                'name' => $name,
-                'status' => $status,
-            ]
-        );
-        return self::findById($game_id);
+        try {
+            // Insert game
+            $this->execute(
+                "INSERT INTO games
+                (id, created_by_user_id, status, created_at, updated_at)
+                VALUES
+                (:game_id, :user_id, 'waiting', NOW(), NOW())",
+                [
+                    'game_id' => $game_id,
+                    'user_id' => $user_id
+                ]
+            );
+
+            // Insert rule set
+            $this->rule_set_model->create($game_id, $rules);
+
+            // Insert state
+            $this->state_model->create($game_id);
+
+            // Commit 
+            $this->db->commit();
+
+            return $game_id;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     // Games - Update game data
@@ -77,11 +97,27 @@ final class GameModel extends BaseModel {
     }
 
     // Games - Delete game
-    public function delete(): void {
-        static::execute(
-            "DELETE FROM games WHERE id = :id", 
-            ['id' => $this->id]
-        );
+    public function delete(): bool {
+        try {
+            $this->db->beginTransaction();
+
+            $this->figure_model->removeAllFigures($this->id);
+            $this->player_model->removeAllPlayer($this->id);
+            $this->state_model->delete($this->id);
+            $this->rule_set_model->delete($this->id);
+
+            $this->db->execute(
+                "DELETE FROM games WHERE id = :game_id",
+                ['game_id' => $this->id]
+            );
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+            return false;
+        }
     }
 
     // Helper - Convert db row to GameModel object
@@ -118,5 +154,25 @@ final class GameModel extends BaseModel {
     // Get the value of updated_at
     public function getUpdated_at() {
         return $this->updated_at;
+    }
+
+    // Get the value of rule_set_model
+    public function getRule_set_model() {
+        return $this->rule_set_model;
+    }
+
+    // Get the value of state_model
+    public function getState_model() {
+        return $this->state_model;
+    }
+
+    // Get the value of player_model
+    public function getPlayer_model() {
+        return $this->player_model;
+    }
+
+    // Get the value of figure_model
+    public function getFigure_model() {
+        return $this->figure_model;
     }
 }

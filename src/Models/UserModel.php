@@ -2,8 +2,6 @@
 // UserModel.php
 namespace App\Models;
 
-use App\Core\Database;
-
 final class UserModel extends BaseModel {
     private string $id;
     private string $username;
@@ -148,7 +146,6 @@ final class UserModel extends BaseModel {
 
     // Reset password - Find reset token
     public static function findByResetToken(string $token): ?self {
-        $db = Database::getInstance();
         $row = static::fetchOne(
             "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1", 
             [

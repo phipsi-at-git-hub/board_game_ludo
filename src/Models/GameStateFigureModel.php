@@ -35,7 +35,7 @@ final class GameStateFigureModel extends BaseModel {
     public static function resetFigure(): void {}
 
     // Delete all figures of given game
-    public static function delete($game_id): bool {
+    public static function removeAllFigures($game_id): bool {
         return static::execute(
             "DELETE FROM game_state_figure WHERE game_id = :game_id",
             ['game_id' => $game_id]

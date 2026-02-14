@@ -40,6 +40,8 @@ abstract class BaseModel {
         return (int) $stmt->fetchColumn();
     }
 
+    protected static function rollBack() {}
+
     // Helper - UUID generator
     protected static function generateUUID(): string {
         return sprintf(
