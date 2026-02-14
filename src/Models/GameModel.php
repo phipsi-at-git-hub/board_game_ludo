@@ -58,6 +58,8 @@ final class GameModel extends BaseModel {
         $game_id = self::generateUUID();
 
         try {
+            $this->db->beginTransaction();
+
             // Insert game
             $this->execute(
                 "INSERT INTO games

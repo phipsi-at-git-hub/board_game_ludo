@@ -1,9 +1,11 @@
 <?php 
 use App\Core\Csrf; 
-use App\Domain\Game\Rules\GameRuleKey;
+use App\Constants\Application;
+use App\Core\Localization;
+
 ?>
 
-<h1>Create new Game</h1>
+<h1><?= Localization::get('game.create.title') ?></h1>
 
 <form method="POST" action="/game/store">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
@@ -11,7 +13,7 @@ use App\Domain\Game\Rules\GameRuleKey;
         <legend>Game Options</legend>
         <label>
             Allow Bots
-            <select name="rules[<?php echo GameRuleKey::ALLOW_BOTS; ?>]">
+            <select name="<?php echo Application::ALLOW_BOTS; ?>">
                 <option value="0">No</option>
                 <option value="1" selected>Yes</option>
             </select>
@@ -19,7 +21,7 @@ use App\Domain\Game\Rules\GameRuleKey;
         <br><br>
         <label>
             Extra Roll on Six
-            <select name="rules[<?php echo GameRuleKey::EXTRA_ROLL_ON_SIX; ?>]">
+            <select name="<?php echo Application::EXTRA_ROLL_ON_SIX; ?>">
                 <option value="0">No</option>
                 <option value="1" selected>Yes</option>
             </select>
@@ -27,7 +29,7 @@ use App\Domain\Game\Rules\GameRuleKey;
         <br><br>
         <label>
             Allow stack on Figures
-            <select name="rules[<?php echo GameRuleKey::ALLOW_STACK_OWN_FIGURES; ?>]">
+            <select name="<?php echo Application::ALLOW_STACK_OWN_FIGURES; ?>">
                 <option value="0" selected>No</option>
                 <option value="1">Yes</option>
             </select>
@@ -35,7 +37,7 @@ use App\Domain\Game\Rules\GameRuleKey;
         <br><br>
         <label>
             Strict Goal Order
-            <select name="rules[<?php echo GameRuleKey::STRICT_GOAL_ORDER; ?>]">
+            <select name="<?php echo Application::STRICT_GOAL_ORDER; ?>">
                 <option value="0">No</option>
                 <option value="1" selected>Yes</option>
             </select>
@@ -43,7 +45,7 @@ use App\Domain\Game\Rules\GameRuleKey;
         <br><br>
         <label>
             Start field must be cleared
-            <select name="rules[<?php echo GameRuleKey::START_FIELD_MUST_BE_CLEARED; ?>]">
+            <select name="<?php echo Application::START_FIELD_MUST_BE_CLEARED; ?>">
                 <option value="0">No</option>
                 <option value="1" selected>Yes</option>
             </select>

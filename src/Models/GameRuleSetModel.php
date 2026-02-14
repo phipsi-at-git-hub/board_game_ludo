@@ -2,6 +2,8 @@
 // src/Models/GameRuleSetModel.php
 namespace App\Models;
 
+use App\Constants\Application;
+
 final class GameRuleSetModel extends BaseModel {
     //Find game by game id
     public static function findByGameId(string $game_id): ?array {
@@ -19,14 +21,23 @@ final class GameRuleSetModel extends BaseModel {
              allow_stack_own_figures, strict_goal_order,
              start_field_must_be_cleared, created_at, updated_at)
             VALUES
-            (:gid, :bots, :six, :stack, :goal, :clear, NOW(), NOW())",
+            (
+                :game_id, 
+                :allow_bots, 
+                :extra_roll_on_six, 
+                :allow_stack_own_figures, 
+                :strict_goal_order, 
+                :start_field_must_be_cleared, 
+                NOW(), 
+                NOW()
+            )",
             [
-                'gid' => $game_id,
-                'bots' => (int)$rules['allow_bots'],
-                'six' => (int)$rules['extra_roll_on_six'],
-                'stack' => (int)$rules['allow_stack_own_figures'],
-                'goal' => (int)$rules['strict_goal_order'],
-                'clear' => (int)$rules['start_field_must_be_cleared'],
+                'game_id' => $game_id,
+                'allow_bots' => (int)$rules[Application::ALLOW_BOTS],
+                'extra_roll_on_six' => (int)$rules[Application::EXTRA_ROLL_ON_SIX],
+                'allow_stack_own_figures' => (int)$rules[Application::ALLOW_STACK_OWN_FIGURES],
+                'strict_goal_order' => (int)$rules[Application::STRICT_GOAL_ORDER],
+                'start_field_must_be_cleared' => (int)$rules[Application::START_FIELD_MUST_BE_CLEARED],
             ]
         );
     }

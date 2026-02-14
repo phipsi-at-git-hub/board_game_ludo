@@ -59,4 +59,11 @@ class Application {
     public const AREA_HOME  = 'home';
     public const AREA_FIELD = 'field';
     public const AREA_GOAL  = 'goal';
+
+    // HTTP requests
+    public const REQUEST_METHOD = 'REQUEST_METHOD';
+    public const REQUEST_METHOD_GET = 'GET';
+    public const REQUEST_METHOD_POST = 'POST';
+    public const REQUEST_METHOD_PUT = 'PUT';
+    public const REQUEST_METHOD_DELETE = 'DELETE';
 }
