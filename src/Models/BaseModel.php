@@ -6,6 +6,12 @@ use App\Core\Database;
 use PDO;
 
 abstract class BaseModel {
+    protected Database $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance();
+    }
+
     protected static function db(): Database {
         return Database::getInstance();
     }

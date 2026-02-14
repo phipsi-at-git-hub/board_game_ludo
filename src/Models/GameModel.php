@@ -2,14 +2,26 @@
 // GameModel.php
 namespace App\Models;
 
-class GameModel extends BaseModel {
+final class GameModel extends BaseModel {
     private string $id;
     private string $name;
     private string $status;
-    private string $rules;
-    private string $state;
     private string $created_at;
     private string $updated_at;
+
+    private GameRuleSetModel $rule_set_model;
+    private GameStateModel $state_model;
+    private GameStatePlayerModel $player_model;
+    private GameStateFigureModel $figure_model;
+
+    public function __construct() {
+        parent::__construct();
+
+        $this->rule_set_model = new GameRuleSetModel();
+        $this->state_model = new GameStateModel();
+        $this->player_model = new GameStatePlayerModel();
+        $this->figure_model = new GameStateFigureModel();
+    }
 
     // Games - Retrieve all games
     public static function all(): array {

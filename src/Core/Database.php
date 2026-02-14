@@ -2,7 +2,6 @@
 // Database.php
 namespace App\Core;
 
-use LDAP\Result;
 use PDO;
 use PDOStatement;
 
@@ -51,7 +50,6 @@ class Database {
         $this->pdo->rollBack();
     }
 
-    /*
     public function query(string $sql, array $params = []): array {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
@@ -69,5 +67,4 @@ class Database {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
     }
-    */
 }

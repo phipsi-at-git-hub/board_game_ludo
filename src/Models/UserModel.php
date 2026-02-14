@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Core\Database;
 
-class UserModel extends BaseModel {
+final class UserModel extends BaseModel {
     private string $id;
     private string $username;
     private string $first_name;
