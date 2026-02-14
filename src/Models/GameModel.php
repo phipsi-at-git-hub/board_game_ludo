@@ -2,9 +2,6 @@
 // GameModel.php
 namespace App\Models;
 
-use App\Core\Database;
-use App\Domain\Game\GameStatus;
-
 class GameModel extends BaseModel {
     private string $id;
     private string $name;
@@ -35,10 +32,10 @@ class GameModel extends BaseModel {
     }
 
     // Games - Count all games with specific status
-    public static function countByStatus(GameStatus $status): int {
+    public static function countByStatus(string $status): int {
         return static::count(
             "SELECT COUNT(*) FROM games WHERE status = :status",
-            ['status' => $status->value]
+            ['status' => $status]
         );
     }
 

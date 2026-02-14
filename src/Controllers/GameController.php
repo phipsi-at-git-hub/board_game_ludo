@@ -2,12 +2,7 @@
 // GameController.php
 namespace App\Controllers;
 
-use App\Core\Auth;
 use App\Core\Csrf;
-use App\Domain\Game\Game;
-use App\Domain\Game\Rules\GameRules;
-use App\Domain\Game\Rules\GameRuleArrayNormalizer;
-use App\Infrastructure\Game\Persistence\MySqlGameRepository;
 use App\Models\GameModel;
 
 class GameController {
@@ -30,19 +25,6 @@ class GameController {
             http_response_code(403);
             die('Invalid CSRF token');
         }
-
-        $rules_array_from_post = $_POST['rules'];
-        $normalized_rules_array = GameRuleArrayNormalizer::normalize($rules_array_from_post);
-        $rules = new GameRules($normalized_rules_array ?? []);
-        $user_id = Auth::user()->getId();
-        $game = Game::create($user_id, $rules);
-
-        $repo = new MySqlGameRepository();
-        $repo->store($game);
-
-        $created_game = $repo->find($game->getId());
-
-        redirect('/game/' . $game->getId());
     }
 
     public function list() {
