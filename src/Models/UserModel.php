@@ -3,6 +3,8 @@
 namespace App\Models;
 
 final class UserModel extends BaseModel {
+    // ToDo: Use constant from application.php 
+
     private string $id;
     private string $username;
     private string $first_name;

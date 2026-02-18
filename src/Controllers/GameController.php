@@ -36,7 +36,7 @@ class GameController {
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
             ];
             
-            $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $rule_set);
+            $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $rule_set);
 
             header("Location: /game/$game_id");
             exit;
@@ -45,8 +45,8 @@ class GameController {
         require __DIR__ . '/../Views/game/create.php';
     }
 
-    public function list() {
-        $games = GameModel::all();
+    public function list(): void {
+        $games = GameModel::getAllOpenGames();
         require __DIR__ . '/../Views/game/list.php';
     }
 

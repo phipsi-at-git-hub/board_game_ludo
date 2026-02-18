@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Constants\Application;
 
 final class GameRuleSetModel extends BaseModel {
+    // ToDo: Use constant from application.php 
+
     //Find game by game id
     public static function findByGameId(string $game_id): ?array {
         return static::fetchOne(

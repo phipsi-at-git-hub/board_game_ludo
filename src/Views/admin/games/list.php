@@ -4,7 +4,7 @@ use App\Core\Csrf;
 
 <h1>Admin · Games</h1>
 
-<a href="/admin/games/create">➕ Create new Game</a>
+<a href="/game/create">➕ Create new Game</a>
 
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>

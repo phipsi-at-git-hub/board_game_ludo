@@ -10,6 +10,13 @@ use App\Core\Localization;
 <form method="POST" action="/game/store">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
     <fieldset>
+        <legend>Name</legend>
+        <label>
+            Allow Bots
+            <input name="<?php echo Application::GAME_NAME; ?>">
+        </label>
+    </fieldset>
+    <fieldset>
         <legend>Game Options</legend>
         <label>
             Allow Bots

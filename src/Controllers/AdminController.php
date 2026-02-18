@@ -88,24 +88,6 @@ class AdminController {
         require __DIR__ . '/../Views/admin/games/list.php';
     }
 
-    // Games - Create new game
-    public function createGame(): void {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-                http_response_code(403);
-                die('Invalid CSFR token');
-            }
-
-            $name = $_POST['name'] ?? 'New Game';
-            $game = GameModel::create($name);
-
-            header('Location /admin/games/list');
-            exit;
-        }
-
-        require __DIR__ . '/../Views/admin/games/create.php';
-    }
-
     // Games - Edit game
     public function editGame(string $game_id): void {
         $game = GameModel::findById($game_id);

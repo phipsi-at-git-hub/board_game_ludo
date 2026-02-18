@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Exception;
+use App\Constants\Application;
 
 final class GameModel extends BaseModel {
     private string $id;
     private string $name;
+    private string $created_by_user_id;
+    private string $created_by_user_name;
+    private string $player_count;
     private string $status;
     private string $created_at;
     private string $updated_at;
@@ -40,6 +44,15 @@ final class GameModel extends BaseModel {
         return $row ? self::fromArray($row) : null;
     }
 
+    // Games - Find game by name
+    public static function findByName(string $game_name): ?self {
+        $row = static::fetchAll(
+            "SELECT * FROM games WHERE name = :name LIMIT 1",
+            ['name' => $game_name]
+        );
+        return $row ? self::fromArray($row) : null;
+    }
+
     // Games - Count all games
     public static function countAll() : int {
         return static::count("SELECT COUNT(*) FROM games");
@@ -54,13 +67,14 @@ final class GameModel extends BaseModel {
     }
 
     // Games - Create new game
-    public function create(string $user_id, array $rules): ?string {
+    public function create(string $user_id, string $game_name, array $rules): ?string {
         $game_id = self::generateUUID();
 
         try {
             $this->db->beginTransaction();
 
             // Insert game
+            /*
             $this->execute(
                 "INSERT INTO games
                 (id, created_by_user_id, status, created_at, updated_at)
@@ -69,6 +83,23 @@ final class GameModel extends BaseModel {
                 [
                     'game_id' => $game_id,
                     'user_id' => $user_id
+                ]
+            );*/
+            $this->execute(
+                sprintf(
+                    "INSERT INTO %s (%s, %s, %s, %s, created_at, updated_at)
+                    VALUES (:id, :name, :created_by_user_id, :status, NOW(), NOW())",
+                    Application::TABLE_GAMES,
+                    Application::ID,
+                    Application::NAME, 
+                    Application::CREATED_BY_USER_ID,
+                    Application::STATUS
+                ),
+                [
+                    'id' => $game_id,
+                    'name' => $game_name, 
+                    'created_by_user_id' => $user_id,
+                    'status' => Application::STATUS_WAITING
                 ]
             );
 
@@ -89,12 +120,12 @@ final class GameModel extends BaseModel {
     }
 
     // Games - Update game data
-    public function update(string $name, string $status): void {
+    public function update(string $created_by_user_id, string $status): void {
         static::execute(
-            "UPDATE games SET name = :name, status = :status WHERE id = :id",
-            ['id' => $this->id, 'name' => $name, 'status' => $status]
+            "UPDATE games SET created_by_user_id = :created_by_user_id, status = :status WHERE id = :id",
+            ['id' => $this->id, 'created_by_user_id' => $created_by_user_id, 'status' => $status]
         );
-        $this->name = $name;
+        $this->created_by_user_id = $created_by_user_id;
         $this->status = $status;
     }
 
@@ -122,12 +153,56 @@ final class GameModel extends BaseModel {
         }
     }
 
+    // get all open game available to join
+    public static function getAllOpenGames(): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count
+                FROM %s g
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s
+                WHERE g.%s = :status
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::STATUS, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
+
+                Application::TABLE_GAMES,
+                Application::TABLE_PLAYERS,
+
+                Application::ID,
+                Application::GAME_ID,
+
+                Application::STATUS,
+                Application::ID,
+                Application::CREATED_AT
+            ),
+            ['status' => Application::STATUS_WAITING]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
     // Helper - Convert db row to GameModel object
     private static function fromArray(array $row): self {
         $game = new self();
         $game->id = $row['id'];
-        $game->name = $row['name'];
-        $game->status = $row['status'];
+        $game->name = $row['name'] ?? null; 
+        $game->created_by_user_id = $row['created_by_user_id'] ?? null;
+        $game->status = $row['status'] ?? null;
+        $game->player_count = $row['player_count'] ?? null;
         $game->created_at = $row['created_at'];
         $game->updated_at = $row['updated_at'];
         return $game;
@@ -138,9 +213,24 @@ final class GameModel extends BaseModel {
         return $this->id;
     }
 
-    // Get the value of name
+    // Get the value of id
     public function getName() {
         return $this->name;
+    }
+
+    // Get the value of created_by_user_id
+    public function getCreatedByUserId() {
+        return $this->created_by_user_id;
+    }
+
+    // Get the value of created_by_user_name
+    public function getCreatedByUserName() {
+        return $this->created_by_user_name;
+    }
+
+    // Get the number of player of the game
+    public function getPlayerCount() {
+        return $this->player_count;
     }
 
     //Get the value of status
@@ -149,12 +239,12 @@ final class GameModel extends BaseModel {
     }
 
     // Get the value of created_at
-    public function getCreated_at() {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
     // Get the value of updated_at
-    public function getUpdated_at() {
+    public function getUpdatedAt() {
         return $this->updated_at;
     }
 

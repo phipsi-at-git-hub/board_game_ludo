@@ -7,6 +7,8 @@ return [
     'game.create.title' => 'Neues Spiel erstellen',
     'game.create.submit' => 'Spiel erstellen',
     'game.lobby.title' => 'Lobby',
+    'game.list.title' => 'Spieleliste', 
+    'game.list.create_new_game' => '➕ Neues Spiel erstellen', 
     'game.status.waiting' => 'Wartend',
     'game.status.running' => 'Laufend',
     'game.status.finished' => 'Beendet',
@@ -22,5 +24,14 @@ return [
     'admin.dashboard.title' => 'Admin Übersicht', 
     'admin.users.manage' => 'Benutzer bearbeiten', 
     'admin.games.manage' => 'Spiele bearbeten', 
+
+    // Games - List
+    'game.list.title' => 'Offene Spiele',
+    'game.list.empty' => 'Keine offenen Spiele vorhanden.',
+    'game.list.id' => 'Spiel-ID',
+    'game.list.creator' => 'Ersteller',
+    'game.list.players' => 'Spieler',
+    'game.list.action' => 'Aktion',
+    'game.list.join' => 'Beitreten',
 
 ];

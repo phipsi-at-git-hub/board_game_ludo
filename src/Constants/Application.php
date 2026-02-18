@@ -12,6 +12,8 @@ class Application {
 
     // Database field names - common
     public const ID = 'id';
+    public const NAME = 'name';
+    public const GAME_NAME = 'name';
     public const GAME_ID = 'game_id';
     public const USER_ID = 'user_id';
     public const STATUS = 'status';

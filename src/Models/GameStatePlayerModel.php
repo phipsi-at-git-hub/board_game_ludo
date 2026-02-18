@@ -3,6 +3,8 @@
 namespace App\Models;
 
 final class GameStatePlayerModel extends BaseModel {
+    // ToDo: Use constant from application.php 
+
     // Find game state players for given game
     public static function findByGameId(string $game_id): array {
         return static::fetchAll(
