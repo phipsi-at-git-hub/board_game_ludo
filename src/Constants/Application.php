@@ -4,6 +4,7 @@ namespace App\Constants;
 
 class Application {
     // Database tables
+    public const TABLE_USERS = 'users'; 
     public const TABLE_GAMES = 'games';
     public const TABLE_RULES = 'game_rule_set';
     public const TABLE_STATE = 'game_state';
@@ -22,8 +23,8 @@ class Application {
     public const UPDATED_AT = 'updated_at';
 
     // Database field name - game_rule_set
-    public const ALLOW_BOTS = 'allows_bots';
-    public const EXTRA_ROLL_ON_SIX = 'extra_roll_on_six';
+    public const ALLOW_BOTS = 'allow_bots';
+    public const EXTRA_ROLL_LIMIT = 'extra_roll_limit';
     public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
     public const STRICT_GOAL_ORDER = 'strict_goal_order';
     public const START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';

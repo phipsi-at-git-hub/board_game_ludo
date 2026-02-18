@@ -1,6 +1,5 @@
 <?php
 use App\Core\Csrf;
-use App\Constants\Application;
 use App\Core\Localization;
 ?>
 
@@ -11,11 +10,12 @@ use App\Core\Localization;
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Created By</th>
-            <th>Player No.</th>
-            <th>Options</th>
+            <th><?= Localization::get('game.list.name') ?></th>
+            <th><?= Localization::get('game.list.status') ?></th>
+            <th><?= Localization::get('game.list.created_by_username') ?></th>
+            <th><?= Localization::get('game.list.player_count') ?></th>
+            <th><?= Localization::get('game.list.game_type') ?></th>
+            <th><?= Localization::get('game.list.options') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -23,8 +23,9 @@ use App\Core\Localization;
             <tr>
                 <td><?= htmlspecialchars($game->getName()) ?></td>
                 <td><?= htmlspecialchars($game->getStatus()) ?></td>
-                <td><?= htmlspecialchars($game->getCreatedByUserId()) ?></td>
-                <td><?= (int) $game->getPlayerCount() ?></td>
+                <td><?= htmlspecialchars($game->getCreatedByUserName()) ?></td>
+                <td><?= (int) $game->getPlayerCount() ?> / <?= (int) $game->getPlayerMax() ?></td>
+                <td><?= ($game->getRuleSetModel()->isGameClassic()) ? "🎲" : "⚙️" ?></td>
                 <td>
                     <form method="POST" action="/game/<?= $game->getId() ?>/join">
                         <button type="submit">

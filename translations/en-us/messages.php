@@ -3,12 +3,14 @@
 // English - US
 
 return [
+    // Application general
+    'application.general.yes' => 'Yes', 
+    'application.general.no' => 'No', 
+
     // Game general
     'game.create.title' => 'Create new game',
     'game.create.submit' => 'Create game',
     'game.lobby.title' => 'Lobby',
-    'game.list.title' => 'Games list', 
-    'game.list.create_new_game' => '➕ Create new Game', 
     'game.status.waiting' => 'Waiting',
     'game.status.running' => 'Running',
     'game.status.finished' => 'Finished',
@@ -31,6 +33,15 @@ return [
     'game.list.id' => 'Game ID',
     'game.list.creator' => 'Created by',
     'game.list.players' => 'Players',
+    'game.list.status' => 'Status',
+    'game.list.game_type' => 'Game Type',
+    'game.list.created_by_username' => 'Created By',
+    'game.list.player_count' => 'Number of Players',
+    'game.list.options' => 'Options',
+    'game.list.name' => 'Name', 
     'game.list.action' => 'Action',
     'game.list.join' => 'Join',
+    'game.list.title' => 'Games list', 
+    'game.list.create_new_game' => '➕ Create new Game', 
+    'game.create.name' => 'Game name', 
 ];

@@ -6,15 +6,19 @@ use Exception;
 use App\Constants\Application;
 
 final class GameModel extends BaseModel {
+    private const PLAYERS_MAX = 4;
     private string $id;
     private string $name;
     private string $created_by_user_id;
-    private string $created_by_user_name;
-    private string $player_count;
+    private int $player_count;
     private string $status;
     private string $created_at;
     private string $updated_at;
 
+    // Variables for specific read operations
+    private string $created_by_user_name;
+
+    // Models for write operations
     private GameRuleSetModel $rule_set_model;
     private GameStateModel $state_model;
     private GameStatePlayerModel $player_model;
@@ -74,17 +78,6 @@ final class GameModel extends BaseModel {
             $this->db->beginTransaction();
 
             // Insert game
-            /*
-            $this->execute(
-                "INSERT INTO games
-                (id, created_by_user_id, status, created_at, updated_at)
-                VALUES
-                (:game_id, :user_id, 'waiting', NOW(), NOW())",
-                [
-                    'game_id' => $game_id,
-                    'user_id' => $user_id
-                ]
-            );*/
             $this->execute(
                 sprintf(
                     "INSERT INTO %s (%s, %s, %s, %s, created_at, updated_at)
@@ -161,11 +154,21 @@ final class GameModel extends BaseModel {
                     g.%s,
                     g.%s, 
                     g.%s,
+                    u.%s, 
                     g.%s, 
                     g.%s,
                     g.%s, 
-                    COUNT(p.%s) AS player_count
+                    COUNT(p.%s) AS player_count, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s
                 FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
+                    ON g.%s = r.%s
                 LEFT JOIN %s p 
                     ON g.%s = p.%s
                 WHERE g.%s = :status
@@ -175,14 +178,28 @@ final class GameModel extends BaseModel {
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
                 Application::STATUS, 
                 Application::CREATED_AT,
                 Application::UPDATED_AT, 
                 Application::USER_ID,
+                Application::ALLOW_BOTS, 
+                Application::EXTRA_ROLL_LIMIT, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
 
                 Application::TABLE_GAMES,
-                Application::TABLE_PLAYERS,
 
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -201,8 +218,12 @@ final class GameModel extends BaseModel {
         $game->id = $row['id'];
         $game->name = $row['name'] ?? null; 
         $game->created_by_user_id = $row['created_by_user_id'] ?? null;
+        $game->created_by_user_name = $row['username'] ?? null;
         $game->status = $row['status'] ?? null;
-        $game->player_count = $row['player_count'] ?? null;
+        $game->player_count = (int) $row['player_count'] ?? null;
+
+        $game->rule_set_model = GameRuleSetModel::fromArray($row) ?? null;
+
         $game->created_at = $row['created_at'];
         $game->updated_at = $row['updated_at'];
         return $game;
@@ -228,8 +249,13 @@ final class GameModel extends BaseModel {
         return $this->created_by_user_name;
     }
 
+    // Get number of maximum allowed player
+    public function getPlayerMax(): int {
+        return self::PLAYERS_MAX;
+    }
+
     // Get the number of player of the game
-    public function getPlayerCount() {
+    public function getPlayerCount(): int {
         return $this->player_count;
     }
 
@@ -248,23 +274,24 @@ final class GameModel extends BaseModel {
         return $this->updated_at;
     }
 
+    // Get Subset of Models - Future preparations 
     // Get the value of rule_set_model
-    public function getRule_set_model() {
+    public function getRuleSetModel() {
         return $this->rule_set_model;
     }
 
     // Get the value of state_model
-    public function getState_model() {
+    public function getStateModel() {
         return $this->state_model;
     }
 
     // Get the value of player_model
-    public function getPlayer_model() {
+    public function getPlayerModel() {
         return $this->player_model;
     }
 
     // Get the value of figure_model
-    public function getFigure_model() {
+    public function getFigureModel() {
         return $this->figure_model;
     }
 }

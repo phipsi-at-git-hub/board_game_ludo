@@ -27,10 +27,11 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            Extra Roll on Six
-            <select name="<?php echo Application::EXTRA_ROLL_ON_SIX; ?>">
+            Extra Roll on Six Limit
+            <select name="<?php echo Application::EXTRA_ROLL_LIMIT; ?>">
                 <option value="0">No</option>
-                <option value="1" selected>Yes</option>
+                <option value="3" selected>3</option>
+                <option value="255" selected>Yes</option>
             </select>
         </label>
         <br><br>

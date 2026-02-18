@@ -30,7 +30,7 @@ class GameController {
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST) {
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::EXTRA_ROLL_ON_SIX => ($_POST[Application::EXTRA_ROLL_ON_SIX]),
+                Application::EXTRA_ROLL_LIMIT => ($_POST[Application::EXTRA_ROLL_LIMIT]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
