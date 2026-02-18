@@ -19,6 +19,9 @@ final class GameRuleSetModel extends BaseModel {
     private const DEFAULT_STRICT_GOAL_ORDER = true;
     private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
 
+    // Define special values
+    private const EXTRA_ROLL_UNLIMITED = 255;
+
     //Find game by game id
     public static function findByGameId(string $game_id): ?array {
         return static::fetchOne(
@@ -77,6 +80,16 @@ final class GameRuleSetModel extends BaseModel {
         && $this->start_field_must_be_cleared === self::DEFAULT_START_FIELD_MUST_BE_CLEARED;
     }
 
+    // Helper - Is extra_roll_limit unlimited
+    public function isExtraRollUnlimited(): bool {
+        return $this->extra_roll_limit === self::EXTRA_ROLL_UNLIMITED;
+    }
+
+    // Helper - Is extra roll allowed
+    public function isExtraRollAllowed() : bool {
+        return $this->extra_roll_limit > 0;
+    }
+
     // Helper - Convert db row to GameModel object
     public static function fromArray(array $row): self {
         $rule_set = new self();
@@ -88,5 +101,11 @@ final class GameRuleSetModel extends BaseModel {
         $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
 
         return $rule_set;
+    }
+
+    // Getter
+    // Get extra limit
+    public function getExtraRollLimit(): int {
+        return $this->extra_roll_limit;
     }
 }
