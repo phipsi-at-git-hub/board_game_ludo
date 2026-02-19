@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Core\Auth;
+use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
 
-class GameController {
+class GameController extends BaseController {
     public function single() {
         echo 'Single';
     }
@@ -47,7 +49,15 @@ class GameController {
 
     public function list(): void {
         $games = GameModel::getAllOpenGames();
-        require __DIR__ . '/../Views/game/list.php';
+
+        $this->render(
+            'game/list', 
+            [
+                'games' => $games
+            ]
+        );
+
+        //require __DIR__ . '/../Views/game/list.php';
     }
 
     public function show(string $game_id) {
@@ -71,5 +81,24 @@ class GameController {
 
     public function destroy(string $game_id) {
         echo 'destroy';
+    }
+
+    // Delete game
+    public function delete(): void {
+        $game_id = $_POST['game_id'];
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        $is_owner = $game->getCreatedByUserId() === $user->getId();
+        $is_admin = $user->isAdmin();
+
+        if (!$is_admin && !($is_owner && $game->isWaiting())) {
+            http_response_code(403);
+            exit ('Unauthorized');
+        }
+
+        $game->cancelGame();
+
+        header('Location: /game/list');
     }
 }

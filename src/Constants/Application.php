@@ -18,11 +18,15 @@ class Application {
     public const GAME_ID = 'game_id';
     public const USER_ID = 'user_id';
     public const STATUS = 'status';
-    public const CREATED_BY_USER_ID = 'created_by_user_id';
     public const CREATED_AT = 'created_at';
     public const UPDATED_AT = 'updated_at';
 
-    // Database field name - game_rule_set
+    // Database field names - games
+    public const CREATED_BY_USER_ID = 'created_by_user_id';
+    public const IS_PRIVATE = 'is_private';
+    public const IS_LOCKED = 'is_locked';
+
+    // Database field names - game_rule_set
     public const ALLOW_BOTS = 'allow_bots';
     public const EXTRA_ROLL_LIMIT = 'extra_roll_limit';
     public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
@@ -54,9 +58,13 @@ class Application {
     public const GAME_MASTER = 'game_master';
 
     // Game status
-    public const STATUS_WAITING  = 'waiting';
-    public const STATUS_RUNNING  = 'running';
-    public const STATUS_FINISHED = 'finished';
+    public const STATUS_WAITING  = 'WAITING';
+    public const STATUS_RUNNING  = 'RUNNING';
+    public const STATUS_FINISHED = 'FINISHED';
+    public const STATUS_CANCELLED = 'CANCELLED';
+
+    // Game visibility 
+    public const VISIBILITY_PRIVATE = '';
 
     // Figure Areas
     public const AREA_HOME  = 'home';

@@ -3,10 +3,11 @@
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\UserModel;
 
-class AuthController {
+class AuthController extends BaseController {
     public function showLogin() {
         require __DIR__ . '/../Views/auth/login.php';
     }

@@ -7,6 +7,10 @@ use App\Core\Localization;
 
 <h1><?= Localization::get('game.create.title') ?></h1>
 
+<ul>
+    <li><a href="/lobby"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
+</ul>
+
 <form method="POST" action="/game/store">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
     <fieldset>

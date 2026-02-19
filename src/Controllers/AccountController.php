@@ -4,10 +4,10 @@
 namespace App\Controllers;
 
 use App\Core\Auth;
-use App\Core\Csrf;
+use App\Core\BaseController;
 use App\Models\UserModel;
 
-class AccountController {
+class AccountController extends BaseController {
     // Show profile
     public function profile() {
         require __DIR__ . '/../Views/account/profile.php';

@@ -2,12 +2,13 @@
 // AdminController.php
 namespace App\Controllers;
 
+use App\Core\BaseController;
 use App\Core\Middleware;
 use App\Core\Csrf;
 use App\Models\UserModel;
 use App\Models\GameModel;
 
-class AdminController {
+class AdminController extends BaseController {
     public function __construct() {
         // Make sure that only Admins have access
         Middleware::admin();

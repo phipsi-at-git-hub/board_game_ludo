@@ -50,11 +50,11 @@ class Middleware {
         }
     }
 
-    public static function csrf(array $request): void {
+    public static function csrf(): void {
         $method = $_SERVER['REQUEST_METHOD'];
         // Check POST, PUT, DELETE
         if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
-            $token = $request['_csrf_token'] ?? '';
+            $token = $_POST['_csrf_token'] ?? '';
             if (!Csrf::validate($token)) {
                 http_response_code(403);
                 die('Invalid CSRF token');

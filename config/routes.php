@@ -15,24 +15,24 @@ $router = new Router();
 
 // --- Guest routes ---
 $router->get('/login', [AuthController::class, 'showLogin'], [fn() => Middleware::guest()]);
-$router->post('/login', [AuthController::class, 'login'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
+$router->post('/login', [AuthController::class, 'login'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 $router->get('/register', [AuthController::class, 'showRegister'], [fn() => Middleware::guest()]);
-$router->post('/register', [AuthController::class, 'register'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
+$router->post('/register', [AuthController::class, 'register'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 $router->get('/forgot-password', [AccountController::class, 'showForgotPassword'], [fn() => Middleware::guest()]);
-$router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
+$router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 $router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
-$router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf($_POST)]);
+$router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 
 // --- Authenticated routes ---
 $router->get('/', [HomeController::class, 'index'], [fn() => Middleware::auth()]);
 $router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
-$router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf($_POST)]);
+$router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf()]);
 
 $router->group('/account', function($group) {
     $group->get('', [AccountController::class, 'profile']);
-    $group->put('/update', [AccountController::class, 'updateProfile'], [fn() => Middleware::csrf($_POST)]);
-    $group->put('/password', [AccountController::class, 'changePassword'], [fn() => Middleware::csrf($_POST)]);
-    $group->delete('/delete', [AccountController::class, 'deleteAccount'], [fn() => Middleware::csrf($_POST)]);
+    $group->put('/update', [AccountController::class, 'updateProfile'], [fn() => Middleware::csrf()]);
+    $group->put('/password', [AccountController::class, 'changePassword'], [fn() => Middleware::csrf()]);
+    $group->delete('/delete', [AccountController::class, 'deleteAccount'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Game routes ---
@@ -40,9 +40,9 @@ $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::au
 $router->group('/game', function($group) {
     $group->get('/create', [GameController::class, 'create']);
     $group->get('/list', [GameController::class, 'list']);
-    $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf($_POST)]);
+    $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf()]);
     $group->get('/{id}', [GameController::class, 'show']);
-    $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf($_POST)]);
+    $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Admin routes ---
@@ -50,8 +50,8 @@ $router->group('/admin', function($group) {
     $group->get('', [AdminController::class, 'dashboard']);
     $group->get('/users', [AdminController::class, 'listUsers']);
     $group->get('/users/edit/{id}', [AdminController::class, 'editUser']);
-    $group->post('/users/edit/{id}', [AdminController::class, 'updateUser'], [fn() => Middleware::csrf($_POST)]);
-    $group->delete('/users/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf($_POST)]);
+    $group->post('/users/edit/{id}', [AdminController::class, 'updateUser'], [fn() => Middleware::csrf()]);
+    $group->delete('/users/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf()]);
     $group->get('/games/list', [AdminController::class, 'listGames']);
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 return $router;

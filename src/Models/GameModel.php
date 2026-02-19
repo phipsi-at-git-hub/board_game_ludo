@@ -12,6 +12,8 @@ final class GameModel extends BaseModel {
     private string $created_by_user_id;
     private int $player_count;
     private string $status;
+    private bool $is_private;
+    private bool $is_locked;
     private string $created_at;
     private string $updated_at;
 
@@ -122,6 +124,33 @@ final class GameModel extends BaseModel {
         $this->status = $status;
     }
 
+    // Games - Update game status
+    public function updateStatus($status): void {
+        static::execute(
+            sprintf(
+                "UPDATE 
+                    %s,
+                SET
+                    %s = :status
+                WHERE
+                    %s = :game_id",
+
+                Application::TABLE_GAMES, 
+                Application::STATUS, 
+                Application::ID
+            ),
+            [
+                'status' => $status,
+                'game_id' => $this->id
+            ]
+        );
+    }
+
+    // Game - Update game status helper
+    public function cancelGame(): void {
+        $this->updateStatus(Application::STATUS_CANCELLED);
+    }
+
     // Games - Delete game
     public function delete(): bool {
         try {
@@ -156,6 +185,8 @@ final class GameModel extends BaseModel {
                     g.%s,
                     u.%s, 
                     g.%s, 
+                    g.%s, 
+                    g.%s, 
                     g.%s,
                     g.%s, 
                     COUNT(p.%s) AS player_count, 
@@ -180,6 +211,8 @@ final class GameModel extends BaseModel {
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
                 Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
                 Application::CREATED_AT,
                 Application::UPDATED_AT, 
                 Application::USER_ID,
@@ -220,6 +253,8 @@ final class GameModel extends BaseModel {
         $game->created_by_user_id = $row['created_by_user_id'] ?? null;
         $game->created_by_user_name = $row['username'] ?? null;
         $game->status = $row['status'] ?? null;
+        $game->is_private = $row['is_private'] ?? null;
+        $game->is_locked = $row['is_locked'] ?? null;
         $game->player_count = (int) $row['player_count'] ?? null;
 
         $game->rule_set_model = GameRuleSetModel::fromArray($row) ?? null;
@@ -229,6 +264,7 @@ final class GameModel extends BaseModel {
         return $game;
     }
 
+    // Getter
     // Get the value of id
     public function getId() {
         return $this->id;
@@ -293,5 +329,36 @@ final class GameModel extends BaseModel {
     // Get the value of figure_model
     public function getFigureModel() {
         return $this->figure_model;
+    }
+
+    // Helper
+    // Helper - Status is waiting
+    public function isWaiting() : bool {
+        return $this->status === Application::STATUS_WAITING;
+    }
+
+    // Helper - Status is running
+    public function isRunning() : bool {
+        return $this->status === Application::STATUS_RUNNING;
+    }
+
+    // Helper - Status is finished
+    public function isFinished() : bool {
+        return $this->status === Application::STATUS_FINISHED;
+    }
+
+    // Helper - Status is cancelled
+    public function isCancelled() : bool {
+        return $this->status === Application::STATUS_CANCELLED;
+    }
+
+    // Helper - Is private
+    public function isPrivate() : bool {
+        return $this->is_private;
+    }
+
+    // Helper - Is locked
+    public function isLocked() : bool {
+        return $this->is_locked;
     }
 }
