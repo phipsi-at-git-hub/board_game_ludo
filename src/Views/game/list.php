@@ -1,5 +1,4 @@
 <?php
-use App\Core\Csrf;
 use App\Core\Localization;
 ?>
 

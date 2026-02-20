@@ -49,7 +49,7 @@ class GameController extends BaseController {
 
     public function list(): void {
         $games = GameModel::getAllOpenGames();
-
+        
         $this->render(
             'game/list', 
             [
@@ -62,7 +62,15 @@ class GameController extends BaseController {
 
     public function show(string $game_id) {
         // View an existing game
-        echo "Game created<br/>";
+        $game = GameModel::findById($game_id);
+
+        if (!$game) {
+            http_response_code(404);
+            die('Game not found');
+        }
+
+        $user = Auth::user();
+
         echo 'Viewing game: ' . htmlspecialchars($game_id);
     }
 

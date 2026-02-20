@@ -4,6 +4,9 @@ namespace App\Models;
 
 final class GameStateModel extends BaseModel {
     // ToDo: Use constant from application.php 
+    private int $current_player_index;
+    private string $created_at;
+    private string $updated_at;
 
     // Find game state by game id
     public static function findByGameId(string $game_id): ?array {

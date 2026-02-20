@@ -94,11 +94,11 @@ final class GameRuleSetModel extends BaseModel {
     public static function fromArray(array $row): self {
         $rule_set = new self();
 
-        $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
-        $rule_set->extra_roll_limit = (int) $row[Application::EXTRA_ROLL_LIMIT];
-        $rule_set->allow_stack_own_figures = (bool) $row[Application::ALLOW_STACK_OWN_FIGURES];
-        $rule_set->strict_goal_order = (bool) $row[Application::STRICT_GOAL_ORDER];
-        $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
+        if (array_key_exists(Application::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
+        if (array_key_exists(Application::EXTRA_ROLL_LIMIT, $row)) $rule_set->extra_roll_limit = (int) $row[Application::EXTRA_ROLL_LIMIT];
+        if (array_key_exists(Application::ALLOW_STACK_OWN_FIGURES, $row)) $rule_set->allow_stack_own_figures = (bool) $row[Application::ALLOW_STACK_OWN_FIGURES];
+        if (array_key_exists(Application::STRICT_GOAL_ORDER, $row)) $rule_set->strict_goal_order = (bool) $row[Application::STRICT_GOAL_ORDER];
+        if (array_key_exists(Application::START_FIELD_MUST_BE_CLEARED, $row)) $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
 
         return $rule_set;
     }

@@ -4,6 +4,9 @@ namespace App\Models;
 
 final class GameStatePlayerModel extends BaseModel {
     // ToDo: Use constant from application.php 
+    private string $player_user_id;
+    private string $created_at;
+    private string $updated_at;
 
     // Find game state players for given game
     public static function findByGameId(string $game_id): array {
@@ -42,5 +45,11 @@ final class GameStatePlayerModel extends BaseModel {
             "DELETE FROM game_state_players WHERE game_id = :game_id",
             ['game_id' => $game_id]
         );
+    }
+
+    // Getter
+    // Getter - get user id
+    public function getPlayerId(): string {
+        return $this->player_user_id;
     }
 }

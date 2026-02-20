@@ -3,6 +3,12 @@
 namespace App\Constants;
 
 class Application {
+    // Application general
+    public const GENERAL_ACCESS = 'access';
+    public const GENERAL_JOIN = 'join';
+    public const GENERAL_EDIT = 'edit';
+    public const GENERAL_DELETE = 'delete';
+
     // Database tables
     public const TABLE_USERS = 'users'; 
     public const TABLE_GAMES = 'games';
@@ -63,6 +69,8 @@ class Application {
     public const STATUS_FINISHED = 'FINISHED';
     public const STATUS_CANCELLED = 'CANCELLED';
 
+    // Game general
+    public const PLAYER_COUNT = 'player_count';
     // Game visibility 
     public const VISIBILITY_PRIVATE = '';
 

@@ -41,7 +41,7 @@ $router->group('/game', function($group) {
     $group->get('/create', [GameController::class, 'create']);
     $group->get('/list', [GameController::class, 'list']);
     $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf()]);
-    $group->get('/{id}', [GameController::class, 'show']);
+    $group->get('/detail/{id}', [GameController::class, 'show']);
     $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
 

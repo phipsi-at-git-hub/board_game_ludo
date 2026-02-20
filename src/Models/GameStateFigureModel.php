@@ -4,6 +4,12 @@ namespace App\Models;
 
 final class GameStateFigureModel extends BaseModel {
     // ToDo: Use constant from application.php 
+    private string $player_user_id;
+    private int $figure_index;
+    private int $position;
+    private string $area;
+    private string $created_at;
+    private string $updated_at;
 
     // Find game state figures by game id
     public function findByGameId(string $game_id): array {

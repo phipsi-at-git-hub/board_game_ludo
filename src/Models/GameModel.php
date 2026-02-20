@@ -23,16 +23,16 @@ final class GameModel extends BaseModel {
     // Models for write operations
     private GameRuleSetModel $rule_set_model;
     private GameStateModel $state_model;
-    private GameStatePlayerModel $player_model;
-    private GameStateFigureModel $figure_model;
+    private array $player_array;    // max 4
+    private array $figure_array;    // max 16
 
     public function __construct() {
         parent::__construct();
 
         $this->rule_set_model = new GameRuleSetModel();
         $this->state_model = new GameStateModel();
-        $this->player_model = new GameStatePlayerModel();
-        $this->figure_model = new GameStateFigureModel();
+        $this->player_array = []; 
+        $this->figure_array = [];
     }
 
     // Games - Retrieve all games
@@ -43,10 +43,28 @@ final class GameModel extends BaseModel {
 
     // Games - Find game by id
     public static function findById(string $game_id): ?self {
-        $row = static::fetchAll(
-            "SELECT * FROM games WHERE id = :id LIMIT 1",
-            ['id' => $game_id]
+        $row = static::fetchOne(
+            "SELECT 
+                g.id, 
+                g.name, 
+                g.created_by_user_id, 
+                u.username, 
+                g.status, 
+                g.is_private, 
+                g.is_locked, 
+                g.created_at, 
+                g.updated_at
+            FROM games g
+            JOIN users u
+                ON g.created_by_user_id = u.id
+            WHERE g.id = :game_id 
+            LIMIT 1",
+            ['game_id' => $game_id]
         );
+
+        //var_dump($row);
+        //var_dump(self::fromArray($row));
+        //exit;
         return $row ? self::fromArray($row) : null;
     }
 
@@ -156,8 +174,8 @@ final class GameModel extends BaseModel {
         try {
             $this->db->beginTransaction();
 
-            $this->figure_model->removeAllFigures($this->id);
-            $this->player_model->removeAllPlayer($this->id);
+            //$this->figure_model->removeAllFigures($this->id);
+            //$this->player_model->removeAllPlayer($this->id);
             $this->state_model->delete($this->id);
             $this->rule_set_model->delete($this->id);
 
@@ -245,23 +263,82 @@ final class GameModel extends BaseModel {
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
-    // Helper - Convert db row to GameModel object
+    // Helper - Convert db rows to GameModel dynamically
+    private static function fromArrayDynamic(array $row): self {
+        $game = new self();
+
+        foreach ($row as $key => $value) {
+            $game->{$key} = $value; 
+        }
+        return $game;
+    }
+
+    // Helper - Convert db rows to GameModel strict
     private static function fromArray(array $row): self {
         $game = new self();
         $game->id = $row['id'];
         $game->name = $row['name'] ?? null; 
         $game->created_by_user_id = $row['created_by_user_id'] ?? null;
-        $game->created_by_user_name = $row['username'] ?? null;
         $game->status = $row['status'] ?? null;
         $game->is_private = $row['is_private'] ?? null;
         $game->is_locked = $row['is_locked'] ?? null;
-        $game->player_count = (int) $row['player_count'] ?? null;
+
+        if (array_key_exists(Application::USERNAME, $row)) $game->created_by_user_name = $row['username'];
+        if (array_key_exists(Application::PLAYER_COUNT, $row)) $game->player_count = (int) $row[Application::PLAYER_COUNT];
 
         $game->rule_set_model = GameRuleSetModel::fromArray($row) ?? null;
 
         $game->created_at = $row['created_at'];
         $game->updated_at = $row['updated_at'];
         return $game;
+    }
+
+    // Helper
+    // Helper - Status is waiting
+    public function isWaiting() : bool {
+        return $this->status === Application::STATUS_WAITING;
+    }
+
+    // Helper - Status is running
+    public function isRunning() : bool {
+        return $this->status === Application::STATUS_RUNNING;
+    }
+
+    // Helper - Status is finished
+    public function isFinished() : bool {
+        return $this->status === Application::STATUS_FINISHED;
+    }
+
+    // Helper - Status is cancelled
+    public function isCancelled() : bool {
+        return $this->status === Application::STATUS_CANCELLED;
+    }
+
+    // Helper - Is private
+    public function isPrivate() : bool {
+        return $this->is_private;
+    }
+
+    // Helper - Is locked
+    public function isLocked() : bool {
+        return $this->is_locked;
+    }
+
+    // Helper - Check for available player slots
+    public function isFull(): bool {
+        return $this->getPlayerCount() >= $this->getPlayerMax();
+    }
+
+    // Helper - Check if given user is already a player of the game
+    public function isParticipant(UserModel $user) {
+        // ToDo: Implement
+        $user_id = $user->getId();
+        for ($i = 0; $i < count($this->player_array); $i++) {
+            $player = $this->player_array[$i];
+            if ($user_id === $player->getPlayerId) {
+                return true;
+            }
+        }
     }
 
     // Getter
@@ -312,53 +389,34 @@ final class GameModel extends BaseModel {
 
     // Get Subset of Models - Future preparations 
     // Get the value of rule_set_model
-    public function getRuleSetModel() {
+    public function getRuleSetModel(): GameRuleSetModel {
         return $this->rule_set_model;
     }
 
     // Get the value of state_model
-    public function getStateModel() {
+    public function getStateModel(): GameStateModel {
         return $this->state_model;
     }
 
-    // Get the value of player_model
-    public function getPlayerModel() {
-        return $this->player_model;
+    // Get array of all player in the game
+    public function getAllPlayer(): array {
+        return $this->player_array;
+    }
+    
+    // Get player given by player id
+    public function getPlayerById(string $player_id): GameStatePlayerModel {
+        // ToDo: Implement this
+        return new GameStatePlayerModel();
     }
 
-    // Get the value of figure_model
-    public function getFigureModel() {
-        return $this->figure_model;
+    // Get array of all figures in the game
+    public function getAllFigures(): array {
+        return $this->figure_array;
     }
 
-    // Helper
-    // Helper - Status is waiting
-    public function isWaiting() : bool {
-        return $this->status === Application::STATUS_WAITING;
-    }
-
-    // Helper - Status is running
-    public function isRunning() : bool {
-        return $this->status === Application::STATUS_RUNNING;
-    }
-
-    // Helper - Status is finished
-    public function isFinished() : bool {
-        return $this->status === Application::STATUS_FINISHED;
-    }
-
-    // Helper - Status is cancelled
-    public function isCancelled() : bool {
-        return $this->status === Application::STATUS_CANCELLED;
-    }
-
-    // Helper - Is private
-    public function isPrivate() : bool {
-        return $this->is_private;
-    }
-
-    // Helper - Is locked
-    public function isLocked() : bool {
-        return $this->is_locked;
+    // Get Figure given by figure id
+    public function getFigureById(string $figure_id): GameStateFigureModel {
+        // ToDo: Implement
+        return new GameStateFigureModel();
     }
 }
