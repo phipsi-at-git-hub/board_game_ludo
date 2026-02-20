@@ -51,7 +51,13 @@ return [
     'game.list.title' => 'Games list', 
     'game.list.create_new_game' => '➕ Create new Game', 
     'game.list.back_to_lobby' => 'Back to Lobby', 
-    'game.create.name' => 'Game name', 
+
+    //Games - Create
+    'game.create.button_create' => 'Create Game', 
+    'game.create.three' => '3', 
+    'game.create.name' => 'Name', 
+    'game.create.game_name' => 'Game Name', 
+    'game.create.game_options' => 'Game Options', 
 
     // Game - Rules
     'game.rules.allow_bots' => 'Allow bots',

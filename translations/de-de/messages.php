@@ -51,7 +51,13 @@ return [
     'game.list.title' => 'Spieleliste', 
     'game.list.create_new_game' => '➕ Neues Spiel erstellen', 
     'game.list.back_to_lobby' => 'Zurück zur Lobby', 
+
+    // Games - Create
+    'game.create.button_create' => 'Spiel erstellen', 
+    'game.create.three' => '3', 
     'game.create.name' => 'Name', 
+    'game.create.game_name' => 'Spielname', 
+    'game.create.game_options' => 'Spielregeln', 
 
     // Game - Rules
     'game.rules.allow_bots' => 'Bots erlauben',

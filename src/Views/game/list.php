@@ -53,24 +53,22 @@ use App\Core\Localization;
                         <?php if ($can_edit || $can_delete): ?>
                             <div class="action-menu">
                                 <button class="menu-toggle action-btn">⋮</button>
-                                <div class="action-buttons">
-                                    <div class="menu-content">
-                                        <?php if ($can_edit): ?>
-                                            <a href="/game/edit/<?= $game->getId() ?>" class="action-btn"><?= Localization::get('game.list.edit_icon') ?></a>
-                                        <?php endif; ?>
+                                <div class="menu-content">
+                                    <?php if ($can_edit): ?>
+                                        <a href="/game/edit/<?= $game->getId() ?>" class="action-btn"><?= Localization::get('game.list.edit_icon') ?></a>
+                                    <?php endif; ?>
 
-                                        <?php if ($can_delete): ?>
-                                            <form method="post" action="/game/delete" onsubmit="return confirm(<?= Localization::get('game.list.confirm_delete') ?>);">
-                                                <input type="hidden" name="id" value="<?= $game->getId() ?>">
-                                                <button type="submit" class="action-btn">
-                                                    <?= Localization::get('game.list.delete_icon') ?>
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
-                                    </div>
+                                    <?php if ($can_delete): ?>
+                                        <form method="post" action="/game/delete" onsubmit="return confirm(<?= Localization::get('game.list.confirm_delete') ?>);">
+                                            <input type="hidden" name="id" value="<?= $game->getId() ?>">
+                                            <button type="submit" class="action-btn">
+                                                <?= Localization::get('game.list.delete_icon') ?>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </td>
             </tr>

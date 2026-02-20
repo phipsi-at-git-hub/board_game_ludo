@@ -7,14 +7,18 @@
     display: none;
     position: absolute;
     background: white;
+    border-radius: 6px;
     border: 1px solid #ccc;
     padding: 5px;
     right: 0;
     z-index: 10;
+
+    flex-direction: column; 
+    gap: 4px; 
 }
 
 .action-menu:hover .menu-content {
-    display: block;
+    display: flex;
 }
 
 /* Div Container Class for all action elements */
