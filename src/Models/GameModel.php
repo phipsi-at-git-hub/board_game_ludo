@@ -41,31 +41,184 @@ final class GameModel extends BaseModel {
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
+    // Get all games
+    public static function getAllGames(): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT
+                    g.*, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    COUNT(p.%s) as player_count
+                FROM %s g 
+                LEFT JOIN %s r 
+                    ON g.%s = r.%s
+                LEFT JOIN %s p
+                    ON g.%s = p.%s
+                GROUP BY g.%s 
+                ORDER BY g.%s DESC", 
+
+                Application::ALLOW_BOTS, 
+                Application::EXTRA_ROLL_LIMIT, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::USER_ID, 
+
+                Application::TABLE_GAMES, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+
+                Application::TABLE_PLAYERS, 
+                Application::ID, 
+                Application::GAME_ID, 
+
+                Application::ID, 
+                Application::CREATED_AT
+            )
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
+    // Get all open game available to join
+    public static function getAllOpenGames(): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    u.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
+                    ON g.%s = r.%s
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s
+                WHERE g.%s = :status
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
+                Application::ALLOW_BOTS, 
+                Application::EXTRA_ROLL_LIMIT, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::TABLE_GAMES,
+
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
+                Application::ID,
+                Application::GAME_ID,
+
+                Application::STATUS,
+                Application::ID,
+                Application::CREATED_AT
+            ),
+            ['status' => Application::STATUS_WAITING]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
     // Games - Find game by id
     public static function findById(string $game_id): ?self {
         $row = static::fetchOne(
-            "SELECT 
-                g.id, 
-                g.name, 
-                g.created_by_user_id, 
-                u.username, 
-                g.status, 
-                g.is_private, 
-                g.is_locked, 
-                g.created_at, 
-                g.updated_at
-            FROM games g
-            JOIN users u
-                ON g.created_by_user_id = u.id
-            WHERE g.id = :game_id 
-            LIMIT 1",
+            sprintf(
+                "SELECT 
+                    g.*, 
+                    u.username, 
+                    r.allow_bots, 
+                    r.extra_roll_limit, 
+                    r.allow_stack_own_figures, 
+                    r.strict_goal_order, 
+                    r.start_field_must_be_cleared 
+                FROM games g
+                JOIN users u
+                    ON g.created_by_user_id = u.id 
+                LEFT JOIN game_rule_set r
+                    ON g.id = r.game_id
+                WHERE g.id = :game_id 
+                LIMIT 1"
+            ), 
             ['game_id' => $game_id]
         );
 
-        //var_dump($row);
-        //var_dump(self::fromArray($row));
-        //exit;
-        return $row ? self::fromArray($row) : null;
+        if (!$row) {
+            return null;
+        }
+
+        $game = self::fromArray($row);
+
+        // Load all players of the game
+        $players = static::fetchAll(
+            sprintf(
+                "SELECT
+                    p.user_id, 
+                    u.username 
+                FROM game_state_players p
+                JOIN users u
+                    ON p.user_id = u.id
+                WHERE p.game_id = :game_id
+                ORDER BY p.created_at ASC"
+            ), 
+            ['game_id' => $game_id]
+        );
+
+        $game->player_array = $players;
+
+        // Load all figures of the game
+        $figures = static::fetchAll(
+            sprintf(
+                "SELECT
+                    f.user_id, 
+                    f.figure_index, 
+                    f.position, 
+                    f.area
+                FROM game_state_figures f
+                WHERE f.game_id = :game_id"
+            ),
+            ['game_id' => $game_id]
+        );
+
+        $game->figure_array = $figures;
+
+        return $game;
     }
 
     // Games - Find game by name
@@ -191,76 +344,6 @@ final class GameModel extends BaseModel {
             throw $e;
             return false;
         }
-    }
-
-    // get all open game available to join
-    public static function getAllOpenGames(): array {
-        $rows = static::fetchAll(
-            sprintf(
-                "SELECT 
-                    g.%s,
-                    g.%s, 
-                    g.%s,
-                    u.%s, 
-                    g.%s, 
-                    g.%s, 
-                    g.%s, 
-                    g.%s,
-                    g.%s, 
-                    COUNT(p.%s) AS player_count, 
-                    r.%s, 
-                    r.%s, 
-                    r.%s, 
-                    r.%s, 
-                    r.%s
-                FROM %s g
-                JOIN %s u
-                    ON g.%s = u.%s
-                JOIN %s r
-                    ON g.%s = r.%s
-                LEFT JOIN %s p 
-                    ON g.%s = p.%s
-                WHERE g.%s = :status
-                GROUP BY g.%s
-                ORDER BY g.%s DESC",
-                
-                Application::ID,
-                Application::NAME,
-                Application::CREATED_BY_USER_ID,
-                Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::CREATED_AT,
-                Application::UPDATED_AT, 
-                Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::EXTRA_ROLL_LIMIT, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
-
-                Application::TABLE_GAMES,
-
-                Application::TABLE_USERS, 
-                Application::CREATED_BY_USER_ID,
-                Application::ID, 
-
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
-                Application::TABLE_PLAYERS,
-                Application::ID,
-                Application::GAME_ID,
-
-                Application::STATUS,
-                Application::ID,
-                Application::CREATED_AT
-            ),
-            ['status' => Application::STATUS_WAITING]
-        );
-        return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
     // Helper - Convert db rows to GameModel dynamically

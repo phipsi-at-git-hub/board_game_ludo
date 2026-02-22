@@ -59,6 +59,12 @@ return [
     'game.create.game_name' => 'Spielname', 
     'game.create.game_options' => 'Spielregeln', 
 
+    //Games - Show / Detail
+    'game.show.title' => 'Spiel', 
+    'game.show.status' => 'Status', 
+    'game.show.created_at' => 'Erstellt am', 
+    'game.show.player' => 'Spieler', 
+
     // Game - Rules
     'game.rules.allow_bots' => 'Bots erlauben',
     'game.rules.extra_roll_on_six' => 'Extra Wurf bei einer 6',

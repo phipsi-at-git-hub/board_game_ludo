@@ -71,7 +71,14 @@ class GameController extends BaseController {
 
         $user = Auth::user();
 
-        echo 'Viewing game: ' . htmlspecialchars($game_id);
+        //echo 'Viewing game: ' . htmlspecialchars($game_id);
+
+        $this->render(
+            'game/show', 
+            [
+                'game' => $game, 
+            ]
+        );
     }
 
     public function join(string $game_id) {

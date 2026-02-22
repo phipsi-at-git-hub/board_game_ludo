@@ -2,9 +2,13 @@
 // src/Models/GameStatePlayerModel.php
 namespace App\Models;
 
+use App\Constants\Application;
+
 final class GameStatePlayerModel extends BaseModel {
     // ToDo: Use constant from application.php 
-    private string $player_user_id;
+    private string $game_id;
+    private string $user_id;
+    private string $user_name;
     private string $created_at;
     private string $updated_at;
 
@@ -50,6 +54,30 @@ final class GameStatePlayerModel extends BaseModel {
     // Getter
     // Getter - get user id
     public function getPlayerId(): string {
-        return $this->player_user_id;
+        return $this->user_id;
+    }
+
+    // Helper
+    // Helper - Convert db rows to GameModel dynamically
+    private static function fromArrayDynamic(array $row): self {
+        $game_state_player = new self();
+
+        foreach ($row as $key => $value) {
+            $game_state_player->{$key} = $value; 
+        }
+        return $game_state_player;
+    }
+
+    // Helper - Convert db rows to GameModel strict
+    public static function fromArray(array $row) : self {
+        $game_state_player = new self();
+
+        $game_state_player->game_id = $row[Application::GAME_ID];
+        $game_state_player->user_id = $row[Application::USER_ID];
+        $game_state_player->user_name = $row[Application::USERNAME];
+        $game_state_player->created_at = $row[Application::CREATED_AT];
+        $game_state_player->updated_at = $row[Application::UPDATED_AT];
+
+        return $game_state_player;
     }
 }

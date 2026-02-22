@@ -104,8 +104,28 @@ final class GameRuleSetModel extends BaseModel {
     }
 
     // Getter
+    // Get allow_bots
+    public function  getAllowBots() : bool {
+        return $this->allow_bots;
+    }
+
     // Get extra limit
     public function getExtraRollLimit(): int {
         return $this->extra_roll_limit;
+    }
+
+    // Get allow_stack_own_figures
+    public function getAllowStackOwnFigures(): bool {
+        return $this->allow_stack_own_figures;
+    }
+
+    // Get strict_goal_order
+    public function getStrictGoalOrder(): bool {
+        return $this->strict_goal_order;
+    }
+
+    // Get start_field_must_be_cleared
+    public function getStartFieldMustBeCleared(): bool {
+         return $this->start_field_must_be_cleared;
     }
 }
