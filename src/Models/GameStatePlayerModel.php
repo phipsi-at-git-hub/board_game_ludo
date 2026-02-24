@@ -53,8 +53,23 @@ final class GameStatePlayerModel extends BaseModel {
 
     // Getter
     // Getter - get user id
-    public function getPlayerId(): string {
+    public function getUserId(): string {
         return $this->user_id;
+    }
+
+    // Getter - get username
+    public function getUsername(): string {
+        return $this->user_name;
+    }
+
+    // Getter - Get created at
+    public function getCreatedAt(): string {
+        return $this->created_at;
+    }
+
+    // Getter - Get updated at
+    public function getUpdatedAt(): string {
+        return $this->updated_at;
     }
 
     // Helper
@@ -74,7 +89,7 @@ final class GameStatePlayerModel extends BaseModel {
 
         $game_state_player->game_id = $row[Application::GAME_ID];
         $game_state_player->user_id = $row[Application::USER_ID];
-        $game_state_player->user_name = $row[Application::USERNAME];
+        if (array_key_exists(Application::USERNAME, $row))  $game_state_player->user_name = $row[Application::USERNAME];
         $game_state_player->created_at = $row[Application::CREATED_AT];
         $game_state_player->updated_at = $row[Application::UPDATED_AT];
 

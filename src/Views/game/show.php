@@ -10,33 +10,33 @@ use App\Core\Localization;
     <p><strong><?= Localization::get('game.show.player') ?>:</strong> <?= count($game->players ?? []) ?></p>
 </div>
 
-<h2>Spieler</h2>
+<h2><?= Localization::get('game.show.players') ?></h2>
 
 <?php if (!empty($game->getAllPlayer())): ?>
     <ul class="player-list">
         <?php foreach ($game->getAllPlayer() as $player): ?>
             <li>
-                <?= htmlspecialchars($player['username']) ?>
+                <?= htmlspecialchars($player->getUsername()) ?>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php else: ?>
-    <p>Keine Spieler vorhanden.</p>
+    <p><?= Localization::get('game.show.label_no_players_found') ?></p>
 <?php endif; ?>
 
-<h2>Figuren</h2>
+<h2><?= Localization::get('game.show.figures') ?></h2>
 
 <?php if (!empty($game->getAllFigures())): ?>
 
     <?php foreach ($game->getAllPlayer() as $player): ?>
-        <h3><?= htmlspecialchars($player['username']) ?></h3>
+        <h3><?= htmlspecialchars($player->getUsername()) ?></h3>
         <ul>
             <?php foreach ($game->getAllFigures() as $figure): ?>
-                <?php if ($figure['user_id'] == $player['user_id']): ?>
+                <?php if ($figure->getUserId() == $player->getUserId()): ?>
                     <li>
-                        Figur <?= $figure['figure_index'] ?> –
-                        Position: <?= $figure['position'] ?> –
-                        Bereich: <?= htmlspecialchars($figure['area']) ?>
+                        <?= Localization::get('game.show.figure') ?> <?= $figure->getFigureIndex() ?> –
+                        <?= Localization::get('game.show.position') ?>: <?= $figure->getPosition() ?> –
+                        <?= Localization::get('game.show.area') ?>: <?= htmlspecialchars($figure->getArea()) ?>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -44,15 +44,15 @@ use App\Core\Localization;
     <?php endforeach; ?>
 
 <?php else: ?>
-    <p>Keine Figuren vorhanden.</p>
+    <p><?= Localization::get('game.show.label_no_figures_found') ?></p>
 <?php endif; ?>
 
-<h2>Regeln</h2>
+<h2><?= Localization::get('game.show.rules') ?></h2>
 
 <ul>
-    <li>Bots erlaubt: <?= $game->getRuleSetModel()->getAllowBots() ? 'Ja' : 'Nein' ?></li>
-    <li>Extra-Wurf bei 6 Limit: <?php if ($game->getRuleSetModel()->getExtraRollLimit() === 0) { echo 'Kein nochmaliges Würfeln nach 6.'; } elseif ($game->getRuleSetModel()->getExtraRollLimit() === 255) { echo 'Nach jeder 6 ein weiteres Würfeln.'; } else { echo "Zusätzliches Würfeln nach einer 6 ist auf ". $game->getRuleSetModel()->getExtraRollLimit() . " Würfe begrenzt.";} ?></li>
-    <li>Eigene Figuren stapeln: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? 'Ja' : 'Nein' ?></li>
-    <li>Strenge Zielfeld-Reihenfolge: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? 'Ja' : 'Nein' ?></li>
-    <li>Startfeld muss frei sein: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? 'Ja' : 'Nein' ?></li>
+    <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+    <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php if ($game->getRuleSetModel()->getExtraRollLimit() === 0) { echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); } elseif ($game->getRuleSetModel()->getExtraRollLimit() === 255) { echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); } else { echo Localization::get('game.show.label_rules_roll_on_six_limit_limited'). $game->getRuleSetModel()->getExtraRollLimit();} ?></li>
+    <li><?= Localization::get('game.show.label_rules_stack_on_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+    <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+    <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
 </ul>

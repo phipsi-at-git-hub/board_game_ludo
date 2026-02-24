@@ -69,7 +69,7 @@ class GameController extends BaseController {
             die('Game not found');
         }
 
-        $user = Auth::user();
+        //$user = Auth::user();
 
         //echo 'Viewing game: ' . htmlspecialchars($game_id);
 

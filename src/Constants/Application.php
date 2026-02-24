@@ -15,7 +15,7 @@ class Application {
     public const TABLE_RULES = 'game_rule_set';
     public const TABLE_STATE = 'game_state';
     public const TABLE_PLAYERS = 'game_state_players';
-    public const TABLE_FIGURES = 'game_state_figure';
+    public const TABLE_FIGURES = 'game_state_figures';
 
     // Database field names - common
     public const ID = 'id';

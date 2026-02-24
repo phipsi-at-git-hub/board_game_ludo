@@ -32,7 +32,7 @@ final class GameModel extends BaseModel {
         $this->rule_set_model = new GameRuleSetModel();
         $this->state_model = new GameStateModel();
         $this->player_array = []; 
-        $this->figure_array = [];
+        //$this->figure_array = [];
     }
 
     // Games - Retrieve all games
@@ -162,19 +162,38 @@ final class GameModel extends BaseModel {
             sprintf(
                 "SELECT 
                     g.*, 
-                    u.username, 
-                    r.allow_bots, 
-                    r.extra_roll_limit, 
-                    r.allow_stack_own_figures, 
-                    r.strict_goal_order, 
-                    r.start_field_must_be_cleared 
-                FROM games g
-                JOIN users u
-                    ON g.created_by_user_id = u.id 
-                LEFT JOIN game_rule_set r
-                    ON g.id = r.game_id
-                WHERE g.id = :game_id 
-                LIMIT 1"
+                    u.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s 
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s 
+                LEFT JOIN %s r
+                    ON g.%s = r.%s
+                WHERE g.%s = :game_id 
+                LIMIT 1", 
+
+                Application::USERNAME, 
+                Application::ALLOW_BOTS, 
+                Application::EXTRA_ROLL_LIMIT, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::TABLE_GAMES, 
+
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID, 
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+
+                Application::ID
             ), 
             ['game_id' => $game_id]
         );
@@ -189,34 +208,67 @@ final class GameModel extends BaseModel {
         $players = static::fetchAll(
             sprintf(
                 "SELECT
-                    p.user_id, 
-                    u.username 
-                FROM game_state_players p
-                JOIN users u
-                    ON p.user_id = u.id
-                WHERE p.game_id = :game_id
-                ORDER BY p.created_at ASC"
+                    p.%s, 
+                    p.%s, 
+                    u.%s, 
+                    p.%s, 
+                    p.%s 
+                FROM %s p
+                JOIN %s u
+                    ON p.%s = u.%s
+                WHERE p.%s = :game_id
+                ORDER BY p.%s ASC", 
+
+                Application::GAME_ID, 
+                Application::USER_ID, 
+                Application::USERNAME, 
+                Application::CREATED_AT, 
+                Application::UPDATED_AT, 
+
+                Application::TABLE_PLAYERS, 
+
+                Application::TABLE_USERS, 
+                Application::USER_ID, 
+                Application::ID, 
+
+                Application::GAME_ID, 
+
+                Application::CREATED_AT
             ), 
             ['game_id' => $game_id]
         );
 
-        $game->player_array = $players;
+        $game->player_array = array_map(fn($row) => GameStatePlayerModel::fromArray($row), $players);
 
         // Load all figures of the game
         $figures = static::fetchAll(
             sprintf(
                 "SELECT
-                    f.user_id, 
-                    f.figure_index, 
-                    f.position, 
-                    f.area
-                FROM game_state_figures f
-                WHERE f.game_id = :game_id"
+                    f.%s, 
+                    f.%s, 
+                    f.%s, 
+                    f.%s, 
+                    f.%s, 
+                    f.%s, 
+                    f.%s 
+                FROM %s f
+                WHERE f.%s = :game_id", 
+
+                Application::GAME_ID, 
+                Application::USER_ID, 
+                Application::FIGURE_INDEX, 
+                Application::POSITION, 
+                Application::AREA, 
+                Application::CREATED_AT, 
+                Application::UPDATED_AT,
+
+                Application::TABLE_FIGURES, 
+                Application::GAME_ID
             ),
             ['game_id' => $game_id]
         );
 
-        $game->figure_array = $figures;
+        $game->figure_array = array_map(fn($row) => GameStateFigureModel::fromArray($row), $figures);
 
         return $game;
     }
@@ -366,7 +418,7 @@ final class GameModel extends BaseModel {
         $game->is_private = $row['is_private'] ?? null;
         $game->is_locked = $row['is_locked'] ?? null;
 
-        if (array_key_exists(Application::USERNAME, $row)) $game->created_by_user_name = $row['username'];
+        if (array_key_exists(Application::USERNAME, $row)) $game->created_by_user_name = $row[Application::USERNAME];
         if (array_key_exists(Application::PLAYER_COUNT, $row)) $game->player_count = (int) $row[Application::PLAYER_COUNT];
 
         $game->rule_set_model = GameRuleSetModel::fromArray($row) ?? null;
@@ -501,5 +553,16 @@ final class GameModel extends BaseModel {
     public function getFigureById(string $figure_id): GameStateFigureModel {
         // ToDo: Implement
         return new GameStateFigureModel();
+    }
+
+    // Get figures for player
+    public function getFiguresGroupedByPlayer(): array {
+        $grouped = [];
+
+        foreach ($this->figure_array as $figure) {
+            $grouped[$figure->getUserId()][] = $figure;
+        }
+
+        return $grouped;
     }
 }
