@@ -22,3 +22,20 @@ function flash (string $key, mixed $value): void {
 
     $_SESSION['_flash'][$key] = $value;
 }
+
+function asset(string $path): string {
+    // Public path
+    $public_path = '/' . ltrim($path, '/');
+
+    // Absolute server path to file
+    $file_path = dirname(__DIR__, 2) . '/public/' . ltrim($path, '/');
+
+    // Version via filemtime if file exists
+    if (file_exists($file_path)) {
+        $version = filemtime($file_path);
+        return $public_path . '?v=' . $version;
+    }
+
+    // Fallback if file doesn't exists
+    return $public_path;
+}

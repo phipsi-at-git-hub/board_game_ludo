@@ -1,4 +1,7 @@
-.action-menu {
+/*
+*****************************************
+* Views - lobby
+****************************************/.action-menu {
     position: relative;
     display: inline-block;
 }
@@ -47,4 +50,68 @@
 
 .action-btn.danger:hover {
     background-color: #f8d7da;
+}
+
+/*
+*****************************************
+* Views - show / detail 
+****************************************/
+.card {
+    background: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 8px 16px;
+}
+
+.status-badge {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.status-waiting { background: #d4edda; color: #155724; }
+.status-running { background: #fff3cd; color: #856404; }
+.status-finished { background: #f8d7da; color: #721c24; }
+
+.is-not-private { background: #d4edda; color: #155724; }
+.is-private { background: #f8d7da; color: #721c24; }
+
+.is-not-locked { background: #d4edda; color: #155724; }
+.is-locked { background: #f8d7da; color: #721c24; }
+
+.player-card {
+    margin-bottom: 15px;
+}
+
+.figure-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.figure-badge {
+    background: #f0f2f5;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #007bff;
 }

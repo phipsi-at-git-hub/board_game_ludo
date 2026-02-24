@@ -16,6 +16,12 @@ use App\Core\Localization;
         <span class="status-badge status-<?= strtolower($game->getStatus()) ?>">
             <?= htmlspecialchars($game->getStatus()) ?>
         </span>
+        <span class="status-badge <?= ($game->isPrivate()) ? 'is' : 'is-not' ?>-private">
+            <?= htmlspecialchars(($game->isPrivate()) ? 'Private' : 'Open') ?>
+        </span>
+        <span class="status-badge <?= ($game->isLocked()) ? 'is' : 'is-not' ?>-locked">
+            <?= htmlspecialchars(($game->isLocked()) ? 'Locked' : 'Unlocked') ?>
+        </span>
     </div>
 
     <div class="card-body meta-grid">
