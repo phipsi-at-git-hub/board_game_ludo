@@ -25,7 +25,7 @@ return [
     'game.lobby.title' => '🎮 Spiel Lobby', 
     'game.lobby.create_new_game' => '➕ Neues Spiel erstellen', 
     'game.lobby.open_games' => '📜 Zeige offene Spiele', 
-    'game.lobby.back_to_menu' => 'Zurück zum Hauptmenü', 
+    'game.lobby.back_to_menu' => '← Zurück zum Hauptmenü', 
 
     // Games - List
     'game.list.title' => 'Offene Spiele',
@@ -50,7 +50,7 @@ return [
     'game.list.delete_confirm' => 'Spiel wirklich löschen?', 
     'game.list.title' => 'Spieleliste', 
     'game.list.create_new_game' => '➕ Neues Spiel erstellen', 
-    'game.list.back_to_lobby' => 'Zurück zur Lobby', 
+    'game.list.back_to_lobby' => '← Zurück zur Lobby', 
 
     // Games - Create
     'game.create.button_create' => 'Spiel erstellen', 
@@ -61,26 +61,27 @@ return [
 
     //Games - Show / Detail
     'game.show.title' => 'Spiel', 
+    'game.show.back_to_list' => '← Zurück zur Übersicht', 
     'game.show.status' => 'Status', 
-    'game.show.created_at' => 'Erstellt am', 
+    'game.show.created_at' => '📅 Erstellt am', 
+    'game.show.created_by' => '👤 Erstellt von', 
     'game.show.player' => 'Spieler', 
-    'game.show.players' => 'Spieler', 
+    'game.show.players' => '👥 Spieler', 
     'game.show.figure' => 'Figur', 
     'game.show.figures' => 'Figuren', 
     'game.show.position' => 'Position', 
     'game.show.area' => 'Bereich', 
-    'game.show.rules' => 'Regeln', 
+    'game.show.rules' => '⚙ Regeln', 
     'game.show.label_no_players_found' => 'Keine Spieler vorhanden.',
     'game.show.label_no_figures_found' => 'Keine Figuren vorhanden.',  
-    'game.show.label_rules_bots_allows' => 'Bots erlaubt', 
-    'game.show.label_rules_roll_on_six_limit' => 'Extra-Wurf bei 6 Limit', 
-    'game.show.label_rules_start_field_must_be_cleared' => 'Start field must be cleared', 
+    'game.show.label_rules_bots_allows' => '🤖 Bots erlaubt', 
+    'game.show.label_rules_roll_on_six_limit' => '🎲 Extra-Wurf bei 6 Limit', 
     'game.show.label_rules_roll_on_six_limit_no' => 'Kein nochmaliges Würfeln nach 6.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Nach jeder 6 ein weiteres Würfeln.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Zusätzliches Würfeln nach einer 6 ist begrenzt auf:', 
-    'game.show.label_rules_stack_on_figures' => 'Eigene Figuren stapeln', 
-    'game.show.label_rules_strict_goal_order' => 'Strenge Zielfeld-Reihenfolge', 
-    'game.show.label_rules_start_field_must_be_cleared' => 'Startfeld muss frei sein', 
+    'game.show.label_rules_stack_on_figures' => '🧱 Eigene Figuren stapeln', 
+    'game.show.label_rules_strict_goal_order' => '🎯 Strenge Zielfeld-Reihenfolge', 
+    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
 
     // Game - Rules
     'game.rules.allow_bots' => 'Bots erlauben',

@@ -2,57 +2,65 @@
 
 use App\Core\Localization;
 ?>
-<h1><?= Localization::get('game.show.title') ?> <?= htmlspecialchars($game->getName()) ?></h1>
+<h1><?= Localization::get('game.show.title') ?> 🎮 <?= htmlspecialchars($game->getName()) ?></h1>
 
-<div class="game-meta">
-    <p><strong><?= Localization::get('game.show.status') ?>:</strong> <?= htmlspecialchars($game->getStatus()) ?></p>
-    <p><strong><?= Localization::get('game.show.created_at') ?>:</strong> <?= htmlspecialchars($game->getCreatedAt()) ?></p>
-    <p><strong><?= Localization::get('game.show.player') ?>:</strong> <?= count($game->players ?? []) ?></p>
+<div class="back-link">
+    <ul class="nav-list">
+        <li><a href="/game/list" class="btn-back"><?= Localization::get('game.show.back_to_list') ?></a></li>
+        <li><a href="/lobby" class="btn-back"><?= Localization::get('game.lobby.back_to_menu') ?></a></li>
+    </ul>
 </div>
 
-<h2><?= Localization::get('game.show.players') ?></h2>
+<div class="card game-card">
+    <div class="card-header">
+        <span class="status-badge status-<?= strtolower($game->getStatus()) ?>">
+            <?= htmlspecialchars($game->getStatus()) ?>
+        </span>
+    </div>
 
-<?php if (!empty($game->getAllPlayer())): ?>
-    <ul class="player-list">
+    <div class="card-body meta-grid">
+        <div><?= Localization::get('game.show.created_by') ?></div>
+        <div><?= htmlspecialchars($game->getCreatedByUserName()) ?></div>
+        <div><?= Localization::get('game.show.created_at') ?></div>
+        <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
+        <div><?= Localization::get('game.show.players') ?></div>
+        <div><?= count($game->getAllPlayer()) ?></div>
+    </div>
+
+</div>
+
+<div class="card">
+    <h2><?= Localization::get('game.show.players') ?></h2>
+
+    <?php if (!empty($game->getAllPlayer())): ?>
         <?php foreach ($game->getAllPlayer() as $player): ?>
-            <li>
-                <?= htmlspecialchars($player->getUsername()) ?>
-            </li>
+            <div class="player-card">
+                <h3>🧑 <?= htmlspecialchars($player->getUsername()) ?></h3>
+                <div class="figure-row">
+                    <?php foreach ($player->getAllFigures() as $figure): ?>
+                        <div class="figure-badge">
+                            ♟ <?= $figure->getFigureIndex() ?>
+                            <small>
+                                <?= htmlspecialchars($figure->getArea()) ?>
+                                (<?= $figure->getPosition() ?>)
+                            </small>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         <?php endforeach; ?>
+    <?php else: ?>
+        <p><?= Localization::get('game.show.label_no_players_found') ?></p>
+    <?php endif; ?>
+</div>
+
+<div class="card">
+    <h2><?= Localization::get('game.show.rules') ?></h2>
+    <ul class="rules-list">
+        <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php if ($game->getRuleSetModel()->getExtraRollLimit() === 0) { echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); } elseif ($game->getRuleSetModel()->getExtraRollLimit() === 255) { echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); } else { echo Localization::get('game.show.label_rules_roll_on_six_limit_limited'). $game->getRuleSetModel()->getExtraRollLimit();} ?></li>
+        <li><?= Localization::get('game.show.label_rules_stack_on_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
     </ul>
-<?php else: ?>
-    <p><?= Localization::get('game.show.label_no_players_found') ?></p>
-<?php endif; ?>
-
-<h2><?= Localization::get('game.show.figures') ?></h2>
-
-<?php if (!empty($game->getAllFigures())): ?>
-
-    <?php foreach ($game->getAllPlayer() as $player): ?>
-        <h3><?= htmlspecialchars($player->getUsername()) ?></h3>
-        <ul>
-            <?php foreach ($game->getAllFigures() as $figure): ?>
-                <?php if ($figure->getUserId() == $player->getUserId()): ?>
-                    <li>
-                        <?= Localization::get('game.show.figure') ?> <?= $figure->getFigureIndex() ?> –
-                        <?= Localization::get('game.show.position') ?>: <?= $figure->getPosition() ?> –
-                        <?= Localization::get('game.show.area') ?>: <?= htmlspecialchars($figure->getArea()) ?>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </ul>
-    <?php endforeach; ?>
-
-<?php else: ?>
-    <p><?= Localization::get('game.show.label_no_figures_found') ?></p>
-<?php endif; ?>
-
-<h2><?= Localization::get('game.show.rules') ?></h2>
-
-<ul>
-    <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-    <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php if ($game->getRuleSetModel()->getExtraRollLimit() === 0) { echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); } elseif ($game->getRuleSetModel()->getExtraRollLimit() === 255) { echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); } else { echo Localization::get('game.show.label_rules_roll_on_six_limit_limited'). $game->getRuleSetModel()->getExtraRollLimit();} ?></li>
-    <li><?= Localization::get('game.show.label_rules_stack_on_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-    <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-    <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-</ul>
+</div>

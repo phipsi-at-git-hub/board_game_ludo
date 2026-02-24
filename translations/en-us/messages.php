@@ -25,7 +25,7 @@ return [
     'game.lobby.title' => '🎮 Game Lobby', 
     'game.lobby.create_new_game' => '➕ Create new Game', 
     'game.lobby.open_games' => '📜 Show open Games', 
-    'game.lobby.back_to_menu' => 'Back to Main Menu', 
+    'game.lobby.back_to_menu' => '← Back to Main Menu', 
 
     // Games - List
     'game.list.title' => 'Open Games',
@@ -50,7 +50,7 @@ return [
     'game.list.delete_confirm' => 'Are you sure you want to delete the Game?', 
     'game.list.title' => 'Games list', 
     'game.list.create_new_game' => '➕ Create new Game', 
-    'game.list.back_to_lobby' => 'Back to Lobby', 
+    'game.list.back_to_lobby' => '← Back to Lobby', 
 
     //Games - Create
     'game.create.button_create' => 'Create Game', 
@@ -59,27 +59,29 @@ return [
     'game.create.game_name' => 'Game Name', 
     'game.create.game_options' => 'Game Options', 
 
-    //Games - Show / Detail
+    //Games - Show - Detail
     'game.show.title' => 'Game', 
+    'game.show.back_to_list' => '← Back to List',  
     'game.show.status' => 'Status', 
-    'game.show.created_at' => 'Created At', 
+    'game.show.created_at' => '📅 Created at', 
+    'game.show.created_by' => '👤 Created by', 
     'game.show.player' => 'Player', 
-    'game.show.players' => 'Players', 
+    'game.show.players' => '👥 Players', 
     'game.show.figure' => 'Figure', 
     'game.show.figures' => 'Figures', 
     'game.show.position' => 'Position', 
     'game.show.area' => 'Area', 
-    'game.show.rules' => 'Rules', 
+    'game.show.rules' => '⚙ Rules', 
     'game.show.label_no_players_found' => 'No Players found.', 
     'game.show.label_no_figures_found' => 'No Figures found.', 
-    'game.show.label_rules_bots_allows' => 'Bots allowed', 
-    'game.show.label_rules_roll_on_six_limit' => 'Extra roll on six limit', 
+    'game.show.label_rules_bots_allows' => '🤖 Bots allowed', 
+    'game.show.label_rules_roll_on_six_limit' => '🎲 Extra roll on six limit', 
     'game.show.label_rules_roll_on_six_limit_no' => 'No additional roll on six.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Unlimited additional rolls on six.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Limited additional rolls on six to: ', 
-    'game.show.label_rules_stack_on_figures' => 'Stack own figures', 
-    'game.show.label_rules_strict_goal_order' => 'Strict goal order', 
-    'game.show.label_rules_start_field_must_be_cleared' => 'Start field must be cleared', 
+    'game.show.label_rules_stack_on_figures' => '🧱 Stack own figures', 
+    'game.show.label_rules_strict_goal_order' => '🎯 Strict goal order', 
+    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
 
     // Game - Rules
     'game.rules.allow_bots' => 'Allow bots',

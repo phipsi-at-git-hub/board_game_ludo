@@ -30,11 +30,12 @@ final class GameStateFigureModel extends BaseModel {
                 "INSERT INTO game_state_figure
                  (game_id, user_id, figure_index, position, area, created_at, updated_at)
                  VALUES
-                 (:game_id, :user_id, :figure_index, 0, 'home', NOW(), NOW())",
+                 (:game_id, :user_id, :figure_index, :position, 'home', NOW(), NOW())",
                 [
                     'game_id' => $game_id,
                     'user_id' => $user_id,
-                    'figure_index' => $i
+                    'figure_index' => $i, 
+                    'position' => $i
                 ]
             );
         }

@@ -12,6 +12,8 @@ final class GameStatePlayerModel extends BaseModel {
     private string $created_at;
     private string $updated_at;
 
+    private array $figure_array = [];    // max 4
+
     // Find game state players for given game
     public static function findByGameId(string $game_id): array {
         return static::fetchAll(
@@ -20,9 +22,9 @@ final class GameStatePlayerModel extends BaseModel {
         );
     }
 
-    // Add player to game
+    // Add player to game and 4 figures
     public static function addPlayer(string $game_id, string $user_id): bool {
-        return static::execute(
+        $row = static::execute(
             "INSERT INTO game_state_players
              (game_id, user_id, created_at, updated_at)
              VALUES
@@ -32,6 +34,13 @@ final class GameStatePlayerModel extends BaseModel {
                 'user_id' => $user_id
             ]
         );
+
+        if ($row) {
+            // add 4 figures
+            GameStateFigureModel::createInitialFigureSet($game_id, $user_id);
+            return true;
+        }
+        return false;
     }
 
     // Remove given player from game
@@ -70,6 +79,21 @@ final class GameStatePlayerModel extends BaseModel {
     // Getter - Get updated at
     public function getUpdatedAt(): string {
         return $this->updated_at;
+    }
+
+    // Getter - Get figures
+    public function getAllFigures(): array {
+        return $this->figure_array;
+    }
+
+    // Getter - Get figure by figure index
+    public function getFigureByFigureIndex(int $figure_index) {
+        // ToDo: Implement
+    }
+
+    // Setter - Set Figure
+    public function addFigure(GameStateFigureModel $figure): void {
+        $this->figure_array[] = $figure; 
     }
 
     // Helper

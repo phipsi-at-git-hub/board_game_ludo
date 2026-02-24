@@ -268,8 +268,37 @@ final class GameModel extends BaseModel {
             ['game_id' => $game_id]
         );
 
-        $game->figure_array = array_map(fn($row) => GameStateFigureModel::fromArray($row), $figures);
+        /*
+        foreach ($game->player_array as $player) {
+            foreach ($figures as $figure) {
+                $figure = GameStateFigureModel::fromArray($figure);
+                if ($figure && $figure->getUserId() === $player->getUserId()) {
+                    $player->addFigure($figure);
+                }
+            }
+        }
+        */
+        $players_by_user_id = [];
+        foreach ($game->player_array as $player) {
+            $players_by_user_id[$player->getUserId()] = $player;
+        }
 
+        foreach ($figures as $row) {
+            $figure = GameStateFigureModel::fromArray($row);
+            $user_id = $figure->getUserId();
+
+            if (isset($players_by_user_id[$user_id])) {
+                $players_by_user_id[$user_id]->addFigure($figure);
+            }
+        }
+
+        /*
+        echo '<pre>';
+        print_r($game);
+        echo '</pre>';
+        exit;
+        */
+        
         return $game;
     }
 
