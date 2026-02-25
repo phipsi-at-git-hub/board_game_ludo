@@ -7,12 +7,10 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
+use DomainException;
 
 class GameController extends BaseController {
-    public function single() {
-        echo 'Single';
-    }
-
+    // Lobby leads to game creation, games list and back
     public function lobby() {
         // Only for logged in users (secured through middleware)
         $this->render(
@@ -20,6 +18,7 @@ class GameController extends BaseController {
         );
     }
 
+    // Game creation form
     public function create() {
         $this->render(
             'game/create'
@@ -58,6 +57,7 @@ class GameController extends BaseController {
         );
     }
 
+    // Games list overview
     public function list(): void {
         $games = GameModel::getAllOpenGames();
         
@@ -71,6 +71,7 @@ class GameController extends BaseController {
         //require __DIR__ . '/../Views/game/list.php';
     }
 
+    // Game detail view
     public function show(string $game_id) {
         // View an existing game
         $game = GameModel::findById($game_id);
@@ -88,8 +89,26 @@ class GameController extends BaseController {
         );
     }
 
+    // Game join 
     public function join(string $game_id) {
         // Player joins existing game
+
+        $game = GameModel::findById($game_id);
+
+        if (!$game) {
+            http_response_code(404);
+            die('Game not found');
+        }
+
+        try {
+            $game->join(Auth::user()->getId());
+        } catch (DomainException $e) {
+            // ToDo: some exception handling
+        }
+
+        header("Location: /game/detail/$game_id");
+        exit;
+
         echo 'Joining game: ' . htmlspecialchars($game_id);
     }
 

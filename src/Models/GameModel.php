@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Exception;
 use App\Constants\Application;
+use DomainException;
+use Throwable;
 
 final class GameModel extends BaseModel {
     private const PLAYERS_MAX = 4;
@@ -412,8 +414,6 @@ final class GameModel extends BaseModel {
         try {
             $this->db->beginTransaction();
 
-            //$this->figure_model->removeAllFigures($this->id);
-            //$this->player_model->removeAllPlayer($this->id);
             $this->state_model->delete($this->id);
             $this->rule_set_model->delete($this->id);
 
@@ -428,6 +428,35 @@ final class GameModel extends BaseModel {
             $this->db->rollBack();
             throw $e;
             return false;
+        }
+    }
+
+    // Join player 
+    public function join(string $user_id): bool {
+        if ($this->status !== Application::STATUS_WAITING) {
+            throw new DomainException('Game cannot be joined');
+        }
+
+        if ($this->hasPlayer($user_id)) {
+            throw new DomainException('User already joined');
+        }
+
+        //echo $this->getPlayerCount();exit;
+        if ($this->getPlayerCount() >= $this->getPlayerMax()) {
+            throw new DomainException('Game is full');
+        }
+
+        // ToDo: add Player
+        try {
+            $this->db->beginTransaction();
+
+            GameStatePlayerModel::addPlayer($this->getId(), $user_id);
+            
+            $this->db->commit();
+            return true;
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
         }
     }
 
@@ -509,6 +538,16 @@ final class GameModel extends BaseModel {
         }
     }
 
+    // Helper - Check if user is already player in game
+    public function hasPlayer(string $user_id): bool {
+        foreach ($this->player_array as $player) {
+            if ($player->getUserId() === $user_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Getter
     // Get the value of id
     public function getId() {
@@ -537,7 +576,10 @@ final class GameModel extends BaseModel {
 
     // Get the number of player of the game
     public function getPlayerCount(): int {
-        return $this->player_count;
+        if (isset($this->player_count)) {
+            return $this->player_count;
+        }
+        return count($this->player_array);
     }
 
     //Get the value of status

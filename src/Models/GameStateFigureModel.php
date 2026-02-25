@@ -18,7 +18,7 @@ final class GameStateFigureModel extends BaseModel {
     // Find game state figures by game id
     public function findByGameId(string $game_id): array {
         return static::fetchAll(
-            "SELECT * FROM game_state_figure WHERE game_id = :game_id",
+            "SELECT * FROM game_state_figures WHERE game_id = :game_id",
             ['game_id' => $game_id]
         );
     }
@@ -27,7 +27,7 @@ final class GameStateFigureModel extends BaseModel {
     public static function createInitialFigureSet(string $game_id, string $user_id): void {
         for ($i = 0; $i < 4; $i++) {
             static::execute(
-                "INSERT INTO game_state_figure
+                "INSERT INTO game_state_figures
                  (game_id, user_id, figure_index, position, area, created_at, updated_at)
                  VALUES
                  (:game_id, :user_id, :figure_index, :position, 'home', NOW(), NOW())",

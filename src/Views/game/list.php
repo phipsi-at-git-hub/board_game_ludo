@@ -1,4 +1,5 @@
 <?php
+use App\Core\Csrf;
 use App\Core\Localization;
 ?>
 
@@ -43,6 +44,7 @@ use App\Core\Localization;
                         <a href="/game/detail/<?= $game->getId() ?>" title="Details" class="action-btn">👁</a>
                         <?php if ($can_join): ?>
                             <form method="POST" action="/game/join/<?= $game->getId() ?>">
+                                <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                                 <button type="submit" class="action-btn">
                                     <?= Localization::get('game.list.join_icon') ?>
                                 </button>
@@ -59,6 +61,7 @@ use App\Core\Localization;
 
                                     <?php if ($can_delete): ?>
                                         <form method="post" action="/game/delete" onsubmit="return confirm(<?= Localization::get('game.list.confirm_delete') ?>);">
+                                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                                             <input type="hidden" name="id" value="<?= $game->getId() ?>">
                                             <button type="submit" class="action-btn">
                                                 <?= Localization::get('game.list.delete_icon') ?>

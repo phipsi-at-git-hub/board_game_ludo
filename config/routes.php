@@ -42,7 +42,7 @@ $router->group('/game', function($group) {
     $group->get('/list', [GameController::class, 'list']);
     $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf()]);
     $group->get('/detail/{id}', [GameController::class, 'show']);
-    $group->post('/{id}/join', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
+    $group->post('/join/{id}', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Admin routes ---
