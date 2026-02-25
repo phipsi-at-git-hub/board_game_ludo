@@ -325,7 +325,7 @@ final class GameModel extends BaseModel {
     }
 
     // Games - Create new game
-    public function create(string $user_id, string $game_name, array $rules): ?string {
+    public function create(string $user_id, string $game_name, array $game_options, array $rules): ?string {
         $game_id = self::generateUUID();
 
         try {
@@ -334,19 +334,23 @@ final class GameModel extends BaseModel {
             // Insert game
             $this->execute(
                 sprintf(
-                    "INSERT INTO %s (%s, %s, %s, %s, created_at, updated_at)
-                    VALUES (:id, :name, :created_by_user_id, :status, NOW(), NOW())",
+                    "INSERT INTO %s (%s, %s, %s, %s, %s, %s, created_at, updated_at)
+                    VALUES (:id, :name, :created_by_user_id, :status, :is_private, :is_locked, NOW(), NOW())",
                     Application::TABLE_GAMES,
                     Application::ID,
                     Application::NAME, 
                     Application::CREATED_BY_USER_ID,
-                    Application::STATUS
+                    Application::STATUS, 
+                    Application::IS_PRIVATE, 
+                    Application::IS_LOCKED
                 ),
                 [
                     'id' => $game_id,
                     'name' => $game_name, 
                     'created_by_user_id' => $user_id,
-                    'status' => Application::STATUS_WAITING
+                    'status' => Application::STATUS_WAITING, 
+                    'is_private' => $game_options[Application::IS_PRIVATE], 
+                    'is_locked' => $game_options[Application::IS_LOCKED]
                 ]
             );
 

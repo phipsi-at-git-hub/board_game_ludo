@@ -15,11 +15,15 @@ class GameController extends BaseController {
 
     public function lobby() {
         // Only for logged in users (secured through middleware)
-        require __DIR__ . '/../Views/game/lobby.php';
+        $this->render(
+            'game/lobby'
+        );
     }
 
     public function create() {
-        require __DIR__ . '/../Views/game/create.php';
+        $this->render(
+            'game/create'
+        );
     }
 
     // Create a new game via POST
@@ -29,7 +33,12 @@ class GameController extends BaseController {
             die('Invalid CSRF token');
         }
 
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST) {
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_NAME] !== '') {
+            $game_options = [
+                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
+                Application::IS_LOCKED => ($_POST[Application::IS_LOCKED]), 
+            ];
+
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
                 Application::EXTRA_ROLL_LIMIT => ($_POST[Application::EXTRA_ROLL_LIMIT]),
@@ -38,13 +47,15 @@ class GameController extends BaseController {
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
             ];
             
-            $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $rule_set);
+            $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
 
-            header("Location: /game/$game_id");
+            header("Location: /game/detail/$game_id");
             exit;
         }
         
-        require __DIR__ . '/../Views/game/create.php';
+        $this->render(
+            'game/create'
+        );
     }
 
     public function list(): void {
@@ -68,10 +79,6 @@ class GameController extends BaseController {
             http_response_code(404);
             die('Game not found');
         }
-
-        //$user = Auth::user();
-
-        //echo 'Viewing game: ' . htmlspecialchars($game_id);
 
         $this->render(
             'game/show', 

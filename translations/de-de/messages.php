@@ -57,6 +57,7 @@ return [
     'game.create.three' => '3', 
     'game.create.name' => 'Name', 
     'game.create.game_name' => 'Spielname', 
+    'game.create.game_options' => 'Spieloptionen', 
     'game.create.game_options' => 'Spielregeln', 
 
     //Games - Show / Detail
@@ -83,12 +84,16 @@ return [
     'game.show.label_rules_strict_goal_order' => '🎯 Strenge Zielfeld-Reihenfolge', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
 
+    // Game - Options
+    'game.options.is_private' => '⛔ Privates Spiel',
+    'game.options.is_locked' => '🔒 Geschlossenes Spiel',
+
     // Game - Rules
-    'game.rules.allow_bots' => 'Bots erlauben',
-    'game.rules.extra_roll_on_six' => 'Extra Wurf bei einer 6',
-    'game.rules.allow_stack' => 'Eigene Figuren stapeln erlauben',
-    'game.rules.strict_goal_order' => 'Strikte Zielreihenfolge',
-    'game.rules.start_field_must_be_cleared' => 'Startfeld muss frei sein',
+    'game.rules.allow_bots' => '🤖 Bots erlauben',
+    'game.rules.roll_on_limit' => '🎲 Extra Wurf bei einer 6',
+    'game.rules.allow_stack' => '🧱 Eigene Figuren stapeln erlauben',
+    'game.rules.strict_goal_order' => '🎯 Strikte Zielreihenfolge',
+    'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',
 
     // Admin 
     'admin.dashboard.title' => 'Admin Übersicht', 

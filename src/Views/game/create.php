@@ -13,6 +13,7 @@ use App\Core\Localization;
 
 <form method="POST" action="/game/store">
     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+
     <fieldset>
         <legend><?= Localization::get('game.create.name') ?></legend>
         <label>
@@ -20,8 +21,28 @@ use App\Core\Localization;
             <input name="<?php echo Application::GAME_NAME; ?>">
         </label>
     </fieldset>
+
     <fieldset>
         <legend><?= Localization::get('game.create.game_options') ?></legend>
+        <label>
+            <?= Localization::get('game.options.is_private') ?>
+            <select name="<?php echo Application::IS_PRIVATE; ?>">
+                <option value="0" selected><?= Localization::get('application.general.no') ?></option>
+                <option value="1"><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            <?= Localization::get('game.options.is_locked') ?>
+            <select name="<?php echo Application::IS_LOCKED; ?>">
+                <option value="0" selected><?= Localization::get('application.general.no') ?></option>
+                <option value="1"><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend><?= Localization::get('game.create.game_rules') ?></legend>
         <label>
             <?= Localization::get('game.rules.allow_bots') ?>
             <select name="<?php echo Application::ALLOW_BOTS; ?>">
@@ -31,7 +52,7 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.create.extra_roll_on_six') ?>
+            <?= Localization::get('game.rules.roll_on_limit') ?>
             <select name="<?php echo Application::EXTRA_ROLL_LIMIT; ?>">
                 <option value="0"><?= Localization::get('application.general.no') ?></option>
                 <option value="3" selected><?= Localization::get('game.create.three') ?></option>
@@ -40,7 +61,7 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.create.allow_stack') ?>
+            <?= Localization::get('game.rules.allow_stack') ?>
             <select name="<?php echo Application::ALLOW_STACK_OWN_FIGURES; ?>">
                 <option value="0" selected><?= Localization::get('application.general.no') ?></option>
                 <option value="1"><?= Localization::get('application.general.yes') ?></option>
@@ -48,7 +69,7 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.create.strict_goal_order') ?>
+            <?= Localization::get('game.rules.strict_goal_order') ?>
             <select name="<?php echo Application::STRICT_GOAL_ORDER; ?>">
                 <option value="0"><?= Localization::get('application.general.no') ?></option>
                 <option value="1" selected><?= Localization::get('application.general.yes') ?></option>
@@ -56,13 +77,14 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.create.start_field_must_be_cleared') ?>
+            <?= Localization::get('game.rules.start_field_must_be_cleared') ?>
             <select name="<?php echo Application::START_FIELD_MUST_BE_CLEARED; ?>">
                 <option value="0"><?= Localization::get('application.general.no') ?></option>
                 <option value="1" selected><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
     </fieldset>
+
     <br>
     <button type="submit"><?= Localization::get('game.create.button_create') ?></button>
 </form>

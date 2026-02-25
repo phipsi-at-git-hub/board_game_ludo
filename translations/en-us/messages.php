@@ -58,6 +58,7 @@ return [
     'game.create.name' => 'Name', 
     'game.create.game_name' => 'Game Name', 
     'game.create.game_options' => 'Game Options', 
+    'game.create.game_rules' => 'Game Rules', 
 
     //Games - Show - Detail
     'game.show.title' => 'Game', 
@@ -83,12 +84,16 @@ return [
     'game.show.label_rules_strict_goal_order' => '🎯 Strict goal order', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
 
+    // Game - Options
+    'game.options.is_private' => '⛔ Private Game',
+    'game.options.is_locked' => '🔒 Lock Game',
+
     // Game - Rules
-    'game.rules.allow_bots' => 'Allow bots',
-    'game.rules.extra_roll_on_six' => 'Extra roll on six',
-    'game.rules.allow_stack' => 'Allow stacking own figures',
-    'game.rules.strict_goal_order' => 'Strict goal order',
-    'game.rules.start_field_must_be_cleared' => 'Start field must be cleared',
+    'game.rules.allow_bots' => '🤖 Allow bots',
+    'game.rules.roll_on_limit' => '🎲 Extra roll on six',
+    'game.rules.allow_stack' => '🧱 Allow stacking own figures',
+    'game.rules.strict_goal_order' => '🎯 Strict goal order',
+    'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
 
     // Admin
     'admin.dashboard.title' => 'Admin Dashboard', 
