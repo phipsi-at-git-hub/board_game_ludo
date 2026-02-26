@@ -58,9 +58,107 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if figure can move
-    private function canMoveFigure(GameStatePlayerModel $player, int $dice): bool {
-        //ToDo: implement
-        return true;
+    // This is the MAIN METHOD for GAME ENGINE LOGIC
+    private function canMoveFigure(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): bool {
+        $area = $figure->getArea();
+
+        /**
+         * 1. Step - Figure is in goal area already
+         */
+        if ($area === Application::AREA_GOAL && $figure->getPosition() === self::GOAL_LENGTH) {
+            return false;
+        }
+
+        /**
+         * 2. Step - Figure is still in home area
+         */
+
+        if ($area === Application::AREA_HOME) {
+            // Figure can only leave home area with a six
+            if ($dice_value !== 6) {
+                return false;
+            }
+
+            // Perhaps the start field of the player must be cleared
+            if ($this->rule_set_model->getStartFieldMustBeCleared()) {
+                if ($this->isStartFieldBlocked($player)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * 3. Step - Figure is on the field / board
+         */
+        if ($area === Application::AREA_FIELD) {
+            $relative_position = $figure->getPosition();
+            $new_relative_position = $relative_position + $dice_value;
+
+            /**
+             * 3.1 Step - Is entering the goal area possible?
+             */
+            if ($new_relative_position >= self::FIELD_LENGTH) {
+                $steps_into_goal = $new_relative_position - self::FIELD_LENGTH;
+
+                // $dive_roll too high
+                if ($steps_into_goal >= self::GOAL_LENGTH) {
+                    // check for other movable figures
+                    if ($this->playerHasOtherMovableFigure($player, $figure, $dice_value)) {
+                        return false;
+                    }
+
+                    // no other figure is allowed to move
+                    return true;
+                }
+
+                // strict goal order active?
+                if ($this->isGoalPositionBlockedByStrictOrder($player, $steps_into_goal)) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            /**
+             * 3.2 Step - Common move on field / board
+             */
+            $absolute_target = ($player->getStartOffset() + $new_relative_position) % self::FIELD_LENGTH;
+
+            // own figure blocked?
+            if (!$this->rule_set_model->getAllowStackOwnFigures()) {
+                if ($this->isOwnFigureOnAbsolutePosition($player, $absolute_target)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * 4. Step - Figure is in goal area already
+         */
+        if ($area === Application::AREA_GOAL) {
+            $current_goal_position = $figure->getPosition();
+            $new_goal_position = $current_goal_position + $dice_value;
+
+            // too far for finish in goal area
+            if ($new_goal_position >= self::GOAL_LENGTH) {
+                // Check for other playable figures of player
+                if ($this->playerHasOtherMovableFigure($player, $figure, $dice_value)) {
+                    return false;
+                }
+                return true;
+            }
+
+            // check strict goal order
+            if ($this->isGoalPositionBlockedByStrictOrder($player, $new_goal_position)) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
     }
 
     // Game Engine - get absolute position on the field of given figure
