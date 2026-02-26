@@ -365,14 +365,41 @@ final class GameModel extends BaseModel {
         }
     }
 
+    // Games - Update game 
+    public function update(string $game_name, array $game_data, array $rule_set): bool {
+        try {
+            $this->db->beginTransaction();
+
+            $this->updateGameData($game_name, $game_data);
+            $this->rule_set_model->update($this->id, $rule_set);
+
+            $this->db->commit();
+
+            return true;
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+            return false;
+        }
+    }
+
     // Games - Update game data
-    public function update(string $created_by_user_id, string $status): void {
-        static::execute(
-            "UPDATE games SET created_by_user_id = :created_by_user_id, status = :status WHERE id = :id",
-            ['id' => $this->id, 'created_by_user_id' => $created_by_user_id, 'status' => $status]
+    public function updateGameData(string $game_name, array $game_options): void {
+        $this->db->execute(
+            sprintf(
+                "UPDATE games 
+                SET
+                    name = :name, 
+                    is_private = :is_private, 
+                    is_locked = :is_locked 
+                WHERE id = :id"
+            ), [
+                'id' => $this->id, 
+                'name' => $game_name, 
+                'is_private' => $game_options['is_private'], 
+                'is_locked' => $game_options['is_locked']
+            ]
         );
-        $this->created_by_user_id = $created_by_user_id;
-        $this->status = $status;
     }
 
     // Games - Update game status

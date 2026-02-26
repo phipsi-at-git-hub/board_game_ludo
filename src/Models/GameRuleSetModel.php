@@ -60,7 +60,27 @@ final class GameRuleSetModel extends BaseModel {
     }
 
     // Update existing game
-    public static function update(string $game_id): void {}
+    public static function update(string $game_id, array $rule_set): void {
+        $row = static::execute(
+            sprintf(
+                "UPDATE game_rule_set 
+                SET 
+                    allow_bots = :allow_bots, 
+                    extra_roll_limit = :extra_roll_limit, 
+                    allow_stack_own_figures = :allow_stack_own_figures, 
+                    strict_goal_order = :strict_goal_order, 
+                    start_field_must_be_cleared = :start_field_must_be_cleared 
+                WHERE game_id = :game_id"
+            ), [
+                'allow_bots' => $rule_set['allow_bots'], 
+                'extra_roll_limit' => $rule_set['extra_roll_limit'], 
+                'allow_stack_own_figures' => $rule_set['allow_stack_own_figures'], 
+                'strict_goal_order' => $rule_set['strict_goal_order'], 
+                'start_field_must_be_cleared' => $rule_set['start_field_must_be_cleared'], 
+                'game_id' => $game_id
+            ]
+        );
+    }
 
     // Delete existing game
     public static function delete(string $game_id): bool {

@@ -39,8 +39,11 @@ $router->group('/account', function($group) {
 $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
 $router->group('/game', function($group) {
     $group->get('/create', [GameController::class, 'create']);
+    $group->get('/edit/{id}', [GameController::class, 'edit'], [fn() => Middleware::csrf()]);
     $group->get('/list', [GameController::class, 'list']);
     $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf()]);
+    $group->post('/update', [GameController::class, 'update'], [fn() => Middleware::csrf()]);
+    $group->delete('/delete', [GameController::class, 'delete'], [fn() => Middleware::csrf()]);
     $group->get('/detail/{id}', [GameController::class, 'show']);
     $group->post('/join/{id}', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
     $group->post('/leave/{id}', [GameController::class, 'leave'], [fn() => Middleware::csrf()]);

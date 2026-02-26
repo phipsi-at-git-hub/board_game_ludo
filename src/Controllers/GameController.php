@@ -7,6 +7,7 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
+use App\Models\GameRuleSetModel;
 use DomainException;
 
 class GameController extends BaseController {
@@ -55,6 +56,78 @@ class GameController extends BaseController {
         $this->render(
             'game/create'
         );
+    }
+
+    // Game edit form
+    public function edit($game_id) {
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        if ($game->isWaiting()) {
+            $this->render(
+                'game/edit', 
+                [
+                    'game' => $game, 
+                    'user' => $user
+                ]
+            );
+            exit;
+        }
+        header("Location: /game/detail/$game_id");
+        exit;
+    }
+
+    // Game update via POST
+    public function update() {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[Application::GAME_ID]);
+            if (!$game) {
+                http_response_code(404);
+                die('Game not found');
+            }
+
+            $game_name = $_POST[Application::GAME_NAME];
+
+            $game_options = [
+                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
+                Application::IS_LOCKED => ($_POST[Application::IS_LOCKED]), 
+            ];
+
+            $rule_set = [
+                Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
+                Application::EXTRA_ROLL_LIMIT => ($_POST[Application::EXTRA_ROLL_LIMIT]),
+                Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
+                Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
+                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
+            ];
+
+            $game->update($game_name, $game_options, $rule_set);
+
+            header('Location: /game/edit/' . $game->getId());
+            exit;
+        }
+    }
+
+    // Delete game
+    public function delete(): void {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[Application::GAME_ID]);
+
+            $game->delete();
+        }
+
+        header('Location: /game/list');
+        exit;
     }
 
     // Games list overview
@@ -141,8 +214,8 @@ class GameController extends BaseController {
         echo 'destroy';
     }
 
-    // Delete game
-    public function delete(): void {
+    // Cancel game
+    public function cancel(): void {
         $game_id = $_POST['game_id'];
         $game = GameModel::findById($game_id);
         $user = Auth::user();

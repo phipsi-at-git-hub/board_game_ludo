@@ -6,8 +6,10 @@ use App\Core\Localization;
 
 <p>Welcome, <?= htmlspecialchars(\App\Core\Auth::user()->getUsername()) ?>!</p>
 
-<ul>
-    <li><a href="/game/create"><?= Localization::get('game.lobby.create_new_game') ?></a></li>
-    <li><a href="/game/list"><?= Localization::get('game.lobby.open_games') ?></a></li>
-    <li><a href="/menu"><?= Localization::get('game.lobby.back_to_menu') ?></a></li>
-</ul>
+<div class="back-link">
+    <ul class="nav-list">
+        <li><a href="/game/create" class="btn-back"><?= Localization::get('game.list.create_new_game') ?></a></li>
+        <li><a href="/game/list" class="btn-back"><?= Localization::get('game.lobby.open_games') ?></a></li>
+        <li><a href="/menu" class="btn-back"><?= Localization::get('game.lobby.back_to_menu') ?></a></li>
+    </ul>
+</div>
