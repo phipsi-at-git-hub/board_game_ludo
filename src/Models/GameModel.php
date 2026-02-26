@@ -293,13 +293,6 @@ final class GameModel extends BaseModel {
                 $players_by_user_id[$user_id]->addFigure($figure);
             }
         }
-
-        /*
-        echo '<pre>';
-        print_r($game);
-        echo '</pre>';
-        exit;
-        */
         
         return $game;
     }
@@ -431,7 +424,7 @@ final class GameModel extends BaseModel {
         }
     }
 
-    // Join player 
+    // Join game - player 
     public function join(string $user_id): bool {
         if ($this->status !== Application::STATUS_WAITING) {
             throw new DomainException('Game cannot be joined');
@@ -451,6 +444,30 @@ final class GameModel extends BaseModel {
             $this->db->beginTransaction();
 
             GameStatePlayerModel::addPlayer($this->getId(), $user_id);
+
+            $this->db->commit();
+            return true;
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
+    // Leave game - player
+    public function leave(string $user_id): bool {
+        if ($this->status === Application::STATUS_RUNNING) {
+            throw new DomainException('Game leave now');
+        }
+
+        if (!$this->hasPlayer($user_id)) {
+            throw new DomainException('User not in the game');
+        }
+
+        try {
+            $this->db->beginTransaction();
+
+            GameStateFigureModel::removeAllUserFigures($this->getId(), $user_id);
+            GameStatePlayerModel::removePlayer($this->getId(), $user_id);
             
             $this->db->commit();
             return true;
@@ -532,10 +549,11 @@ final class GameModel extends BaseModel {
         $user_id = $user->getId();
         for ($i = 0; $i < count($this->player_array); $i++) {
             $player = $this->player_array[$i];
-            if ($user_id === $player->getPlayerId) {
+            if ($user_id === $player->getUserId()) {
                 return true;
             }
         }
+        return false;
     }
 
     // Helper - Check if user is already player in game

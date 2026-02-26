@@ -20,8 +20,12 @@ class GamePolicy {
         return $user->getId() === $game->getCreatedByUserId();
     }
 
-    public static function canJoin(UserModel $user, GameModel $game): bool {
-        // Game is closed
+    public static function canJoin(UserModel $user, GameModel $game, $check_participant = true): bool {
+        // Game is private
+        if ($game->isPrivate()) {
+            return false;
+        }
+        // Game is locked
         if ($game->isLocked()) {
             return false;
         }
@@ -32,7 +36,7 @@ class GamePolicy {
         }
 
         // User is already player of the game
-        if ($game->isParticipant($user)) {
+        if ($check_participant && $game->isParticipant($user)) {
             return false;
         }
 

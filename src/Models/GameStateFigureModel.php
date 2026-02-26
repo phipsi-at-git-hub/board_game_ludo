@@ -55,6 +55,14 @@ final class GameStateFigureModel extends BaseModel {
         );
     }
 
+    // Delete all figures of given user
+    public static function removeAllUserFigures(string $game_id, string $user_id): bool {
+        return static::execute(
+            "DELETE FROM game_state_figures WHERE game_id = :game_id AND user_id = :user_id",
+            ['game_id' => $game_id, 'user_id' => $user_id]
+        );
+    }
+
     // Getter
     // Getter - Get game id
     public function getGameId(): string {

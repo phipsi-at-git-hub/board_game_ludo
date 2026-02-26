@@ -60,11 +60,13 @@ class GameController extends BaseController {
     // Games list overview
     public function list(): void {
         $games = GameModel::getAllOpenGames();
+        $user = Auth::user();
         
         $this->render(
             'game/list', 
             [
-                'games' => $games
+                'games' => $games, 
+                'user' => $user
             ]
         );
 
@@ -75,6 +77,7 @@ class GameController extends BaseController {
     public function show(string $game_id) {
         // View an existing game
         $game = GameModel::findById($game_id);
+        $user = Auth::user();
 
         if (!$game) {
             http_response_code(404);
@@ -85,6 +88,7 @@ class GameController extends BaseController {
             'game/show', 
             [
                 'game' => $game, 
+                'user' => $user
             ]
         );
     }
@@ -108,12 +112,25 @@ class GameController extends BaseController {
 
         header("Location: /game/detail/$game_id");
         exit;
-
-        echo 'Joining game: ' . htmlspecialchars($game_id);
     }
 
     public function leave(string $game_id) {
-        echo 'leave';
+        $game = GameModel::findById($game_id);
+
+        if (!$game) {
+            http_response_code(404);
+            die('Game not found');
+        }
+
+        try {
+            // ToDo: implement leaving game 
+            $game->leave(Auth::user()->getId());
+        } catch (DomainException $e) {
+            // ToDo: some exception handling
+        }
+
+        header("Location: /game/detail/$game_id");
+        exit;
     }
 
     public function start(string $game_id) {

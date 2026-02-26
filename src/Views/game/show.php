@@ -1,6 +1,9 @@
 <?php
 
+use App\Core\Csrf;
 use App\Core\Localization;
+use App\Policies\GamePolicy;
+
 ?>
 <h1><?= Localization::get('game.show.title') ?> 🎮 <?= htmlspecialchars($game->getName()) ?></h1>
 
@@ -23,6 +26,20 @@ use App\Core\Localization;
         <span class="status-badge <?= ($game->isLocked()) ? 'is' : 'is-not' ?>-locked">
             <?= htmlspecialchars(($game->isLocked()) ? 'Locked' : 'Unlocked') ?>
         </span>
+
+        <?php if ($game->isParticipant($user)) { ?>
+        <?php } ?>
+
+        <?php if (GamePolicy::canJoin($user, $game, false)) { ?>
+        <form method="POST" action="/game/<?= ($game->isParticipant($user)) ? 'leave' : 'join' ?>/<?= $game->getId() ?>">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+            <button class="joined-btn <?= ($game->isParticipant($user)) ? 'has' : 'has-not' ?>-joined">
+                <?= htmlspecialchars(($game->isParticipant($user)) ? 'Leave' : 'Join') ?>
+            </button>
+        <?php } else { ?>
+            <button class="joined-btn can-not-join">Join</button>
+        </form>
+        <?php } ?>
     </div>
 
     <div class="card-body meta-grid">
@@ -32,6 +49,8 @@ use App\Core\Localization;
         <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
         <div><?= Localization::get('game.show.players') ?></div>
         <div><?= count($game->getAllPlayer()) ?></div>
+        <div><?= Localization::get('game.show.label_join') ?></div>
+        <div><?php if ($game->isParticipant($user)) { ?> joined <?php } ?></div>
     </div>
 
 </div>
@@ -42,7 +61,7 @@ use App\Core\Localization;
     <?php if (!empty($game->getAllPlayer())): ?>
         <?php foreach ($game->getAllPlayer() as $player): ?>
             <div class="player-card">
-                <h3>🧑 <?= htmlspecialchars($player->getUsername()) ?></h3>
+                <h3><?php if ($player->getUserId() === $user->getId()) { ?>➡️<?php } ?>🧑 <?= htmlspecialchars($player->getUsername()) ?></h3>
                 <div class="figure-row">
                     <?php foreach ($player->getAllFigures() as $figure): ?>
                         <div class="figure-badge">
