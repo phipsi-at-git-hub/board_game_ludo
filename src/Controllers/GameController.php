@@ -7,7 +7,6 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
-use App\Models\GameRuleSetModel;
 use DomainException;
 
 class GameController extends BaseController {

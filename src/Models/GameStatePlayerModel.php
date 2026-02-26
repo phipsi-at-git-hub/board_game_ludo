@@ -17,7 +17,7 @@ final class GameStatePlayerModel extends BaseModel {
     // Find game state players for given game
     public static function findByGameId(string $game_id): array {
         return static::fetchAll(
-            "SELECT * FROM game_state_players WHERE game_id = :game_id",
+            sprintf("SELECT * FROM game_state_players WHERE game_id = :game_id"),
             ['game_id' => $game_id]
         );
     }
@@ -43,6 +43,27 @@ final class GameStatePlayerModel extends BaseModel {
         return false;
     }
 
+    // Find player by game_id and user_id
+    public static function getPlayerById(string $game_id, string $user_id): self {
+        $row = self::fetchOne(
+            sprintf("
+                SELECT * 
+                FROM game_state_players 
+                WHERE 
+                    game_id = :game_id, 
+                    user_id = :user_id "), 
+            [
+                'game_id' => $game_id, 
+                'user_id' => $user_id
+            ]
+        );
+
+        $player = self::fromArray($row);
+        $player->addSetOfFigures(GameStateFigureModel::findByGameIdAndPlayerId($game_id, $user_id));
+
+        return $player;
+    }
+
     // Remove given player from game
     public static function removePlayer(string $game_id, string $user_id): bool {
         return static::execute(
@@ -60,7 +81,9 @@ final class GameStatePlayerModel extends BaseModel {
         );
     }
 
-    // Getter
+    /**
+     * Getter
+     */
     // Getter - get user id
     public function getUserId(): string {
         return $this->user_id;
@@ -91,12 +114,28 @@ final class GameStatePlayerModel extends BaseModel {
         // ToDo: Implement
     }
 
-    // Setter - Set Figure
+    // Getter - Get start offset of players figures
+    public function getStartOffset(): int {
+        $offset = 0;
+        return $offset;
+    }
+
+    /**
+     * Setter
+     */
+    // Setter - Add single Figure
     public function addFigure(GameStateFigureModel $figure): void {
         $this->figure_array[] = $figure; 
     }
 
-    // Helper
+    // Setter - Add array of figures
+    public function addSetOfFigures(array $figure_set): void {
+        $this->figure_array = $figure_set;
+    }
+
+    /**
+     * Helper
+     */
     // Helper - Convert db rows to GameModel dynamically
     private static function fromArrayDynamic(array $row): self {
         $game_state_player = new self();

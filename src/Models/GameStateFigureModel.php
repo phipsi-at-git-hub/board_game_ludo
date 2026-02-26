@@ -16,11 +16,28 @@ final class GameStateFigureModel extends BaseModel {
     private string $updated_at;
 
     // Find game state figures by game id
-    public function findByGameId(string $game_id): array {
+    public static function findByGameId(string $game_id): array {
         return static::fetchAll(
             "SELECT * FROM game_state_figures WHERE game_id = :game_id",
             ['game_id' => $game_id]
         );
+    }
+
+    // Find game state figures by game id and player id
+    public static function findByGameIdAndPlayerId(string $game_id, string $player_id): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT *
+                FROM game_state_figures
+                WHERE
+                    game_id = :game_id, 
+                    user_id = :user_id"
+            ), [
+                'game_id' => $game_id, 
+                'user_id' => $player_id
+            ]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
     // Create initial figures for given game
