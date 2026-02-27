@@ -23,6 +23,20 @@ final class GameStateFigureModel extends BaseModel {
         );
     }
 
+    // Find game state players for given game
+    public static function findByFigureIndex(int $figure_index): self {
+        $row = static::fetchOne(
+            sprintf("SELECT * FROM game_state_figures WHERE game_id = :game_id AND user_id = :user_id AND figure_index = :figure_id"),
+            [
+                'game_id' => self::$game_id,
+                'user_ud' => self::$user_id, 
+                'figure_index' => $figure_index 
+            ]
+        );
+
+        return self::fromArray($row);
+    }
+
     // Find game state figures by game id and player id
     public static function findByGameIdAndPlayerId(string $game_id, string $player_id): array {
         $rows = static::fetchAll(
@@ -121,7 +135,34 @@ final class GameStateFigureModel extends BaseModel {
         return $this->updated_at;
     }
 
+    /**
+     * Setter
+     */
+    // Setter - Set Area
+    public function setArea(string $area): void {
+        // ToDo: make it proof
+        $this->area = $area;
+    }
+
+    // Setter - Set Position
+    public function setPosition($position): void {
+        // ToDo: make it proof
+        // find first empty slot in home area an position figure there
+        $this->position = $position;
+    }
+
     // Helper
+    // Helper - Find first empty slot in home area
+    public function findFirstEmptySlotInHome(): int {
+        // ToDo: Implement
+        return 0;
+    }
+    // Helper - Find empty slots in goal area
+    public function findEmptySlotsInGoal(): int {
+        // ToDo: Implement
+        return 0;
+    }
+
     // Helper - Convert db rows to GameModel dynamically
     private static function fromArrayDynamic(array $row): self {
         $game_state_figure = new self();

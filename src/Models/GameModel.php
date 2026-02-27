@@ -39,22 +39,177 @@ final class GameModel extends BaseModel {
         $this->rule_set_model = new GameRuleSetModel();
         $this->state_model = new GameStateModel();
         $this->player_array = []; 
-        //$this->figure_array = [];
     }
 
     /**
      * Game Engine - Core
      */
+    // apply moves to figure
+    public function applyMove(string $user_id, array $move): void {
+        $player = $this->getPlayerById($user_id);
+
+        /**
+         * 1. Get figure by figure_index
+         */
+        $figure_index = $move[Application::FIGURE_INDEX];
+        $figure = $player->getFigureByFigureIndex($figure_index);
+
+        /**
+         * 2. Optional - execute kick
+         */
+        if (!empty($move[Application::DTO_IS_KICK])) {
+            $kicked_player = $this->getPlayerById($move[Application::DTO_KICKED_PLAYER_ID]);
+            $kicked_figure = $kicked_player->getFigureByFigureIndex($move[Application::DTO_KICKED_FIGURE_INDEX]);
+            $kicked_figure->setArea(Application::AREA_HOME);
+            $kicked_figure->setPosition(null); // ToDo: set first empty position in home area
+        }
+
+        /**
+         * 3. set goal
+         */
+        $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
+        $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
+
+        /**
+         *  4. check win condition
+         */
+        if ($this->hasPlayerWon($player)) {
+            $this->setWinner($player);
+        }
+    }
+
     //  Game Engine - get available move for player and rolled dice
     private function getAvailableMoves(string $user_id, int $dice_value): array {
         $player = $this->getPlayerById($user_id);
-
         $moves = [];
 
         foreach ($player->getAllFigures() as $figure) {
-            // ToDo: Implement
+            if (!$this->canMoveFigure($player, $figure, $dice_value))  {
+                continue;
+            }
+
+            $area = $figure->getArea();
+            $move = [
+                Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(), 
+                Application::DTO_FROM => [
+                    Application::DTO_AREA => $area, 
+                    Application::DTO_POSITION => $figure->getPosition(), 
+                ], 
+                Application::DTO_TO => null, 
+                Application::DTO_ABSOLUTE_TARGET => null, 
+                Application::DTO_IS_KICK => false, 
+                Application::DTO_KICKED_PLAYER_ID => null, 
+                Application::DTO_KICKED_FIGURE_INDEX => null, 
+                Application::DTO_IS_GOAL_ENTRY => false, 
+                Application::DTO_IS_LAP_OVERFLOW => false, 
+            ]; 
+
+            /**
+             * HOME -> FIELD
+             */
+            if ($area === Application::AREA_HOME) {
+                $absolute_position = $player->getStartOffset();
+
+                $move[Application::DTO_TO] = [
+                    Application::DTO_AREA => Application::AREA_FIELD, 
+                    Application::DTO_POSITION => 0, 
+                ];
+
+                $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
+
+                $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
+
+                if ($enemy !== null) {
+                    $move[Application::DTO_IS_KICK] = true;
+                    $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                }
+
+                $moves[] = $move;
+                continue;
+            }
+
+            /**
+             * FIELD
+             */
+            if ($area === Application::AREA_FIELD) {
+                $relative_position = $figure->getPosition();
+                $new_relative_position = $relative_position + $dice_value;
+
+                // Entry to goal area?
+                if ($new_relative_position >= self::FIELD_LENGTH) {
+                    $steps_into_goal = $new_relative_position - self::FIELD_LENGTH;
+
+                    // Overflow?
+                    if ($steps_into_goal >= self::GOAL_LENGTH) {
+                        $wrapped_relative_position = $new_relative_position % self::FIELD_LENGTH;
+                        $absolute_position = ($player->getStartOffset() + $wrapped_relative_position) % self::FIELD_LENGTH;
+
+                        $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
+                        $move[Application::DTO_IS_LAP_OVERFLOW] = true;
+
+                        $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
+
+                        if ($enemy !== null) {
+                            $move[Application::DTO_IS_KICK] = true;
+                            $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                            $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                        }
+
+                        $moves[] = $move;
+                        continue;
+                    }
+
+                    // Common goal entry
+                    $move[Application::DTO_TO] = [
+                        Application::DTO_AREA => Application::AREA_GOAL, 
+                        Application::DTO_POSITION => $steps_into_goal, 
+                    ];
+
+                    $move[Application::DTO_IS_GOAL_ENTRY] = true; 
+
+                    $moves[] = $move;
+                    continue;
+                }
+
+                // Common field movement
+                $absolute_position = ($player->getStartOffset() + $new_relative_position) % self::FIELD_LENGTH;
+
+                $move[Application::DTO_TO] = [
+                    Application::DTO_AREA => Application::AREA_FIELD, 
+                    Application::DTO_POSITION => $new_relative_position, 
+                ];
+
+                $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
+
+                $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
+
+                if ($enemy !== null) {
+                    $move[Application::DTO_IS_KICK] = true;
+                    $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                }
+
+                $moves[] = $move;
+                continue;
+            }
+
+            /**
+             * GOAL
+             */
+            if ($area === Application::AREA_GOAL) {
+                $new_goal_position = $figure->getPosition() + $dice_value;
+
+                $move[Application::DTO_TO] = [
+                    Application::DTO_AREA => Application::AREA_GOAL, 
+                    Application::DTO_POSITION => $new_goal_position, 
+                ];
+
+                $moves[] = $move;
+                continue;
+            }
         }
-        return [];
+        return $moves;
     }
 
     // Game Engine - Check if figure can move
@@ -65,8 +220,32 @@ final class GameModel extends BaseModel {
         /**
          * 1. Step - Figure is in goal area already
          */
-        if ($area === Application::AREA_GOAL && $figure->getPosition() === self::GOAL_LENGTH) {
-            return false;
+        if ($area === Application::AREA_GOAL) {
+            $current_goal_position = $figure->getPosition();
+            $new_goal_position = $current_goal_position + $dice_value;
+
+            // too far for finish in goal area
+            if ($new_goal_position >= self::GOAL_LENGTH) {
+                /*
+                // Check for other playable figures of player
+                if ($this->playerHasOtherMovableFigure($player, $figure, $dice_value)) {
+                    return false;
+                }
+                return true;
+                */
+                return false;
+            }
+
+            // check strict goal order
+            if ($this->isGoalPositionBlockedByStrictOrder($player, $new_goal_position)) {
+                return false;
+            }
+
+            // check if position in goal area is already occupied 
+            if ($this->isGoalPositionOccupied($player, $new_goal_position)) {
+                return false;
+            }
+            return true;
         }
 
         /**
@@ -77,6 +256,15 @@ final class GameModel extends BaseModel {
             // Figure can only leave home area with a six
             if ($dice_value !== 6) {
                 return false;
+            }
+
+            $start_offset = $player->getStartOffset();
+
+            // Is own figure blocked?
+            if (!$this->rule_set_model->getAllowStackOwnFigures()) {
+                if ($this->isOwnFigureOnAbsolutePosition($player, $start_offset)) {
+                    return false;
+                }
             }
 
             // Perhaps the start field of the player must be cleared
@@ -101,11 +289,23 @@ final class GameModel extends BaseModel {
             if ($new_relative_position >= self::FIELD_LENGTH) {
                 $steps_into_goal = $new_relative_position - self::FIELD_LENGTH;
 
-                // $dive_roll too high
+                // $dice_roll is too high - overflow
                 if ($steps_into_goal >= self::GOAL_LENGTH) {
-                    // check for other movable figures
-                    if ($this->playerHasOtherMovableFigure($player, $figure, $dice_value)) {
+                    // complete another lap optional?
+                    if (!$this->rule_set_model->getForceExtraLapOnOverflow()) {
                         return false;
+                    }
+
+                    // calculate new field / board position
+                    $wrapped_relative_position = $new_relative_position % self::FIELD_LENGTH;
+                    $absolute_target = ($player->getStartOffset() + $wrapped_relative_position) %self::FIELD_LENGTH;
+
+
+                    // check stack
+                    if (!$this->rule_set_model->getAllowStackOwnFigures()) {
+                        if ($this->isOwnFigureOnAbsolutePosition($player, $absolute_target)) {
+                            return false;
+                        }
                     }
 
                     // no other figure is allowed to move
@@ -135,29 +335,6 @@ final class GameModel extends BaseModel {
             return true;
         }
 
-        /**
-         * 4. Step - Figure is in goal area already
-         */
-        if ($area === Application::AREA_GOAL) {
-            $current_goal_position = $figure->getPosition();
-            $new_goal_position = $current_goal_position + $dice_value;
-
-            // too far for finish in goal area
-            if ($new_goal_position >= self::GOAL_LENGTH) {
-                // Check for other playable figures of player
-                if ($this->playerHasOtherMovableFigure($player, $figure, $dice_value)) {
-                    return false;
-                }
-                return true;
-            }
-
-            // check strict goal order
-            if ($this->isGoalPositionBlockedByStrictOrder($player, $new_goal_position)) {
-                return false;
-            }
-            return true;
-        }
-
         return false;
     }
 
@@ -175,7 +352,7 @@ final class GameModel extends BaseModel {
         return $absolute_position;
     }
 
-    // Game Engine - Check if
+    // Game Engine - Check if start field is blocked
     private function isStartFieldBlocked(GameStatePlayerModel $player): bool {
         // ToDo: check logic here. Start field must be cleared by own figures. Other players figures can be removed by player itself :) 
         $start_offset = $player->getStartOffset();
@@ -278,6 +455,16 @@ final class GameModel extends BaseModel {
         return false;
     }
 
+    private function isGoalPositionOccupied(GameStatePlayerModel $player, int $target_goal_position): bool {
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() === Application::AREA_GOAL && $figure->getPosition() === $target_goal_position) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Game Engine - Check if player has other movable figures
     private function playerHasOtherMovableFigure(GameStatePlayerModel $player, GameStateFigureModel $excluded_figure, int $dice_value): bool {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure === $excluded_figure) {
@@ -289,6 +476,35 @@ final class GameModel extends BaseModel {
             }
         }
         return false;
+    }
+
+    // Game Engine - Check if player has won the game
+    private function hasPlayerWon(GameStatePlayerModel $player): bool {
+        $slots = array_fill(0, self::GOAL_LENGTH, false); 
+
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() !== Application::AREA_GOAL) {
+                return false;
+            }
+
+            $position = $figure->getPosition();
+
+            if ($position < 0 || $position >= self::GOAL_LENGTH) {
+                return false;
+            }
+
+            if ($slots[$position]) {
+                return false; // more then one figure on one spot - that's not allowed
+            }
+
+            $slots[$position] = true;
+        }
+        return !in_array(false, $slots, true);
+    }
+
+    // Game Engine - Set winner of the game
+    private function setWinner(GameStatePlayerModel $player): void {
+        // ToDo: Implement
     }
 
     /**
@@ -475,6 +691,7 @@ final class GameModel extends BaseModel {
                 "SELECT
                     p.%s, 
                     p.%s, 
+                    p.%s, 
                     u.%s, 
                     p.%s, 
                     p.%s 
@@ -486,6 +703,7 @@ final class GameModel extends BaseModel {
 
                 Application::GAME_ID, 
                 Application::USER_ID, 
+                Application::PLAYER_INDEX, 
                 Application::USERNAME, 
                 Application::CREATED_AT, 
                 Application::UPDATED_AT, 
@@ -736,7 +954,7 @@ final class GameModel extends BaseModel {
         try {
             $this->db->beginTransaction();
 
-            GameStatePlayerModel::addPlayer($this->getId(), $user_id);
+            GameStatePlayerModel::addPlayer($this->getId(), $user_id, $this->getPlayerCount());
 
             $this->db->commit();
             return true;
@@ -837,6 +1055,11 @@ final class GameModel extends BaseModel {
     // Helper - Check for available player slots
     public function isFull(): bool {
         return $this->getPlayerCount() >= $this->getPlayerMax();
+    }
+
+    // Helper - get player offset
+    public function getPlayerStartOffset(int $player_index): int {
+        return ( self::FIELD_LENGTH / self::PLAYERS_MAX ) * $player_index;
     }
 
     // Helper - Check if given user is already a player of the game

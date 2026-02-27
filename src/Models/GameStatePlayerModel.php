@@ -9,6 +9,7 @@ final class GameStatePlayerModel extends BaseModel {
     private string $game_id;
     private string $user_id;
     private string $user_name;
+    private int $player_index;
     private string $created_at;
     private string $updated_at;
 
@@ -23,15 +24,16 @@ final class GameStatePlayerModel extends BaseModel {
     }
 
     // Add player to game and 4 figures
-    public static function addPlayer(string $game_id, string $user_id): bool {
+    public static function addPlayer(string $game_id, string $user_id, int $player_index): bool {
         $row = static::execute(
             "INSERT INTO game_state_players
-             (game_id, user_id, created_at, updated_at)
+             (game_id, user_id, player_index, created_at, updated_at)
              VALUES
-             (:game_id, :user_id, NOW(), NOW())",
+             (:game_id, :user_id, :player_index, NOW(), NOW())",
             [
                 'game_id' => $game_id,
-                'user_id' => $user_id
+                'user_id' => $user_id, 
+                'player_index' => $player_index
             ]
         );
 
@@ -94,6 +96,11 @@ final class GameStatePlayerModel extends BaseModel {
         return $this->user_name;
     }
 
+    // Getter - get player index
+    public function getPlayerIndex() {
+        return $this->player_index;
+    }
+
     // Getter - Get created at
     public function getCreatedAt(): string {
         return $this->created_at;
@@ -110,15 +117,18 @@ final class GameStatePlayerModel extends BaseModel {
     }
 
     // Getter - Get figure by figure index
-    public function getFigureByFigureIndex(int $figure_index) {
-        // ToDo: Implement
+    public function getFigureByFigureIndex(int $figure_index): GameStateFigureModel {
+        return GameStateFigureModel::findByFigureIndex($figure_index);
     }
 
     // Getter - Get start offset of players figures
-    public function getStartOffset(): int {
-        $offset = 0;
-        return $offset;
+    public function getStartOffset(): int {$offset = 0;
+        // Should be part of GameModel since field length is property of game not the play -> ( $field_length / $player_max ) * $player->getPlayerIndex();
+        return $this->player_index * 10;
     }
+
+    // Getter - Get figure of player by figure id
+    public function getFigureById(string $figure_id) {}
 
     /**
      * Setter
@@ -153,6 +163,7 @@ final class GameStatePlayerModel extends BaseModel {
         $game_state_player->game_id = $row[Application::GAME_ID];
         $game_state_player->user_id = $row[Application::USER_ID];
         if (array_key_exists(Application::USERNAME, $row))  $game_state_player->user_name = $row[Application::USERNAME];
+        $game_state_player->player_index = $row[Application::PLAYER_INDEX]; 
         $game_state_player->created_at = $row[Application::CREATED_AT];
         $game_state_player->updated_at = $row[Application::UPDATED_AT];
 

@@ -48,6 +48,9 @@ class Application {
     public const POSITION = 'position';
     public const AREA = 'area';
 
+    // database field names - game_state_figures
+    public const PLAYER_INDEX = 'player_index';
+
     // Database field names - users
     public const USERNAME = 'username';
     public const FIRSTNAME = 'firstname';
@@ -74,6 +77,19 @@ class Application {
     public const PLAYER_COUNT = 'player_count';
     // Game visibility 
     public const VISIBILITY_PRIVATE = '';
+
+    // Game  DTO keys
+    public const DTO_FIGURE_INDEX = 'figure_index'; 
+    public const DTO_FROM = 'from'; 
+    public const DTO_TO = 'to'; 
+    public const DTO_AREA = 'area'; 
+    public const DTO_POSITION = 'position'; 
+    public const DTO_ABSOLUTE_TARGET = 'absolute_target'; 
+    public const DTO_IS_KICK = 'is_kick'; 
+    public const DTO_KICKED_PLAYER_ID = 'kicked_player_id'; 
+    public const DTO_KICKED_FIGURE_INDEX = 'kicked_figure_index'; 
+    public const DTO_IS_GOAL_ENTRY = 'is_goal_entry'; 
+    public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow'; 
 
     // Figure Areas
     public const AREA_HOME  = 'home';
