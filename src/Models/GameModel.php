@@ -311,6 +311,7 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
                     COUNT(p.%s) as player_count
                 FROM %s g 
                 LEFT JOIN %s r 
@@ -322,6 +323,7 @@ final class GameModel extends BaseModel {
 
                 Application::ALLOW_BOTS, 
                 Application::EXTRA_ROLL_LIMIT, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
                 Application::START_FIELD_MUST_BE_CLEARED, 
@@ -364,6 +366,7 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
                     r.%s
                 FROM %s g
                 JOIN %s u
@@ -388,6 +391,7 @@ final class GameModel extends BaseModel {
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
                 Application::EXTRA_ROLL_LIMIT, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
                 Application::START_FIELD_MUST_BE_CLEARED, 
@@ -426,6 +430,7 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
                     r.%s 
                 FROM %s g
                 JOIN %s u
@@ -438,6 +443,7 @@ final class GameModel extends BaseModel {
                 Application::USERNAME, 
                 Application::ALLOW_BOTS, 
                 Application::EXTRA_ROLL_LIMIT, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
                 Application::START_FIELD_MUST_BE_CLEARED, 

@@ -7,6 +7,7 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
+use App\Models\GameRuleSetModel;
 use DomainException;
 
 class GameController extends BaseController {
@@ -20,8 +21,11 @@ class GameController extends BaseController {
 
     // Game creation form
     public function create() {
+        $rule_set = (new GameRuleSetModel())->initializeDefaultRuleSet();
+
         $this->render(
-            'game/create'
+            'game/create', 
+            ['rule_set' => $rule_set]
         );
     }
 

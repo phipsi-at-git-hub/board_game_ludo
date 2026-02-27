@@ -91,6 +91,7 @@ return [
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Bots erlauben',
     'game.rules.roll_on_limit' => '🎲 Extra Wurf bei einer 6',
+    'game.rules.force_extra_lap_on_overflow' => '➿ Weitere Runde bei Überwurf', 
     'game.rules.allow_stack' => '🧱 Eigene Figuren stapeln erlauben',
     'game.rules.strict_goal_order' => '🎯 Strikte Zielreihenfolge',
     'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',

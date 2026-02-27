@@ -8,6 +8,7 @@ final class GameRuleSetModel extends BaseModel {
     // ToDo: Use constant from application.php 
     private bool $allow_bots;
     private int $extra_roll_limit;
+    private bool $force_extra_roll_on_overflow;
     private bool $allow_stack_own_figures;
     private bool $strict_goal_order;
     private bool $start_field_must_be_cleared;
@@ -15,12 +16,27 @@ final class GameRuleSetModel extends BaseModel {
     // Define Default values
     private const DEFAULT_ALLOW_BOTS = true;
     private const DEFAULT_EXTRA_ROLL_LIMIT = 255;
+    private const DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW = true;
     private const DEFAULT_ALLOW_STACK_OWN_FIGURES = false;
     private const DEFAULT_STRICT_GOAL_ORDER = true;
     private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
 
     // Define special values
     private const EXTRA_ROLL_UNLIMITED = 255;
+
+    // Initialize Default RuleSet
+    public function initializeDefaultRuleSet(): self {
+        $rule_set = new self;
+
+        $rule_set->allow_bots = self::DEFAULT_ALLOW_BOTS;
+        $rule_set->extra_roll_limit = self::DEFAULT_EXTRA_ROLL_LIMIT;
+        $rule_set->force_extra_roll_on_overflow = self::DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW;
+        $rule_set->allow_stack_own_figures = self::DEFAULT_ALLOW_STACK_OWN_FIGURES;
+        $rule_set->strict_goal_order = self::DEFAULT_STRICT_GOAL_ORDER;
+        $rule_set->start_field_must_be_cleared = self::DEFAULT_START_FIELD_MUST_BE_CLEARED;
+
+        return $rule_set;
+    }
 
     //Find game by game id
     public static function findByGameId(string $game_id): ?array {
@@ -34,7 +50,7 @@ final class GameRuleSetModel extends BaseModel {
     public static function create(string $game_id, array $rules): bool {
         return static::execute(
             "INSERT INTO game_rule_set
-            (game_id, allow_bots, extra_roll_limit,
+            (game_id, allow_bots, extra_roll_limit, force_extra_lap_on_overflow, 
              allow_stack_own_figures, strict_goal_order,
              start_field_must_be_cleared, created_at, updated_at)
             VALUES
@@ -42,6 +58,7 @@ final class GameRuleSetModel extends BaseModel {
                 :game_id, 
                 :allow_bots, 
                 :extra_roll_limit, 
+                :force_extra_lap_on_overflow, 
                 :allow_stack_own_figures, 
                 :strict_goal_order, 
                 :start_field_must_be_cleared, 
@@ -52,6 +69,7 @@ final class GameRuleSetModel extends BaseModel {
                 'game_id' => $game_id,
                 'allow_bots' => (int)$rules[Application::ALLOW_BOTS],
                 'extra_roll_limit' => (int)$rules[Application::EXTRA_ROLL_LIMIT],
+                'force_extra_lap_on_overflow' => (int)$rules[Application::FORCE_EXTRA_LAP_ON_OVERFLOW],
                 'allow_stack_own_figures' => (int)$rules[Application::ALLOW_STACK_OWN_FIGURES],
                 'strict_goal_order' => (int)$rules[Application::STRICT_GOAL_ORDER],
                 'start_field_must_be_cleared' => (int)$rules[Application::START_FIELD_MUST_BE_CLEARED],
@@ -67,6 +85,7 @@ final class GameRuleSetModel extends BaseModel {
                 SET 
                     allow_bots = :allow_bots, 
                     extra_roll_limit = :extra_roll_limit, 
+                    force_extra_lap_on_overflow = :force_extra_lap_on_overflow, 
                     allow_stack_own_figures = :allow_stack_own_figures, 
                     strict_goal_order = :strict_goal_order, 
                     start_field_must_be_cleared = :start_field_must_be_cleared 
@@ -74,7 +93,7 @@ final class GameRuleSetModel extends BaseModel {
             ), [
                 'allow_bots' => $rule_set['allow_bots'], 
                 'extra_roll_limit' => $rule_set['extra_roll_limit'], 
-                'allow_stack_own_figures' => $rule_set['allow_stack_own_figures'], 
+                'force_extra_lap_on_overflow' => $rule_set['force_extra_lap_on_overflow'], 
                 'strict_goal_order' => $rule_set['strict_goal_order'], 
                 'start_field_must_be_cleared' => $rule_set['start_field_must_be_cleared'], 
                 'game_id' => $game_id
@@ -95,6 +114,7 @@ final class GameRuleSetModel extends BaseModel {
     public function isGameClassic(): bool {
         return $this->allow_bots === self::DEFAULT_ALLOW_BOTS 
         && $this->extra_roll_limit === self::DEFAULT_EXTRA_ROLL_LIMIT
+        && $this->force_extra_roll_on_overflow === self::DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW
         && $this->allow_stack_own_figures === self::DEFAULT_ALLOW_STACK_OWN_FIGURES 
         && $this->strict_goal_order === self::DEFAULT_STRICT_GOAL_ORDER 
         && $this->start_field_must_be_cleared === self::DEFAULT_START_FIELD_MUST_BE_CLEARED;
@@ -116,6 +136,7 @@ final class GameRuleSetModel extends BaseModel {
 
         if (array_key_exists(Application::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
         if (array_key_exists(Application::EXTRA_ROLL_LIMIT, $row)) $rule_set->extra_roll_limit = (int) $row[Application::EXTRA_ROLL_LIMIT];
+        if (array_key_exists(Application::FORCE_EXTRA_LAP_ON_OVERFLOW, $row)) $rule_set->force_extra_roll_on_overflow = (bool) $row[Application::FORCE_EXTRA_LAP_ON_OVERFLOW];
         if (array_key_exists(Application::ALLOW_STACK_OWN_FIGURES, $row)) $rule_set->allow_stack_own_figures = (bool) $row[Application::ALLOW_STACK_OWN_FIGURES];
         if (array_key_exists(Application::STRICT_GOAL_ORDER, $row)) $rule_set->strict_goal_order = (bool) $row[Application::STRICT_GOAL_ORDER];
         if (array_key_exists(Application::START_FIELD_MUST_BE_CLEARED, $row)) $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
@@ -132,6 +153,11 @@ final class GameRuleSetModel extends BaseModel {
     // Get extra limit
     public function getExtraRollLimit(): int {
         return $this->extra_roll_limit;
+    }
+
+    // Get force extra lap on overflow
+    public function getForceExtraLapOnOverflow(): bool {
+        return $this->force_extra_roll_on_overflow;
     }
 
     // Get allow_stack_own_figures

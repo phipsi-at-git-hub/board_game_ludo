@@ -35,6 +35,7 @@ class Application {
     // Database field names - game_rule_set
     public const ALLOW_BOTS = 'allow_bots';
     public const EXTRA_ROLL_LIMIT = 'extra_roll_limit';
+    public const FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow'; 
     public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
     public const STRICT_GOAL_ORDER = 'strict_goal_order';
     public const START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';

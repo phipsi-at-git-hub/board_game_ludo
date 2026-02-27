@@ -66,6 +66,14 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
+            <?= Localization::get('game.rules.force_extra_lap_on_overflow') ?>
+            <select name="<?php echo Application::FORCE_EXTRA_LAP_ON_OVERFLOW; ?>">
+                <option value="0" <?= (!$game->getRuleSetModel()->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($game->getRuleSetModel()->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
             <?= Localization::get('game.rules.allow_stack') ?>
             <select name="<?= Application::ALLOW_STACK_OWN_FIGURES; ?>">
                 <option value="0" <?= (!$game->getRuleSetModel()->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>

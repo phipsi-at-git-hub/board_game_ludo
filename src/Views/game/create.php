@@ -49,41 +49,49 @@ use App\Core\Localization;
         <label>
             <?= Localization::get('game.rules.allow_bots') ?>
             <select name="<?php echo Application::ALLOW_BOTS; ?>">
-                <option value="0"><?= Localization::get('application.general.no') ?></option>
-                <option value="1" selected><?= Localization::get('application.general.yes') ?></option>
+                <option value="0" <?= (!$rule_set->getAllowBots()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getAllowBots()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>
         <label>
             <?= Localization::get('game.rules.roll_on_limit') ?>
             <select name="<?php echo Application::EXTRA_ROLL_LIMIT; ?>">
-                <option value="0"><?= Localization::get('application.general.no') ?></option>
-                <option value="3" selected><?= Localization::get('game.create.three') ?></option>
-                <option value="255" selected><?= Localization::get('application.general.yes') ?></option>
+                <option value="0" <?= ($rule_set->getExtraRollLimit() === 0) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="3" <?= ($rule_set->getExtraRollLimit() > 0 && $rule_set->getAllowStackOwnFigures() < 255) ? 'selected' : '' ?> ><?= Localization::get('game.create.three') ?></option>
+                <option value="255" <?= ($rule_set->getExtraRollLimit() === 255) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            <?= Localization::get('game.rules.force_extra_lap_on_overflow') ?>
+            <select name="<?php echo Application::FORCE_EXTRA_LAP_ON_OVERFLOW; ?>">
+                <option value="0" <?= (!$rule_set->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>
         <label>
             <?= Localization::get('game.rules.allow_stack') ?>
             <select name="<?php echo Application::ALLOW_STACK_OWN_FIGURES; ?>">
-                <option value="0" selected><?= Localization::get('application.general.no') ?></option>
-                <option value="1"><?= Localization::get('application.general.yes') ?></option>
+                <option value="0" <?= (!$rule_set->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>
         <label>
             <?= Localization::get('game.rules.strict_goal_order') ?>
             <select name="<?php echo Application::STRICT_GOAL_ORDER; ?>">
-                <option value="0"><?= Localization::get('application.general.no') ?></option>
-                <option value="1" selected><?= Localization::get('application.general.yes') ?></option>
+                <option value="0" <?= (!$rule_set->getStrictGoalOrder()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getStrictGoalOrder()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>
         <label>
             <?= Localization::get('game.rules.start_field_must_be_cleared') ?>
             <select name="<?php echo Application::START_FIELD_MUST_BE_CLEARED; ?>">
-                <option value="0"><?= Localization::get('application.general.no') ?></option>
-                <option value="1" selected><?= Localization::get('application.general.yes') ?></option>
+                <option value="0" <?= (!$rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
     </fieldset>

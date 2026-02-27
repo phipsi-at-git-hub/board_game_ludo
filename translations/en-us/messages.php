@@ -91,6 +91,7 @@ return [
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Allow bots',
     'game.rules.roll_on_limit' => '🎲 Extra roll on six',
+    'game.rules.force_extra_lap_on_overflow' => '➿ Force complete another lap on overflow', 
     'game.rules.allow_stack' => '🧱 Allow stacking own figures',
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
     'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
