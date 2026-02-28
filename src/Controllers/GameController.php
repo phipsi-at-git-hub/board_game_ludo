@@ -44,7 +44,10 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
+                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
+                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
                 Application::EXTRA_ROLL_LIMIT => ($_POST[Application::EXTRA_ROLL_LIMIT]),
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
@@ -103,7 +106,10 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
+                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
+                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
                 Application::EXTRA_ROLL_LIMIT => ($_POST[Application::EXTRA_ROLL_LIMIT]),
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),

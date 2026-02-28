@@ -55,6 +55,23 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
+            <?= Localization::get('game.rules.leave_home_attempt') ?>
+            <select name="<?php echo Application::LEAVE_HOME_ATTEMPT; ?>">
+                <option value="<?= Application::ENUM_FIRST_FIGURE ?>" <?= ($rule_set->getLeaveHomeAttempt() === Application::ENUM_FIRST_FIGURE) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_first_figure') ?></option>
+                <option value="<?= Application::ENUM_ALL_FIGURES ?>" <?= ($rule_set->getLeaveHomeAttempt() === Application::ENUM_ALL_FIGURES) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_all_figures') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            <?= Localization::get('game.rules.leave_home_attempts_max') ?>
+            <select name="<?php echo Application::LEAVE_HOME_ATTEMPTS_MAX; ?>">
+                <option value="1" <?= ($rule_set->getLeaveHomeAttemptsMax() === 1) ? 'selected' : '' ?> >1</option>
+                <option value="3" <?= ($rule_set->getLeaveHomeAttemptsMax() === 3) ? 'selected' : '' ?> >3</option>
+                <option value="5" <?= ($rule_set->getLeaveHomeAttemptsMax() === 5) ? 'selected' : '' ?> >5</option>
+            </select>
+        </label>
+        <br><br>
+        <label>
             <?= Localization::get('game.rules.roll_on_limit') ?>
             <select name="<?php echo Application::EXTRA_ROLL_LIMIT; ?>">
                 <option value="0" <?= ($rule_set->getExtraRollLimit() === 0) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>

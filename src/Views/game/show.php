@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
 use App\Policies\GamePolicy;
@@ -37,7 +38,7 @@ use App\Policies\GamePolicy;
                 <?= htmlspecialchars(($game->isParticipant($user)) ? 'Leave' : 'Join') ?>
             </button>
         <?php } else { ?>
-            <button class="joined-btn can-not-join">Join</button>
+            <button class="joined-btn can-not-join"><?= Localization::get('game.show.join') ?></button>
         </form>
         <?php } ?>
     </div>
@@ -84,7 +85,10 @@ use App\Policies\GamePolicy;
     <h2><?= Localization::get('game.show.rules') ?></h2>
     <ul class="rules-list">
         <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_leave_home_attempt') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttempt() === Application::ENUM_FIRST_FIGURE ? Localization::get('game.show.label_rules_leave_home_attempt_enum_first_figure') : Localization::get('game.show.label_rules_leave_home_attempt_enum_all_figures') ?></li>
+        <li><?= Localization::get('game.show.label_rules_leave_home_attempts_max') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptsMax() ?></li>
         <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php if ($game->getRuleSetModel()->getExtraRollLimit() === 0) { echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); } elseif ($game->getRuleSetModel()->getExtraRollLimit() === 255) { echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); } else { echo Localization::get('game.show.label_rules_roll_on_six_limit_limited'). $game->getRuleSetModel()->getExtraRollLimit();} ?></li>
+        <li><?= Localization::get('game.show.label_force_extra_roll_limit') ?>: <?= $game->getRuleSetModel()->getExtraRollLimit() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_stack_on_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>

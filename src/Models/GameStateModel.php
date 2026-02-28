@@ -2,9 +2,14 @@
 // src/Models/GameStateModel.php
 namespace App\Models;
 
+use App\Constants\Application;
+
 final class GameStateModel extends BaseModel {
     // ToDo: Use constant from application.php 
     private int $current_player_index;
+    private ?int $current_dice_roll;
+    private int $leave_home_attempts_used;
+    private string $winner_user_id;
     private string $created_at;
     private string $updated_at;
 
@@ -20,9 +25,9 @@ final class GameStateModel extends BaseModel {
     public static function create(string $game_id): bool {
         return static::execute(
             "INSERT INTO game_state
-            (game_id, current_player_index, created_at, updated_at)
+            (game_id, current_player_index, current_dice_roll, leave_home_attempts_used, created_at, updated_at)
             VALUES
-            (:game_id, 0, NOW(), NOW())",
+            (:game_id, 0, NULL, 0, NOW(), NOW())",
             ['game_id' => $game_id]
         );
     }
@@ -36,5 +41,43 @@ final class GameStateModel extends BaseModel {
             "DELETE FROM game_state WHERE game_id = :game_id",
             ['game_id' => $game_id]
         );
+    }
+
+    /**
+     * Helper
+     */
+    // Helper - Convert db row to GameModel object
+    public static function fromArray(array $row): self {
+        $game_state = new self();
+
+        if (array_key_exists(Application::CURRENT_PLAYER_INDEX, $row)) $game_state->current_player_index = (int) $row[Application::CURRENT_PLAYER_INDEX];
+        if (array_key_exists(Application::CURRENT_DICE_ROLL, $row)) $game_state->current_dice_roll = (int) $row[Application::CURRENT_DICE_ROLL];
+        if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_USED, $row)) $game_state->leave_home_attempts_used = (int) $row[Application::LEAVE_HOME_ATTEMPTS_USED];
+        if (array_key_exists(Application::WINNER_USER_ID, $row)) $game_state->winner_user_id = (string) $row[Application::WINNER_USER_ID];
+
+        return $game_state;
+    }
+
+    /**
+     * Getter
+     */
+    // Get current player index
+    public function getCurrentPlayerIndex(): int {
+        return $this->current_player_index;
+    }
+
+    // Get current dice roll
+    public function getCurrentDiceRoll(): int {
+         return $this->current_dice_roll;
+    }
+
+    // Get leave home attempts used
+    public function getLeaveHomeAttemptsUsed(): int {
+        return $this->leave_home_attempts_used;
+    }
+
+    // Get winner user id
+    public function getWinnerUserId(): string {
+        return $this->winner_user_id;
     }
 }

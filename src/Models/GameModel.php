@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use App\Constants\Application;
 use DomainException;
+use InvalidArgumentException;
 use LogicException;
 use Throwable;
 
@@ -47,6 +48,10 @@ final class GameModel extends BaseModel {
     // apply moves to figure
     public function applyMove(string $user_id, array $move): void {
         $player = $this->getPlayerById($user_id);
+
+        if (!isset($move[Application::DTO_FIGURE_INDEX])) {
+            throw new InvalidArgumentException('Missing Figure Index');
+        }
 
         /**
          * 1. Get figure by figure_index
@@ -528,6 +533,8 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
                     COUNT(p.%s) as player_count
                 FROM %s g 
                 LEFT JOIN %s r 
@@ -538,6 +545,8 @@ final class GameModel extends BaseModel {
                 ORDER BY g.%s DESC", 
 
                 Application::ALLOW_BOTS, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
@@ -583,6 +592,8 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
                     r.%s
                 FROM %s g
                 JOIN %s u
@@ -606,6 +617,8 @@ final class GameModel extends BaseModel {
                 Application::UPDATED_AT, 
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
@@ -647,6 +660,8 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
                     r.%s 
                 FROM %s g
                 JOIN %s u
@@ -658,6 +673,8 @@ final class GameModel extends BaseModel {
 
                 Application::USERNAME, 
                 Application::ALLOW_BOTS, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
@@ -1021,7 +1038,20 @@ final class GameModel extends BaseModel {
         return $game;
     }
 
-    // Helper
+    // Helper - Get Winner 
+    public function getWinner(): ?GameStatePlayerModel {
+        if ($this->state_model->getWinnerUserId() === null) {
+            return null;
+        }
+
+        foreach ($this->player_array as $player) {
+            if ($player->getUserId() === $this->state_model->getWinnerUserId()) {
+                return $player;
+            }
+        }
+        return null;
+    }
+
     // Helper - Status is waiting
     public function isWaiting() : bool {
         return $this->status === Application::STATUS_WAITING;

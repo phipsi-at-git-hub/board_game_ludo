@@ -34,21 +34,28 @@ class Application {
 
     // Database field names - game_rule_set
     public const ALLOW_BOTS = 'allow_bots';
+    public const LEAVE_HOME_ATTEMPT = 'leave_home_attempt'; 
+    public const LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max'; 
     public const EXTRA_ROLL_LIMIT = 'extra_roll_limit';
     public const FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow'; 
     public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
     public const STRICT_GOAL_ORDER = 'strict_goal_order';
     public const START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';
+    public const ENUM_FIRST_FIGURE = 'first_figure';
+    public const ENUM_ALL_FIGURES = 'all_figures';
 
     // Database field names - game_state
     public const CURRENT_PLAYER_INDEX = 'current_player_index';
+    public const CURRENT_DICE_ROLL = 'current_dice_roll'; 
+    public const LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used'; 
+    public const WINNER_USER_ID = 'winner_user_id'; 
 
-    // database field names - game_state_figures
+    // Database field names - game_state_figures
     public const FIGURE_INDEX = 'figure_index';
     public const POSITION = 'position';
     public const AREA = 'area';
 
-    // database field names - game_state_figures
+    // Database field names - game_state_figures
     public const PLAYER_INDEX = 'player_index';
 
     // Database field names - users
