@@ -85,7 +85,8 @@ return [
     'game.show.label_rules_roll_on_six_limit_no' => 'Kein nochmaliges Würfeln nach 6.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Nach jeder 6 ein weiteres Würfeln.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Zusätzliches Würfeln nach einer 6 ist begrenzt auf:', 
-    'game.show.label_rules_stack_on_figures' => '🧱 Eigene Figuren stapeln', 
+    'game.show.label_rules_force_extra_lap_on_overflow' => '➿ Weitere Runde bei Überwurf', 
+    'game.show.label_rules_stack_own_figures' => '🧱 Eigene Figuren stapeln', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strenge Zielfeld-Reihenfolge', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
 
@@ -99,9 +100,9 @@ return [
     'game.rules.leave_home_attempt_enum_first_figure' => 'der ersten Figur', 
     'game.rules.leave_home_attempt_enum_all_figures' => 'allen Figuren', 
     'game.rules.leave_home_attempts_max' => '🔂 Wie viele Versuche zum Verlassen der Homezone bevor der nächste Spieler am Zug ist',
-    'game.rules.roll_on_limit' => '🎲 Extra Wurf bei einer 6',
+    'game.rules.roll_on_six_limit' => '🎲 Extra Wurf bei einer 6',
     'game.rules.force_extra_lap_on_overflow' => '➿ Weitere Runde bei Überwurf', 
-    'game.rules.allow_stack' => '🧱 Eigene Figuren stapeln erlauben',
+    'game.rules.allow_stack_own_figures' => '🧱 Eigene Figuren stapeln erlauben',
     'game.rules.strict_goal_order' => '🎯 Strikte Zielreihenfolge',
     'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',
 

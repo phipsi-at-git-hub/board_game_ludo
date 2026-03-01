@@ -85,7 +85,8 @@ return [
     'game.show.label_rules_roll_on_six_limit_no' => 'No additional roll on six.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Unlimited additional rolls on six.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Limited additional rolls on six to: ', 
-    'game.show.label_rules_stack_on_figures' => '🧱 Stack own figures', 
+    'game.show.label_rules_force_extra_lap_on_overflow' => '➿ Force complete another lap on overflow', 
+    'game.show.label_rules_stack_own_figures' => '🧱 Stack own figures', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strict goal order', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
 
@@ -99,9 +100,9 @@ return [
     'game.rules.leave_home_attempt_enum_first_figure' => 'First Figure', 
     'game.rules.leave_home_attempt_enum_all_figures' => 'All Figures', 
     'game.rules.leave_home_attempts_max' => '🔂 Roll attempts to leave home zone before next player',
-    'game.rules.roll_on_limit' => '🎲 Extra roll on six',
+    'game.rules.roll_on_six_limit' => '🎲 Extra roll on six',
     'game.rules.force_extra_lap_on_overflow' => '➿ Force complete another lap on overflow', 
-    'game.rules.allow_stack' => '🧱 Allow stacking own figures',
+    'game.rules.allow_stack_own_figures' => '🧱 Allow stacking own figures',
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
     'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
 

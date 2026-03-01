@@ -89,7 +89,7 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.rules.allow_stack') ?>
+            <?= Localization::get('game.rules.allow_stack_own_figures') ?>
             <select name="<?php echo Application::ALLOW_STACK_OWN_FIGURES; ?>">
                 <option value="0" <?= (!$rule_set->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
                 <option value="1" <?= ($rule_set->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
