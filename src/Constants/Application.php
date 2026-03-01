@@ -36,7 +36,7 @@ class Application {
     public const ALLOW_BOTS = 'allow_bots';
     public const LEAVE_HOME_ATTEMPT = 'leave_home_attempt'; 
     public const LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max'; 
-    public const EXTRA_ROLL_LIMIT = 'extra_roll_limit';
+    public const EXTRA_ROLL_ON_SIX_LIMIT = 'extra_roll_on_six_limit';
     public const FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow'; 
     public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
     public const STRICT_GOAL_ORDER = 'strict_goal_order';

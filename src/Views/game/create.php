@@ -57,8 +57,8 @@ use App\Core\Localization;
         <label>
             <?= Localization::get('game.rules.leave_home_attempt') ?>
             <select name="<?php echo Application::LEAVE_HOME_ATTEMPT; ?>">
-                <option value="<?= Application::ENUM_FIRST_FIGURE ?>" <?= ($rule_set->getLeaveHomeAttempt() === Application::ENUM_FIRST_FIGURE) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_first_figure') ?></option>
-                <option value="<?= Application::ENUM_ALL_FIGURES ?>" <?= ($rule_set->getLeaveHomeAttempt() === Application::ENUM_ALL_FIGURES) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_all_figures') ?></option>
+                <option value="<?= Application::ENUM_FIRST_FIGURE ?>" <?= ($rule_set->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_first_figure') ?></option>
+                <option value="<?= Application::ENUM_ALL_FIGURES ?>" <?= ($rule_set->getLeaveHomeAttemptVariant() === Application::ENUM_ALL_FIGURES) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_all_figures') ?></option>
             </select>
         </label>
         <br><br>
@@ -72,11 +72,11 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.rules.roll_on_limit') ?>
-            <select name="<?php echo Application::EXTRA_ROLL_LIMIT; ?>">
-                <option value="0" <?= ($rule_set->getExtraRollLimit() === 0) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
-                <option value="3" <?= ($rule_set->getExtraRollLimit() > 0 && $rule_set->getAllowStackOwnFigures() < 255) ? 'selected' : '' ?> ><?= Localization::get('game.create.three') ?></option>
-                <option value="255" <?= ($rule_set->getExtraRollLimit() === 255) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            <?= Localization::get('game.rules.roll_on_six_limit') ?>
+            <select name="<?php echo Application::EXTRA_ROLL_ON_SIX_LIMIT; ?>">
+                <option value="0" <?= ($rule_set->getExtraRollOnSixLimit() === 0) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="3" <?= ($rule_set->getExtraRollOnSixLimit() > 0 && $rule_set->getAllowStackOwnFigures() < 255) ? 'selected' : '' ?> ><?= Localization::get('game.create.three') ?></option>
+                <option value="255" <?= ($rule_set->getExtraRollOnSixLimit() === 255) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>

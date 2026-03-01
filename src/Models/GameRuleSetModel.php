@@ -9,7 +9,7 @@ final class GameRuleSetModel extends BaseModel {
     private bool $allow_bots;
     private string $leave_home_attempt;
     private int $leave_home_attempts_max;
-    private int $extra_roll_limit;
+    private int $extra_roll_on_six_limit;
     private bool $force_extra_roll_on_overflow;
     private bool $allow_stack_own_figures;
     private bool $strict_goal_order;
@@ -19,14 +19,14 @@ final class GameRuleSetModel extends BaseModel {
     private const DEFAULT_ALLOW_BOTS = true;
     private const DEFAULT_LEAVE_HOME_ATTEMPT = Application::ENUM_FIRST_FIGURE;
     private const DEFAULT_LEAVE_HOME_ATTEMPTS_MAX = 3;
-    private const DEFAULT_EXTRA_ROLL_LIMIT = 255;
-    private const DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW = true;
+    private const DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT = 255;
+    private const DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW = false;
     private const DEFAULT_ALLOW_STACK_OWN_FIGURES = false;
     private const DEFAULT_STRICT_GOAL_ORDER = true;
     private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
 
     // Define special values
-    private const EXTRA_ROLL_UNLIMITED = 255;
+    private const EXTRA_ROLL_ON_SIX_UNLIMITED = 255;
 
     // Initialize Default RuleSet
     public function initializeDefaultRuleSet(): self {
@@ -35,7 +35,7 @@ final class GameRuleSetModel extends BaseModel {
         $rule_set->allow_bots = self::DEFAULT_ALLOW_BOTS;
         $rule_set->leave_home_attempt = self::DEFAULT_LEAVE_HOME_ATTEMPT;
         $rule_set->leave_home_attempts_max = self::DEFAULT_LEAVE_HOME_ATTEMPTS_MAX;
-        $rule_set->extra_roll_limit = self::DEFAULT_EXTRA_ROLL_LIMIT;
+        $rule_set->extra_roll_on_six_limit = self::DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT;
         $rule_set->force_extra_roll_on_overflow = self::DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW;
         $rule_set->allow_stack_own_figures = self::DEFAULT_ALLOW_STACK_OWN_FIGURES;
         $rule_set->strict_goal_order = self::DEFAULT_STRICT_GOAL_ORDER;
@@ -61,7 +61,7 @@ final class GameRuleSetModel extends BaseModel {
                 allow_bots, 
                 leave_home_attempt, 
                 leave_home_attempts_max, 
-                extra_roll_limit, 
+                extra_roll_on_six_limit, 
                 force_extra_lap_on_overflow, 
                 allow_stack_own_figures, 
                 strict_goal_order, 
@@ -73,7 +73,7 @@ final class GameRuleSetModel extends BaseModel {
                 :allow_bots, 
                 :leave_home_attempt, 
                 :leave_home_attempts_max, 
-                :extra_roll_limit, 
+                :extra_roll_on_six_limit, 
                 :force_extra_lap_on_overflow, 
                 :allow_stack_own_figures, 
                 :strict_goal_order, 
@@ -86,7 +86,7 @@ final class GameRuleSetModel extends BaseModel {
                 'allow_bots' => (int)$rules[Application::ALLOW_BOTS],
                 'leave_home_attempt' => (string)$rules[Application::LEAVE_HOME_ATTEMPT], 
                 'leave_home_attempts_max' => (int)$rules[Application::LEAVE_HOME_ATTEMPTS_MAX], 
-                'extra_roll_limit' => (int)$rules[Application::EXTRA_ROLL_LIMIT],
+                'extra_roll_on_six_limit' => (int)$rules[Application::EXTRA_ROLL_ON_SIX_LIMIT],
                 'force_extra_lap_on_overflow' => (int)$rules[Application::FORCE_EXTRA_LAP_ON_OVERFLOW],
                 'allow_stack_own_figures' => (int)$rules[Application::ALLOW_STACK_OWN_FIGURES],
                 'strict_goal_order' => (int)$rules[Application::STRICT_GOAL_ORDER],
@@ -104,7 +104,7 @@ final class GameRuleSetModel extends BaseModel {
                     allow_bots = :allow_bots, 
                     leave_home_attempt = :leave_home_attempt, 
                     leave_home_attempts_max = :leave_home_attempts_max, 
-                    extra_roll_limit = :extra_roll_limit, 
+                    extra_roll_on_six_limit = :extra_roll_on_six_limit, 
                     force_extra_lap_on_overflow = :force_extra_lap_on_overflow, 
                     allow_stack_own_figures = :allow_stack_own_figures, 
                     strict_goal_order = :strict_goal_order, 
@@ -114,7 +114,7 @@ final class GameRuleSetModel extends BaseModel {
                 'allow_bots' => $rule_set['allow_bots'], 
                 'leave_home_attempt' => $rule_set['leave_home_attempt'], 
                 'leave_home_attempts_max' => $rule_set['leave_home_attempts_max'], 
-                'extra_roll_limit' => $rule_set['extra_roll_limit'], 
+                'extra_roll_on_six_limit' => $rule_set['extra_roll_on_six_limit'], 
                 'force_extra_lap_on_overflow' => $rule_set['force_extra_lap_on_overflow'], 
                 'allow_stack_own_figures' => $rule_set['allow_stack_own_figures'], 
                 'strict_goal_order' => $rule_set['strict_goal_order'], 
@@ -140,7 +140,7 @@ final class GameRuleSetModel extends BaseModel {
         return $this->allow_bots === self::DEFAULT_ALLOW_BOTS 
         && $this->leave_home_attempt === self::DEFAULT_LEAVE_HOME_ATTEMPT
         && $this->leave_home_attempts_max === self::DEFAULT_LEAVE_HOME_ATTEMPTS_MAX
-        && $this->extra_roll_limit === self::DEFAULT_EXTRA_ROLL_LIMIT
+        && $this->extra_roll_on_six_limit === self::DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT
         && $this->force_extra_roll_on_overflow === self::DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW
         && $this->allow_stack_own_figures === self::DEFAULT_ALLOW_STACK_OWN_FIGURES 
         && $this->strict_goal_order === self::DEFAULT_STRICT_GOAL_ORDER 
@@ -149,12 +149,12 @@ final class GameRuleSetModel extends BaseModel {
 
     // Helper - Is extra_roll_limit unlimited
     public function isExtraRollUnlimited(): bool {
-        return $this->extra_roll_limit === self::EXTRA_ROLL_UNLIMITED;
+        return $this->extra_roll_on_six_limit === self::EXTRA_ROLL_ON_SIX_UNLIMITED;
     }
 
     // Helper - Is extra roll allowed
     public function isExtraRollAllowed() : bool {
-        return $this->extra_roll_limit > 0;
+        return $this->extra_roll_on_six_limit > 0;
     }
 
     // Helper - Convert db row to GameModel object
@@ -164,7 +164,7 @@ final class GameRuleSetModel extends BaseModel {
         if (array_key_exists(Application::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
         if (array_key_exists(Application::LEAVE_HOME_ATTEMPT, $row)) $rule_set->leave_home_attempt = (string) $row[Application::LEAVE_HOME_ATTEMPT];
         if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_MAX, $row)) $rule_set->leave_home_attempts_max = (int) $row[Application::LEAVE_HOME_ATTEMPTS_MAX];
-        if (array_key_exists(Application::EXTRA_ROLL_LIMIT, $row)) $rule_set->extra_roll_limit = (int) $row[Application::EXTRA_ROLL_LIMIT];
+        if (array_key_exists(Application::EXTRA_ROLL_ON_SIX_LIMIT, $row)) $rule_set->extra_roll_on_six_limit = (int) $row[Application::EXTRA_ROLL_ON_SIX_LIMIT];
         if (array_key_exists(Application::FORCE_EXTRA_LAP_ON_OVERFLOW, $row)) $rule_set->force_extra_roll_on_overflow = (bool) $row[Application::FORCE_EXTRA_LAP_ON_OVERFLOW];
         if (array_key_exists(Application::ALLOW_STACK_OWN_FIGURES, $row)) $rule_set->allow_stack_own_figures = (bool) $row[Application::ALLOW_STACK_OWN_FIGURES];
         if (array_key_exists(Application::STRICT_GOAL_ORDER, $row)) $rule_set->strict_goal_order = (bool) $row[Application::STRICT_GOAL_ORDER];
@@ -187,8 +187,8 @@ final class GameRuleSetModel extends BaseModel {
     }
 
     // Get leave home attempt
-    public function getLeaveHomeAttempt(): string {
-        return $this->leave_home_attempt;
+    public function getLeaveHomeAttemptVariant(): string {
+        return $this->leave_home_attempt; // Returns either Application::ENUM_FIRST_FIGURE or Application::ENUM_ALL_FIGURES
     }
 
     // Get max leave home attempts
@@ -197,8 +197,8 @@ final class GameRuleSetModel extends BaseModel {
     }
 
     // Get extra limit
-    public function getExtraRollLimit(): int {
-        return $this->extra_roll_limit;
+    public function getExtraRollOnSixLimit(): int {
+        return $this->extra_roll_on_six_limit;
     }
 
     // Get force extra lap on overflow

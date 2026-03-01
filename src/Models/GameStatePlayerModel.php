@@ -66,6 +66,27 @@ final class GameStatePlayerModel extends BaseModel {
         return $player;
     }
 
+    // get player by player index
+    public static function getPlayerByPlayerIndex(string $game_id, int $player_index): self {
+        $row = self::fetchOne(
+            sprintf("
+                SELECT * 
+                FROM game_state_players 
+                WHERE 
+                    game_id = :game_id, 
+                    player_index = :player_index "), 
+            [
+                'game_id' => $game_id, 
+                'player_index' => $player_index
+            ]
+        );
+
+        $player = self::fromArray($row);
+        $player->addSetOfFigures(GameStateFigureModel::findByGameIdAndPlayerId($game_id, $player->getUserId()));
+
+        return $player;
+    }
+
     // Remove given player from game
     public static function removePlayer(string $game_id, string $user_id): bool {
         return static::execute(

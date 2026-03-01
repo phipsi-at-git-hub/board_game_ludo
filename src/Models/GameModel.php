@@ -2,10 +2,9 @@
 // GameModel.php
 namespace App\Models;
 
-use Exception;
 use App\Constants\Application;
+use Exception;
 use DomainException;
-use InvalidArgumentException;
 use LogicException;
 use Throwable;
 
@@ -47,40 +46,183 @@ final class GameModel extends BaseModel {
      */
     // apply moves to figure
     public function applyMove(string $user_id, array $move): void {
-        $player = $this->getPlayerById($user_id);
-
-        if (!isset($move[Application::DTO_FIGURE_INDEX])) {
-            throw new InvalidArgumentException('Missing Figure Index');
+        // 1. Game already over
+        if ($this->state_model->getWinnerUserId() !== null) {
+            throw new LogicException('Game already finished');
         }
 
-        /**
-         * 1. Get figure by figure_index
-         */
-        $figure_index = $move[Application::FIGURE_INDEX];
-        $figure = $player->getFigureByFigureIndex($figure_index);
+        // 2. Is it the player's turn
+        $current_player = $this->getCurrentPlayer();
+        if ($current_player->getUserId() !== $user_id) {
+            throw new LogicException('Not your turn');
+        }
 
-        /**
-         * 2. Optional - execute kick
-         */
+        // 3. Dice rolled already?
+        $dice_value = $this->state_model->getCurrentDiceRoll();
+        if ($dice_value === null) {
+            throw new LogicException('No dice roll available');
+        }
+
+        // 4. Validate Move
+        $available_moves = $this->getAvailableMoves($user_id, $dice_value);
+
+        if (!$this->isMoveInList($move, $available_moves)) {
+            throw new LogicException('Illegal move');
+        }
+
+        $figure_index = $move[Application::DTO_FIGURE_INDEX];
+        $figure = $current_player->getFigureByFigureIndex($figure_index);
+
         if (!empty($move[Application::DTO_IS_KICK])) {
             $kicked_player = $this->getPlayerById($move[Application::DTO_KICKED_PLAYER_ID]);
             $kicked_figure = $kicked_player->getFigureByFigureIndex($move[Application::DTO_KICKED_FIGURE_INDEX]);
             $kicked_figure->setArea(Application::AREA_HOME);
-            $kicked_figure->setPosition(null); // ToDo: set first empty position in home area
+            $kicked_figure->setPosition(null);
         }
 
-        /**
-         * 3. set goal
-         */
         $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
         $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
 
-        /**
-         *  4. check win condition
-         */
-        if ($this->hasPlayerWon($player)) {
-            $this->setWinner($player);
+        // 5. Check winner
+        if ($this->hasPlayerWon($current_player)) {
+            $this->setWinner($current_player);
+            return;
         }
+
+        // 6. Extra roll on six handling
+        if ($dice_value === 6) {
+            $extra_roll_on_six_limit = $this->rule_set_model->getExtraRollOnSixLimit();
+            // check extra roll limit
+            if ($extra_roll_on_six_limit !== null) {
+                $this->state_model->incrementExtraRollsOnSixUsed();
+
+                if ($this->state_model->getExtraRollsOnSixUsed() >= $extra_roll_on_six_limit) {
+                    $this->endTurn();
+                    return;
+                }
+            }
+            // Extra roll on six granted
+            $this->state_model->setCurrentDiceRoll(null);
+            return;
+        }
+
+        // 7. Planned turn end
+        $this->endTurn();
+    }
+
+    // Game Engine - Roll dice
+    public function rollDice(): int {
+        if ($this->state_model->getCurrentDiceRoll() !== null) {
+            throw new LogicException('Dice already rolled');
+        }
+
+        $dice_value = random_int(1, 6);
+        $this->state_model->setCurrentDiceRoll($dice_value);
+
+        $current_player = $this->getCurrentPlayer();
+
+        /**
+        * Rule Triple Toll logic
+        */
+        if ($dice_value !== 6) {
+            $variant = $this->rule_set_model->getLeaveHomeAttemptVariant();
+            $should_apply = false;
+
+            if ($variant === Application::ENUM_ALL_FIGURES) {
+                $should_apply = $this->allFiguresInHome($current_player);
+            }
+
+            if ($variant === Application::ENUM_FIRST_FIGURE) {
+                $should_apply = $this->hasNoFigureOnBoard($current_player);
+            }
+
+            if ($should_apply) {
+                $this->state_model->incrementLeaveHomeAttemptsUsed();
+
+                if ($this->state_model->getLeaveHomeAttemptsUsed() >= $this->rule_set_model->getLeaveHomeAttemptsMax()) {
+                    $this->endTurn();
+                }
+            }
+            return $dice_value;
+        }
+        /*
+        if ($dice_value !== 6 && $this->allFiguresInHome($current_player)) {
+
+            $this->state_model->incrementLeaveHomeAttemptsUsed();
+
+            if (
+                $this->state_model->getLeaveHomeAttemptsUsed()
+                >= $this->rule_set_model->getLeaveHomeAttemptsMax()
+            ) {
+                $this->endTurn();
+            }
+
+            return $dice_value;
+        }
+        */
+
+        /**
+        * Normal Move Check
+        */
+        if (!$this->hasAvailableMoves($current_player, $dice_value)) {
+
+            // No moves available -> turn end
+            $this->endTurn();
+            return $dice_value;
+        }
+
+        return $dice_value;        
+        /*
+        // 1. Game end?
+        if ($this->state_model->getWinnerUserId() !== null) {
+            throw new LogicException('Game already finished');
+        }
+
+        // 2. Is it the player's turn?
+        $current_player = $this->getCurrentPlayer();
+
+        if ($current_player->getUserId() !== $user_id) {
+            throw new LogicException('Not your turn');
+        }
+
+        // 3. Was there already a dice roll?
+        if ($this->state_model->getCurrentDiceRoll() !== null) {
+            throw new LogicException('Dice already rolled');
+        }
+
+        // 4. Roll dice
+        $dice_value = random_int(1, 6);
+        $this->state_model->setCurrentDiceRoll($dice_value);
+
+        // 5. Check triple-dice-roll
+        if ($this->canUseTripleRoll($current_player)) {
+            $max_attempts = $this->rule_set_model->getLeaveHomeAttemptsMax();
+
+            if ($dice_value !== 6) {
+                $this->state_model->incrementLeaveHomeAttemptsUsed();
+
+                // Used every attempts already?
+                if ($this->state_model->getLeaveHomeAttemptsUsed() >= $max_attempts) {
+                    $this->endTurn();
+                }
+                return $dice_value;
+            }
+
+            // rolled 6 - -> reset attempts
+            $this->state_model->resetLeaveHomeAttemptsUsed();
+
+            return $dice_value;
+        }
+
+        // 6. Standard Rule
+        if ($dice_value !== 6) {
+            // If now moves available -> end turn
+            if (!$this->hasAvailableMoves($current_player, $dice_value)) {
+                $this->endTurn();
+            }
+        }
+        return $dice_value;
+        */
     }
 
     //  Game Engine - get available move for player and rolled dice
@@ -343,6 +485,16 @@ final class GameModel extends BaseModel {
         return false;
     }
 
+    // Game Engine - End turn
+    private function endTurn(): void {
+        $this->state_model->setCurrentDiceRoll(null);
+        $this->state_model->resetLeaveHomeAttemptsUsed();
+        $this->state_model->resetExtraRollsOnSixUsed();
+
+        $new_player_index = ($this->state_model->getCurrentPlayerIndex() + 1) % $this->getPlayerCount();
+        $this->state_model->setCurrentPlayerIndex($new_player_index);
+    }
+
     // Game Engine - get absolute position on the field of given figure
     private function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int {
         if ($figure->getArea() !== Application::AREA_FIELD) {
@@ -547,7 +699,7 @@ final class GameModel extends BaseModel {
                 Application::ALLOW_BOTS, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_LIMIT, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -619,7 +771,7 @@ final class GameModel extends BaseModel {
                 Application::ALLOW_BOTS, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_LIMIT, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -675,7 +827,7 @@ final class GameModel extends BaseModel {
                 Application::ALLOW_BOTS, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_LIMIT, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -1115,6 +1267,63 @@ final class GameModel extends BaseModel {
         return false;
     }
 
+    // Helper - Get current player
+    private function getCurrentPlayer(): GameStatePlayerModel {
+        return $this->getPlayerByPlayerIndex($this->getStateModel()->getCurrentPlayerIndex());
+    }
+
+    // Helper - Can user use triple roll
+    public function canUseTripleRoll($user): bool {
+        return true;
+    }
+
+    // Helper - has any available move
+    private function hasAvailableMoves(GameStatePlayerModel $player, int $dice_value): bool {
+        foreach ($player->getAllFigures() as $figure) {
+            if ($this->canMoveFigure($player, $figure, $dice_value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper - Check is move is already in list
+    private function isMoveInList(array $move, array $available_moves): bool {
+        foreach ($available_moves as $available_move) {
+            if (
+                $move[Application::DTO_FIGURE_INDEX] === $available_move[Application::DTO_FIGURE_INDEX] 
+                && $move[Application::DTO_TO][Application::DTO_AREA] === $available_move[Application::DTO_TO][Application::DTO_AREA] 
+                && ($move[Application::DTO_TO][Application::DTO_POSITION] ?? null) === ($available_move[Application::DTO_TO][Application::DTO_POSITION] ?? null) 
+                && ($move[Application::DTO_IS_KICK] ?? false) === ($available_move[Application::DTO_IS_KICK] ?? false) 
+                && ($move[Application::DTO_IS_GOAL_ENTRY] ?? null) === ($available_move[Application::DTO_IS_GOAL_ENTRY] ?? null) 
+                && ($move[Application::DTO_IS_LAP_OVERFLOW] ?? null) === ($available_move[Application::DTO_IS_LAP_OVERFLOW] ?? null)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper - Check if all figures are in home area
+    private function allFiguresInHome(GameStatePlayerModel $player): bool {
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() !== Application::AREA_HOME) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Helper - 
+    private function hasNoFigureOnBoard(GameStatePlayerModel $player): bool {
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() === Application::AREA_FIELD) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Getter
      */
@@ -1185,6 +1394,11 @@ final class GameModel extends BaseModel {
     // Get player given by player id
     public function getPlayerById(string $player_id): GameStatePlayerModel {
         return GameStatePlayerModel::getPlayerById($this->id, $player_id);
+    }
+    
+    // Get player given by player id
+    public function getPlayerByPlayerIndex(string $player_index): GameStatePlayerModel {
+        return GameStatePlayerModel::getPlayerByPlayerIndex($this->id, $player_index);
     }
 
     // Get array of all figures in the game

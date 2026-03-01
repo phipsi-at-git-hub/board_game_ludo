@@ -9,6 +9,7 @@ final class GameStateModel extends BaseModel {
     private int $current_player_index;
     private ?int $current_dice_roll;
     private int $leave_home_attempts_used;
+    private int $extra_rolls_on_six_used;
     private string $winner_user_id;
     private string $created_at;
     private string $updated_at;
@@ -76,8 +77,56 @@ final class GameStateModel extends BaseModel {
         return $this->leave_home_attempts_used;
     }
 
+    // Get extra rolls on six used
+    public function getExtraRollsOnSixUsed(): int {
+        return $this->extra_rolls_on_six_used;
+    }
+
     // Get winner user id
     public function getWinnerUserId(): string {
         return $this->winner_user_id;
+    }
+
+    /**
+     * Setter
+     */
+    // Set current dice roll
+    public function setCurrentDiceRoll(?int $dice_value): void {
+        $this->current_dice_roll = $dice_value;
+    }
+
+    // Set leave home attempts used
+    private function setLeaveHomeAttemptsUsed(int $attempts): void {
+        $this->leave_home_attempts_used = $attempts;
+    }
+
+    // Reset leave home attempts used
+    public function resetLeaveHomeAttemptsUsed(): void {
+        $this->leave_home_attempts_used = 0;
+    }
+
+    // Increase leave home attempts used by 1
+    public function incrementLeaveHomeAttemptsUsed(): void {
+        $this->leave_home_attempts_used++;
+    }
+
+    // Set extra rolls on six used
+    private function setExtraRollsOnSixUsed(int $rolls_used): void {
+        $this->extra_rolls_on_six_used = $rolls_used;
+    }
+
+    // Reset extra rolls on six used
+    public function resetExtraRollsOnSixUsed(): void {
+        $this->extra_rolls_on_six_used = 0;
+    }
+
+    // Increase extra rolls on six used by 1
+    public function incrementExtraRollsOnSixUsed(): void {
+        $this->extra_rolls_on_six_used++;
+    }
+
+    // Set current player index
+    public function setCurrentPlayerIndex(int $player_index): void {
+        $this->current_player_index = $player_index;
     }
 }
