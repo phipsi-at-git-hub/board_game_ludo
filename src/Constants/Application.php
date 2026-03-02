@@ -31,6 +31,7 @@ class Application {
     public const CREATED_BY_USER_ID = 'created_by_user_id';
     public const IS_PRIVATE = 'is_private';
     public const IS_LOCKED = 'is_locked';
+    public const IS_TEST_GAME = 'is_test_game'; 
 
     // Database field names - game_rule_set
     public const ALLOW_BOTS = 'allow_bots';

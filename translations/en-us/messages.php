@@ -45,6 +45,8 @@ return [
     'game.list.join_icon' => '➕',
     'game.list.edit' => '✏️ Edit', 
     'game.list.edit_icon' => '✏️', 
+    'game.list.test_solo' => '🧪 Solo Game for Testing', 
+    'game.list.test_solo_icon' => '🧪', 
     'game.list.delete' => '🗑 Delete', 
     'game.list.delete_icon' => '🗑', 
     'game.list.delete_confirm' => 'Are you sure you want to delete the Game?', 
@@ -62,9 +64,11 @@ return [
 
     //Games - Show - Detail
     'game.show.title' => 'Game', 
-    'game.show.back_to_list' => '← Back to List',  
+    'game.show.back_to_list' => '← Back to List', 
+    'game.show.solo_test_creation_confirm' => 'Are you sure you want to create and run a Test Session from this Game?', 
     'game.show.status' => 'Status', 
     'game.show.join' => 'Join',
+    'game.show.leave' => 'Leave',
     'game.show.created_at' => '📅 Created at', 
     'game.show.created_by' => '👤 Created by', 
     'game.show.player' => 'Player', 

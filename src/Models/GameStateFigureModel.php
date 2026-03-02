@@ -56,6 +56,7 @@ final class GameStateFigureModel extends BaseModel {
 
     // Create initial figures for given game
     public static function createInitialFigureSet(string $game_id, string $user_id): void {
+        $figures = [];
         for ($i = 0; $i < 4; $i++) {
             static::execute(
                 "INSERT INTO game_state_figures

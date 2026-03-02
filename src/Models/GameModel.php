@@ -21,6 +21,7 @@ final class GameModel extends BaseModel {
     private string $status;
     private bool $is_private;
     private bool $is_locked;
+    private bool $is_test_game;
     private string $created_at;
     private string $updated_at;
 
@@ -31,7 +32,7 @@ final class GameModel extends BaseModel {
     private GameRuleSetModel $rule_set_model;
     private GameStateModel $state_model;
     private array $player_array;    // max 4
-    private array $figure_array;    // max 16
+    // private array $figure_array;    // max 16
 
     public function __construct() {
         parent::__construct();
@@ -116,7 +117,7 @@ final class GameModel extends BaseModel {
             throw new LogicException('Dice already rolled');
         }
 
-        $dice_value = random_int(1, 6);
+        $dice_value = $this->rollDiceValue();
         $this->state_model->setCurrentDiceRoll($dice_value);
 
         $current_player = $this->getCurrentPlayer();
@@ -223,6 +224,11 @@ final class GameModel extends BaseModel {
         }
         return $dice_value;
         */
+    }
+
+    // Game Engine - get a random dice roll
+    protected function rollDiceValue(): int {
+        return random_int(1, 6);
     }
 
     //  Game Engine - get available move for player and rolled dice
@@ -736,6 +742,7 @@ final class GameModel extends BaseModel {
                     g.%s, 
                     g.%s, 
                     g.%s, 
+                    g.%s, 
                     g.%s,
                     g.%s, 
                     COUNT(p.%s) AS player_count, 
@@ -765,6 +772,7 @@ final class GameModel extends BaseModel {
                 Application::STATUS, 
                 Application::IS_PRIVATE, 
                 Application::IS_LOCKED, 
+                Application::IS_TEST_GAME, 
                 Application::CREATED_AT,
                 Application::UPDATED_AT, 
                 Application::USER_ID,
@@ -973,21 +981,34 @@ final class GameModel extends BaseModel {
     public function create(string $user_id, string $game_name, array $game_options, array $rules): ?string {
         $game_id = self::generateUUID();
 
+        /*
+        echo $user_id . '<br/>';
+        echo $game_name . '<br/><br/>';
+        var_dump($game_options);
+        echo '<br/><br/>';
+        var_dump($rules);
+        exit;
+        */
+
+        // Standard games are no test games
+        if (!key_exists(Application::IS_TEST_GAME, $game_options)) $game_options[Application::IS_TEST_GAME] = 0;
+
         try {
             $this->db->beginTransaction();
 
             // Insert game
             $this->execute(
                 sprintf(
-                    "INSERT INTO %s (%s, %s, %s, %s, %s, %s, created_at, updated_at)
-                    VALUES (:id, :name, :created_by_user_id, :status, :is_private, :is_locked, NOW(), NOW())",
+                    "INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, created_at, updated_at)
+                    VALUES (:id, :name, :created_by_user_id, :status, :is_private, :is_locked, :is_test_game, NOW(), NOW())",
                     Application::TABLE_GAMES,
                     Application::ID,
                     Application::NAME, 
                     Application::CREATED_BY_USER_ID,
                     Application::STATUS, 
                     Application::IS_PRIVATE, 
-                    Application::IS_LOCKED
+                    Application::IS_LOCKED, 
+                    Application::IS_TEST_GAME
                 ),
                 [
                     'id' => $game_id,
@@ -995,7 +1016,8 @@ final class GameModel extends BaseModel {
                     'created_by_user_id' => $user_id,
                     'status' => Application::STATUS_WAITING, 
                     'is_private' => $game_options[Application::IS_PRIVATE], 
-                    'is_locked' => $game_options[Application::IS_LOCKED]
+                    'is_locked' => $game_options[Application::IS_LOCKED], 
+                    'is_test_game' => $game_options[Application::IS_TEST_GAME]
                 ]
             );
 
@@ -1179,6 +1201,7 @@ final class GameModel extends BaseModel {
         $game->status = $row['status'] ?? null;
         $game->is_private = $row['is_private'] ?? null;
         $game->is_locked = $row['is_locked'] ?? null;
+        $game->is_test_game = $row['is_test_game'] ?? null;
 
         if (array_key_exists(Application::USERNAME, $row)) $game->created_by_user_name = $row[Application::USERNAME];
         if (array_key_exists(Application::PLAYER_COUNT, $row)) $game->player_count = (int) $row[Application::PLAYER_COUNT];
@@ -1234,6 +1257,11 @@ final class GameModel extends BaseModel {
         return $this->is_locked;
     }
 
+    // Helper -  Is solo test game
+    public function isTestGame(): bool {
+        return $this->is_test_game;
+    }
+
     // Helper - Check for available player slots
     public function isFull(): bool {
         return $this->getPlayerCount() >= $this->getPlayerMax();
@@ -1270,6 +1298,35 @@ final class GameModel extends BaseModel {
     // Helper - Get current player
     private function getCurrentPlayer(): GameStatePlayerModel {
         return $this->getPlayerByPlayerIndex($this->getStateModel()->getCurrentPlayerIndex());
+    }
+
+    // Helper - Clone existing game
+    public function cloneGameWithOnePlayer(): ?string {
+        if ($this->is_test_game) {
+            return null;
+        }
+        
+        $game_user_id = $this->getCreatedByUserId();
+        $game_name = 'Solo Test - ' . $this->name;
+
+        $game_options = [
+            Application::IS_PRIVATE => (int)$this->IsPrivate(), 
+            Application::IS_LOCKED => (int)$this->isLocked(), 
+            Application::IS_TEST_GAME => 1,
+        ];
+
+        $rule_set = [
+            Application::ALLOW_BOTS => $this->rule_set_model->getAllowBots(),
+            Application::LEAVE_HOME_ATTEMPT => $this->rule_set_model->getLeaveHomeAttemptVariant(), 
+            Application::LEAVE_HOME_ATTEMPTS_MAX => $this->rule_set_model->getLeaveHomeAttemptsMax(), 
+            Application::EXTRA_ROLL_ON_SIX_LIMIT => $this->rule_set_model->getExtraRollOnSixLimit(),
+            Application::FORCE_EXTRA_LAP_ON_OVERFLOW => $this->rule_set_model->getForceExtraLapOnOverflow(),
+            Application::ALLOW_STACK_OWN_FIGURES => $this->rule_set_model->getAllowStackOwnFigures(),
+            Application::STRICT_GOAL_ORDER => $this->rule_set_model->getStrictGoalOrder(),
+            Application::START_FIELD_MUST_BE_CLEARED => $this->rule_set_model->getStartFieldMustBeCleared(),
+        ];
+
+        return $this->create($game_user_id, $game_name, $game_options, $rule_set);
     }
 
     // Helper - Can user use triple roll
@@ -1401,6 +1458,7 @@ final class GameModel extends BaseModel {
         return GameStatePlayerModel::getPlayerByPlayerIndex($this->id, $player_index);
     }
 
+    /*
     // Get array of all figures in the game
     public function getAllFigures(): array {
         return $this->figure_array;
@@ -1422,4 +1480,5 @@ final class GameModel extends BaseModel {
 
         return $grouped;
     }
+    */
 }

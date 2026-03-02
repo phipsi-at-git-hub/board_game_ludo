@@ -8,6 +8,12 @@ use App\Core\BaseController;
 class MenuController extends BaseController {
     public function index() {
         $user = Auth::user();
-        require __DIR__ . '/../Views/menu/index.php';
+        $this->render(
+            'menu/index', 
+            [
+                'user' => $user
+            ]
+        );
+        exit;
     }
 }

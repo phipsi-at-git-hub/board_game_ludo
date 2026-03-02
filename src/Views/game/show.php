@@ -31,14 +31,23 @@ use App\Policies\GamePolicy;
         <?php if ($game->isParticipant($user)) { ?>
         <?php } ?>
 
-        <?php if (GamePolicy::canJoin($user, $game, false)) { ?>
         <form method="POST" action="/game/<?= ($game->isParticipant($user)) ? 'leave' : 'join' ?>/<?= $game->getId() ?>">
+        <?php if (GamePolicy::canJoin($user, $game, false)) { ?>
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <button class="joined-btn <?= ($game->isParticipant($user)) ? 'has' : 'has-not' ?>-joined">
-                <?= htmlspecialchars(($game->isParticipant($user)) ? 'Leave' : 'Join') ?>
+                <?= htmlspecialchars(($game->isParticipant($user)) ? Localization::get('game.show.leave') : Localization::get('game.show.join')) ?>
             </button>
         <?php } else { ?>
             <button class="joined-btn can-not-join"><?= Localization::get('game.show.join') ?></button>
+        <?php } ?>
+        </form>
+
+        <?php if ($user->isAdmin() && !$game->IsTestGame()) { ?>
+        <form method="POST" action="/game/solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
+            <input type="hidden" name="_method" value="POST">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+            <button type="submit" class="solo-test-btn"><?= Localization::get('game.list.test_solo') ?></button>
         </form>
         <?php } ?>
     </div>
@@ -50,8 +59,8 @@ use App\Policies\GamePolicy;
         <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
         <div><?= Localization::get('game.show.players') ?></div>
         <div><?= count($game->getAllPlayer()) ?></div>
-        <div><?= Localization::get('game.show.label_join') ?></div>
-        <div><?php if ($game->isParticipant($user)) { ?> joined <?php } ?></div>
+        <div><?= Localization::get('game.show.join') ?></div>
+        <div><?= ($game->isParticipant($user)) ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></div>
     </div>
 
 </div>

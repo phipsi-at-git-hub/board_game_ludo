@@ -9,13 +9,16 @@ use App\Core\Csrf;
 use App\Models\GameModel;
 use App\Models\GameRuleSetModel;
 use DomainException;
+use GMP;
 
 class GameController extends BaseController {
     // Lobby leads to game creation, games list and back
     public function lobby() {
         // Only for logged in users (secured through middleware)
+        $user = Auth::user();
         $this->render(
-            'game/lobby'
+            'game/lobby', 
+            ['user' => $user]
         );
     }
 
@@ -212,6 +215,31 @@ class GameController extends BaseController {
         }
 
         header("Location: /game/detail/$game_id");
+        exit;
+    }
+
+    // Start a Solo TEST game
+    public function soloTest() {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+
+        $game = null;
+
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[Application::GAME_ID]);
+            $game_id = $game->cloneGameWithOnePlayer();
+            $game = GameModel::findById($game_id);
+            $user = Auth::user();
+
+            $game->join($user->getId());
+
+            header("Location: /game/detail/$game_id");
+            exit;
+        }
+
+        header('Location: /game/list');
         exit;
     }
 
