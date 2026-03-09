@@ -43,11 +43,20 @@ use App\Policies\GamePolicy;
         </form>
 
         <?php if ($user->isAdmin() && !$game->IsTestGame()) { ?>
-        <form method="POST" action="/game/solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
+        <form method="POST" action="/game/create_solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-            <button type="submit" class="solo-test-btn"><?= Localization::get('game.list.test_solo') ?></button>
+            <button type="submit" class="solo-test-btn create"><?= Localization::get('game.show.test_solo_create') ?></button>
+        </form>
+        <?php } ?>
+
+        <?php if ($user->isAdmin() && $game->IsTestGame() && $game->isParticipant($user)) { ?>
+        <form method="POST" action="/game/play_solo_test">
+            <input type="hidden" name="_method" value="POST">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+            <button type="submit" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_play') ?></button>
         </form>
         <?php } ?>
     </div>
@@ -58,7 +67,7 @@ use App\Policies\GamePolicy;
         <div><?= Localization::get('game.show.created_at') ?></div>
         <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
         <div><?= Localization::get('game.show.players') ?></div>
-        <div><?= count($game->getAllPlayer()) ?></div>
+        <div><?= count($game->getAllPlayers()) ?></div>
         <div><?= Localization::get('game.show.join') ?></div>
         <div><?= ($game->isParticipant($user)) ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></div>
     </div>
@@ -68,8 +77,8 @@ use App\Policies\GamePolicy;
 <div class="card">
     <h2><?= Localization::get('game.show.players') ?></h2>
 
-    <?php if (!empty($game->getAllPlayer())): ?>
-        <?php foreach ($game->getAllPlayer() as $player): ?>
+    <?php if (!empty($game->getAllPlayers())): ?>
+        <?php foreach ($game->getAllPlayers() as $player): ?>
             <div class="player-card">
                 <h3><?php if ($player->getUserId() === $user->getId()) { ?>➡️<?php } ?>🧑 <?= htmlspecialchars($player->getUsername()) ?></h3>
                 <div class="figure-row">

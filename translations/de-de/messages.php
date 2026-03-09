@@ -78,6 +78,8 @@ return [
     'game.show.position' => 'Position', 
     'game.show.area' => 'Bereich', 
     'game.show.rules' => '⚙ Regeln', 
+    'game.show.test_solo_create' => 'Einzelspiel zum Testen erstellen', 
+    'game.show.test_solo_play' => 'Einzelspiel zum Testen spielen', 
     'game.show.label_no_players_found' => 'Keine Spieler vorhanden.',
     'game.show.label_no_figures_found' => 'Keine Figuren vorhanden.',  
     'game.show.label_rules_bots_allows' => '🤖 Bots erlaubt', 
@@ -93,6 +95,16 @@ return [
     'game.show.label_rules_stack_own_figures' => '🧱 Eigene Figuren stapeln', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strenge Zielfeld-Reihenfolge', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
+
+    // Game - Play a game
+    'game.play.status' => 'Status', 
+    'game.play.current_player' => 'Aktueller Spieler', 
+    'game.play.roll_dice' => 'Würfelwert', 
+    'game.play.possible_moves' => 'Mögliche Bewegungen', 
+    'game.play.figure' => 'Figur', 
+    'game.play.figures' => 'Figuren', 
+    'game.play.move_figure' => 'Bewege Figur ', 
+    'game.play.position' => 'Position', 
 
     // Game - Options
     'game.options.is_private' => '⛔ Privates Spiel',

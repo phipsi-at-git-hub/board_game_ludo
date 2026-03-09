@@ -78,6 +78,8 @@ return [
     'game.show.position' => 'Position', 
     'game.show.area' => 'Area', 
     'game.show.rules' => '⚙ Rules', 
+    'game.show.test_solo_create' => 'Create Solo Game for Testing', 
+    'game.show.test_solo_play' => 'Play Solo Game for Testing', 
     'game.show.label_no_players_found' => 'No Players found.', 
     'game.show.label_no_figures_found' => 'No Figures found.', 
     'game.show.label_rules_bots_allows' => '🤖 Bots allowed', 
@@ -93,6 +95,16 @@ return [
     'game.show.label_rules_stack_own_figures' => '🧱 Stack own figures', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strict goal order', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
+
+    // Game - Play a game
+    'game.play.status' => 'Status', 
+    'game.play.current_player' => 'Current Player', 
+    'game.play.roll_dice' => 'Roll Dice', 
+    'game.play.possible_moves' => 'Possible Moves', 
+    'game.play.figure' => 'Figure', 
+    'game.play.figures' => 'Figures', 
+    'game.play.move_figure' => 'Move Figure ', 
+    'game.play.position' => 'Position', 
 
     // Game - Options
     'game.options.is_private' => '⛔ Private Game',

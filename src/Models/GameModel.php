@@ -232,7 +232,7 @@ final class GameModel extends BaseModel {
     }
 
     //  Game Engine - get available move for player and rolled dice
-    private function getAvailableMoves(string $user_id, int $dice_value): array {
+    public function getAvailableMoves(string $user_id, int $dice_value): array {
         $player = $this->getPlayerById($user_id);
         $moves = [];
 
@@ -862,6 +862,40 @@ final class GameModel extends BaseModel {
 
         $game = self::fromArray($row);
 
+        // Load complete State of the Game
+        $state = static::fetchOne(
+            sprintf(
+                "SELECT 
+                    s.%s, 
+                    s.%s, 
+                    s.%s, 
+                    s.%s, 
+                    s.%s, 
+                    s.%s, 
+                    s.%s, 
+                    s.%s
+                FROM %s s
+                WHERE s.%s = :game_id
+                LIMIT 1", 
+
+                Application::GAME_ID, 
+                Application::CURRENT_PLAYER_INDEX, 
+                Application::CURRENT_DICE_ROLL, 
+                Application::LEAVE_HOME_ATTEMPTS_USED, 
+                Application::EXTRA_ROLLS_ON_SIX_USED, 
+                Application::WINNER_USER_ID, 
+                Application::CREATED_AT, 
+                Application::UPDATED_AT, 
+
+                Application::TABLE_STATE, 
+
+                Application::GAME_ID
+            ), 
+            ['game_id' => $game_id]
+        );
+
+        $game->state_model = GameStateModel::fromArray($state);
+
         // Load all players of the game
         $players = static::fetchAll(
             sprintf(
@@ -1296,7 +1330,7 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Get current player
-    private function getCurrentPlayer(): GameStatePlayerModel {
+    public function getCurrentPlayer(): GameStatePlayerModel {
         return $this->getPlayerByPlayerIndex($this->getStateModel()->getCurrentPlayerIndex());
     }
 
@@ -1371,7 +1405,7 @@ final class GameModel extends BaseModel {
         return true;
     }
 
-    // Helper - 
+    // Helper - Has no Figure on Board
     private function hasNoFigureOnBoard(GameStatePlayerModel $player): bool {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() === Application::AREA_FIELD) {
@@ -1379,6 +1413,17 @@ final class GameModel extends BaseModel {
             }
         }
         return true;
+    }
+
+    // Helper - Debug State 
+    // ToDo: check if this is ever used and useful!
+    public function getDebugState(string $user_id, int $dice_value) {
+        return [
+            Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(), 
+            Application::CURRENT_DICE_ROLL => $this->state_model->getCurrentDiceRoll(), 
+            Application::AVAILABLE_MOVES => $this->getAvailableMoves($user_id, $dice_value), 
+            Application::EXTRA_ROLLS_ON_SIX_USED => $this->state_model->getExtraRollsOnSixUsed()
+        ];
     }
 
     /**
@@ -1444,7 +1489,7 @@ final class GameModel extends BaseModel {
     }
 
     // Get array of all player in the game
-    public function getAllPlayer(): array {
+    public function getAllPlayers(): array {
         return $this->player_array;
     }
     

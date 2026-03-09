@@ -49,6 +49,7 @@ class Application {
     public const CURRENT_PLAYER_INDEX = 'current_player_index';
     public const CURRENT_DICE_ROLL = 'current_dice_roll'; 
     public const LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used'; 
+    public const EXTRA_ROLLS_ON_SIX_USED = 'extra_rolls_on_six_used'; 
     public const WINNER_USER_ID = 'winner_user_id'; 
 
     // Database field names - game_state_figures
@@ -83,11 +84,13 @@ class Application {
 
     // Game general
     public const PLAYER_COUNT = 'player_count';
+    public const AVAILABLE_MOVES = 'available_moves'; 
     // Game visibility 
     public const VISIBILITY_PRIVATE = '';
 
     // Game  DTO keys
     public const DTO_FIGURE_INDEX = 'figure_index'; 
+    public const DTO_MOVE = 'move'; 
     public const DTO_FROM = 'from'; 
     public const DTO_TO = 'to'; 
     public const DTO_AREA = 'area'; 

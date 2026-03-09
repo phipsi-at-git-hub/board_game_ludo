@@ -44,7 +44,7 @@ final class GameStateFigureModel extends BaseModel {
                 "SELECT *
                 FROM game_state_figures
                 WHERE
-                    game_id = :game_id, 
+                    game_id = :game_id AND 
                     user_id = :user_id"
             ), [
                 'game_id' => $game_id, 

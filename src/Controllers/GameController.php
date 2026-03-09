@@ -9,7 +9,6 @@ use App\Core\Csrf;
 use App\Models\GameModel;
 use App\Models\GameRuleSetModel;
 use DomainException;
-use GMP;
 
 class GameController extends BaseController {
     // Lobby leads to game creation, games list and back
@@ -243,6 +242,29 @@ class GameController extends BaseController {
         exit;
     }
 
+    // Play a given game
+    public function playSoloTest() {
+        $game_id = $_POST[Application::GAME_ID];
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+        $moves = [];
+
+        //var_dump($game); exit;
+
+        if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
+            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
+        }
+
+        $this->render(
+            'game/play_solo_test', 
+            [
+                'game' => $game, 
+                'moves' => $moves, 
+                'user' => $user
+            ]
+        );
+    }
+
     public function start(string $game_id) {
         echo 'Start';
     }
@@ -268,5 +290,20 @@ class GameController extends BaseController {
         $game->cancelGame();
 
         header('Location: /game/list');
+    }
+
+    public function roll($game_id) {
+        $game = GameModel::findById($game_id);
+        $game->rollDice();
+
+        $this->redirect("/game/play/$game_id");
+    }
+
+    public function move($game_id) {
+        $move = json_decode($_POST[Application::DTO_MOVE], true);
+        $game = GameModel::findById($game_id);
+        $game->applyMove($_SESSION[Application::USER_ID], $move); 
+
+        $this->redirect("/game/play/$game_id");
     }
 }

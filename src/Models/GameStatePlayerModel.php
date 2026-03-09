@@ -49,11 +49,13 @@ final class GameStatePlayerModel extends BaseModel {
     public static function getPlayerById(string $game_id, string $user_id): self {
         $row = self::fetchOne(
             sprintf("
-                SELECT * 
-                FROM game_state_players 
+                SELECT s.*, u.username  
+                FROM game_state_players s 
+                JOIN users u
+                    ON s.user_id = u.id 
                 WHERE 
-                    game_id = :game_id, 
-                    user_id = :user_id "), 
+                    s.game_id = :game_id AND  
+                    s.user_id = :user_id "), 
             [
                 'game_id' => $game_id, 
                 'user_id' => $user_id
@@ -70,11 +72,13 @@ final class GameStatePlayerModel extends BaseModel {
     public static function getPlayerByPlayerIndex(string $game_id, int $player_index): self {
         $row = self::fetchOne(
             sprintf("
-                SELECT * 
-                FROM game_state_players 
+                SELECT s.*, u.username  
+                FROM game_state_players s 
+                JOIN users u
+                    ON s.user_id = u.id 
                 WHERE 
-                    game_id = :game_id, 
-                    player_index = :player_index "), 
+                    s.game_id = :game_id AND 
+                    s.player_index = :player_index "), 
             [
                 'game_id' => $game_id, 
                 'player_index' => $player_index

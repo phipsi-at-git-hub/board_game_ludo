@@ -47,7 +47,8 @@ $router->group('/game', function($group) {
     $group->get('/detail/{id}', [GameController::class, 'show']);
     $group->post('/join/{id}', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
     $group->post('/leave/{id}', [GameController::class, 'leave'], [fn() => Middleware::csrf()]);
-    $group->post('/solo_test', [GameController::class, 'soloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
+    $group->post('/create_solo_test', [GameController::class, 'soloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
+    $group->post('/play_solo_test', [GameController::class, 'playSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Admin routes ---

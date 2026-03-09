@@ -112,13 +112,24 @@
     font-size: 0.8rem;
     border: none;
     cursor: pointer;
+}
+
+.solo-test-btn.create {
     background: #fff3cd; 
     color: #856404;
 }
-
-.solo-test-btn:hover {
+.solo-test-btn.create:hover {
     background: #f8d7da; 
     color: #721c24;
+}
+
+.solo-test-btn.play {
+    background: #d4edda; 
+    color: #155724;
+}
+.solo-test-btn.play:hover {
+    background: #fff3cd; 
+    color: #856404;
 }
 
 .player-card {

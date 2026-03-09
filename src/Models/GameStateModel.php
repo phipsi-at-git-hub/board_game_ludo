@@ -54,8 +54,11 @@ final class GameStateModel extends BaseModel {
         if (array_key_exists(Application::CURRENT_PLAYER_INDEX, $row)) $game_state->current_player_index = (int) $row[Application::CURRENT_PLAYER_INDEX];
         if (array_key_exists(Application::CURRENT_DICE_ROLL, $row)) $game_state->current_dice_roll = (int) $row[Application::CURRENT_DICE_ROLL];
         if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_USED, $row)) $game_state->leave_home_attempts_used = (int) $row[Application::LEAVE_HOME_ATTEMPTS_USED];
+        if (array_key_exists(Application::EXTRA_ROLLS_ON_SIX_USED, $row)) $game_state->extra_rolls_on_six_used = (int) $row[Application::EXTRA_ROLLS_ON_SIX_USED];
         if (array_key_exists(Application::WINNER_USER_ID, $row)) $game_state->winner_user_id = (string) $row[Application::WINNER_USER_ID];
 
+        $game_state->created_at = $row['created_at'];
+        $game_state->updated_at = $row['updated_at'];
         return $game_state;
     }
 
