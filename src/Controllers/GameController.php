@@ -325,9 +325,12 @@ class GameController extends BaseController {
         );
     }
 
-    public function roll($game_id) {
+    public function roll() {
+        $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
         $game->rollDice();
+
+        //var_dump($game);exit;
 
         $this->redirect("/game/play/$game_id");
     }

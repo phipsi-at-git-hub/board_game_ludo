@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Core\Csrf;
 use App\Core\Localization;
 ?>
 <h1><?= $game->getName() ?></h1>
@@ -9,7 +10,10 @@ use App\Core\Localization;
 <p><?= Localization::get('game.play.current_player') ?>: <?= $game->getCurrentPlayer()->getUsername() ?></p>
 
 <?php if (!$game->getStateModel()->getCurrentDiceRoll()): ?>
-    <form method="POST" action="/game/roll/<?= $game->getId() ?>">
+    <p><?= $game->getStateModel()->getCurrentDiceRoll() ?></p>
+    <form method="POST" action="/game/roll">
+        <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+        <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
         <button type="submit"><?= Localization::get('game.play.roll_dice') ?></button>
     </form>
 <?php else: ?>

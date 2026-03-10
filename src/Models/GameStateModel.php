@@ -10,7 +10,7 @@ final class GameStateModel extends BaseModel {
     private ?int $current_dice_roll;
     private int $leave_home_attempts_used;
     private int $extra_rolls_on_six_used;
-    private string $winner_user_id;
+    private ?string $winner_user_id;
     private string $created_at;
     private string $updated_at;
 
@@ -51,11 +51,11 @@ final class GameStateModel extends BaseModel {
     public static function fromArray(array $row): self {
         $game_state = new self();
 
-        if (array_key_exists(Application::CURRENT_PLAYER_INDEX, $row)) $game_state->current_player_index = (int) $row[Application::CURRENT_PLAYER_INDEX];
-        if (array_key_exists(Application::CURRENT_DICE_ROLL, $row)) $game_state->current_dice_roll = (int) $row[Application::CURRENT_DICE_ROLL];
-        if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_USED, $row)) $game_state->leave_home_attempts_used = (int) $row[Application::LEAVE_HOME_ATTEMPTS_USED];
-        if (array_key_exists(Application::EXTRA_ROLLS_ON_SIX_USED, $row)) $game_state->extra_rolls_on_six_used = (int) $row[Application::EXTRA_ROLLS_ON_SIX_USED];
-        if (array_key_exists(Application::WINNER_USER_ID, $row)) $game_state->winner_user_id = (string) $row[Application::WINNER_USER_ID];
+        $game_state->current_player_index = self::hydrateInt($row, Application::CURRENT_PLAYER_INDEX);
+        $game_state->current_dice_roll = self::hydrateIntOrNull($row, Application::CURRENT_DICE_ROLL);
+        $game_state->leave_home_attempts_used = self::hydrateInt($row, Application::LEAVE_HOME_ATTEMPTS_USED);
+        $game_state->extra_rolls_on_six_used = self::hydrateInt($row, Application::EXTRA_ROLLS_ON_SIX_USED);
+        $game_state->winner_user_id = self::hydrateStringOrNull($row, Application::WINNER_USER_ID);
 
         $game_state->created_at = $row['created_at'];
         $game_state->updated_at = $row['updated_at'];
@@ -71,22 +71,22 @@ final class GameStateModel extends BaseModel {
     }
 
     // Get current dice roll
-    public function getCurrentDiceRoll(): int {
+    public function getCurrentDiceRoll(): ?int {
          return $this->current_dice_roll;
     }
 
     // Get leave home attempts used
-    public function getLeaveHomeAttemptsUsed(): int {
+    public function getLeaveHomeAttemptsUsed(): ?int {
         return $this->leave_home_attempts_used;
     }
 
     // Get extra rolls on six used
-    public function getExtraRollsOnSixUsed(): int {
+    public function getExtraRollsOnSixUsed(): ?int {
         return $this->extra_rolls_on_six_used;
     }
 
     // Get winner user id
-    public function getWinnerUserId(): string {
+    public function getWinnerUserId(): ?string {
         return $this->winner_user_id;
     }
 

@@ -232,7 +232,11 @@ final class GameModel extends BaseModel {
     }
 
     //  Game Engine - get available move for player and rolled dice
-    public function getAvailableMoves(string $user_id, int $dice_value): array {
+    public function getAvailableMoves(string $user_id, ?int $dice_value): array {
+        if ($dice_value === null) {
+            return [];
+        }
+
         $player = $this->getPlayerById($user_id);
         $moves = [];
 
@@ -1460,7 +1464,7 @@ final class GameModel extends BaseModel {
 
     // Helper - Debug State 
     // ToDo: check if this is ever used and useful!
-    public function getDebugState(string $user_id, int $dice_value) {
+    public function getDebugState(string $user_id, ?int $dice_value) {
         return [
             Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(), 
             Application::CURRENT_DICE_ROLL => $this->state_model->getCurrentDiceRoll(), 

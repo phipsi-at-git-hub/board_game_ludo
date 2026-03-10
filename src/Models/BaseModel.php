@@ -55,4 +55,82 @@ abstract class BaseModel {
             random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
         );
     }
+
+    // Helper - Helps with hydration - Hydrate Int or NULL
+    protected static function hydrateIntOrNull(array $row, string $key): ?int {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return null;
+        }
+        return (int) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate Int
+    protected static function hydrateInt(array $row, string $key): int {
+        return (int) $row[$key];
+    }
+
+    // Helper = Helps with hydration - Hydrate String or NULL
+    protected static function hydrateStringOrNull(array $row, string $key): ?string {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return null;
+        }
+        return (string) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate String
+    protected static function hydrateString(array $row, string $key): string {
+        return (string) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate Boolean or Null
+    protected static function hydrateBooleanOrNull(array $row, string $key): ?bool {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return null;
+        }
+        return (bool) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate Boolean
+    protected static function hydrateBoolean(array $row, string $key): bool {
+        return (bool) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate Float or Null
+    protected static function hydrateFloatOrNull(array $row, string $key): ?float {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return null;
+        }
+        return (float) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate Boolean
+    protected static function hydrateFloat(array $row, string $key): float {
+        return (float) $row[$key];
+    }
+
+    // Helper - Helps with hydration - Hydrate JSON
+    protected static function hydrateJsonOrNull(array $row, string $key): ?array {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return null;
+        }
+        return json_decode($row[$key], true);
+    }
+
+    // Helper - Helps with hydration - Array
+    protected static function hydrateArray(array $row, string $key): array {
+        if (!array_key_exists($key, $row) || $row[$key] === null) {
+            return [];
+        }
+        return json_decode($row[$key], true);
+    }
+
+    // Helper - int or NULL
+    protected static function intOrNull($value): ?int {
+        return $value === null ? null : (int) $value;
+    }
+
+    // Helper - string or NULL
+    protected static function stringOrNull($value): ?string {
+        return $value === null ? null : (string) $value;
+    }
 }
