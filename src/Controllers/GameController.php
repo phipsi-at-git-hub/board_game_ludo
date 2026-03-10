@@ -300,8 +300,6 @@ class GameController extends BaseController {
 
         $game->cancelGame();
         $this->redirect("/game/detail/$game_id");
-
-        //header('Location: /game/list');
     }
 
     public function play($game_id) {
@@ -309,10 +307,24 @@ class GameController extends BaseController {
         $user = Auth::user();
         $moves = [];
 
-        $game->startGame();
+        // Start the game if it hasn't started yet
+        if ($game->isWaiting()) {
+            $game->startGame();
+        }
 
-        if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
-            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
+        // Only if a die value exists can possible moves be determined
+        $current_roll = $game->getStateModel()->getCurrentDiceRoll();
+        if ($current_roll !== null) {
+            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $current_roll);
+
+            // If no moves are available, offer at least one passing move
+            if (empty($moves)) {
+                $moves[] = [
+                    Application::DTO_IS_PASS => true,
+                    Application::DTO_FIGURE_INDEX => null,
+                    Application::DTO_TO => null,
+                ];
+            }
         }
 
         $this->render(
@@ -326,19 +338,29 @@ class GameController extends BaseController {
     }
 
     public function roll() {
+        $user = Auth::user();
         $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
-        $game->rollDice();
 
-        //var_dump($game);exit;
+        // Roll the dice and store the value in the database
+        $game->rollDice();
 
         $this->redirect("/game/play/$game_id");
     }
 
-    public function move($game_id) {
+    public function move() {
+        $game_id = $_POST[Application::GAME_ID];
         $move = json_decode($_POST[Application::DTO_MOVE], true);
         $game = GameModel::findById($game_id);
-        $game->applyMove($_SESSION[Application::USER_ID], $move); 
+        var_dump($_POST[Application::DTO_MOVE]);
+
+        // Check if a move is skipped
+        if (!empty($move[Application::DTO_IS_PASS])) {
+            // Turn may end directly
+            $game->passTurn($_SESSION[Application::USER_ID]);
+        } else {
+            $game->applyMove($_SESSION[Application::USER_ID], $move);
+        }
 
         $this->redirect("/game/play/$game_id");
     }

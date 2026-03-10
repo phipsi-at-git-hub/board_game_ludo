@@ -103,11 +103,14 @@ return [
     'game.play.status' => 'Status', 
     'game.play.current_player' => 'Current Player', 
     'game.play.roll_dice' => 'Roll Dice', 
+    'game.play.rolled' => 'Rolled', 
     'game.play.possible_moves' => 'Possible Moves', 
+    'game.play.pass_turn' => 'Pass Turn', 
     'game.play.figure' => 'Figure', 
     'game.play.figures' => 'Figures', 
     'game.play.move_figure' => 'Move Figure ', 
     'game.play.position' => 'Position', 
+    'game.play.back_to_detail' => '← Back to Detail View', 
 
     // Game - Options
     'game.options.is_private' => '⛔ Private Game',

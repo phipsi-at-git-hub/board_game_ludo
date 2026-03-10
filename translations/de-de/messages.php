@@ -103,11 +103,14 @@ return [
     'game.play.status' => 'Status', 
     'game.play.current_player' => 'Aktueller Spieler', 
     'game.play.roll_dice' => 'Würfelwert', 
+    'game.play.rolled' => 'Gewürfelt', 
     'game.play.possible_moves' => 'Mögliche Bewegungen', 
+    'game.play.pass_turn' => 'Zug aussetzen', 
     'game.play.figure' => 'Figur', 
     'game.play.figures' => 'Figuren', 
     'game.play.move_figure' => 'Bewege Figur ', 
     'game.play.position' => 'Position', 
+    'game.play.back_to_detail' => '← Zurück zur Detailansicht', 
 
     // Game - Options
     'game.options.is_private' => '⛔ Privates Spiel',

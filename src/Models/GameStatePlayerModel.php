@@ -142,8 +142,8 @@ final class GameStatePlayerModel extends BaseModel {
     }
 
     // Getter - Get figure by figure index
-    public function getFigureByFigureIndex(int $figure_index): GameStateFigureModel {
-        return GameStateFigureModel::findByFigureIndex($figure_index);
+    public function getFigureByFigureIndex(string $game_id, string $user_id, int $figure_index): GameStateFigureModel {
+        return GameStateFigureModel::findByFigureIndex($game_id, $user_id, $figure_index);
     }
 
     // Getter - Get start offset of players figures

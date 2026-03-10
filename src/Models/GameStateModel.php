@@ -6,6 +6,7 @@ use App\Constants\Application;
 
 final class GameStateModel extends BaseModel {
     // ToDo: Use constant from application.php 
+    private string $game_id;
     private int $current_player_index;
     private ?int $current_dice_roll;
     private int $leave_home_attempts_used;
@@ -33,8 +34,83 @@ final class GameStateModel extends BaseModel {
         );
     }
 
+    // Store current_player_index
+    public function storeCurrentPlayerIndex(string $game_id, int $player_index): bool {
+        $game_state_array = $this->toArray();
+        $game_state_array[Application::CURRENT_PLAYER_INDEX] = $player_index;
+
+        return $this->updateCurrentState($game_id, $game_state_array);
+    }
+
+    // Store current_dice_roll
+    public function storeCurrentDiceRoll(?int $dice_value): bool {
+        $game_state_array = $this->toArray();
+        $game_state_array[Application::CURRENT_DICE_ROLL] = $dice_value;
+
+        return $this->updateCurrentState($this->game_id, $game_state_array);
+    }
+
+    // Store leave_home_attempts_used
+    public function storeLeaveHomeAttemptsUsed(string $game_id, int $leave_home_attempts_used): bool {
+        $game_state_array = $this->toArray();
+        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $leave_home_attempts_used;
+
+        return $this->updateCurrentState($game_id, $game_state_array);
+    }
+
+    // Store extra_rolls_on_six_used
+    public function storeExtraRollsOnSixUsed(string $game_id, int $extra_rolls_on_six_used): bool {
+        $game_state_array = $this->toArray();
+        $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $extra_rolls_on_six_used;
+
+        return $this->updateCurrentState($game_id, $game_state_array);
+    }
+
+    // Store leave_home_attempts_used
+    public function storeWinnerUserId(string $game_id, ?string $winner_user_id): bool {
+        $game_state_array = $this->toArray();
+        $game_state_array[Application::WINNER_USER_ID] = $winner_user_id;
+
+        return $this->updateCurrentState($game_id, $game_state_array);
+    }
+
+    // Save current game state
+    public function save(): bool {
+        return false;
+    }
+
     // Update game state for given game
-    public static function updateCurrentPlayer (): void {}
+    private static function updateCurrentState (string $game_id, array $state_array): bool {
+        return static::execute(
+            sprintf(
+                "UPDATE 
+                    game_state 
+                SET 
+                    current_player_index = :current_player_index, 
+                    current_dice_roll = :current_dice_roll, 
+                    leave_home_attempts_used = :leave_home_attempts_used, 
+                    extra_rolls_on_six_used = :extra_rolls_on_six_used, 
+                    winner_user_id = :winner_user_id
+                WHERE 
+                    game_id = :game_id", 
+                Application::TABLE_STATE, 
+
+                Application::CURRENT_PLAYER_INDEX, 
+                Application::CURRENT_DICE_ROLL, 
+                Application::LEAVE_HOME_ATTEMPTS_USED, 
+                Application::EXTRA_ROLLS_ON_SIX_USED, 
+                Application::WINNER_USER_ID
+                ), [
+                    'current_player_index' => $state_array[Application::CURRENT_PLAYER_INDEX], 
+                    'current_dice_roll' => $state_array[Application::CURRENT_DICE_ROLL], 
+                    'leave_home_attempts_used' => $state_array[Application::LEAVE_HOME_ATTEMPTS_USED], 
+                    'extra_rolls_on_six_used' => $state_array[Application::EXTRA_ROLLS_ON_SIX_USED], 
+                    'winner_user_id' => $state_array[Application::WINNER_USER_ID], 
+                    'game_id' => $game_id
+                ]
+        );
+        return false;
+    }
 
     // Delete game state for given game
     public static function delete(string $game_id): bool {
@@ -50,6 +126,7 @@ final class GameStateModel extends BaseModel {
     // Helper - Convert db row to GameModel object
     public static function fromArray(array $row): self {
         $game_state = new self();
+        $game_state->game_id = $row[Application::GAME_ID];
 
         $game_state->current_player_index = self::hydrateInt($row, Application::CURRENT_PLAYER_INDEX);
         $game_state->current_dice_roll = self::hydrateIntOrNull($row, Application::CURRENT_DICE_ROLL);
@@ -60,6 +137,18 @@ final class GameStateModel extends BaseModel {
         $game_state->created_at = $row['created_at'];
         $game_state->updated_at = $row['updated_at'];
         return $game_state;
+    }
+
+    // Helper - Create Array from GameModel
+    private function toArray(): array {
+        $game_state_array[Application::GAME_ID] = $this->game_id;
+        $game_state_array[Application::CURRENT_PLAYER_INDEX] = $this->current_player_index;
+        $game_state_array[Application::CURRENT_DICE_ROLL] = $this->current_dice_roll;
+        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $this->leave_home_attempts_used;
+        $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $this->extra_rolls_on_six_used;
+        $game_state_array[Application::WINNER_USER_ID] = $this->winner_user_id;
+
+        return $game_state_array;
     }
 
     /**
@@ -96,6 +185,7 @@ final class GameStateModel extends BaseModel {
     // Set current dice roll
     public function setCurrentDiceRoll(?int $dice_value): void {
         $this->current_dice_roll = $dice_value;
+        $this->storeCurrentDiceRoll($dice_value);
     }
 
     // Set leave home attempts used

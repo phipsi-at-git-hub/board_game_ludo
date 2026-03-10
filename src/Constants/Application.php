@@ -101,6 +101,7 @@ class Application {
     public const DTO_KICKED_FIGURE_INDEX = 'kicked_figure_index'; 
     public const DTO_IS_GOAL_ENTRY = 'is_goal_entry'; 
     public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow'; 
+    public const DTO_IS_PASS = 'is_pass'; 
 
     // Figure Areas
     public const AREA_HOME  = 'home';

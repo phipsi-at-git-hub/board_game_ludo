@@ -18,18 +18,27 @@ final class GameStateFigureModel extends BaseModel {
     // Find game state figures by game id
     public static function findByGameId(string $game_id): array {
         return static::fetchAll(
-            "SELECT * FROM game_state_figures WHERE game_id = :game_id",
+            "SELECT * 
+            FROM game_state_figures 
+            WHERE game_id = :game_id",
             ['game_id' => $game_id]
         );
     }
 
     // Find game state players for given game
-    public static function findByFigureIndex(int $figure_index): self {
+    public static function findByFigureIndex(string $game_id, string $user_id, int $figure_index): self {
         $row = static::fetchOne(
-            sprintf("SELECT * FROM game_state_figures WHERE game_id = :game_id AND user_id = :user_id AND figure_index = :figure_id"),
+            sprintf(
+                "SELECT * 
+                FROM game_state_figures 
+                WHERE 
+                    game_id = :game_id 
+                    AND user_id = :user_id 
+                    AND figure_index = :figure_index"
+            ),
             [
-                'game_id' => self::$game_id,
-                'user_ud' => self::$user_id, 
+                'game_id' => $game_id,
+                'user_id' => $user_id, 
                 'figure_index' => $figure_index 
             ]
         );
