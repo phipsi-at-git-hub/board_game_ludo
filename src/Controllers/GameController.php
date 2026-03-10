@@ -143,8 +143,12 @@ class GameController extends BaseController {
 
     // Games list overview
     public function list(): void {
-        $games = GameModel::getAllOpenGames();
         $user = Auth::user();
+        if ($user->isAdmin()) {
+            $games = GameModel::getAllGames();
+        } else {
+            $games = GameModel::getAllOpenGames();
+        }
         
         $this->render(
             'game/list', 
@@ -242,31 +246,38 @@ class GameController extends BaseController {
         exit;
     }
 
-    // Play a given game
-    public function playSoloTest() {
+    // Start a given solo test game
+    public function startSoloTest() {
         $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
         $user = Auth::user();
         $moves = [];
 
-        //var_dump($game); exit;
+        $game->startGame();
 
         if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
             $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
         }
 
-        $this->render(
-            'game/play_solo_test', 
-            [
-                'game' => $game, 
-                'moves' => $moves, 
-                'user' => $user
-            ]
-        );
+        $this->redirect("/game/detail/$game_id");
     }
 
-    public function start(string $game_id) {
-        echo 'Start';
+    // Start game
+    public function start() {
+        $game_id = $_POST[Application::GAME_ID];
+        $game = GameModel::findById($game_id);
+        $game->startGame();
+
+        $this->redirect("/game/play/$game_id");
+    }
+
+    // Pause game
+    public function pause() {
+        $game_id = $_POST[Application::GAME_ID];
+        $game = GameModel::findById($game_id);
+        $game->pauseGame();
+
+        $this->redirect("/game/detail/$game_id");
     }
 
     public function destroy(string $game_id) {
@@ -288,8 +299,30 @@ class GameController extends BaseController {
         }
 
         $game->cancelGame();
+        $this->redirect("/game/detail/$game_id");
 
-        header('Location: /game/list');
+        //header('Location: /game/list');
+    }
+
+    public function play($game_id) {
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+        $moves = [];
+
+        $game->startGame();
+
+        if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
+            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
+        }
+
+        $this->render(
+            'game/play_solo_test', 
+            [
+                'game' => $game, 
+                'moves' => $moves, 
+                'user' => $user
+            ]
+        );
     }
 
     public function roll($game_id) {

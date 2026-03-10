@@ -42,23 +42,33 @@ use App\Policies\GamePolicy;
         <?php } ?>
         </form>
 
-        <?php if ($user->isAdmin() && !$game->IsTestGame()) { ?>
+        <?php if ($user->isAdmin() && !$game->IsTestGame()): ?>
         <form method="POST" action="/game/create_solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
             <button type="submit" class="solo-test-btn create"><?= Localization::get('game.show.test_solo_create') ?></button>
         </form>
-        <?php } ?>
+        <?php endif; ?>
 
-        <?php if ($user->isAdmin() && $game->IsTestGame() && $game->isParticipant($user)) { ?>
-        <form method="POST" action="/game/play_solo_test">
+        <?php if ($user->isAdmin() && $game->IsTestGame() && $game->isParticipant($user) && $game->isWaiting()): ?>
+        <form method="POST" action="/game/start_solo_test">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-            <button type="submit" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_play') ?></button>
+            <button type="submit" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_start') ?></button>
         </form>
-        <?php } ?>
+        <?php endif; ?>
+
+        <?php if ($user->isAdmin() && $game->IsTestGame() && $game->isParticipant($user) && $game->isRunning()): ?>
+        <form method="POST" action="/game/pause">
+            <input type="hidden" name="_method" value="POST">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+            <button type="submit" class="solo-test-btn pause"><?= Localization::get('game.show.test_solo_pause') ?></button>
+        </form>
+        <a href="/game/play/<?= $game->getId() ?>" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_play') ?></a>
+        <?php endif; ?>
     </div>
 
     <div class="card-body meta-grid">

@@ -683,8 +683,18 @@ final class GameModel extends BaseModel {
     public static function getAllGames(): array {
         $rows = static::fetchAll(
             sprintf(
-                "SELECT
-                    g.*, 
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    u.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count, 
                     r.%s, 
                     r.%s, 
                     r.%s, 
@@ -692,16 +702,28 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
-                    r.%s, 
-                    COUNT(p.%s) as player_count
-                FROM %s g 
-                LEFT JOIN %s r 
+                    r.%s
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
                     ON g.%s = r.%s
-                LEFT JOIN %s p
-                    ON g.%s = p.%s
-                GROUP BY g.%s 
-                ORDER BY g.%s DESC", 
-
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s 
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+                Application::IS_TEST_GAME, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
                 Application::ALLOW_BOTS, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
@@ -711,19 +733,21 @@ final class GameModel extends BaseModel {
                 Application::STRICT_GOAL_ORDER, 
                 Application::START_FIELD_MUST_BE_CLEARED, 
 
-                Application::USER_ID, 
+                Application::TABLE_GAMES,
 
-                Application::TABLE_GAMES, 
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
 
                 Application::TABLE_RULES, 
                 Application::ID, 
                 Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
+                Application::ID,
+                Application::GAME_ID,
 
-                Application::TABLE_PLAYERS, 
-                Application::ID, 
-                Application::GAME_ID, 
-
-                Application::ID, 
+                Application::ID,
                 Application::CREATED_AT
             )
         );
@@ -1113,7 +1137,7 @@ final class GameModel extends BaseModel {
         static::execute(
             sprintf(
                 "UPDATE 
-                    %s,
+                    %s 
                 SET
                     %s = :status
                 WHERE
@@ -1155,9 +1179,28 @@ final class GameModel extends BaseModel {
     /** 
      * Game 
      * */
-    // Game - Update game status helper
+    // Game - Update game status helper - Start game
+    public function startGame(): void {
+        $this->updateStatus(Application::STATUS_RUNNING);
+        $this->setStatus(Application::STATUS_RUNNING);
+    }
+
+    // Game - Update game status helper - finish game
+    public function finishGame(): void {
+        $this->updateStatus(Application::STATUS_FINISHED);
+        $this->setStatus(Application::STATUS_FINISHED);
+    }
+
+    // Game - Update game status helper - Set game to waiting
+    public function pauseGame(): void {
+        $this->updateStatus(Application::STATUS_WAITING);
+        $this->setStatus(Application::STATUS_WAITING);
+    }
+
+    // Game - Update game status helper - Cancel game
     public function cancelGame(): void {
         $this->updateStatus(Application::STATUS_CANCELLED);
+        $this->setStatus(Application::STATUS_CANCELLED);
     }
 
     // Game - Join game - player 
@@ -1503,27 +1546,21 @@ final class GameModel extends BaseModel {
         return GameStatePlayerModel::getPlayerByPlayerIndex($this->id, $player_index);
     }
 
-    /*
-    // Get array of all figures in the game
-    public function getAllFigures(): array {
-        return $this->figure_array;
-    }
-
-    // Get Figure given by figure id
-    public function getFigureById(string $figure_id): GameStateFigureModel {
-        // ToDo: Implement
-        return new GameStateFigureModel();
-    }
-
-    // Get figures for player
-    public function getFiguresGroupedByPlayer(): array {
-        $grouped = [];
-
-        foreach ($this->figure_array as $figure) {
-            $grouped[$figure->getUserId()][] = $figure;
+    /**
+     * Setter
+     */
+    // Setter - Set status
+    public function setStatus(string $status): bool {
+        if (
+            $status === Application::STATUS_CANCELLED 
+            || $status === Application::STATUS_FINISHED 
+            || $status === Application::STATUS_FINISHED 
+            || $status === Application::STATUS_RUNNING 
+            || $status === Application::STATUS_WAITING 
+        ) {
+            $this->status = $status;
+            return true;
         }
-
-        return $grouped;
+        return false;
     }
-    */
 }

@@ -46,9 +46,15 @@ $router->group('/game', function($group) {
     $group->delete('/delete', [GameController::class, 'delete'], [fn() => Middleware::csrf()]);
     $group->get('/detail/{id}', [GameController::class, 'show']);
     $group->post('/join/{id}', [GameController::class, 'join'], [fn() => Middleware::csrf()]);
+    $group->post('/start', [GameController::class, 'start'], [fn() => Middleware::csrf()]);
+    $group->post('/pause', [GameController::class, 'pause'], [fn() => Middleware::csrf()]);
+    $group->post('/cancel', [GameController::class, 'cancel'], [fn() => Middleware::csrf()]);
+    $group->get('/play/{id}', [GameController::class, 'play']);
+    $group->post('/roll', [GameController::class, 'roll'], [fn() => Middleware::csrf()]);
+    $group->post('/move', [GameController::class, 'move'], [fn() => Middleware::csrf()]);
     $group->post('/leave/{id}', [GameController::class, 'leave'], [fn() => Middleware::csrf()]);
     $group->post('/create_solo_test', [GameController::class, 'soloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
-    $group->post('/play_solo_test', [GameController::class, 'playSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
+    $group->post('/start_solo_test', [GameController::class, 'startSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Admin routes ---
