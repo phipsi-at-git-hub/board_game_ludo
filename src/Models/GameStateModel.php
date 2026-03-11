@@ -35,15 +35,15 @@ final class GameStateModel extends BaseModel {
     }
 
     // Store current_player_index
-    public function storeCurrentPlayerIndex(string $game_id, int $player_index): bool {
+    public function saveCurrentPlayerIndex(int $player_index): bool {
         $game_state_array = $this->toArray();
         $game_state_array[Application::CURRENT_PLAYER_INDEX] = $player_index;
 
-        return $this->updateCurrentState($game_id, $game_state_array);
+        return $this->updateCurrentState($this->game_id, $game_state_array);
     }
 
     // Store current_dice_roll
-    public function storeCurrentDiceRoll(?int $dice_value): bool {
+    public function saveCurrentDiceRoll(?int $dice_value): bool {
         $game_state_array = $this->toArray();
         $game_state_array[Application::CURRENT_DICE_ROLL] = $dice_value;
 
@@ -51,32 +51,32 @@ final class GameStateModel extends BaseModel {
     }
 
     // Store leave_home_attempts_used
-    public function storeLeaveHomeAttemptsUsed(string $game_id, int $leave_home_attempts_used): bool {
+    public function saveLeaveHomeAttemptsUsed(int $leave_home_attempts_used): bool {
         $game_state_array = $this->toArray();
         $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $leave_home_attempts_used;
 
-        return $this->updateCurrentState($game_id, $game_state_array);
+        return $this->updateCurrentState($this->game_id, $game_state_array);
     }
 
     // Store extra_rolls_on_six_used
-    public function storeExtraRollsOnSixUsed(string $game_id, int $extra_rolls_on_six_used): bool {
+    public function saveExtraRollsOnSixUsed(int $extra_rolls_on_six_used): bool {
         $game_state_array = $this->toArray();
         $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $extra_rolls_on_six_used;
 
-        return $this->updateCurrentState($game_id, $game_state_array);
+        return $this->updateCurrentState($this->game_id, $game_state_array);
     }
 
     // Store leave_home_attempts_used
-    public function storeWinnerUserId(string $game_id, ?string $winner_user_id): bool {
+    public function saveWinnerUserId(?string $winner_user_id): bool {
         $game_state_array = $this->toArray();
         $game_state_array[Application::WINNER_USER_ID] = $winner_user_id;
 
-        return $this->updateCurrentState($game_id, $game_state_array);
+        return $this->updateCurrentState($this->game_id, $game_state_array);
     }
 
     // Save current game state
     public function save(): bool {
-        return false;
+        return $this->updateCurrentState($this->game_id, $this->toArray());
     }
 
     // Update game state for given game
@@ -186,7 +186,6 @@ final class GameStateModel extends BaseModel {
     // Set current dice roll
     public function setCurrentDiceRoll(?int $dice_value): void {
         $this->current_dice_roll = $dice_value;
-        $this->storeCurrentDiceRoll($dice_value);
     }
 
     // Set leave home attempts used
@@ -222,5 +221,10 @@ final class GameStateModel extends BaseModel {
     // Set current player index
     public function setCurrentPlayerIndex(int $player_index): void {
         $this->current_player_index = $player_index;
+    }
+
+    // Set winner user id
+    public function setWinnerUserId($user_id): void {
+        $this->winner_user_id = $user_id;
     }
 }

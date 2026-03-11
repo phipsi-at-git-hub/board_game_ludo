@@ -95,6 +95,8 @@ final class GameRuleSetModel extends BaseModel {
         );
     }
 
+    public function store(): void {}
+
     // Update existing game
     public static function update(string $game_id, array $rule_set): void {
         $row = static::execute(
@@ -157,7 +159,7 @@ final class GameRuleSetModel extends BaseModel {
         return $this->extra_roll_on_six_limit > 0;
     }
 
-    // Helper - Convert db row to GameModel object
+    // Helper - Convert db row to GameRuleSetModel object
     public static function fromArray(array $row): self {
         $rule_set = new self();
 
@@ -171,6 +173,20 @@ final class GameRuleSetModel extends BaseModel {
         if (array_key_exists(Application::START_FIELD_MUST_BE_CLEARED, $row)) $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
 
         return $rule_set;
+    }
+
+    // Helper - Create Array from GameRuleSetModel
+    private function toArray(): array {
+        $game_state_array[Application::ALLOW_BOTS] = $this->allow_bots;
+        $game_state_array[Application::LEAVE_HOME_ATTEMPT] = $this->leave_home_attempt;
+        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_MAX] = $this->leave_home_attempts_max;
+        $game_state_array[Application::EXTRA_ROLL_ON_SIX_LIMIT] = $this->extra_roll_on_six_limit;
+        $game_state_array[Application::FORCE_EXTRA_LAP_ON_OVERFLOW] = $this->force_extra_roll_on_overflow;
+        $game_state_array[Application::ALLOW_STACK_OWN_FIGURES] = $this->allow_stack_own_figures;
+        $game_state_array[Application::STRICT_GOAL_ORDER] = $this->strict_goal_order;
+        $game_state_array[Application::START_FIELD_MUST_BE_CLEARED] = $this->start_field_must_be_cleared;
+
+        return $game_state_array;
     }
 
     // Check Triple roll rule

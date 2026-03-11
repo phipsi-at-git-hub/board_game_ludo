@@ -82,13 +82,13 @@ final class GameStateFigureModel extends BaseModel {
         }
     }
 
-    // Store complete GameStateFigueModel
-    public function store(): bool {
+    // Store complete GameStateFigureModel
+    public function save(): bool {
         return $this->updateFigure($this->game_id, $this->user_id, $this->figure_index, $this->toArray());
     }
 
     // Store position
-    public function storePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool {
+    public function savePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool {
         $game_state_figure_array = $this->toArray();
         $game_state_figure_array[Application::POSITION] = $figure_position;
 
@@ -96,7 +96,7 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Store position
-    public function storeArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool {
+    public function saveArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool {
         $game_state_figure_array = $this->toArray();
         $game_state_figure_array[Application::AREA] = $figure_area; 
         var_dump($game_state_figure_array);

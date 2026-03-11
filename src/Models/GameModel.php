@@ -83,19 +83,20 @@ final class GameModel extends BaseModel {
             $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[Application::DTO_KICKED_FIGURE_INDEX]);
             $kicked_figure->setArea(Application::AREA_HOME);
             $kicked_figure->setPosition(null);
-            $kicked_figure->store();
+            $kicked_figure->save();
         }
 
         // Move Figure
         $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
         $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
-        $figure->store();
+        $figure->save();
 
         // 6. Check Winner
         if ($this->hasPlayerWon($current_player)) {
             $this->setWinner($current_player);
             // Keep rolled dice visible for UI
             $this->state_model->setCurrentDiceRoll(null);
+            $this->state_model->save();
             return;
         }
 
@@ -104,6 +105,7 @@ final class GameModel extends BaseModel {
             $extra_roll_limit = $this->rule_set_model->getExtraRollOnSixLimit();
             if ($extra_roll_limit !== null) {
                 $this->state_model->incrementExtraRollsOnSixUsed();
+                $this->state_model->save();
 
                 // check extra roll limit
                 if ($this->state_model->getExtraRollsOnSixUsed() >= $extra_roll_limit) {
@@ -114,6 +116,7 @@ final class GameModel extends BaseModel {
 
             // Extra roll on six granted
             $this->state_model->setCurrentDiceRoll(null);
+            $this->state_model->save();
             return;
         }
 
@@ -142,6 +145,7 @@ final class GameModel extends BaseModel {
 
         // store dice value in DB
         $this->state_model->setCurrentDiceRoll($dice_value);
+        $this->state_model->save();
 
         // Return dice value for UI
         return $dice_value;
@@ -312,7 +316,7 @@ final class GameModel extends BaseModel {
             }
 
             // check strict goal order
-            if ($this->isGoalPositionBlockedByStrictOrder($player, $new_goal_position)) {
+            if ($this->isGoalPositionBlockedByStrictOrder($player, $figure, $new_goal_position)) {
                 return false;
             }
 
@@ -388,7 +392,7 @@ final class GameModel extends BaseModel {
                 }
 
                 // strict goal order active?
-                if ($this->isGoalPositionBlockedByStrictOrder($player, $steps_into_goal)) {
+                if ($this->isGoalPositionBlockedByStrictOrder($player, $figure, $steps_into_goal)) {
                     return false;
                 }
 
@@ -423,6 +427,7 @@ final class GameModel extends BaseModel {
 
         $new_player_index = ($this->state_model->getCurrentPlayerIndex() + 1) % $this->getPlayerCount();
         $this->state_model->setCurrentPlayerIndex($new_player_index);
+        $this->state_model->save();
     }
 
     /**
@@ -464,6 +469,7 @@ final class GameModel extends BaseModel {
 
         // Reset dice value
         $this->state_model->setCurrentDiceRoll(null);
+        $this->state_model->save();
 
         // Check extra roll on six: If there are still throws left, the player stays on their turn
         if ($dice_value === 6) {
@@ -483,6 +489,7 @@ final class GameModel extends BaseModel {
 
             if ($variant !== null && $this->state_model->getLeaveHomeAttemptsUsed() < $max_attempts) {
                 $this->state_model->incrementLeaveHomeAttemptsUsed();
+                $this->state_model->save();
                 return; // The player may roll the dice again
             }
         }
@@ -590,12 +597,16 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if figure can move through goal area to finish
-    private function isGoalPositionBlockedByStrictOrder(GameStatePlayerModel $player, int $target_goal_position): bool {
+    private function isGoalPositionBlockedByStrictOrder(GameStatePlayerModel $player, GameStateFigureModel $current_figure, int $target_goal_position): bool {
         if (!$this->rule_set_model->getStrictGoalOrder()) {
             return false;
         }
 
         foreach ($player->getAllFigures() as $figure) {
+            if ($current_figure === $figure) {
+                continue;
+            }
+
             if ($figure->getArea() !== Application::AREA_GOAL) {
                 continue;
             }
@@ -657,7 +668,8 @@ final class GameModel extends BaseModel {
 
     // Game Engine - Set winner of the game
     private function setWinner(GameStatePlayerModel $player): void {
-        // ToDo: Implement
+        $this->state_model->setWinnerUserId($player->getUserId());
+        $this->state_model->save();
     }
 
     /**
@@ -1029,15 +1041,6 @@ final class GameModel extends BaseModel {
     public function create(string $user_id, string $game_name, array $game_options, array $rules): ?string {
         $game_id = self::generateUUID();
 
-        /*
-        echo $user_id . '<br/>';
-        echo $game_name . '<br/><br/>';
-        var_dump($game_options);
-        echo '<br/><br/>';
-        var_dump($rules);
-        exit;
-        */
-
         // Standard games are no test games
         if (!key_exists(Application::IS_TEST_GAME, $game_options)) $game_options[Application::IS_TEST_GAME] = 0;
 
@@ -1203,7 +1206,6 @@ final class GameModel extends BaseModel {
             throw new DomainException('User already joined');
         }
 
-        //echo $this->getPlayerCount();exit;
         if ($this->getPlayerCount() >= $this->getPlayerMax()) {
             throw new DomainException('Game is full');
         }

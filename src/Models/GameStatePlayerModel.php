@@ -181,7 +181,7 @@ final class GameStatePlayerModel extends BaseModel {
         return $game_state_player;
     }
 
-    // Helper - Convert db rows to GameModel strict
+    // Helper - Convert db rows to GameStatePlayerModel strict
     public static function fromArray(array $row) : self {
         $game_state_player = new self();
 
@@ -191,6 +191,15 @@ final class GameStatePlayerModel extends BaseModel {
         $game_state_player->player_index = $row[Application::PLAYER_INDEX]; 
         $game_state_player->created_at = $row[Application::CREATED_AT];
         $game_state_player->updated_at = $row[Application::UPDATED_AT];
+
+        return $game_state_player;
+    }
+
+    // Helper - Create Array from GameStatePlayerModel
+    private function toArray(): array {
+        $game_state_player[Application::GAME_ID] = $this->game_id;
+        $game_state_player[Application::USER_ID] = $this->user_id;
+        $game_state_player[Application::PLAYER_INDEX] = $this->player_index;
 
         return $game_state_player;
     }
