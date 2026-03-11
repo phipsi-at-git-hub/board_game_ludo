@@ -83,11 +83,13 @@ final class GameModel extends BaseModel {
             $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[Application::DTO_KICKED_FIGURE_INDEX]);
             $kicked_figure->setArea(Application::AREA_HOME);
             $kicked_figure->setPosition(null);
+            $kicked_figure->store();
         }
 
         // Move Figure
         $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
         $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
+        $figure->store();
 
         // 6. Check Winner
         if ($this->hasPlayerWon($current_player)) {

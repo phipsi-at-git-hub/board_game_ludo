@@ -93,6 +93,7 @@ final class GameStateModel extends BaseModel {
                     winner_user_id = :winner_user_id
                 WHERE 
                     game_id = :game_id", 
+
                 Application::TABLE_STATE, 
 
                 Application::CURRENT_PLAYER_INDEX, 
@@ -123,7 +124,7 @@ final class GameStateModel extends BaseModel {
     /**
      * Helper
      */
-    // Helper - Convert db row to GameModel object
+    // Helper - Convert db row to GameStateModel object
     public static function fromArray(array $row): self {
         $game_state = new self();
         $game_state->game_id = $row[Application::GAME_ID];
@@ -139,7 +140,7 @@ final class GameStateModel extends BaseModel {
         return $game_state;
     }
 
-    // Helper - Create Array from GameModel
+    // Helper - Create Array from GameStateModel
     private function toArray(): array {
         $game_state_array[Application::GAME_ID] = $this->game_id;
         $game_state_array[Application::CURRENT_PLAYER_INDEX] = $this->current_player_index;

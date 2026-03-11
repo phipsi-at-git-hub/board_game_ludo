@@ -102,6 +102,7 @@ return [
     // Game - Play a game
     'game.play.status' => 'Status', 
     'game.play.current_player' => 'Current Player', 
+    'game.play.area' => 'Area', 
     'game.play.roll_dice' => 'Roll Dice', 
     'game.play.rolled' => 'Rolled', 
     'game.play.possible_moves' => 'Possible Moves', 

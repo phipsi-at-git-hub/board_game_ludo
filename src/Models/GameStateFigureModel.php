@@ -82,8 +82,42 @@ final class GameStateFigureModel extends BaseModel {
         }
     }
 
+    // Store complete GameStateFigueModel
+    public function store(): bool {
+        return $this->updateFigure($this->game_id, $this->user_id, $this->figure_index, $this->toArray());
+    }
+
+    // Store position
+    public function storePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool {
+        $game_state_figure_array = $this->toArray();
+        $game_state_figure_array[Application::POSITION] = $figure_position;
+
+        return $this->updateFigure($game_id, $user_id, $figure_index, $game_state_figure_array);
+    }
+
+    // Store position
+    public function storeArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool {
+        $game_state_figure_array = $this->toArray();
+        $game_state_figure_array[Application::AREA] = $figure_area; 
+        var_dump($game_state_figure_array);
+
+        return $this->updateFigure($game_id, $user_id, $figure_index, $game_state_figure_array);
+    }
+
     // Update given figures for given game
-    public static function updateFigurePosition(): void {}
+    public static function updateFigure(string $game_id, string $user_id, int $figure_index, array $figure_array): bool {
+        return static::execute(
+            sprintf(
+                "UPDATE game_state_figures SET area = :area, position = :position WHERE game_id = :game_id AND user_id = :user_id AND figure_index = :figure_index"
+            ), [
+                'position' => $figure_array[Application::POSITION], 
+                'area' => $figure_array[Application::AREA], 
+                'game_id' => $game_id, 
+                'user_id' => $user_id, 
+                'figure_index' => $figure_index
+            ]
+        );
+    }
 
     // Reset given figure for given game
     public static function resetFigure(): void {}
@@ -149,15 +183,25 @@ final class GameStateFigureModel extends BaseModel {
      * Setter
      */
     // Setter - Set Area
-    public function setArea(string $area): void {
+    public function setArea(string $area): bool {
         // ToDo: make it proof
-        $this->area = $area;
+        if (
+            $area === Application::AREA_HOME 
+            || $area === Application::AREA_FIELD 
+            || $area === Application::AREA_GOAL
+        ) {
+            //$this->storeArea($this->game_id, $this->user_id, $this->figure_index, $area);
+            $this->area = $area;
+            return true;
+        }
+        return false;
     }
 
     // Setter - Set Position
     public function setPosition($position): void {
         // ToDo: make it proof
         // find first empty slot in home area an position figure there
+        //$this->storePosition($this->game_id, $this->user_id, $this->figure_index, $position);
         $this->position = $position;
     }
 
@@ -183,18 +227,29 @@ final class GameStateFigureModel extends BaseModel {
         return $game_state_figure;
     }
 
-    // Helper - Convert db rows to GameModel strict
+    // Helper - Convert db rows to GameStateFigureModel strict
     public static function fromArray(array $row) : self {
         $game_state_figure = new self();
 
-        $game_state_figure->game_id = $row[Application::GAME_ID];
-        $game_state_figure->user_id = $row[Application::USER_ID];
+        $game_state_figure->game_id = self::hydrateString($row, Application::GAME_ID);
+        $game_state_figure->user_id = self::hydrateString($row, Application::USER_ID);
         if (array_key_exists(Application::USERNAME, $row))  $game_state_figure->user_name = $row[Application::USERNAME];
-        $game_state_figure->figure_index = $row[Application::FIGURE_INDEX];
-        $game_state_figure->position = $row[Application::POSITION];
-        $game_state_figure->area = $row[Application::AREA];
+        $game_state_figure->figure_index = self::hydrateInt($row, Application::FIGURE_INDEX);
+        $game_state_figure->position = self::hydrateInt($row, Application::POSITION);
+        $game_state_figure->area = self::hydrateString($row, Application::AREA);
         $game_state_figure->created_at = $row[Application::CREATED_AT];
         $game_state_figure->updated_at = $row[Application::UPDATED_AT];
+
+        return $game_state_figure;
+    }
+
+    // Helper - Create Array from GameStateFigureModel
+    private function toArray(): array {
+        $game_state_figure[Application::GAME_ID] = $this->game_id;
+        $game_state_figure[Application::USER_ID] = $this->user_id;
+        $game_state_figure[Application::FIGURE_INDEX] = $this->figure_index;
+        $game_state_figure[Application::POSITION] = $this->position;
+        $game_state_figure[Application::AREA] = $this->area;
 
         return $game_state_figure;
     }

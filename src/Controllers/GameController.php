@@ -352,7 +352,6 @@ class GameController extends BaseController {
         $game_id = $_POST[Application::GAME_ID];
         $move = json_decode($_POST[Application::DTO_MOVE], true);
         $game = GameModel::findById($game_id);
-        var_dump($_POST[Application::DTO_MOVE]);
 
         // Check if a move is skipped
         if (!empty($move[Application::DTO_IS_PASS])) {

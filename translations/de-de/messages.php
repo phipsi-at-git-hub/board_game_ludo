@@ -102,6 +102,7 @@ return [
     // Game - Play a game
     'game.play.status' => 'Status', 
     'game.play.current_player' => 'Aktueller Spieler', 
+    'game.play.area' => 'Bereich', 
     'game.play.roll_dice' => 'Würfelwert', 
     'game.play.rolled' => 'Gewürfelt', 
     'game.play.possible_moves' => 'Mögliche Bewegungen', 
