@@ -203,4 +203,34 @@ final class GameStatePlayerModel extends BaseModel {
 
         return $game_state_player;
     }
+
+    // Helper - Has player Figures in home zone
+    public function hasFiguresAtHome(): bool {
+        foreach ($this->getAllFigures() as $figure) {
+            if ($figure->isHome()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper - Has player Figures on field
+    public function hasFiguresOnField(): bool {
+        foreach ($this->getAllFigures() as $figure) {
+            if ($figure->isField()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper - Has player Figures in goal zone
+    public function hasFiguresInGoal(): bool {
+        foreach ($this->getAllFigures() as $figure) {
+            if ($figure->isGoal()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

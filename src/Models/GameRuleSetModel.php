@@ -8,6 +8,7 @@ final class GameRuleSetModel extends BaseModel {
     // ToDo: Use constant from application.php 
     private bool $allow_bots;
     private bool $all_figures_start_at_home;
+    private bool $start_field_must_be_cleared;
     private string $leave_home_attempt;
     private int $leave_home_attempts_max;
     private int $extra_roll_on_six_limit;
@@ -16,11 +17,11 @@ final class GameRuleSetModel extends BaseModel {
     private bool $force_extra_lap_on_overflow;
     private bool $allow_stack_own_figures;
     private bool $strict_goal_order;
-    private bool $start_field_must_be_cleared;
 
     // Define Default values
     private const DEFAULT_ALLOW_BOTS = true;
     private const DEFAULT_ALL_FIGURES_START_AT_HOME = false;
+    private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
     private const DEFAULT_LEAVE_HOME_ATTEMPT = Application::ENUM_FIRST_FIGURE;
     private const DEFAULT_LEAVE_HOME_ATTEMPTS_MAX = 3;
     private const DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT = 255;
@@ -29,7 +30,6 @@ final class GameRuleSetModel extends BaseModel {
     private const DEFAULT_FORCE_EXTRA_LAP_ON_OVERFLOW = false;
     private const DEFAULT_ALLOW_STACK_OWN_FIGURES = false;
     private const DEFAULT_STRICT_GOAL_ORDER = false;
-    private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
 
     // Define special values
     private const EXTRA_ROLL_ON_SIX_UNLIMITED = 255;
@@ -234,7 +234,13 @@ final class GameRuleSetModel extends BaseModel {
     public function  getAllowBots() : bool {
         return $this->allow_bots;
     }
-    // Get all_figures_start_in_home
+
+    // Get start_field_must_be_cleared
+    public function getStartFieldMustBeCleared(): bool {
+         return $this->start_field_must_be_cleared;
+    }
+
+    // Get all_figures_start_at_home
     public function  getAllFiguresStartAtHome() : bool {
         return $this->all_figures_start_at_home;
     }
@@ -277,10 +283,5 @@ final class GameRuleSetModel extends BaseModel {
     // Get strict_goal_order
     public function getStrictGoalOrder(): bool {
         return $this->strict_goal_order;
-    }
-
-    // Get start_field_must_be_cleared
-    public function getStartFieldMustBeCleared(): bool {
-         return $this->start_field_must_be_cleared;
     }
 }

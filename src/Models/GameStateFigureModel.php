@@ -261,4 +261,19 @@ final class GameStateFigureModel extends BaseModel {
 
         return $game_state_figure;
     }
+
+    // Helper - Is Figure at home
+    public function isHome(): bool {
+        return ($this->area === Application::AREA_HOME);
+    }
+
+    // Helper - Is Figure on field
+    public function isField(): bool {
+        return ($this->area === Application::AREA_FIELD);
+    }
+
+    // Helper - Is Figure in goal
+    public function isGoal(): bool {
+        return ($this->area === Application::AREA_GOAL);
+    }
 }

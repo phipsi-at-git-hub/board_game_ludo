@@ -204,6 +204,11 @@ final class GameModel extends BaseModel {
                 continue;
             }
 
+            // Check if 6 is rolled, at least one figure is at home and this figures must be moves out
+            if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix()) {
+                continue;
+            }
+
             /**
              * FIELD
              */
