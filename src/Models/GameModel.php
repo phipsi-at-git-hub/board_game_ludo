@@ -89,6 +89,7 @@ final class GameModel extends BaseModel {
         // Move Figure
         $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
         $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
+        $current_player->setFigureByFigureIndex($figure);
         $figure->save();
 
         // 6. Check Winner
@@ -660,22 +661,22 @@ final class GameModel extends BaseModel {
     // Game Engine - Check if player has won the game
     private function hasPlayerWon(GameStatePlayerModel $player): bool {
         $slots = array_fill(0, self::GOAL_LENGTH, false); 
-
         foreach ($player->getAllFigures() as $figure) {
+            $position = $figure->getPosition();
             if ($figure->getArea() !== Application::AREA_GOAL) {
                 return false;
+                continue;
             }
-
-            $position = $figure->getPosition();
 
             if ($position < 0 || $position >= self::GOAL_LENGTH) {
                 return false;
+                continue;
             }
 
             if ($slots[$position]) {
-                return false; // more then one figure on one spot - that's not allowed
+                return false;
+                continue;
             }
-
             $slots[$position] = true;
         }
         return !in_array(false, $slots, true);
@@ -685,6 +686,8 @@ final class GameModel extends BaseModel {
     private function setWinner(GameStatePlayerModel $player): void {
         $this->state_model->setWinnerUserId($player->getUserId());
         $this->state_model->save();
+        $this->status = Application::STATUS_FINISHED;
+        $this->save();
     }
 
     /**
@@ -1111,6 +1114,46 @@ final class GameModel extends BaseModel {
         }
     }
 
+    // Save current game state - only the GameModel
+    public function save(): bool {
+        return $this->updateGame($this->toArray());
+    }
+
+    // Database - Update current state of the game
+    private function updateGame(array $game_array) {
+        return static::execute(
+            sprintf(
+                "UPDATE 
+                    games
+                SET
+                    name = :name, 
+                    created_by_user_id = :created_by_user_id, 
+                    status = :status, 
+                    is_private = :is_private, 
+                    is_locked = :is_locked 
+                WHERE 
+                    id = :id", 
+                
+                Application::TABLE_GAMES, 
+
+                Application::NAME, 
+                Application::CREATED_BY_USER_ID, 
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+
+                Application::ID
+            ), [
+                'name' => $game_array[Application::NAME], 
+                'created_by_user_id' => $game_array[Application::CREATED_BY_USER_ID], 
+                'status' => $game_array[Application::STATUS], 
+                'is_private' => (int)$game_array[Application::IS_PRIVATE], 
+                'is_locked' => (int)$game_array[Application::IS_LOCKED], 
+                'id' => $game_array[Application::ID]
+            ]
+        );
+    }
+
     // Database - Update game 
     public function update(string $game_name, array $game_data, array $rule_set): bool {
         try {
@@ -1303,6 +1346,19 @@ final class GameModel extends BaseModel {
         $game->created_at = $row['created_at'];
         $game->updated_at = $row['updated_at'];
         return $game;
+    }
+
+    // Helper - Create Array from GameModel
+    private function toArray(): array {
+        $game_array[Application::ID] = $this->id;
+        $game_array[Application::NAME] = $this->name;
+        $game_array[Application::CREATED_BY_USER_ID] = $this->created_by_user_id;
+        $game_array[Application::STATUS] = $this->status;
+        $game_array[Application::IS_PRIVATE] = $this->is_private;
+        $game_array[Application::IS_LOCKED] = $this->is_locked;
+        $game_array[Application::IS_TEST_GAME] = $this->is_test_game;
+
+        return $game_array;
     }
 
     // Helper - Get Winner 

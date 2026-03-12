@@ -168,6 +168,15 @@ final class GameStatePlayerModel extends BaseModel {
         $this->figure_array = $figure_set;
     }
 
+    // Setter - Set specific figure in figure_array
+    public function setFigureByFigureIndex(GameStateFigureModel $new_figure): void {
+        for ($i = 0; $i < count($this->figure_array); $i++) {
+            if ($this->figure_array[$i]->getFigureIndex() === $new_figure->getFigureIndex()) {
+                $this->figure_array[$i] = $new_figure;
+            }
+        }
+    }
+
     /**
      * Helper
      */

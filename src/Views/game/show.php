@@ -90,7 +90,7 @@ use App\Policies\GamePolicy;
     <?php if (!empty($game->getAllPlayers())): ?>
         <?php foreach ($game->getAllPlayers() as $player): ?>
             <div class="player-card">
-                <h3><?php if ($player->getUserId() === $user->getId()) { ?>➡️<?php } ?>🧑 <?= htmlspecialchars($player->getUsername()) ?></h3>
+                <h3><?php if ($player->getUserId() === $user->getId()) { ?>➡️<?php } ?>🧑 <?= htmlspecialchars($player->getUsername()) ?> <?php if ($player->getUserId() === $game->getStateModel()->getWinnerUserId()) { echo '👑'; } ?></h3>
                 <div class="figure-row">
                     <?php foreach ($player->getAllFigures() as $figure): ?>
                         <div class="figure-badge">
