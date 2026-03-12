@@ -21,13 +21,13 @@ return [
     'game.status.running' => 'Laufend',
     'game.status.finished' => 'Beendet',
     
-    // Games - Lobby
+    // Game - Lobby
     'game.lobby.title' => '🎮 Spiel Lobby', 
     'game.lobby.create_new_game' => '➕ Neues Spiel erstellen', 
     'game.lobby.open_games' => '📜 Zeige offene Spiele', 
     'game.lobby.back_to_menu' => '← Zurück zum Hauptmenü', 
 
-    // Games - List
+    // Game - List
     'game.list.title' => 'Offene Spiele',
     'game.list.empty' => 'Keine offenen Spiele vorhanden.',
     'game.list.id' => 'Spiel-ID',
@@ -54,7 +54,7 @@ return [
     'game.list.create_new_game' => '➕ Neues Spiel erstellen', 
     'game.list.back_to_lobby' => '← Zurück zur Lobby', 
 
-    // Games - Create
+    // Game - Create
     'game.create.button_create' => 'Spiel erstellen', 
     'game.create.three' => '3', 
     'game.create.name' => 'Name', 
@@ -62,7 +62,10 @@ return [
     'game.create.game_options' => 'Spieloptionen', 
     'game.create.game_options' => 'Spielregeln', 
 
-    //Games - Show / Detail
+    // Game - Edit
+    'game.edit.button_update' => 'Spiel aktualisieren', 
+
+    // Game - Show / Detail
     'game.show.title' => 'Spiel', 
     'game.show.back_to_list' => '← Zurück zur Übersicht', 
     'game.show.solo_test_creation_confirm' => 'Möchtest du sicher eine Solosession aus diesem Spiel erstellen und starten?', 
@@ -86,6 +89,8 @@ return [
     'game.show.label_no_players_found' => 'Keine Spieler vorhanden.',
     'game.show.label_no_figures_found' => 'Keine Figuren vorhanden.',  
     'game.show.label_rules_bots_allows' => '🤖 Bots erlaubt', 
+    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
+    'game.show.label_rules_all_figures_start_in_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
     'game.show.label_rules_leave_home_attempt' => '🏠 Mehrmaliges Würfeln bis zum Verlassen der Homzone von', 
     'game.show.label_rules_leave_home_attempt_enum_first_figure' => 'der ersten Figur', 
     'game.show.label_rules_leave_home_attempt_enum_all_figures' => 'allen Figuren', 
@@ -94,10 +99,11 @@ return [
     'game.show.label_rules_roll_on_six_limit_no' => 'Kein nochmaliges Würfeln nach 6.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Nach jeder 6 ein weiteres Würfeln.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Zusätzliches Würfeln nach einer 6 ist begrenzt auf:', 
+    'game.show.label_rules_force_leaving_home_on_six' => '👈 Bei einer gewürfelten 6 müssen Figuren in der eigenen Home Zone bevorzugt bewegt werden', 
+    'game.show.label_rules_force_capture_enemy_figures' => '🎳 Gegenerische Figuren müssen geschlagen werden', 
     'game.show.label_rules_force_extra_lap_on_overflow' => '➿ Weitere Runde bei Überwurf', 
     'game.show.label_rules_stack_own_figures' => '🧱 Eigene Figuren stapeln', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strenge Zielfeld-Reihenfolge', 
-    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
 
     // Game - Play a game
     'game.play.status' => 'Status', 
@@ -119,15 +125,18 @@ return [
 
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Bots erlauben',
+    'game.rules.all_figures_start_in_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
+    'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',
     'game.rules.leave_home_attempt' => '🏠 Mehrmaliges Würfeln bis zum Verlassen der Homzone von', 
     'game.rules.leave_home_attempt_enum_first_figure' => 'der ersten Figur', 
     'game.rules.leave_home_attempt_enum_all_figures' => 'allen Figuren', 
     'game.rules.leave_home_attempts_max' => '🔂 Wie viele Versuche zum Verlassen der Homezone bevor der nächste Spieler am Zug ist',
     'game.rules.roll_on_six_limit' => '🎲 Extra Wurf bei einer 6',
+    'game.rules.force_leaving_home_on_six' => '👈 Bei einer gewürfelten 6 müssen Figuren in der eigenen Home Zone bevorzugt bewegt werden', 
+    'game.rules.force_capture_enemy_figures' => '🎳 Gegenerische Figuren müssen geschlagen werden', 
     'game.rules.force_extra_lap_on_overflow' => '➿ Weitere Runde bei Überwurf', 
     'game.rules.allow_stack_own_figures' => '🧱 Eigene Figuren stapeln erlauben',
     'game.rules.strict_goal_order' => '🎯 Strikte Zielreihenfolge',
-    'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',
 
     // Admin 
     'admin.dashboard.title' => 'Admin Übersicht', 

@@ -21,13 +21,13 @@ return [
     'game.status.running' => 'Running',
     'game.status.finished' => 'Finished',
     
-    // Games - Lobby
+    // Game - Lobby
     'game.lobby.title' => '🎮 Game Lobby', 
     'game.lobby.create_new_game' => '➕ Create new Game', 
     'game.lobby.open_games' => '📜 Show open Games', 
     'game.lobby.back_to_menu' => '← Back to Main Menu', 
 
-    // Games - List
+    // Game - List
     'game.list.title' => 'Open Games',
     'game.list.empty' => 'No open games available.',
     'game.list.id' => 'Game ID',
@@ -54,7 +54,7 @@ return [
     'game.list.create_new_game' => '➕ Create new Game', 
     'game.list.back_to_lobby' => '← Back to Lobby', 
 
-    //Games - Create
+    // Game - Create
     'game.create.button_create' => 'Create Game', 
     'game.create.three' => '3', 
     'game.create.name' => 'Name', 
@@ -62,7 +62,10 @@ return [
     'game.create.game_options' => 'Game Options', 
     'game.create.game_rules' => 'Game Rules', 
 
-    //Games - Show - Detail
+    // Game - Edit
+    'game.edit.button_update' => 'Update Game', 
+
+    // Game - Show - Detail
     'game.show.title' => 'Game', 
     'game.show.back_to_list' => '← Back to List', 
     'game.show.solo_test_creation_confirm' => 'Are you sure you want to create and run a Test Session from this Game?', 
@@ -86,6 +89,8 @@ return [
     'game.show.label_no_players_found' => 'No Players found.', 
     'game.show.label_no_figures_found' => 'No Figures found.', 
     'game.show.label_rules_bots_allows' => '🤖 Bots allowed', 
+    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
+    'game.show.label_rules_all_figures_start_in_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
     'game.show.label_rules_leave_home_attempt' => '🏠 Roll attempts to leave home zone with', 
     'game.show.label_rules_leave_home_attempt_enum_first_figure' => 'First Figure', 
     'game.show.label_rules_leave_home_attempt_enum_all_figures' => 'All Figures', 
@@ -94,10 +99,11 @@ return [
     'game.show.label_rules_roll_on_six_limit_no' => 'No additional roll on six.', 
     'game.show.label_rules_roll_on_six_limit_unlimited' => 'Unlimited additional rolls on six.', 
     'game.show.label_rules_roll_on_six_limit_limited' => 'Limited additional rolls on six to: ', 
+    'game.show.label_rules_force_leaving_home_on_six' => '👈 Force leaving home on six', 
+    'game.show.label_rules_force_capture_enemy_figures' => '🎳 Force player to capture enemy figures', 
     'game.show.label_rules_force_extra_lap_on_overflow' => '➿ Force complete another lap on overflow', 
     'game.show.label_rules_stack_own_figures' => '🧱 Stack own figures', 
     'game.show.label_rules_strict_goal_order' => '🎯 Strict goal order', 
-    'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
 
     // Game - Play a game
     'game.play.status' => 'Status', 
@@ -119,15 +125,18 @@ return [
 
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Allow bots',
+    'game.rules.all_figures_start_in_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
+    'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
     'game.rules.leave_home_attempt' => '🏠 Roll attempts to leave home zone with', 
     'game.rules.leave_home_attempt_enum_first_figure' => 'First Figure', 
     'game.rules.leave_home_attempt_enum_all_figures' => 'All Figures', 
     'game.rules.leave_home_attempts_max' => '🔂 Roll attempts to leave home zone before next player',
     'game.rules.roll_on_six_limit' => '🎲 Extra roll on six',
+    'game.rules.force_leaving_home_on_six' => '👈 Force leaving home on six', 
+    'game.rules.force_capture_enemy_figures' => '🎳 Force player to capture enemy figures', 
     'game.rules.force_extra_lap_on_overflow' => '➿ Force complete another lap on overflow', 
     'game.rules.allow_stack_own_figures' => '🧱 Allow stacking own figures',
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
-    'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
 
     // Admin
     'admin.dashboard.title' => 'Admin Dashboard', 

@@ -55,6 +55,22 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
+            <?= Localization::get('game.rules.all_figures_start_in_home') ?>
+            <select name="<?php echo Application::ALL_FIGURES_START_IN_HOME; ?>">
+                <option value="0" <?= (!$rule_set->getAllFiguresStartInHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getAllFiguresStartInHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            <?= Localization::get('game.rules.start_field_must_be_cleared') ?>
+            <select name="<?php echo Application::START_FIELD_MUST_BE_CLEARED; ?>">
+                <option value="0" <?= (!$rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
             <?= Localization::get('game.rules.leave_home_attempt') ?>
             <select name="<?php echo Application::LEAVE_HOME_ATTEMPT; ?>">
                 <option value="<?= Application::ENUM_FIRST_FIGURE ?>" <?= ($rule_set->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_first_figure') ?></option>
@@ -81,6 +97,22 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
+            <?= Localization::get('game.rules.force_leaving_home_on_six') ?>
+            <select name="<?php echo Application::FORCE_LEAVING_HOME_ON_SIX; ?>">
+                <option value="0" <?= (!$rule_set->getForceLeavingHomeOnSix()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getForceLeavingHomeOnSix()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            <?= Localization::get('game.rules.force_capture_enemy_figures') ?>
+            <select name="<?php echo Application::FORCE_CAPTURE_ENEMY_FIGURES; ?>">
+                <option value="0" <?= (!$rule_set->getForceCaptureEnemyFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($rule_set->getForceCaptureEnemyFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </label>
+        <br><br>
+        <label>
             <?= Localization::get('game.rules.force_extra_lap_on_overflow') ?>
             <select name="<?php echo Application::FORCE_EXTRA_LAP_ON_OVERFLOW; ?>">
                 <option value="0" <?= (!$rule_set->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
@@ -103,16 +135,10 @@ use App\Core\Localization;
                 <option value="1" <?= ($rule_set->getStrictGoalOrder()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
-        <br><br>
-        <label>
-            <?= Localization::get('game.rules.start_field_must_be_cleared') ?>
-            <select name="<?php echo Application::START_FIELD_MUST_BE_CLEARED; ?>">
-                <option value="0" <?= (!$rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
-                <option value="1" <?= ($rule_set->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
-            </select>
-        </label>
     </fieldset>
 
     <br>
     <button type="submit"><?= Localization::get('game.create.button_create') ?></button>
+    <br>
+    <br>
 </form>

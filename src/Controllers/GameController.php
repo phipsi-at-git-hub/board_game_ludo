@@ -46,13 +46,16 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
+                Application::ALL_FIGURES_START_IN_HOME => ($_POST[Application::ALL_FIGURES_START_IN_HOME]), 
+                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
                 Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
                 Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
+                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]), 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]), 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
-                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
             ];
             
             $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
@@ -108,13 +111,16 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
+                Application::ALL_FIGURES_START_IN_HOME => ($_POST[Application::ALL_FIGURES_START_IN_HOME]), 
+                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
                 Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
                 Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
+                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]), 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]), 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
-                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
             ];
 
             $game->update($game_name, $game_options, $rule_set);

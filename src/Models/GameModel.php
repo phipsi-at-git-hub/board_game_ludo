@@ -704,6 +704,9 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
                     r.%s
                 FROM %s g
                 JOIN %s u
@@ -727,9 +730,12 @@ final class GameModel extends BaseModel {
                 Application::UPDATED_AT, 
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_IN_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -779,6 +785,9 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
                     r.%s
                 FROM %s g
                 JOIN %s u
@@ -803,9 +812,12 @@ final class GameModel extends BaseModel {
                 Application::UPDATED_AT, 
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_IN_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -848,6 +860,9 @@ final class GameModel extends BaseModel {
                     r.%s, 
                     r.%s, 
                     r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
                     r.%s 
                 FROM %s g
                 JOIN %s u
@@ -859,9 +874,12 @@ final class GameModel extends BaseModel {
 
                 Application::USERNAME, 
                 Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_IN_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
                 Application::ALLOW_STACK_OWN_FIGURES, 
                 Application::STRICT_GOAL_ORDER, 
@@ -988,16 +1006,6 @@ final class GameModel extends BaseModel {
             ['game_id' => $game_id]
         );
 
-        /*
-        foreach ($game->player_array as $player) {
-            foreach ($figures as $figure) {
-                $figure = GameStateFigureModel::fromArray($figure);
-                if ($figure && $figure->getUserId() === $player->getUserId()) {
-                    $player->addFigure($figure);
-                }
-            }
-        }
-        */
         $players_by_user_id = [];
         foreach ($game->player_array as $player) {
             $players_by_user_id[$player->getUserId()] = $player;

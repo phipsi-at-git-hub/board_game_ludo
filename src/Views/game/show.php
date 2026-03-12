@@ -113,12 +113,15 @@ use App\Policies\GamePolicy;
     <h2><?= Localization::get('game.show.rules') ?></h2>
     <ul class="rules-list">
         <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_all_figures_start_in_home') ?>: <?= $game->getRuleSetModel()->getAllFiguresStartInHome() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_leave_home_attempt') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE ? Localization::get('game.show.label_rules_leave_home_attempt_enum_first_figure') : Localization::get('game.show.label_rules_leave_home_attempt_enum_all_figures') ?></li>
         <li><?= Localization::get('game.show.label_rules_leave_home_attempts_max') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptsMax() ?></li>
         <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php if ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 0) { echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); } elseif ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 255) { echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); } else { echo Localization::get('game.show.label_rules_roll_on_six_limit_limited'). $game->getRuleSetModel()->getExtraRollOnSixLimit();} ?></li>
+        <li><?= Localization::get('game.show.label_rules_force_leaving_home_on_six') ?>: <?= $game->getRuleSetModel()->getForceLeavingHomeOnSix() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_force_capture_enemy_figures') ?>: <?= $game->getRuleSetModel()->getForceCaptureEnemyFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_force_extra_lap_on_overflow') ?>: <?= $game->getRuleSetModel()->getForceExtraLapOnOverflow() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_stack_own_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-        <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
     </ul>
 </div>
