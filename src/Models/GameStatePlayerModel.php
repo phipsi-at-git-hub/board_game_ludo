@@ -24,7 +24,7 @@ final class GameStatePlayerModel extends BaseModel {
     }
 
     // Add player to game and 4 figures
-    public static function addPlayer(string $game_id, string $user_id, int $player_index): bool {
+    public static function addPlayer(string $game_id, string $user_id, int $player_index, bool $all_start_from_home = true): bool {
         $row = static::execute(
             "INSERT INTO game_state_players
              (game_id, user_id, player_index, created_at, updated_at)
@@ -39,7 +39,7 @@ final class GameStatePlayerModel extends BaseModel {
 
         if ($row) {
             // add 4 figures
-            GameStateFigureModel::createInitialFigureSet($game_id, $user_id);
+            GameStateFigureModel::createInitialFigureSet($game_id, $user_id, $all_start_from_home);
             return true;
         }
         return false;

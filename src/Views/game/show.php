@@ -113,7 +113,7 @@ use App\Policies\GamePolicy;
     <h2><?= Localization::get('game.show.rules') ?></h2>
     <ul class="rules-list">
         <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-        <li><?= Localization::get('game.show.label_rules_all_figures_start_in_home') ?>: <?= $game->getRuleSetModel()->getAllFiguresStartInHome() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
+        <li><?= Localization::get('game.show.label_rules_all_figures_start_at_home') ?>: <?= $game->getRuleSetModel()->getAllFiguresStartAtHome() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
         <li><?= Localization::get('game.show.label_rules_leave_home_attempt') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE ? Localization::get('game.show.label_rules_leave_home_attempt_enum_first_figure') : Localization::get('game.show.label_rules_leave_home_attempt_enum_all_figures') ?></li>
         <li><?= Localization::get('game.show.label_rules_leave_home_attempts_max') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptsMax() ?></li>

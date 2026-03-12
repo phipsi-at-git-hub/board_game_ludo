@@ -63,6 +63,7 @@ return [
     'game.create.game_options' => 'Spielregeln', 
 
     // Game - Edit
+    'game.edit.title' => 'Aktualisiere Spiel', 
     'game.edit.button_update' => 'Spiel aktualisieren', 
 
     // Game - Show / Detail
@@ -90,7 +91,7 @@ return [
     'game.show.label_no_figures_found' => 'Keine Figuren vorhanden.',  
     'game.show.label_rules_bots_allows' => '🤖 Bots erlaubt', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Startfeld muss frei sein', 
-    'game.show.label_rules_all_figures_start_in_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
+    'game.show.label_rules_all_figures_start_at_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
     'game.show.label_rules_leave_home_attempt' => '🏠 Mehrmaliges Würfeln bis zum Verlassen der Homzone von', 
     'game.show.label_rules_leave_home_attempt_enum_first_figure' => 'der ersten Figur', 
     'game.show.label_rules_leave_home_attempt_enum_all_figures' => 'allen Figuren', 
@@ -125,7 +126,7 @@ return [
 
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Bots erlauben',
-    'game.rules.all_figures_start_in_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
+    'game.rules.all_figures_start_at_home' => '👨‍👨‍👦‍👦 Alle Figuren starten aus der eigenen Home Zone', 
     'game.rules.start_field_must_be_cleared' => '🚪 Startfeld muss frei sein',
     'game.rules.leave_home_attempt' => '🏠 Mehrmaliges Würfeln bis zum Verlassen der Homzone von', 
     'game.rules.leave_home_attempt_enum_first_figure' => 'der ersten Figur', 

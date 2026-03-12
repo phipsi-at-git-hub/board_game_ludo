@@ -63,6 +63,7 @@ return [
     'game.create.game_rules' => 'Game Rules', 
 
     // Game - Edit
+    'game.edit.title' => 'Update Game', 
     'game.edit.button_update' => 'Update Game', 
 
     // Game - Show - Detail
@@ -90,7 +91,7 @@ return [
     'game.show.label_no_figures_found' => 'No Figures found.', 
     'game.show.label_rules_bots_allows' => '🤖 Bots allowed', 
     'game.show.label_rules_start_field_must_be_cleared' => '🚪 Start field must be cleared', 
-    'game.show.label_rules_all_figures_start_in_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
+    'game.show.label_rules_all_figures_start_at_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
     'game.show.label_rules_leave_home_attempt' => '🏠 Roll attempts to leave home zone with', 
     'game.show.label_rules_leave_home_attempt_enum_first_figure' => 'First Figure', 
     'game.show.label_rules_leave_home_attempt_enum_all_figures' => 'All Figures', 
@@ -125,7 +126,7 @@ return [
 
     // Game - Rules
     'game.rules.allow_bots' => '🤖 Allow bots',
-    'game.rules.all_figures_start_in_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
+    'game.rules.all_figures_start_at_home' => '👨‍👨‍👦‍👦 All Figures start in home zone', 
     'game.rules.start_field_must_be_cleared' => '🚪 Start field must be cleared',
     'game.rules.leave_home_attempt' => '🏠 Roll attempts to leave home zone with', 
     'game.rules.leave_home_attempt_enum_first_figure' => 'First Figure', 

@@ -35,7 +35,7 @@ class Application {
 
     // Database field names - game_rule_set
     public const ALLOW_BOTS = 'allow_bots';
-    public const ALL_FIGURES_START_IN_HOME = 'all_figures_start_in_home';
+    public const ALL_FIGURES_START_AT_HOME = 'all_figures_start_at_home';
     public const LEAVE_HOME_ATTEMPT = 'leave_home_attempt'; 
     public const LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max'; 
     public const EXTRA_ROLL_ON_SIX_LIMIT = 'extra_roll_on_six_limit';

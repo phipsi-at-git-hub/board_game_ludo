@@ -730,7 +730,7 @@ final class GameModel extends BaseModel {
                 Application::UPDATED_AT, 
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_IN_HOME, 
+                Application::ALL_FIGURES_START_AT_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
@@ -812,7 +812,7 @@ final class GameModel extends BaseModel {
                 Application::UPDATED_AT, 
                 Application::USER_ID,
                 Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_IN_HOME, 
+                Application::ALL_FIGURES_START_AT_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
@@ -874,7 +874,7 @@ final class GameModel extends BaseModel {
 
                 Application::USERNAME, 
                 Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_IN_HOME, 
+                Application::ALL_FIGURES_START_AT_HOME, 
                 Application::LEAVE_HOME_ATTEMPT, 
                 Application::LEAVE_HOME_ATTEMPTS_MAX, 
                 Application::EXTRA_ROLL_ON_SIX_LIMIT, 
@@ -1222,7 +1222,7 @@ final class GameModel extends BaseModel {
         try {
             $this->db->beginTransaction();
 
-            GameStatePlayerModel::addPlayer($this->getId(), $user_id, $this->getPlayerCount());
+            GameStatePlayerModel::addPlayer($this->getId(), $user_id, $this->getPlayerCount(), $this->rule_set_model->getAllFiguresStartAtHome());
 
             $this->db->commit();
             return true;
@@ -1362,6 +1362,14 @@ final class GameModel extends BaseModel {
         return false;
     }
 
+    // Helper - Check if this game has participants
+    public function hasParticipants(): bool {
+        if ($this->getPlayerCount() > 0) {
+            return true;
+        }
+        return false;
+    }
+
     // Helper - Check if user is already player in game
     public function hasPlayer(string $user_id): bool {
         foreach ($this->player_array as $player) {
@@ -1463,6 +1471,14 @@ final class GameModel extends BaseModel {
             if ($figure->getArea() === Application::AREA_FIELD) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    // Helper - Allowed to edit Rule all_figures_start_at_home
+    public function editAllowedRuleAllFiguresStartAtHome(): bool {
+        if ($this->hasParticipants()) {
+            return false;
         }
         return true;
     }

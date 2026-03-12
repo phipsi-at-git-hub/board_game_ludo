@@ -46,7 +46,7 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_IN_HOME => ($_POST[Application::ALL_FIGURES_START_IN_HOME]), 
+                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]), 
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
                 Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
                 Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
@@ -111,7 +111,7 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_IN_HOME => ($_POST[Application::ALL_FIGURES_START_IN_HOME]), 
+                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]), 
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
                 Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
                 Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 

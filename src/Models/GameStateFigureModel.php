@@ -64,19 +64,27 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Create initial figures for given game
-    public static function createInitialFigureSet(string $game_id, string $user_id): void {
+    public static function createInitialFigureSet(string $game_id, string $user_id, bool $all_start_from_home = true): void {
         $figures = [];
         for ($i = 0; $i < 4; $i++) {
+            $area = Application::AREA_HOME; 
+            $position = $i;
+            if ($all_start_from_home === false && (int)$i === 3) {
+                $area = Application::AREA_FIELD;
+                $position = 0;
+            }
+
             static::execute(
                 "INSERT INTO game_state_figures
                  (game_id, user_id, figure_index, position, area, created_at, updated_at)
                  VALUES
-                 (:game_id, :user_id, :figure_index, :position, 'home', NOW(), NOW())",
+                 (:game_id, :user_id, :figure_index, :position, :area, NOW(), NOW())",
                 [
                     'game_id' => $game_id,
                     'user_id' => $user_id,
                     'figure_index' => $i, 
-                    'position' => $i
+                    'position' => $position, 
+                    'area' => $area
                 ]
             );
         }

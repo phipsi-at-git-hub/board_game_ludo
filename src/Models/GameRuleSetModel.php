@@ -7,7 +7,7 @@ use App\Constants\Application;
 final class GameRuleSetModel extends BaseModel {
     // ToDo: Use constant from application.php 
     private bool $allow_bots;
-    private bool $all_figures_start_in_home;
+    private bool $all_figures_start_at_home;
     private string $leave_home_attempt;
     private int $leave_home_attempts_max;
     private int $extra_roll_on_six_limit;
@@ -20,7 +20,7 @@ final class GameRuleSetModel extends BaseModel {
 
     // Define Default values
     private const DEFAULT_ALLOW_BOTS = true;
-    private const DEFAULT_ALL_FIGURES_START_IN_HOME = false;
+    private const DEFAULT_ALL_FIGURES_START_AT_HOME = false;
     private const DEFAULT_LEAVE_HOME_ATTEMPT = Application::ENUM_FIRST_FIGURE;
     private const DEFAULT_LEAVE_HOME_ATTEMPTS_MAX = 3;
     private const DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT = 255;
@@ -39,7 +39,7 @@ final class GameRuleSetModel extends BaseModel {
         $rule_set = new self;
 
         $rule_set->allow_bots = self::DEFAULT_ALLOW_BOTS;
-        $rule_set->all_figures_start_in_home = self::DEFAULT_ALL_FIGURES_START_IN_HOME; 
+        $rule_set->all_figures_start_at_home = self::DEFAULT_ALL_FIGURES_START_AT_HOME; 
         $rule_set->leave_home_attempt = self::DEFAULT_LEAVE_HOME_ATTEMPT;
         $rule_set->leave_home_attempts_max = self::DEFAULT_LEAVE_HOME_ATTEMPTS_MAX;
         $rule_set->extra_roll_on_six_limit = self::DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT;
@@ -68,7 +68,7 @@ final class GameRuleSetModel extends BaseModel {
             (
                 game_id, 
                 allow_bots, 
-                all_figures_start_in_home, 
+                all_figures_start_at_home, 
                 leave_home_attempt, 
                 leave_home_attempts_max, 
                 extra_roll_on_six_limit, 
@@ -83,7 +83,7 @@ final class GameRuleSetModel extends BaseModel {
             (
                 :game_id, 
                 :allow_bots, 
-                :all_figures_start_in_home, 
+                :all_figures_start_at_home, 
                 :leave_home_attempt, 
                 :leave_home_attempts_max, 
                 :extra_roll_on_six_limit, 
@@ -99,7 +99,7 @@ final class GameRuleSetModel extends BaseModel {
             [
                 'game_id' => $game_id,
                 'allow_bots' => (int)$rules[Application::ALLOW_BOTS],
-                'all_figures_start_in_home' => (int)$rules[Application::ALL_FIGURES_START_IN_HOME],
+                'all_figures_start_at_home' => (int)$rules[Application::ALL_FIGURES_START_AT_HOME],
                 'leave_home_attempt' => (string)$rules[Application::LEAVE_HOME_ATTEMPT], 
                 'leave_home_attempts_max' => (int)$rules[Application::LEAVE_HOME_ATTEMPTS_MAX], 
                 'extra_roll_on_six_limit' => (int)$rules[Application::EXTRA_ROLL_ON_SIX_LIMIT],
@@ -122,7 +122,7 @@ final class GameRuleSetModel extends BaseModel {
                 "UPDATE game_rule_set 
                 SET 
                     allow_bots = :allow_bots, 
-                    all_figures_start_in_home = :all_figures_start_in_home, 
+                    all_figures_start_at_home = :all_figures_start_at_home, 
                     leave_home_attempt = :leave_home_attempt, 
                     leave_home_attempts_max = :leave_home_attempts_max, 
                     extra_roll_on_six_limit = :extra_roll_on_six_limit, 
@@ -135,7 +135,7 @@ final class GameRuleSetModel extends BaseModel {
                 WHERE game_id = :game_id"
             ), [
                 'allow_bots' => $rule_set['allow_bots'], 
-                'all_figures_start_in_home' => $rule_set['all_figures_start_in_home'], 
+                'all_figures_start_at_home' => $rule_set['all_figures_start_at_home'], 
                 'leave_home_attempt' => $rule_set['leave_home_attempt'], 
                 'leave_home_attempts_max' => $rule_set['leave_home_attempts_max'], 
                 'extra_roll_on_six_limit' => $rule_set['extra_roll_on_six_limit'], 
@@ -164,7 +164,7 @@ final class GameRuleSetModel extends BaseModel {
     // Helper - Check default game rule set - classic rule set
     public function isGameClassic(): bool {
         return $this->allow_bots === self::DEFAULT_ALLOW_BOTS 
-        && $this->all_figures_start_in_home === self::DEFAULT_ALL_FIGURES_START_IN_HOME 
+        && $this->all_figures_start_at_home === self::DEFAULT_ALL_FIGURES_START_AT_HOME 
         && $this->leave_home_attempt === self::DEFAULT_LEAVE_HOME_ATTEMPT
         && $this->leave_home_attempts_max === self::DEFAULT_LEAVE_HOME_ATTEMPTS_MAX
         && $this->extra_roll_on_six_limit === self::DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT
@@ -191,7 +191,7 @@ final class GameRuleSetModel extends BaseModel {
         $rule_set = new self();
 
         if (array_key_exists(Application::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
-        if (array_key_exists(Application::ALL_FIGURES_START_IN_HOME, $row)) $rule_set->all_figures_start_in_home = (bool) $row[Application::ALL_FIGURES_START_IN_HOME];
+        if (array_key_exists(Application::ALL_FIGURES_START_AT_HOME, $row)) $rule_set->all_figures_start_at_home = (bool) $row[Application::ALL_FIGURES_START_AT_HOME];
         if (array_key_exists(Application::LEAVE_HOME_ATTEMPT, $row)) $rule_set->leave_home_attempt = (string) $row[Application::LEAVE_HOME_ATTEMPT];
         if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_MAX, $row)) $rule_set->leave_home_attempts_max = (int) $row[Application::LEAVE_HOME_ATTEMPTS_MAX];
         if (array_key_exists(Application::EXTRA_ROLL_ON_SIX_LIMIT, $row)) $rule_set->extra_roll_on_six_limit = (int) $row[Application::EXTRA_ROLL_ON_SIX_LIMIT];
@@ -208,7 +208,7 @@ final class GameRuleSetModel extends BaseModel {
     // Helper - Create Array from GameRuleSetModel
     private function toArray(): array {
         $game_state_array[Application::ALLOW_BOTS] = $this->allow_bots;
-        $game_state_array[Application::ALL_FIGURES_START_IN_HOME] = $this->all_figures_start_in_home;
+        $game_state_array[Application::ALL_FIGURES_START_AT_HOME] = $this->all_figures_start_at_home;
         $game_state_array[Application::LEAVE_HOME_ATTEMPT] = $this->leave_home_attempt;
         $game_state_array[Application::LEAVE_HOME_ATTEMPTS_MAX] = $this->leave_home_attempts_max;
         $game_state_array[Application::EXTRA_ROLL_ON_SIX_LIMIT] = $this->extra_roll_on_six_limit;
@@ -235,8 +235,8 @@ final class GameRuleSetModel extends BaseModel {
         return $this->allow_bots;
     }
     // Get all_figures_start_in_home
-    public function  getAllFiguresStartInHome() : bool {
-        return $this->all_figures_start_in_home;
+    public function  getAllFiguresStartAtHome() : bool {
+        return $this->all_figures_start_at_home;
     }
 
     // Get leave home attempt

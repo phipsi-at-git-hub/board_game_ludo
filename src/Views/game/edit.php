@@ -57,10 +57,10 @@ use App\Core\Localization;
         </label>
         <br><br>
         <label>
-            <?= Localization::get('game.rules.all_figures_start_in_home') ?>
-            <select name="<?= Application::ALL_FIGURES_START_IN_HOME; ?>">
-                <option value="0" <?= (!$game->getRuleSetModel()->getAllFiguresStartInHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
-                <option value="1" <?= ($game->getRuleSetModel()->getAllFiguresStartInHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            <?= Localization::get('game.rules.all_figures_start_at_home') ?>
+            <select name="<?= Application::ALL_FIGURES_START_AT_HOME; ?>" <?php if (!$game->editAllowedRuleAllFiguresStartAtHome()) { echo 'disabled';} ?>>
+                <option value="0" <?= (!$game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" <?= ($game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
             </select>
         </label>
         <br><br>
