@@ -204,15 +204,15 @@ final class GameModel extends BaseModel {
                 continue;
             }
 
-            // Check if 6 is rolled, at least one figure is at home and this figures must be moves out
-            if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix()) {
-                continue;
-            }
-
             /**
              * FIELD
              */
             if ($area === Application::AREA_FIELD) {
+                // Check if 6 is rolled, at least one figure is at home and this figures must be moves out
+                if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix()) {
+                    continue;
+                }
+
                 $relative_position = $figure->getPosition();
                 $new_relative_position = $relative_position + $dice_value;
 
@@ -225,6 +225,12 @@ final class GameModel extends BaseModel {
                         $wrapped_relative_position = $new_relative_position % self::FIELD_LENGTH;
                         $absolute_position = ($player->getStartOffset() + $wrapped_relative_position) % self::FIELD_LENGTH;
 
+                        echo "neue Position: " . $absolute_position;
+
+                        $move[Application::DTO_TO] = [
+                            Application::DTO_AREA => Application::AREA_FIELD,
+                            Application::DTO_POSITION => $wrapped_relative_position,
+                        ];
                         $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
                         $move[Application::DTO_IS_LAP_OVERFLOW] = true;
 
@@ -384,7 +390,6 @@ final class GameModel extends BaseModel {
                     $wrapped_relative_position = $new_relative_position % self::FIELD_LENGTH;
                     $absolute_target = ($player->getStartOffset() + $wrapped_relative_position) %self::FIELD_LENGTH;
 
-
                     // check stack
                     if (!$this->rule_set_model->getAllowStackOwnFigures()) {
                         if ($this->isOwnFigureOnAbsolutePosition($player, $absolute_target)) {
@@ -398,6 +403,11 @@ final class GameModel extends BaseModel {
 
                 // strict goal order active?
                 if ($this->isGoalPositionBlockedByStrictOrder($player, $figure, $steps_into_goal)) {
+                    return false;
+                }
+
+                // check if position in goal area is already occupied 
+                if ($this->isGoalPositionOccupied($player, $steps_into_goal)) {
                     return false;
                 }
 

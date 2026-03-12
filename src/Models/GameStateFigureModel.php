@@ -163,12 +163,12 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Getter - Get figure index
-    public function getFigureIndex(): string {
+    public function getFigureIndex(): int {
         return $this->figure_index;
     }
 
     // Getter - Get position
-    public function getPosition(): string {
+    public function getPosition(): int {
         return $this->position;
     }
 
