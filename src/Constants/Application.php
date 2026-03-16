@@ -92,6 +92,14 @@ class Application {
     public const VISIBILITY_PRIVATE = '';
 
     // Game  DTO keys
+    public const DTO_GAME_ID = 'game_id'; 
+    public const DTO_GAME_NAME = 'game_name'; 
+    public const DTO_GAME_STATUS = 'game_status'; 
+    public const DTO_PLAYERS = 'players'; 
+    public const DTO_CURRENT_PLAYER_ID = 'current_player_id'; 
+    public const DTO_USER_ID = 'user_id'; 
+    public const DTO_USERNAME = 'username'; 
+    public const DTO_FIGURES = 'figures'; 
     public const DTO_FIGURE_INDEX = 'figure_index'; 
     public const DTO_MOVE = 'move'; 
     public const DTO_FROM = 'from'; 
@@ -105,6 +113,7 @@ class Application {
     public const DTO_IS_GOAL_ENTRY = 'is_goal_entry'; 
     public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow'; 
     public const DTO_IS_PASS = 'is_pass'; 
+    public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll'; 
 
     // Figure Areas
     public const AREA_HOME  = 'home';

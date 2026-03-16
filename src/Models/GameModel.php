@@ -1,5 +1,5 @@
 <?php
-// GameModel.php
+// src/Models/GameModel.php
 namespace App\Models;
 
 use App\Constants\Application;
@@ -162,7 +162,8 @@ final class GameModel extends BaseModel {
      */
     public function getAvailableMoves(string $user_id, int $dice_value): array {
         $player = $this->getPlayerById($user_id);
-        $moves = [];
+        //$moves = [];
+        $move = MoveDTO::create();
 
         foreach ($player->getAllFigures() as $figure) {
             if (!$this->canMoveFigure($player, $figure, $dice_value)) {
@@ -1317,6 +1318,38 @@ final class GameModel extends BaseModel {
     /**
      * Helper
      */
+    // Helper - Get Game State Snapshot
+    public function getGameStateSnapshot(): array {
+        $players = [];
+
+        foreach($this->getAllPlayers() as $player) {
+            $figures = [];
+
+            foreach ($player->getAllFigures() as $figure) {
+                $figures[] = [
+                    Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(), 
+                    Application::DTO_AREA => $figure->getArea(), 
+                    Application::DTO_POSITION => $figure->getPosition()
+                ];
+            }
+
+            $players[] = [
+                Application::DTO_USER_ID => $player->getUserId(), 
+                Application::DTO_USERNAME => $player->getUsername(), 
+                Application::DTO_FIGURES => $figures
+            ];
+        }
+
+        return [
+            Application::DTO_GAME_ID => $this->getId(), 
+            Application::DTO_GAME_NAME => $this->getName(), 
+            Application::DTO_GAME_STATUS => $this->getStatus(), 
+            Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(), 
+            Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(), 
+            Application::DTO_PLAYERS => $players
+        ];
+    }
+
     // Helper - Convert db rows to GameModel dynamically
     private static function fromArrayDynamic(array $row): self {
         $game = new self();
