@@ -210,13 +210,18 @@ final class GameModel extends BaseModel {
              * FIELD
              */
             if ($area === Application::AREA_FIELD) {
+                $relative_position = $figure->getPosition();
+                $new_relative_position = $relative_position + $dice_value;
+
                 // Check if 6 is rolled, at least one figure is at home and this figures must be moves out
                 if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix()) {
                     continue;
                 }
 
-                $relative_position = $figure->getPosition();
-                $new_relative_position = $relative_position + $dice_value;
+                // Check if 6 is rolled, player has figure on start field and rule start field must be cleared is active
+                if ($dice_value === 6 && $this->hasFigureOnStartField($player) && $this->rule_set_model->getStartFieldMustBeCleared() && $relative_position !== 0) {
+                    continue;
+                }
 
                 // Entry to goal area?
                 if ($new_relative_position >= self::FIELD_LENGTH) {
@@ -1577,6 +1582,16 @@ final class GameModel extends BaseModel {
             }
         }
         return true;
+    }
+
+    // Helper - Has Figure on start field
+    private function hasFigureOnStartField(GameStatePlayerModel $player): bool {
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() === Application::AREA_FIELD && $figure->getPosition() === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Helper - Allowed to edit Rule all_figures_start_at_home
