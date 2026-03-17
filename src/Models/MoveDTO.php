@@ -7,6 +7,7 @@ use App\Constants\Application;
 final class MoveDTO {
     public static function create(): array {
         return [
+            Application::DTO_GAME_TURN => null, 
             Application::DTO_FIGURE_INDEX => null, 
             Application::DTO_FROM => [
                 Application::DTO_AREA => null, 

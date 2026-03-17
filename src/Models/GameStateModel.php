@@ -9,6 +9,7 @@ final class GameStateModel extends BaseModel {
     private string $game_id;
     private int $current_player_index;
     private ?int $current_dice_roll;
+    private int $current_turn_counter;
     private int $leave_home_attempts_used;
     private int $extra_rolls_on_six_used;
     private ?string $winner_user_id;
@@ -27,9 +28,9 @@ final class GameStateModel extends BaseModel {
     public static function create(string $game_id): bool {
         return static::execute(
             "INSERT INTO game_state
-            (game_id, current_player_index, current_dice_roll, leave_home_attempts_used, created_at, updated_at)
+            (game_id, current_player_index, current_dice_roll, current_turn_counter, leave_home_attempts_used, created_at, updated_at)
             VALUES
-            (:game_id, 0, NULL, 0, NOW(), NOW())",
+            (:game_id, 0, NULL, 0, 0, NOW(), NOW())",
             ['game_id' => $game_id]
         );
     }
@@ -88,6 +89,7 @@ final class GameStateModel extends BaseModel {
                 SET 
                     current_player_index = :current_player_index, 
                     current_dice_roll = :current_dice_roll, 
+                    current_turn_counter = :current_turn_counter, 
                     leave_home_attempts_used = :leave_home_attempts_used, 
                     extra_rolls_on_six_used = :extra_rolls_on_six_used, 
                     winner_user_id = :winner_user_id
@@ -98,12 +100,14 @@ final class GameStateModel extends BaseModel {
 
                 Application::CURRENT_PLAYER_INDEX, 
                 Application::CURRENT_DICE_ROLL, 
+                Application::CURRENT_TURN_COUNTER, 
                 Application::LEAVE_HOME_ATTEMPTS_USED, 
                 Application::EXTRA_ROLLS_ON_SIX_USED, 
                 Application::WINNER_USER_ID
                 ), [
                     'current_player_index' => $state_array[Application::CURRENT_PLAYER_INDEX], 
                     'current_dice_roll' => $state_array[Application::CURRENT_DICE_ROLL], 
+                    'current_turn_counter' => $state_array[Application::CURRENT_TURN_COUNTER], 
                     'leave_home_attempts_used' => $state_array[Application::LEAVE_HOME_ATTEMPTS_USED], 
                     'extra_rolls_on_six_used' => $state_array[Application::EXTRA_ROLLS_ON_SIX_USED], 
                     'winner_user_id' => $state_array[Application::WINNER_USER_ID], 
@@ -131,6 +135,7 @@ final class GameStateModel extends BaseModel {
 
         $game_state->current_player_index = self::hydrateInt($row, Application::CURRENT_PLAYER_INDEX);
         $game_state->current_dice_roll = self::hydrateIntOrNull($row, Application::CURRENT_DICE_ROLL);
+        $game_state->current_turn_counter = self::hydrateInt($row, Application::CURRENT_TURN_COUNTER); 
         $game_state->leave_home_attempts_used = self::hydrateInt($row, Application::LEAVE_HOME_ATTEMPTS_USED);
         $game_state->extra_rolls_on_six_used = self::hydrateInt($row, Application::EXTRA_ROLLS_ON_SIX_USED);
         $game_state->winner_user_id = self::hydrateStringOrNull($row, Application::WINNER_USER_ID);
@@ -145,6 +150,7 @@ final class GameStateModel extends BaseModel {
         $game_state_array[Application::GAME_ID] = $this->game_id;
         $game_state_array[Application::CURRENT_PLAYER_INDEX] = $this->current_player_index;
         $game_state_array[Application::CURRENT_DICE_ROLL] = $this->current_dice_roll;
+        $game_state_array[Application::CURRENT_TURN_COUNTER] = $this->current_turn_counter; 
         $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $this->leave_home_attempts_used;
         $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $this->extra_rolls_on_six_used;
         $game_state_array[Application::WINNER_USER_ID] = $this->winner_user_id;
@@ -163,6 +169,11 @@ final class GameStateModel extends BaseModel {
     // Get current dice roll
     public function getCurrentDiceRoll(): ?int {
          return $this->current_dice_roll;
+    }
+
+    // Get current turn counter
+    public function getCurrentTurnCounter(): int {
+        return $this->current_turn_counter; 
     }
 
     // Get leave home attempts used
@@ -186,6 +197,21 @@ final class GameStateModel extends BaseModel {
     // Set current dice roll
     public function setCurrentDiceRoll(?int $dice_value): void {
         $this->current_dice_roll = $dice_value;
+    }
+
+    // Reset current dice roll
+    public function resetCurrentDiceRoll(): void {
+        $this->setCurrentDiceRoll(null);
+    }
+
+    // Increase current turn counter by 1
+    public function incrementCurrentTurnCounter(): void {
+        $this->current_turn_counter++;
+    }
+
+    // Reset current turn counter
+    public function resetCurentTurnCounter(): void {
+        $this->current_turn_counter = 0;
     }
 
     // Set leave home attempts used

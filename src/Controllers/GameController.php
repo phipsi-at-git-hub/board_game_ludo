@@ -9,6 +9,7 @@ use App\Core\Csrf;
 use App\Models\GameModel;
 use App\Models\GameRuleSetModel;
 use DomainException;
+use LogicException;
 
 class GameController extends BaseController {
     // Lobby leads to game creation, games list and back
@@ -308,6 +309,7 @@ class GameController extends BaseController {
         $this->redirect("/game/detail/$game_id");
     }
 
+    // Play game
     public function play($game_id) {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -318,7 +320,7 @@ class GameController extends BaseController {
             $game->startGame();
         }
 
-        // Only if a die value exists can possible moves be determined
+        // Only if a dice value exists can possible moves be determined
         $current_roll = $game->getStateModel()->getCurrentDiceRoll();
         if ($current_roll !== null) {
             $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $current_roll);
@@ -343,21 +345,34 @@ class GameController extends BaseController {
         );
     }
 
+    // Roll dice
     public function roll() {
         $user = Auth::user();
         $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
 
+        // Check if it's users turn
+        if ($game->getCurrentPlayer()->getUserId() !== $user->getId()) {
+            throw new LogicException('Not your turn');
+        }
+
         // Roll the dice and store the value in the database
-        $game->rollDice();
+        $game->rollDice($user->getId());
 
         $this->redirect("/game/play/$game_id");
     }
 
+    // Move figure
     public function move() {
+        $user = Auth::user();
         $game_id = $_POST[Application::GAME_ID];
         $move = json_decode($_POST[Application::DTO_MOVE], true);
         $game = GameModel::findById($game_id);
+
+        // Check if it's users turn
+        if ($game->getCurrentPlayer()->getUserId() !== $user->getId()) {
+            throw new LogicException('Not your turn');
+        }
 
         // Check if a move is skipped
         if (!empty($move[Application::DTO_IS_PASS])) {

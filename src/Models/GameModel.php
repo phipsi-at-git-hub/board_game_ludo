@@ -49,16 +49,16 @@ final class GameModel extends BaseModel {
      * Game Engine - Apply Move 
      */
     public function applyMove(string $user_id, array $move): void {
+        // Check if it's users turn 
+        $this->assertPlayerTurn($user_id);
+        // Check if turn counter is validate
+        $this->validateTurnCounter($move[Application::DTO_GAME_TURN]);
+
         $current_player = $this->getCurrentPlayer();
 
         // 1. Game finished?
         if ($this->state_model->getWinnerUserId() !== null) {
             throw new LogicException('Game already finished');
-        }
-
-        // 2. Is it the player's turn
-        if ($current_player->getUserId() !== $user_id) {
-            throw new LogicException('Not your turn');
         }
 
         // 3. Dice rolled already?
@@ -67,7 +67,7 @@ final class GameModel extends BaseModel {
             throw new LogicException('No dice roll available');
         }
 
-        // 4. Validate Move
+        // 4 Validate Move
         $available_moves = $this->getAvailableMoves($user_id, $dice_value);
         if (!$this->isMoveInList($move, $available_moves)) {
             throw new LogicException('Illegal move');
@@ -128,12 +128,15 @@ final class GameModel extends BaseModel {
     /**
      * Game Engine - Roll dice and prepare move
      */
-    public function rollDice(): int {
+    public function rollDice(String $user_id): int {
         $current_player = $this->getCurrentPlayer();
 
         // Ensure that it is the player's turn
         if ($current_player === null) {
             throw new LogicException('No players turn');
+        }
+        if ($current_player->getUserId() !== $user_id) {
+            throw new LogicException('Not your turn');
         }
 
         // Check that it hasn't been thrown yet.
@@ -172,6 +175,7 @@ final class GameModel extends BaseModel {
 
             $area = $figure->getArea();
             $move = [
+                Application::DTO_GAME_TURN => $this->state_model->getCurrentTurnCounter(), 
                 Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(),
                 Application::DTO_FROM => [
                     Application::DTO_AREA => $area,
@@ -447,8 +451,10 @@ final class GameModel extends BaseModel {
         $this->state_model->resetLeaveHomeAttemptsUsed();
         $this->state_model->resetExtraRollsOnSixUsed();
 
+        // Set next player
         $new_player_index = ($this->state_model->getCurrentPlayerIndex() + 1) % $this->getPlayerCount();
         $this->state_model->setCurrentPlayerIndex($new_player_index);
+        $this->state_model->incrementCurrentTurnCounter();
         $this->state_model->save();
     }
 
@@ -457,11 +463,10 @@ final class GameModel extends BaseModel {
      * Called when the player cannot make a move or deliberately passes
      */
     public function passTurn(string $user_id): void {
-        $current_player = $this->getCurrentPlayer();
+        // Check if it's users turn
+        $this->assertPlayerTurn($user_id);
 
-        if ($current_player->getUserId() !== $user_id) {
-            throw new LogicException('Not your turn');
-        }
+        $current_player = $this->getCurrentPlayer();
 
         $dice_value = $this->state_model->getCurrentDiceRoll();
 
@@ -518,6 +523,27 @@ final class GameModel extends BaseModel {
 
         // End Turn
         $this->endTurn();
+    }
+
+    // Game Engine - Validate move turn with current game urn  counter
+    private function validateTurnCounter(int $move_turn_counter): void {
+        if ($move_turn_counter !== $this->state_model->getCurrentTurnCounter()) {
+            throw new LogicException('Stale move');
+        }
+    }
+
+    // Game Engine - Set next player in line as active current player
+    private function nextPlayer(): void {
+        $next_player_index = ($this->state_model->getCurrentPlayerIndex() + 1) % $this->getPlayerCount();
+        $this->state_model->setCurrentPlayerIndex($next_player_index);
+        $this->state_model->setCurrentDiceRoll(null);
+    }
+
+    // Game Engine - Check if it's current players turn
+    private function assertPlayerTurn(String $user_id): void {
+        if ($this->getCurrentPlayer()->getUserId() !== $user_id) {
+            throw new LogicException('Not your turn');
+        }
     }
 
     // Game Engine - get absolute position on the field of given figure
@@ -941,6 +967,7 @@ final class GameModel extends BaseModel {
                     s.%s, 
                     s.%s, 
                     s.%s, 
+                    s.%s, 
                     s.%s
                 FROM %s s
                 WHERE s.%s = :game_id
@@ -949,6 +976,7 @@ final class GameModel extends BaseModel {
                 Application::GAME_ID, 
                 Application::CURRENT_PLAYER_INDEX, 
                 Application::CURRENT_DICE_ROLL, 
+                Application::CURRENT_TURN_COUNTER, 
                 Application::LEAVE_HOME_ATTEMPTS_USED, 
                 Application::EXTRA_ROLLS_ON_SIX_USED, 
                 Application::WINNER_USER_ID, 

@@ -50,7 +50,8 @@ class Application {
 
     // Database field names - game_state
     public const CURRENT_PLAYER_INDEX = 'current_player_index';
-    public const CURRENT_DICE_ROLL = 'current_dice_roll'; 
+    public const CURRENT_DICE_ROLL = 'current_dice_roll';
+    public const CURRENT_TURN_COUNTER = 'current_turn_counter'; 
     public const LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used'; 
     public const EXTRA_ROLLS_ON_SIX_USED = 'extra_rolls_on_six_used'; 
     public const WINNER_USER_ID = 'winner_user_id'; 
@@ -95,6 +96,7 @@ class Application {
     public const DTO_GAME_ID = 'game_id'; 
     public const DTO_GAME_NAME = 'game_name'; 
     public const DTO_GAME_STATUS = 'game_status'; 
+    public const DTO_GAME_TURN = 'game_turn'; 
     public const DTO_PLAYERS = 'players'; 
     public const DTO_CURRENT_PLAYER_ID = 'current_player_id'; 
     public const DTO_USER_ID = 'user_id'; 
