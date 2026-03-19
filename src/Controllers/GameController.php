@@ -229,7 +229,7 @@ class GameController extends BaseController {
     }
 
     // Start a Solo TEST game
-    public function soloTest() {
+    public function createSoloTest() {
         if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
             http_response_code(403);
             die('Invalid CSRF token');
@@ -275,7 +275,7 @@ class GameController extends BaseController {
         $game = GameModel::findById($game_id);
         $game->startGame();
 
-        $this->redirect("/game/play/$game_id");
+        $this->redirect("/game/detail/$game_id");
     }
 
     // Pause game
@@ -323,7 +323,9 @@ class GameController extends BaseController {
         // Only if a dice value exists can possible moves be determined
         $current_roll = $game->getStateModel()->getCurrentDiceRoll();
         if ($current_roll !== null) {
-            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $current_roll);
+            if ($game->isPlayersTurn($user)) {
+                $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $current_roll);
+            }
 
             // If no moves are available, offer at least one passing move
             if (empty($moves)) {
@@ -336,7 +338,7 @@ class GameController extends BaseController {
         }
 
         $this->render(
-            'game/play_solo_test', 
+            'game/play', 
             [
                 'game' => $game, 
                 'moves' => $moves, 

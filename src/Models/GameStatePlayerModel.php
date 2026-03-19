@@ -242,4 +242,47 @@ final class GameStatePlayerModel extends BaseModel {
         }
         return false;
     }
+
+    // Helper - get an array of empty home area slots of player
+    private function getOccupiedHomePositions(): array {
+        $occupied_home_positions = [];
+        foreach ($this->figure_array as $figure) {
+            if ($figure->getArea() === Application::AREA_HOME) {
+                $occupied_home_positions[] = $figure->getPosition();
+            }
+        }
+
+        return $occupied_home_positions;
+    }
+
+    // Helper - get an array of home slots with true if occupied and false if free / empty
+    private function getHomePositions(): array {
+        $home_slots = [
+            0 => false, 
+            1 => false, 
+            2 => false, 
+            3 => false
+        ];
+
+        foreach ($this->figure_array as $figure) {
+            if ($figure->getArea() === Application::AREA_HOME) {
+                $home_slots[$figure->getPosition()] = true;
+            }
+        }
+
+        return $home_slots;
+    }
+
+    // Helper - get first empty position in home area
+    public function getFirstEmptyHomePosition(): ?int {
+        $home_slots = $this->getHomePositions();
+
+        for ($i = 0; $i < count($this->figure_array); $i++) {
+            if ($home_slots[$i] === false) {
+                return $i;
+            }
+        }
+        
+        return null;
+    }
 }

@@ -31,6 +31,7 @@ use App\Policies\GamePolicy;
         <?php if ($game->isParticipant($user)) { ?>
         <?php } ?>
 
+        <?php if (!$game->isFinished()): ?>
         <form method="POST" action="/game/<?= ($game->isParticipant($user)) ? 'leave' : 'join' ?>/<?= $game->getId() ?>">
         <?php if (GamePolicy::canJoin($user, $game, false)) { ?>
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
@@ -41,13 +42,14 @@ use App\Policies\GamePolicy;
             <button class="joined-btn can-not-join"><?= Localization::get('game.show.join') ?></button>
         <?php } ?>
         </form>
+        <?php endif; ?>
 
         <?php if ($user->isAdmin() && !$game->IsTestGame()): ?>
         <form method="POST" action="/game/create_solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-            <button type="submit" class="solo-test-btn create"><?= Localization::get('game.show.test_solo_create') ?></button>
+            <button type="submit" class="game-play-btn create"><?= Localization::get('game.show.test_solo_create') ?></button>
         </form>
         <?php endif; ?>
 
@@ -56,7 +58,7 @@ use App\Policies\GamePolicy;
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-            <button type="submit" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_start') ?></button>
+            <button type="submit" class="game-play-btn play"><?= Localization::get('game.show.test_solo_start') ?></button>
         </form>
         <?php endif; ?>
 
@@ -65,9 +67,30 @@ use App\Policies\GamePolicy;
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-            <button type="submit" class="solo-test-btn pause"><?= Localization::get('game.show.test_solo_pause') ?></button>
+            <button type="submit" class="game-play-btn pause"><?= Localization::get('game.show.test_solo_pause') ?></button>
         </form>
-        <a href="/game/play/<?= $game->getId() ?>" class="solo-test-btn play"><?= Localization::get('game.show.test_solo_play') ?></a>
+        <a href="/game/play/<?= $game->getId() ?>" class="game-play-btn play"><?= Localization::get('game.show.test_solo_play') ?></a>
+        <?php endif; ?>
+
+        <?php if ($game->isCreator($user) && $game->isWaiting()): ?>
+        <form method="POST" action="/game/start">
+            <input type="hidden" name="_method" value="POST">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+            <button type="submit" class="game-play-btn play"><?= Localization::get('game.show.start') ?></button>
+        </form>
+        <?php endif; ?>
+
+        <?php if ($game->isRunning()): ?>
+            <?php if ($game->isCreator($user)): ?>
+            <form method="POST" action="/game/pause">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+                <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+                <button type="submit" class="game-play-btn pause"><?= Localization::get('game.show.pause') ?></button>
+            </form>
+            <?php endif; ?>
+        <a href="/game/play/<?= $game->getId() ?>" class="game-play-btn play"><?= Localization::get('game.show.play') ?></a>
         <?php endif; ?>
     </div>
 
@@ -78,6 +101,10 @@ use App\Policies\GamePolicy;
         <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
         <div><?= Localization::get('game.show.players') ?></div>
         <div><?= count($game->getAllPlayers()) ?></div>
+        <?php if ($game->isFinished()): ?>
+            <div><?= Localization::get('game.show.winner') ?></div>
+            <div><?= $game->getWinner()->getUsername() ?></div>
+        <?php endif; ?>
         <div><?= Localization::get('game.show.join') ?></div>
         <div><?= ($game->isParticipant($user)) ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></div>
     </div>

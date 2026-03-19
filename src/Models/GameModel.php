@@ -82,7 +82,7 @@ final class GameModel extends BaseModel {
             $kicked_player = $this->getPlayerById($move[Application::DTO_KICKED_PLAYER_ID]);
             $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[Application::DTO_KICKED_FIGURE_INDEX]);
             $kicked_figure->setArea(Application::AREA_HOME);
-            $kicked_figure->setPosition(null);
+            $kicked_figure->setPosition($kicked_player->getFirstEmptyHomePosition());
             $kicked_figure->save();
         }
 
@@ -217,8 +217,8 @@ final class GameModel extends BaseModel {
                 $relative_position = $figure->getPosition();
                 $new_relative_position = $relative_position + $dice_value;
 
-                // Check if 6 is rolled, at least one figure is at home and this figures must be moves out
-                if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix()) {
+                // Check if 6 is rolled, no figure is blocking the start field, at least one figure is at home and this figures must be moves out
+                if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix() && $relative_position !== 0) {
                     continue;
                 }
 
@@ -284,7 +284,7 @@ final class GameModel extends BaseModel {
                 if ($enemy !== null) {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
                 $moves[] = $move;
@@ -512,7 +512,7 @@ final class GameModel extends BaseModel {
         // Check leave home attempts: If figure is in the house and there are still attempts left
         if ($this->hasFiguresInHome($current_player)) {
             $variant = $this->rule_set_model->getLeaveHomeAttemptVariant();
-            $max_attempts = $this->rule_set_model->getLeaveHomeAttemptsMax();
+            $max_attempts = $this->rule_set_model->getLeaveHomeAttemptsMax() - 1;
 
             if ($variant !== null && $this->state_model->getLeaveHomeAttemptsUsed() < $max_attempts) {
                 $this->state_model->incrementLeaveHomeAttemptsUsed();
@@ -547,8 +547,9 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - get absolute position on the field of given figure
-    private function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int {
+    public function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int {
         if ($figure->getArea() !== Application::AREA_FIELD) {
+            return 99;
             throw new LogicException('Figure is not on field');
         }
 
@@ -598,6 +599,7 @@ final class GameModel extends BaseModel {
         return false;
     }
 
+    // Game Engine - Get the absolute position of enemy figure
     private function getEnemyFiguresOnAbsolutePosition(GameStatePlayerModel $current_player, int $absolute_position): ?array {
         foreach ($this->player_array as $other_player) {
             if ($other_player->getUserId() === $current_player->getUserId()) {
@@ -1487,7 +1489,7 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check if given user is already a player of the game
-    public function isParticipant(UserModel $user) {
+    public function isParticipant(UserModel $user): bool {
         // ToDo: Implement
         $user_id = $user->getId();
         for ($i = 0; $i < count($this->player_array); $i++) {
@@ -1495,6 +1497,14 @@ final class GameModel extends BaseModel {
             if ($user_id === $player->getUserId()) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    // Helper - Check if given user is creator of the game
+    public function isCreator(UserModel $user): bool {
+        if ($this->created_by_user_id === $user->getId()) {
+            return true;
         }
         return false;
     }
@@ -1520,6 +1530,14 @@ final class GameModel extends BaseModel {
     // Helper - Get current player
     public function getCurrentPlayer(): GameStatePlayerModel {
         return $this->getPlayerByPlayerIndex($this->getStateModel()->getCurrentPlayerIndex());
+    }
+
+    // Helper - Is players turn
+    public function isPlayersTurn(UserModel $user): bool{
+        if ($this->getCurrentPlayer()->getUserId() === $user->getId()) {
+            return true;
+        }
+        return false;
     }
 
     // Helper - Clone existing game

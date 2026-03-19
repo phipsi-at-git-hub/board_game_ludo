@@ -53,7 +53,7 @@ $router->group('/game', function($group) {
     $group->post('/roll', [GameController::class, 'roll'], [fn() => Middleware::csrf()]);
     $group->post('/move', [GameController::class, 'move'], [fn() => Middleware::csrf()]);
     $group->post('/leave/{id}', [GameController::class, 'leave'], [fn() => Middleware::csrf()]);
-    $group->post('/create_solo_test', [GameController::class, 'soloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
+    $group->post('/create_solo_test', [GameController::class, 'createSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
     $group->post('/start_solo_test', [GameController::class, 'startSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
 }, [fn() => Middleware::auth()]);
 
