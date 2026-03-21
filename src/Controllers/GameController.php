@@ -386,4 +386,20 @@ class GameController extends BaseController {
 
         $this->redirect("/game/play/$game_id");
     }
+
+    // Game State for Frontend
+    public function state($game_id) {
+        if (!$game_id) {
+            return $this->json([
+                'success' => false, 
+                'error' => 'Missing game_id'
+            ]);
+        }
+        $game = GameModel::findById($game_id);
+
+        return $this->json([
+            'success' => true, 
+            'state' => $game->getGameStateSnapshot()
+        ]);
+    }
 }

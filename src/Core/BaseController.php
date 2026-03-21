@@ -3,12 +3,10 @@
 namespace App\Core;
 
 use App\Core\Auth;
-use App\Core\Csrf;
 
 abstract class BaseController {
     // Renderer
     protected function render(string $view, array $data = []): void {
-        //$data['_csrf_token'] = Csrf::generate();
         $data['current_user'] = Auth::user();
 
         extract($data);
@@ -20,8 +18,16 @@ abstract class BaseController {
         require VIEWS_PATH . '/layout.php';
     }
 
+    // Redirect
     protected function redirect(string $url): void {
         header("Location: $url");
+        exit;
+    }
+
+    // JSON
+    protected function json(array $data) {
+        header('Content-Type: application/json');
+        echo json_encode($data);
         exit;
     }
 }
