@@ -21,7 +21,7 @@ db_data/
 
 # Busted assets (Cache Busting)
 # CSS
-/public/js/*.*.js
+/public/js/*.*.css
 
 # Images
 /public/images/*.*.{png,jpg,jpeg,gif,svg}
