@@ -18,3 +18,13 @@ db_data/
 # Cache / Temp
 *.cache
 *.tmp
+
+# Busted assets (Cache Busting)
+# CSS
+/public/js/*.*.*.js
+
+# Images
+/public/images/*.*.*.{png,jpg,jpeg,gif,svg}
+
+# JS
+/public/js/*.*.*.js

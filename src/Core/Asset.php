@@ -59,21 +59,49 @@ class Asset {
         // 4. Copy files and replace references
         foreach ($map as $original => $busted) {
             $original_full = PUBLIC_PATH . '/' . $original;
-            $busted_full = PUBLIC_PATH . '/' . $busted;
+            $busted_full   = PUBLIC_PATH . '/' . $busted;
+
+            // Copy only if original has changed
+            if (file_exists($busted_full) && filemtime($busted_full) >= filemtime($original_full)) {
+                continue;
+            }
+
             $content = file_get_contents($original_full);
 
-            // Set references
+            // Replace references
+            // Sort map by path length desc to avoid partial replacements
+            uksort($map, fn($a, $b) => strlen($b) - strlen($a));
+
             foreach ($map as $search => $replace) {
-                // 4.1 Absolute path
+                $searchDir    = dirname($search);
+                $replaceDir   = dirname($replace);
+                $searchBase   = basename($search);
+                $replaceBase  = basename($replace);
+
+                // 4.1 Absolute references
                 $content = str_replace($search, $replace, $content);
 
-                // 4.2 Relative path
-                $basename = basename($search);
-                $busted_basename = basename($replace);
+                // 4.2 Relative references "./file.js"
+                $content = str_replace('./' . $searchBase, './' . $replaceBase, $content);
 
-                $content = str_replace('./' . $basename, './' . $busted_basename, $content); 
-                $content = str_replace($basename, $busted_basename, $content); 
+                // 4.3 Only basename
+                $content = str_replace($searchBase, $replaceBase, $content);
+
+                // 4.4 CSS url(...)
+                $content = preg_replace_callback(
+                    '#url\((.*?)\)#',
+                    function ($matches) use ($search, $replace, $searchDir, $searchBase, $replaceDir, $replaceBase) {
+                        $url = trim($matches[1], '"\' ');
+
+                        if ($url === $search || $url === $searchDir . '/' . $searchBase || basename($url) === $searchBase) {
+                            return 'url(' . $replace . ')';
+                        }
+                        return $matches[0];
+                    },
+                    $content
+                );
             }
+
             file_put_contents($busted_full, $content);
         }
 
