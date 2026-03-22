@@ -33,9 +33,8 @@ use App\Core\Localization;
                 $can_delete = ($is_owner && $game->isWaiting()) || $is_admin;
 
                 $can_join = $game->isWaiting() && !$game->isLocked() && !$game->isPrivate();
-
-                if (!$game->isPrivate() || $game->getCreatedByUserId() === $user->getId()) {
             ?>
+            <?php if (!$game->isPrivate() || $game->getCreatedByUserId() === $current_user->getId() || ($game->isRunning())): ?>
             <tr>
                 <td><?= htmlspecialchars($game->getName()) ?></td>
                 <td><?= (int) $game->getPlayerCount() ?> / <?= (int) $game->getPlayerMax() ?></td>
@@ -80,7 +79,7 @@ use App\Core\Localization;
                     </div>
                 </td>
             </tr>
-        <?php } ?>
+        <?php endif; ?>
         <?php endforeach; ?>
     </tbody>
 </table>

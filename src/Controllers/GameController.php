@@ -148,7 +148,7 @@ class GameController extends BaseController {
         exit;
     }
 
-    // Games list overview
+    // Games list overview - open games
     public function list(): void {
         $user = Auth::user();
         if ($user->isAdmin()) {
@@ -160,12 +160,9 @@ class GameController extends BaseController {
         $this->render(
             'game/list', 
             [
-                'games' => $games, 
-                'user' => $user
+                'games' => $games 
             ]
         );
-
-        //require __DIR__ . '/../Views/game/list.php';
     }
 
     // Game detail view
