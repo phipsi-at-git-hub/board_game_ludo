@@ -1,0 +1,167 @@
+/*
+*****************************************
+* Views - lobby
+****************************************/.action-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    right: 0;
+    z-index: 10;
+
+    flex-direction: column; 
+    gap: 4px; 
+}
+
+.action-menu:hover .menu-content {
+    display: flex;
+}
+
+/* Div Container Class for all action elements */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem; 
+    align-items: center; 
+}
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.action-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.action-btn.danger:hover {
+    background-color: #f8d7da;
+}
+
+/*
+*****************************************
+* Views - show / detail 
+****************************************/
+.card {
+    background: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 8px 16px;
+}
+
+.status-badge {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.status-waiting { background: #d4edda; color: #155724; }
+.status-running { background: #fff3cd; color: #856404; }
+.status-finished { background: #f8d7da; color: #721c24; }
+
+.is-not-private { background: #d4edda; color: #155724; }
+.is-private { background: #f8d7da; color: #721c24; }
+
+.is-not-locked { background: #d4edda; color: #155724; }
+.is-locked { background: #f8d7da; color: #721c24; }
+
+.joined-btn {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+}
+
+.has-not-joined { background: #d4edda; color: #155724; }
+.has-joined { background: #f8d7da; color: #721c24; }
+.can-not-join { background: #f2f2f2; color: #514c4c; cursor: default; }
+
+.game-play-btn {
+    text-decoration: none;
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+}
+
+.game-play-btn.create {
+    background: #fff3cd; 
+    color: #856404;
+}
+.game-play-btn.create:hover {
+    background: #f8d7da; 
+    color: #721c24;
+}
+
+.game-play-btn.play {
+    background: #d4edda; 
+    color: #155724;
+}
+.game-play-btn.play:hover {
+    background: #fff3cd; 
+    color: #856404;
+}
+
+.game-play-btn.cancel, .game-play-btn.pause {
+    background: #fff3cd; 
+    color: #856404;
+}
+.game-play-btn.cancel:hover, .game-play-btn.pause:hover {
+    background: #f8d7da; 
+    color: #721c24;
+}
+
+.player-card {
+    margin-bottom: 15px;
+}
+
+.figure-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.figure-badge {
+    background: #f0f2f5;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #007bff;
+}
