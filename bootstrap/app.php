@@ -5,6 +5,8 @@
 require __DIR__ . '/paths.php';
 
 // 1.1
+
+use App\Core\Asset;
 use App\Core\Debug;
 use App\Core\Env;
 Env::get();
@@ -25,6 +27,9 @@ if (Env::isDev()) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    // Cache busting
+    Asset::buildAssets();
 
     // Add Debug in DEV
     Debug::start();

@@ -1,5 +1,6 @@
 <?php
 use App\Core\Localization;
+use App\Core\Asset;
 ?>
 
 <h1><?= $game->getName() ?></h1>
@@ -20,7 +21,8 @@ use App\Core\Localization;
     };
 </script>
 
-<script type="module" src="<?= asset('/js/loader.js') ?>"></script>
+<!--<script type="module" src="<?= Asset::asset('/js/loader.js') ?>"></script>-->
+<script type="module" src="<?= Asset::asset('/js/game.js') ?>"></script>
 
 <style>
     body {

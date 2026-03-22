@@ -1,5 +1,6 @@
 <?php
 use App\Core\Localization;
+use App\Core\Asset;
 
 $cssPath = __DIR__ . '/../../public/css/general.css';
 $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
@@ -10,7 +11,7 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
     <head>
         <meta charset="UTF-8">
         <title><?= Localization::get('application.general.title') ?></title>
-        <link rel="stylesheet" href="<?= asset('css/general.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::asset('css/general.css') ?>">
     </head>
     <body>
 

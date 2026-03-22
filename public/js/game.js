@@ -21,7 +21,7 @@ async function update() {
 }
 
 // Polling 
-setInterval(update, 2000);
+//setInterval(update, 2000);
 
 // First Load
 update(); 
