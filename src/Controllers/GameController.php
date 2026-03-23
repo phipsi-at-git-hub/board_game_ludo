@@ -148,7 +148,7 @@ class GameController extends BaseController {
         exit;
     }
 
-    // Games list overview - open games
+    // Game - Games list overview - open games
     public function list(): void {
         $user = Auth::user();
         if ($user->isAdmin()) {
@@ -165,7 +165,22 @@ class GameController extends BaseController {
         );
     }
 
-    // Game detail view
+    // Game - Show list with user involved
+    public function usersGames(): void {
+        $user = Auth::user();
+        $games = GameModel::getAllGamesWithUserInvolved($user->getId());
+
+        //var_dump($games);
+        
+        $this->render(
+            'game/list', 
+            [
+                'games' => $games 
+            ]
+        );
+    }
+
+    // Game - Detail view
     public function show(string $game_id) {
         // View an existing game
         $game = GameModel::findById($game_id);

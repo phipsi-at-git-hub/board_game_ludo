@@ -898,6 +898,259 @@ final class GameModel extends BaseModel {
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
+    // Database - Get all games created by the given user
+    public static function getAllGamesCreatedByUser(string $user_id): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    u.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
+                    ON g.%s = r.%s
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s
+                WHERE g.%s = :created_by_user_id
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+                Application::IS_TEST_GAME, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
+                Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_AT_HOME, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::TABLE_GAMES,
+
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
+                Application::ID,
+                Application::GAME_ID,
+
+                Application::CREATED_BY_USER_ID,
+                Application::ID,
+                Application::CREATED_AT
+            ),
+            ['created_by_user_id' => $user_id]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
+    // Database - Get all games with the given user as an participant
+    public static function getAllGamesWithUserParticipating(string $user_id): array {
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    u.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
+                    ON g.%s = r.%s
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s
+                WHERE p.%s = :user_id
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+                Application::IS_TEST_GAME, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
+                Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_AT_HOME, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::TABLE_GAMES,
+
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
+                Application::ID,
+                Application::GAME_ID,
+
+                Application::USER_ID,
+                Application::ID,
+                Application::CREATED_AT
+            ),
+            ['user_id' => $user_id]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
+    // Database - Get all games with given user involved
+    public static function getAllGamesWithUserInvolved(string $user_id): array{
+        $rows = static::fetchAll(
+            sprintf(
+                "SELECT 
+                    g.%s,
+                    g.%s, 
+                    g.%s,
+                    u.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s, 
+                    g.%s,
+                    g.%s, 
+                    COUNT(p.%s) AS player_count, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s, 
+                    r.%s
+                FROM %s g
+                JOIN %s u
+                    ON g.%s = u.%s
+                JOIN %s r
+                    ON g.%s = r.%s
+                LEFT JOIN %s p 
+                    ON g.%s = p.%s
+                WHERE p.%s = :user_id OR g.%s = :user_id
+                GROUP BY g.%s
+                ORDER BY g.%s DESC",
+                
+                Application::ID,
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::USERNAME,
+                Application::STATUS, 
+                Application::IS_PRIVATE, 
+                Application::IS_LOCKED, 
+                Application::IS_TEST_GAME, 
+                Application::CREATED_AT,
+                Application::UPDATED_AT, 
+                Application::USER_ID,
+                Application::ALLOW_BOTS, 
+                Application::ALL_FIGURES_START_AT_HOME, 
+                Application::LEAVE_HOME_ATTEMPT, 
+                Application::LEAVE_HOME_ATTEMPTS_MAX, 
+                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
+                Application::FORCE_LEAVING_HOME_ON_SIX, 
+                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
+                Application::ALLOW_STACK_OWN_FIGURES, 
+                Application::STRICT_GOAL_ORDER, 
+                Application::START_FIELD_MUST_BE_CLEARED, 
+
+                Application::TABLE_GAMES,
+
+                Application::TABLE_USERS, 
+                Application::CREATED_BY_USER_ID,
+                Application::ID, 
+
+                Application::TABLE_RULES, 
+                Application::ID, 
+                Application::GAME_ID, 
+                
+                Application::TABLE_PLAYERS,
+                Application::ID,
+                Application::GAME_ID,
+
+                Application::USER_ID,
+                Application::CREATED_BY_USER_ID, 
+                Application::ID,
+                Application::CREATED_AT
+            ),
+            ['user_id' => $user_id]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
     // Database - Find game by id
     public static function findById(string $game_id): ?self {
         $row = static::fetchOne(

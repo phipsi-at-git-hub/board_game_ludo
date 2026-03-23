@@ -24,7 +24,8 @@ return [
     // Game - Lobby
     'game.lobby.title' => '🎮 Spiel Lobby', 
     'game.lobby.create_new_game' => '➕ Neues Spiel erstellen', 
-    'game.lobby.open_games' => '📜 Zeige offene Spiele', 
+    'game.lobby.open_games' => '📜 Offene Spiele', 
+    'game.lobby.my_games' => '🐦 Meine Spiele', 
     'game.lobby.back_to_menu' => '← Zurück zum Hauptmenü', 
 
     // Game - List

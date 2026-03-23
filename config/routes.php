@@ -41,6 +41,7 @@ $router->group('/game', function($group) {
     $group->get('/create', [GameController::class, 'create']);
     $group->get('/edit/{id}', [GameController::class, 'edit'], [fn() => Middleware::csrf()]);
     $group->get('/list', [GameController::class, 'list']);
+    $group->get('/my_games', [GameController::class, 'usersGames']);
     $group->post('/store', [GameController::class, 'store'], [fn() => Middleware::csrf()]);
     $group->post('/update', [GameController::class, 'update'], [fn() => Middleware::csrf()]);
     $group->delete('/delete', [GameController::class, 'delete'], [fn() => Middleware::csrf()]);
