@@ -1,4 +1,3 @@
-//import * as THREE from 'https://unpkg.com/three@0.150.0/build/three.module.js';
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 
 export let scene, camera, renderer;
@@ -16,7 +15,7 @@ export function initRenderer(canvas) {
         1000
     );
 
-    camera.position.set(0, 10, 10); 
+    camera.position.set(0, 15, 10); 
     camera.lookAt(0, 0, 0);
 
     renderer = new THREE.WebGLRenderer({
@@ -31,7 +30,7 @@ export function initRenderer(canvas) {
     light.position.set(5, 10, 5);
     scene.add(light);
 
-    const grid = new THREE.GridHelper(20, 20); 
+    const grid = new THREE.GridHelper(13, 13); 
     scene.add(grid);
 
     resizeRenderer();
