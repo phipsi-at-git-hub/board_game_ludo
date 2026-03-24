@@ -12,7 +12,6 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
         <meta charset="UTF-8">
         <title><?= Localization::get('application.general.title') ?></title>
         <link rel="stylesheet" href="<?= Asset::asset('css/general.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::asset('/css/game.css') ?>">
     </head>
     <body>
 

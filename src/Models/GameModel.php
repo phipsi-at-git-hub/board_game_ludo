@@ -549,7 +549,7 @@ final class GameModel extends BaseModel {
     // Game Engine - get absolute position on the field of given figure
     public function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int {
         if ($figure->getArea() !== Application::AREA_FIELD) {
-            return 99;
+            return $figure->getPosition();
             throw new LogicException('Figure is not on field');
         }
 
@@ -1617,12 +1617,14 @@ final class GameModel extends BaseModel {
                 $figures[] = [
                     Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(), 
                     Application::DTO_AREA => $figure->getArea(), 
-                    Application::DTO_POSITION => $figure->getPosition()
+                    //Application::DTO_POSITION => $figure->getPosition()
+                    Application::DTO_POSITION => ($this->getAbsoluteFieldPosition($player, $figure)) ?? $figure->getPosition()
                 ];
             }
 
             $players[] = [
                 Application::DTO_USER_ID => $player->getUserId(), 
+                Application::DTO_PLAYER_INDEX => $player->getPlayerIndex(), 
                 Application::DTO_USERNAME => $player->getUsername(), 
                 Application::DTO_FIGURES => $figures
             ];

@@ -57,6 +57,7 @@ use App\Core\Asset;
         user_id: "<?= $user->getId() ?>"
     };
 </script>
+<link rel="stylesheet" href="<?= Asset::asset('/css/game.css') ?>">
 
 <!-- 🎮 Game entry point -->
 <script type="module" src="<?= Asset::asset('/js/game.js') ?>"></script>

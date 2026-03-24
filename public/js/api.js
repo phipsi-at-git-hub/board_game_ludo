@@ -1,6 +1,5 @@
 export async function fetchState(game_id) {
     const res = await fetch(`/game/state/${game_id}`);
-    //console.log(res);
     return await res.json();
 }
 

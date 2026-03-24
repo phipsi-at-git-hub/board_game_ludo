@@ -101,6 +101,7 @@ class Application {
     public const DTO_CURRENT_PLAYER_ID = 'current_player_id'; 
     public const DTO_USER_ID = 'user_id'; 
     public const DTO_USERNAME = 'username'; 
+    public const DTO_PLAYER_INDEX = 'player_index'; 
     public const DTO_FIGURES = 'figures'; 
     public const DTO_FIGURE_INDEX = 'figure_index'; 
     public const DTO_MOVE = 'move'; 

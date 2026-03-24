@@ -12,6 +12,8 @@ async function update() {
     try {
         const data = await fetchState(game_id);
 
+        console.log(data);
+
         if (data.success) {
             updateScene(data.state);
         }
