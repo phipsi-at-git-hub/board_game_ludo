@@ -1,23 +1,57 @@
+async function requestGet(url, json = true) {
+    try {
+        const res = await fetch(url);
+        const text = (json === true) ? await res.json() : await res.text();
+        return text;
+    } catch (e) {
+        console.error('[GET Error]', e);
+    }
+}
+
+async function requestPost(url,  data = {}, json = true) {
+    const CSRF_TOKEN = window.GAME_CONFIG._csrf_token;
+    const GAME_ID = window.GAME_CONFIG.game_id;
+    try {
+        const form_data = new URLSearchParams();
+        for (const key in data) {
+            form_data.append(key, data[key]);
+        }
+        form_data.append('_csrf_token', CSRF_TOKEN);
+        //form_data.append('game_id', GAME_ID);
+
+        const res = await fetch(url, {
+            method: 'POST', 
+            body: form_data
+        });
+
+        const text = (json === true) ? await res.json() : await res.text();
+        console.log(text);
+        return text;
+    } catch (e) {
+        console.error('[POST Response]', e)
+    }
+}
+
+function encodeFormData(data) {
+    return Object.keys(data).map(key =>encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+}
+
 export async function fetchState(game_id) {
-    const res = await fetch(`/game/state/${game_id}`);
-    return await res.json();
+    return await requestPost('/api/game/state', { game_id });
 }
 
 export async function rollDice(game_id) {
-    await fetch('/game/roll', {
-        method: 'POST', 
-        headers: { 'Content_type': 'application/json' }, 
-        body: JSON.stringify({ game_id: game_id})
-    });
+    return await requestPost('/api/game/roll_dice', { game_id });
 }
 
-export async function sendMove(game_id, move) {
-    await fetch('/game/move', {
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({
-            game_id: game_id, 
-            move: move
-        })
-    });
+export async function getAvailableMoves(game_id) {
+    return await requestPost('/api/game/get_available_moves', { game_id });
+}
+
+export async function applyMove(game_id, move) {
+    return await requestPost('/api/game/apply_move', { game_id, move });
+}
+
+export async function passTurn(game_id) {
+    return await requestPost('/api/game/pass_turn', { game_id });
 }

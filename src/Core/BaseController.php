@@ -25,7 +25,14 @@ abstract class BaseController {
     }
 
     // JSON
-    protected function json(array $data) {
+    protected function json(array $data): void {
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+
+    protected function jsonClean(array $data): void {
+        ob_clean();
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;

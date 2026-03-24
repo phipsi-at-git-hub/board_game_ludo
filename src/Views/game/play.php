@@ -1,6 +1,7 @@
 <?php
-use App\Core\Localization;
 use App\Core\Asset;
+use App\Core\Csrf;
+use App\Core\Localization;
 ?>
 
 <!-- 🎮 THREE.js Canvas -->
@@ -54,7 +55,8 @@ use App\Core\Asset;
 <script>
     window.GAME_CONFIG = {
         game_id: "<?= $game->getId() ?>",
-        user_id: "<?= $user->getId() ?>"
+        user_id: "<?= $user->getId() ?>", 
+        _csrf_token: "<?= Csrf::generate() ?>"
     };
 </script>
 <link rel="stylesheet" href="<?= Asset::asset('/css/game.css') ?>">
