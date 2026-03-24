@@ -101,7 +101,7 @@ function createCell(cell, x, z) {
     if (cell.startsWith("F")) {
         let pos = parseInt(cell.split('-')[1]);
         const index = parseInt(cell.split("-")[1]);
-        const mesh = (pos === 0 || pos === 10 || pos === 20 || pos === 30) ? createBox(PLAYER_COLORS[pos/10], 1) : createBox(0xffffff, 1);
+        const mesh = (pos === 0 || pos === 10 || pos === 20 || pos === 30) ? createBox(PLAYER_COLORS[pos/10], 1) : createBox(0xdddddd, 0.9);
         mesh.position.set(x, 0.05, z);
         scene.add(mesh);
 

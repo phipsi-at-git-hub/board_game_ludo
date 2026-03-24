@@ -26,7 +26,7 @@ export function initRenderer(canvas) {
     const  game_wrapper = canvas.parentElement;
     renderer.setSize(game_wrapper.clientWidth, game_wrapper.clientHeight);
 
-    const light = new THREE.DirectionalLight(0xffffff, 1);
+    const light = new THREE.DirectionalLight(0xffffff, 3);
     light.position.set(5, 10, 5);
     scene.add(light);
 
