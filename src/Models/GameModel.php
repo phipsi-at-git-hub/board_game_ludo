@@ -1635,6 +1635,7 @@ final class GameModel extends BaseModel {
             Application::DTO_GAME_NAME => $this->getName(), 
             Application::DTO_GAME_STATUS => $this->getStatus(), 
             Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(), 
+            Application::DTO_CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(), 
             Application::DTO_CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(), 
             Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(), 
             Application::DTO_PLAYERS => $players

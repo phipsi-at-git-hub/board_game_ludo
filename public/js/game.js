@@ -7,7 +7,16 @@ const { game_id, user_id } = window.GAME_CONFIG;
 const btn_roll = document.getElementById('btn-roll');
 const btn_end = document.getElementById('btn-end');
 
+// Colors
+const PLAYER_COLORS = {
+    0: '#ff4444', 
+    1: '#4444ff', 
+    2: '#44ff44', 
+    3: '#ffff44' 
+};
+
 let current_state = null;
+let last_dice_value = null;
 
 const canvas = document.getElementById('game_canvas');
 
@@ -35,7 +44,8 @@ async function updateState() {
 function updateHUD() {
     const hud_current_player = document.getElementById('current-username');
     if (current_state && current_state.current_player_username) {
-        hud_current_player.textContent = current_state.current_player_username;
+        hud_current_player.textContent = current_state.current_player_username; 
+        hud_current_player.style.color = isMyTurn() ? PLAYER_COLORS[current_state.current_player_index] : '#ffffff';
     }
 }
 
@@ -52,19 +62,23 @@ function updateDice() {
     if (dice_value === null) {
         dice_value_element.textContent = '-';
         dice_element.textContent = '';
+        last_dice_value = null;
         return;
     }
 
     // Animation
-    dice_element.classList.add('roll');
+    if (dice_value !== last_dice_value) {
+        dice_element.classList.add('roll');
 
-    setTimeout(() => {
-        dice_element.classList.remove('roll'); 
+        setTimeout(() => {
+            dice_element.classList.remove('roll'); 
+        }, 400);
+    }
 
-        const dice_faces = ['⚀','⚁','⚂','⚃','⚄','⚅']; 
-        dice_element.textContent = dice_faces[dice_value - 1];
-        dice_value_element.textContent = dice_value;
-    }, 400);
+    const dice_faces = ['⚀','⚁','⚂','⚃','⚄','⚅']; 
+    dice_element.textContent = dice_faces[dice_value - 1];
+    dice_value_element.textContent = dice_value;
+    last_dice_value = dice_value;
 }
 
 // --- Update Controls ---
