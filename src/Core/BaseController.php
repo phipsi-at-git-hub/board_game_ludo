@@ -31,8 +31,9 @@ abstract class BaseController {
         exit;
     }
 
-    protected function jsonClean(array $data): void {
+    protected function jsonClean(array $data, int $status = 200): void {
         ob_clean();
+        http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;

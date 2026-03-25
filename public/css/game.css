@@ -33,6 +33,60 @@ html, body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
 
+/* Dice */
+#dice-container {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    text-align: center;
+    pointer-events: none;
+}
+
+#dice {
+    width: 70px;
+    height: 70px;
+    line-height: 60px;
+    font-size: 75px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 0 #cccccc;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.2s ease;
+}
+
+#dice.roll {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 3px 0 #cccccc;
+}
+
+#dice-value {
+    margin-top: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff; 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+#moves-container {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: all;
+}
+
+.move-item {
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-shadow: 1px 1px 2px #000000;
+    cursor: pointer;
+}
+
 /* Controls */
 #controls {
     position: absolute;

@@ -21,15 +21,26 @@ use App\Core\Localization;
         </div>
     </div>
 
+    <!-- Dice -->
+    <div id="dice-container">
+    <div id="dice"></div>
+    <div id="dice-value"></div>
+    </div>
+
+    <!-- Available Moves -->
+     <div id="moves-container"></div>
+
     <!-- Controls -->
     <div id="controls">
         <button id="btn-roll">
             🎲 <?= Localization::get('game.play.roll_dice') ?>
         </button>
 
+        <!--
         <button id="btn-end">
             ➡️ <?= Localization::get('game.play.pass_turn') ?>
         </button>
+        -->
 
         <button id="btn-menu">☰</button>
     </div>

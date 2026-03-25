@@ -25,7 +25,6 @@ async function requestPost(url,  data = {}, json = true) {
         });
 
         const text = (json === true) ? await res.json() : await res.text();
-        console.log(text);
         return text;
     } catch (e) {
         console.error('[POST Response]', e)
@@ -49,9 +48,18 @@ export async function getAvailableMoves(game_id) {
 }
 
 export async function applyMove(game_id, move) {
-    return await requestPost('/api/game/apply_move', { game_id, move });
+    //return await requestPost('/api/game/apply_move', { game_id, move });
+    return await requestPost('/api/game/apply_move', {
+        game_id, 
+        move: asJSON(move)
+    });
 }
 
 export async function passTurn(game_id) {
     return await requestPost('/api/game/pass_turn', { game_id });
+}
+
+// Helper 
+function asJSON(data) {
+    return JSON.stringify(data);
 }
