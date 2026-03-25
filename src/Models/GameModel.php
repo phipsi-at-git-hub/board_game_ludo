@@ -203,6 +203,7 @@ final class GameModel extends BaseModel {
                 if ($enemy !== null) {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
                     $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
                 }
 
@@ -250,6 +251,7 @@ final class GameModel extends BaseModel {
                         if ($enemy !== null) {
                             $move[Application::DTO_IS_KICK] = true;
                             $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                            $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
                             $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
                         }
 
@@ -284,6 +286,7 @@ final class GameModel extends BaseModel {
                 if ($enemy !== null) {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
                     $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 

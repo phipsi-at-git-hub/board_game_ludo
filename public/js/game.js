@@ -117,9 +117,11 @@ function renderMoves(moves) {
     if (!isMyTurn()) return;
 
     moves.forEach(move => {
+        if (move.is_pass === true) {} else {}
         const btn = document.createElement('button');
         btn.classList.add('move-item');
-        btn.textContent = `Figure ${move.figure_index}  → ${move.to.area}:${move.to.position}`;
+        btn.style.background = (move.is_kick === true) ? PLAYER_COLORS[move.kicked_player_index] : '';
+        btn.textContent = (move.is_pass) ? 'pass' : `Figure ${move.figure_index}: ${move.from.area}:${move.from.position} → ${move.to.area}:${move.to.position}`;
         btn.addEventListener('click', async () => { 
             await handleMove(move); 
         });

@@ -22,6 +22,7 @@ final class MoveDTO {
             Application::DTO_IS_KICK => false,
             Application::DTO_KICKED_PLAYER_ID => null,
             Application::DTO_KICKED_FIGURE_INDEX => null,
+            Application::DTO_KICKED_PLAYER_INDEX => null, 
             Application::DTO_IS_GOAL_ENTRY => false,
             Application::DTO_IS_LAP_OVERFLOW => false,
         ];
