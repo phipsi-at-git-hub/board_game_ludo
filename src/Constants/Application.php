@@ -116,6 +116,8 @@ class Application {
     public const DTO_KICKED_PLAYER_ID = 'kicked_player_id'; 
     public const DTO_KICKED_PLAYER_INDEX = 'kicked_player_index'; 
     public const DTO_KICKED_FIGURE_INDEX = 'kicked_figure_index'; 
+    public const DTO_WINNER_USER_ID = 'winner_user_id'; 
+    public const DTO_WINNER_PLAYER_INDEX = 'winner_player_index'; 
     public const DTO_IS_GOAL_ENTRY = 'is_goal_entry'; 
     public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow'; 
     public const DTO_IS_PASS = 'is_pass'; 

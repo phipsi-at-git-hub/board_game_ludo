@@ -1640,6 +1640,8 @@ final class GameModel extends BaseModel {
             Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(), 
             Application::DTO_CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(), 
             Application::DTO_CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(), 
+            Application::DTO_WINNER_USER_ID => $this->getWinner()->getUserID(), 
+            Application::DTO_WINNER_PLAYER_INDEX => $this->getWinner()->getPlayerIndex(), 
             Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(), 
             Application::DTO_PLAYERS => $players
         ];
