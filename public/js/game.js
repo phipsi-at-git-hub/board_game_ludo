@@ -4,8 +4,8 @@ import { updateScene } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 
-const btnRoll = document.getElementById('btn-roll');
-const btnEnd = document.getElementById('btn-end');
+const btn_roll = document.getElementById('btn-roll');
+const btn_end = document.getElementById('btn-end');
 
 let current_state = null;
 
@@ -23,7 +23,8 @@ async function updateState() {
             updateScene(current_state);
             updateHUD();
             updateDice();
-            showAvailableMoves();
+            updateControls();
+            if (current_state.current_dice_roll) showAvailableMoves();
         }
     } catch (e) {
         console.error('State fetch failed', e);
@@ -32,9 +33,9 @@ async function updateState() {
 // --- HUD --- 
 // --- Update HUD ---
 function updateHUD() {
-    const hudCurrent = document.querySelector('#hud div:nth-child(2)');
-    if (current_state && current_state.current_player) {
-        hudCurrent.textContent = `<?= Localization::get('game.play.current_player') ?>: ${current_state.current_player.username}`;
+    const hud_current_player = document.getElementById('current-username');
+    if (current_state && current_state.current_player_username) {
+        hud_current_player.textContent = current_state.current_player_username;
     }
 }
 
@@ -66,9 +67,23 @@ function updateDice() {
     }, 400);
 }
 
+// --- Update Controls ---
+function updateControls() {
+    const my_turn = isMyTurn();
+    if (!my_turn || !current_state.current_dice_roll) {
+        btn_roll.disabled = false;
+    } else {
+        btn_roll.disabled = true;
+    }
+    //btn_roll.disabled = !my_turn;
+
+    btn_roll.style.opacity = my_turn ? '1' : '0.5';
+}
+
 // --- MOVES ---
 // --- Available Moves (optional UI for selecting moves) ---
 async function showAvailableMoves() {
+    if (!isMyTurn()) return;
     const moves_data = await getAvailableMoves(game_id);
     if (!moves_data.success) return;
 
@@ -100,25 +115,38 @@ function renderMoves(moves) {
     });
 }
 
+function resetMoves() {
+    const moves_container = document.getElementById('moves-container');
+    while (moves_container.firstChild) {
+        moves_container.removeChild(moves_container.lastChild);
+    }
+}
+
 // --- Move Handling ---
 async function handleMove(move) {
     const data = await applyMove(game_id, move);
-    //console.log(data);
 
     if (data.success) {
         current_state = data.state;
         updateScene(current_state);
         updateHUD();
         updateDice();
+        resetMoves();
 
         // Load new moves after executing current move
         await showAvailableMoves();
     }
 }
 
+// --- Helper ---
+function isMyTurn() {
+    if (!current_state) return false;
+    return current_state.current_player_id === user_id;
+}
+
 // --- EVENT LISTENER ---
 // --- Roll Dice Button ---
-btnRoll.addEventListener('click', async () => {
+btn_roll.addEventListener('click', async () => {
     const data = await rollDice(game_id);
     //console.log(data);
     if (data.success) {
@@ -130,55 +158,8 @@ btnRoll.addEventListener('click', async () => {
     }
 });
 
-/*
-// --- End Turn Button ---
-btnEnd.addEventListener('click', async () => {
-    const data = await passTurn(game_id);
-    if (data.success) {
-        current_state = data.state;
-        updateScene(current_state);
-        updateHUD();
-    }
-});
-*/
-
 // --- Polling / Auto-Update ---
-//setInterval(updateState, 2000);
+setInterval(updateState, 2000);
 
 // --- First Load ---
 updateState();
-
-/*
-import { initRenderer, renderLoop } from "./renderer.js";
-import { updateScene } from "./scene.js";
-import { fetchState, rollDice } from "./api.js";
-
-const canvas = document.getElementById('game_canvas');
-const { game_id } = window.GAME_CONFIG; 
-
-initRenderer(canvas);
-renderLoop();
-
-async function update() {
-    try {
-        const data = await fetchState(game_id);
-
-        console.log(data);
-
-        if (data.success) {
-            updateScene(data.state);
-        }
-    } catch (e) {
-        console.error('State fetch failed', e);
-    }
-}
-
-// Polling 
-//setInterval(update, 2000);
-
-// First Load
-update(); 
-
-// DEBUG Button - temporary
-window.rollDice = () => rollDice(game_id);
-*/

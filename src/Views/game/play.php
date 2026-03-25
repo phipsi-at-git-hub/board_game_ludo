@@ -16,8 +16,8 @@ use App\Core\Localization;
             🎮 <?= $game->getName() ?>
         </div>
         <div>
-            <?= Localization::get('game.play.current_player') ?>:
-            <?= $game->getCurrentPlayer()->getUsername() ?>
+            <span><?= Localization::get('game.play.current_player') ?>:</span>
+            <span id="current-username"><?= $game->getCurrentPlayer()->getUsername() ?></span>
         </div>
     </div>
 

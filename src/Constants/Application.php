@@ -99,6 +99,7 @@ class Application {
     public const DTO_GAME_TURN = 'game_turn'; 
     public const DTO_PLAYERS = 'players'; 
     public const DTO_CURRENT_PLAYER_ID = 'current_player_id'; 
+    public const DTO_CURRENT_PLAYER_USERNAME = 'current_player_username'; 
     public const DTO_USER_ID = 'user_id'; 
     public const DTO_USERNAME = 'username'; 
     public const DTO_PLAYER_INDEX = 'player_index'; 

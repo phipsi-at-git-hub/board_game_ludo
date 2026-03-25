@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Constants\Application;
 use App\Core\BaseController;
 use App\Core\Auth;
-use App\Core\Csrf;
 use App\Models\GameModel;
 use DomainException;
 
@@ -14,13 +13,9 @@ class ApiGameController extends BaseController {
     public function state() {
         try {
             $game_id = $_POST[Application::GAME_ID] ?? null;
-            if (!$game_id) {
-                return $this->jsonClean(['success' => false, 'error' => 'Missing game_id'], 400);
-            }
-
             $game = GameModel::findById($game_id);
             if (!$game) {
-                return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 400);
+                return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
             }
 
             return $this->jsonClean([
@@ -42,10 +37,10 @@ class ApiGameController extends BaseController {
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
-            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 400);
+            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
 
             if ($game->getCurrentPlayer()->getUserId() !== $user->getId()) {
-                return $this->jsonClean(['success' => false, 'error' => 'Not your turn'], 400);
+                return $this->jsonClean(['success' => false, 'error' => 'Not your turn'], 403);
             }
 
             $game->rollDice($user->getId());
@@ -69,11 +64,11 @@ class ApiGameController extends BaseController {
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
-            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 400);
+            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
 
             $current_roll = $game->getStateModel()->getCurrentDiceRoll();
             if ($current_roll === null) {
-                return $this->jsonClean(['success' => false, 'error' => 'Dice not rolled yet'], 400);
+                return $this->jsonClean(['success' => false, 'error' => 'Dice not rolled yet'], 406);
             }
 
             $moves = $game->getAvailableMoves($user->getId(), $current_roll);
@@ -105,7 +100,7 @@ class ApiGameController extends BaseController {
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
-            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 400);
+            if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
 
             if ($game->getCurrentPlayer()->getUserId() !== $user->getId()) {
                 return $this->jsonClean(['success' => false, 'error' => 'Not your turn'], 400);
@@ -150,7 +145,7 @@ class ApiGameController extends BaseController {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
 
-        if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 400);
+        if (!$game) return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
 
         if ($game->getCurrentPlayer()->getUserId() !== $user->getId()) {
             return $this->jsonClean(['success' => false, 'error' => 'Not your turn'], 400);
