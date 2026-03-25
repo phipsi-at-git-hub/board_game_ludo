@@ -107,6 +107,16 @@ button {
     cursor: pointer;
     box-shadow: 0 4px 0 #cc9900;
     transition: transform 0.1s ease;
+    opacity: 1;
+}
+
+button.inactive {
+    opacity: 0.5;
+}
+
+button.inactive:hover {
+    cursor: default;
+    transform: scale(1.0);
 }
 
 button:hover {

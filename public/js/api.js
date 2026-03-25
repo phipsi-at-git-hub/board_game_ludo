@@ -48,7 +48,6 @@ export async function getAvailableMoves(game_id) {
 }
 
 export async function applyMove(game_id, move) {
-    //return await requestPost('/api/game/apply_move', { game_id, move });
     return await requestPost('/api/game/apply_move', {
         game_id, 
         move: asJSON(move)

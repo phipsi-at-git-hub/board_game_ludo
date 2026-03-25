@@ -70,14 +70,13 @@ function updateDice() {
 // --- Update Controls ---
 function updateControls() {
     const my_turn = isMyTurn();
-    if (!my_turn || !current_state.current_dice_roll) {
+    if (my_turn && !current_state.current_dice_roll) {
         btn_roll.disabled = false;
+        btn_roll.classList.remove('inactive');
     } else {
         btn_roll.disabled = true;
+        btn_roll.classList.add('inactive');
     }
-    //btn_roll.disabled = !my_turn;
-
-    btn_roll.style.opacity = my_turn ? '1' : '0.5';
 }
 
 // --- MOVES ---
@@ -101,14 +100,13 @@ function renderMoves(moves) {
     moves_container.innerHTML = '';
 
     if (!moves || moves.length === 0) return;
+    if (!isMyTurn()) return;
 
     moves.forEach(move => {
         const btn = document.createElement('button');
         btn.classList.add('move-item');
         btn.textContent = `Figure ${move.figure_index}  → ${move.to.area}:${move.to.position}`;
         btn.addEventListener('click', async () => { 
-            //console.log('move clicked');
-            //console.log(move);
             await handleMove(move); 
         });
         moves_container.appendChild(btn);
@@ -147,8 +145,9 @@ function isMyTurn() {
 // --- EVENT LISTENER ---
 // --- Roll Dice Button ---
 btn_roll.addEventListener('click', async () => {
+    if (!isMyTurn()) return;
+
     const data = await rollDice(game_id);
-    //console.log(data);
     if (data.success) {
         current_state = data.state;
         updateScene(current_state);
