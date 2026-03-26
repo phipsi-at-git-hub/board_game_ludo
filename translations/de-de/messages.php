@@ -125,6 +125,7 @@ return [
     'game.play.move_figure' => 'Bewege Figur ', 
     'game.play.position' => 'Position', 
     'game.play.absolute_position' => 'Absolute Position', 
+    'game.play.resume' => 'Spiel fortsetzen', 
     'game.play.back_to_detail' => '← Zurück zur Detailansicht', 
 
     // Game - Options

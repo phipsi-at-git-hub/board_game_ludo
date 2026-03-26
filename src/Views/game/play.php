@@ -57,7 +57,7 @@ use App\Core\Localization;
             <br><br>
 
             <button id="btn-exit">
-                <?= Localization::get('game.play.exit') ?>
+                <?= Localization::get('game.play.back_to_detail') ?>
             </button>
         </div>
     </div>
