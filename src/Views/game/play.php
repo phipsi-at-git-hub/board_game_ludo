@@ -46,18 +46,20 @@ use App\Core\Localization;
     </div>
 
     <!-- Menu -->
-    <div id="menu">
-        <h2><?= Localization::get('game.play.menu') ?></h2>
+    <div id="menu-overlay">
+        <div id="menu">
+            <h2><?= Localization::get('game.play.menu') ?></h2>
 
-        <button id="btn-resume">
-            <?= Localization::get('game.play.resume') ?>
-        </button>
+            <button id="btn-resume">
+                <?= Localization::get('game.play.resume') ?>
+            </button>
 
-        <br><br>
+            <br><br>
 
-        <button id="btn-exit">
-            <?= Localization::get('game.play.exit') ?>
-        </button>
+            <button id="btn-exit">
+                <?= Localization::get('game.play.exit') ?>
+            </button>
+        </div>
     </div>
 
 </div>

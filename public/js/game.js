@@ -9,6 +9,7 @@ const btn_roll = document.getElementById('btn-roll');
 const btn_menu = document.getElementById('btn-menu');
 const btn_resume = document.getElementById('btn-resume');
 const btn_exit = document.getElementById('btn-exit');
+const menu_overlay_element = document.getElementById('menu-overlay');
 const menu_element = document.getElementById('menu');
 
 // Colors
@@ -175,6 +176,13 @@ function isMyTurn() {
     return current_state.current_player_id === user_id;
 }
 
+function openMenu() {
+    menu_overlay_element.classList.add('visible');
+}
+function closeMenu() {
+    menu_overlay_element.classList.remove('visible');
+}
+
 // --- EVENT LISTENER ---
 // --- Roll Dice Button ---
 btn_roll.addEventListener('click', async () => {
@@ -192,35 +200,24 @@ btn_roll.addEventListener('click', async () => {
 
 // Open Menu button
 btn_menu.addEventListener('click', () => {
-    menu_element.style.display = 'block';
-
-    requestAnimationFrame(() => {
-        menu_element.style.opacity = '1';
-    });
+   openMenu();
 });
 
 // Close Menu button
 btn_resume.addEventListener('click', () => {
-    menu_element.style.opacity = '0';
-
-    setTimeout(() => {
-        menu_element.style.display = 'none';
-    }, 200);
+   closeMenu();
 });
-menu_element.addEventListener('click', (e) => {
-    if (e.target === menu_element) {
-        menu_element.style.opacity = '0';
-
-        setTimeout(() => {
-            menu_element.style.display = 'none';
-        }, 200);
+menu_overlay_element.addEventListener('click', (e) => {
+    if (e.target === menu_overlay_element) {
+        closeMenu();
     }
 });
 
 btn_exit.addEventListener('click', () => {
+    closeMenu();
     setTimeout(function() {
         window.location.href = `../detail/${window.GAME_CONFIG.game_id}`;
-    }, 200);
+    }, 300);
 });
 
 // --- Polling / Auto-Update ---
