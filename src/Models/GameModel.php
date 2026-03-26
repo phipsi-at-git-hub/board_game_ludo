@@ -204,7 +204,7 @@ final class GameModel extends BaseModel {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
                     $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
-                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
                 $moves[] = $move;
@@ -373,7 +373,7 @@ final class GameModel extends BaseModel {
 
             // Perhaps the start field of the player must be cleared
             if ($this->rule_set_model->getStartFieldMustBeCleared()) {
-                if ($this->isStartFieldBlocked($player)) {
+                if ($this->isStartFieldBlockedByPlayer($player)) {
                     return false;
                 }
             }
@@ -562,6 +562,25 @@ final class GameModel extends BaseModel {
         $absolute_position = ($start_offset + $relative_position) % self::FIELD_LENGTH;
 
         return $absolute_position;
+    }
+
+    // Game Engine - Check if start field is blocked
+    private function isStartFieldBlockedByPlayer(GameStatePlayerModel $player): bool {
+        // ToDo: check logic here. Start field must be cleared by own figures. Other players figures can be removed by player itself :) 
+        $start_offset = $player->getStartOffset();
+        foreach ($player->getAllFigures() as $figure) {
+            if ($figure->getArea() !== Application::AREA_FIELD) {
+                continue;
+            }
+
+            $absolute_position = $this->getAbsoluteFieldPosition($player, $figure);
+
+            if ($absolute_position === $start_offset) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Game Engine - Check if start field is blocked
