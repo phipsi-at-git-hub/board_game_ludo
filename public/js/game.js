@@ -5,7 +5,11 @@ import { updateScene } from './scene.js';
 const { game_id, user_id } = window.GAME_CONFIG;
 
 const btn_roll = document.getElementById('btn-roll');
-const btn_end = document.getElementById('btn-end');
+// const btn_end = document.getElementById('btn-end');
+const btn_menu = document.getElementById('btn-menu');
+const btn_resume = document.getElementById('btn-resume');
+const btn_exit = document.getElementById('btn-exit');
+const menu_element = document.getElementById('menu');
 
 // Colors
 const PLAYER_COLORS = {
@@ -52,19 +56,32 @@ function updateHUD() {
 // --- DICE ---
 // --- Update Dice ---
 function updateDice() {
+    const dice_container = document.getElementById('dice-container');
     const dice_element = document.getElementById('dice');
     const dice_value_element = document.getElementById('dice-value');
 
-    if (!dice_element || !dice_value_element || !current_state) return;
+    if (!dice_container || !dice_element || !dice_value_element || !current_state) return;
 
     const dice_value = current_state.current_dice_roll;
 
     if (dice_value === null) {
-        dice_value_element.textContent = '-';
+        dice_container.style.display = 'none'; 
+        dice_container.style.opacity = '0';
+        /*
+        dice_value_element.textContent = '';
         dice_element.textContent = '';
+        dice_element.style.display = 'none';
+        */
         last_dice_value = null;
         return;
     }
+
+    //dice_element.style.display = 'block';
+    dice_container.style.display = 'flex'; 
+
+    requestAnimationFrame(() => {
+        dice_container.style.opacity = '1'; 
+    });
 
     // Animation
     if (dice_value !== last_dice_value) {
@@ -171,6 +188,39 @@ btn_roll.addEventListener('click', async () => {
         updateDice(); 
         await showAvailableMoves();
     }
+});
+
+// Open Menu button
+btn_menu.addEventListener('click', () => {
+    menu_element.style.display = 'block';
+
+    requestAnimationFrame(() => {
+        menu_element.style.opacity = '1';
+    });
+});
+
+// Close Menu button
+btn_resume.addEventListener('click', () => {
+    menu_element.style.opacity = '0';
+
+    setTimeout(() => {
+        menu_element.style.display = 'none';
+    }, 200);
+});
+menu_element.addEventListener('click', (e) => {
+    if (e.target === menu_element) {
+        menu_element.style.opacity = '0';
+
+        setTimeout(() => {
+            menu_element.style.display = 'none';
+        }, 200);
+    }
+});
+
+btn_exit.addEventListener('click', () => {
+    setTimeout(function() {
+        window.location.href = `../detail/${window.GAME_CONFIG.game_id}`;
+    }, 200);
 });
 
 // --- Polling / Auto-Update ---

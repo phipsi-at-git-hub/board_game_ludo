@@ -217,14 +217,16 @@ final class GameModel extends BaseModel {
             if ($area === Application::AREA_FIELD) {
                 $relative_position = $figure->getPosition();
                 $new_relative_position = $relative_position + $dice_value;
+                $can_figure_on_start_field_be_moved = $this->canFigureOnStartFieldBeMoved($player, $dice_value);
+                $has_figures_in_home = $this->hasFiguresInHome($player);
 
                 // Check if 6 is rolled, no figure is blocking the start field, at least one figure is at home and this figures must be moves out
-                if ($dice_value === 6 && $this->hasFiguresInHome($player) && $this->rule_set_model->getForceLeavingHomeOnSix() && $relative_position !== 0) {
+                if ($dice_value === 6 && $has_figures_in_home && $this->rule_set_model->getForceLeavingHomeOnSix() && $can_figure_on_start_field_be_moved && $relative_position !== 0) {
                     continue;
                 }
 
-                // Check if 6 is rolled, player has figure on start field and rule start field must be cleared is active
-                if ($dice_value === 6 && $this->hasFigureOnStartField($player) && $this->rule_set_model->getStartFieldMustBeCleared() && $relative_position !== 0) {
+                // (Check if 6 is rolled, )player has figure on start field, still figures in home zone and rule start field must be cleared is active
+                if ($has_figures_in_home && $this->hasFigureOnStartField($player) && $this->rule_set_model->getStartFieldMustBeCleared() && $can_figure_on_start_field_be_moved && $relative_position !== 0) {
                     continue;
                 }
 
@@ -564,9 +566,45 @@ final class GameModel extends BaseModel {
         return $absolute_position;
     }
 
+    // Game Engine - Can figure on start field be moved
+    // This method returns true if at least one figure on the start field can be moved or no figure is on the start field
+    private function canFigureOnStartFieldBeMoved(GameStatePlayerModel $player, int $dice_value): bool {
+        $figures = $player->getAllFigures();
+        $on_start_field = [false, false, false, false]; 
+        $figures_on_start_field = [];
+
+        // Check if any and which figure is on start field
+        for ($i = 0; $i < count($figures); $i++) {
+            // Only figures on field has to be checked
+            if ($figures[$i]->getArea() !== Application::AREA_FIELD) {
+                continue;
+            }
+
+            // If figure is on start field keep that in mind
+            if ($figures[$i]->getPosition() === 0) {
+                $on_start_field[$i] = true;
+                $figures_on_start_field[] = $i;
+            }
+        }
+
+        if (count($figures_on_start_field) > 0) {
+            for ($j = 0; $j < count($figures); $j++) {
+                // Don't check the new position of figure that starts on start field
+                if ($figures_on_start_field[0] === $j) {
+                    continue;
+                }
+
+                if ($dice_value === $figures[$j]->getPosition()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // Game Engine - Check if start field is blocked
     private function isStartFieldBlockedByPlayer(GameStatePlayerModel $player): bool {
-        // ToDo: check logic here. Start field must be cleared by own figures. Other players figures can be removed by player itself :) 
         $start_offset = $player->getStartOffset();
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() !== Application::AREA_FIELD) {
@@ -585,7 +623,6 @@ final class GameModel extends BaseModel {
 
     // Game Engine - Check if start field is blocked
     private function isStartFieldBlocked(GameStatePlayerModel $player): bool {
-        // ToDo: check logic here. Start field must be cleared by own figures. Other players figures can be removed by player itself :) 
         $start_offset = $player->getStartOffset();
 
         foreach ($this->player_array as $other_player) {
