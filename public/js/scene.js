@@ -1,9 +1,22 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { scene, camera } from './renderer.js';
 
+const CAMERA_MODE_FIXED = 'fixed';
+const CAMERA_MODE_FOLLOW = 'follow_turn';
+const CAMERA_RADIUS = 12;  // Distance to board center
+const CAMERA_HEIGHT = 10; // Height above board
+const CAMERA_TILT = -8 * Math.PI / 180;
+const BASE_ANGLES = [
+    3 * Math.PI/2 + CAMERA_TILT, // player 0
+    Math.PI + CAMERA_TILT, // player 1
+    Math.PI / 2 + CAMERA_TILT, // player 2
+    0 + CAMERA_TILT, // player 3
+];
+
 const figure_meshes = {};
 let board_initialized = false;
 let camera_target_position = new THREE.Vector3();
+let camera_mode = CAMERA_MODE_FIXED;
 
 // Field Storage
 const mainFields = new Array(40);
@@ -53,26 +66,52 @@ export function updateScene(state) {
     placeFigures(state);
 }
 
+// Update Camera target
+export function updateCameraTarget(state, user_id) {
+    if (!state || !state.players) return;
+
+    let player_index; 
+    if (camera_mode === CAMERA_MODE_FOLLOW) {
+        // Active player
+        player_index = state.current_player_index;
+    } else {
+        // Fixed player is the user itself 
+        const player_me = state.players.find(p => p.user_id === user_id);
+        if (!player_me) return;
+        player_index = player_me.player_index;
+    }
+
+    const angle = BASE_ANGLES[player_index] ?? 0;
+    
+    camera_target_position.set(
+        Math.sin(angle) * CAMERA_RADIUS, 
+        CAMERA_HEIGHT, 
+        Math.cos(angle) * CAMERA_RADIUS
+    );
+}
+
 // Initialize camera target after entering the scene
 export function getInitialCameraTarget(player_index) {
-    const radius = 12;  // Distance to board center
-    const height = 10; // Height above board
-    const tilt = -8 * Math.PI / 180;
+    //const radius = 12;  // Distance to board center
+    //const height = 10; // Height above board
+    //const tilt = -8 * Math.PI / 180;
 
     // angle offset to own corner and board border
+    /*
     const base_angles = [
-        3 * Math.PI/2 + tilt, // player 0
-        Math.PI + tilt, // player 1
-        Math.PI / 2 + tilt, // player 2
-        0 + tilt, // player 3
+        3 * Math.PI/2 + CAMERA_TILT, // player 0
+        Math.PI + CAMERA_TILT, // player 1
+        Math.PI / 2 + CAMERA_TILT, // player 2
+        0 + CAMERA_TILT, // player 3
     ];
+    */
 
-    const angle = base_angles[player_index]?? 0;
+    const angle = BASE_ANGLES[player_index]?? 0;
 
     camera_target_position.set(
-        Math.sin(angle) * radius, 
-        height, 
-        Math.cos(angle) * radius
+        Math.sin(angle) * CAMERA_RADIUS, 
+        CAMERA_HEIGHT, 
+        Math.cos(angle) * CAMERA_RADIUS
     );
 
     return camera_target_position.clone();
@@ -205,4 +244,14 @@ function createFigure(color) {
         new THREE.SphereGeometry(0.4, 20, 20),
         new THREE.MeshStandardMaterial({ color })
     );
+}
+
+// Getter - Get camera_target_position
+export function getCameraTarget() {
+    return camera_target_position;
+}
+
+// Setter - Set camera_mode
+export function setCameraMode(mode) {
+    camera_mode = mode;
 }

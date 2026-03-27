@@ -1,19 +1,20 @@
 import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
-import { updateScene } from './scene.js';
+import { updateScene, updateCameraTarget, setCameraMode, getCameraTarget } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 
 const canvas = document.getElementById('game_canvas');
 const btn_roll = document.getElementById('btn-roll');
-// const btn_end = document.getElementById('btn-end');
 const btn_menu = document.getElementById('btn-menu');
 const btn_resume = document.getElementById('btn-resume');
 const btn_exit = document.getElementById('btn-exit');
 const menu_overlay_element = document.getElementById('menu-overlay');
-const menu_element = document.getElementById('menu');
+const menu_settings_camera_toggle_item = document.getElementById('settings-camera-toggle');
 
 const my_player_index = window.GAME_CONFIG.user_player_index;
+let old_player_index = null;
+let settings_camera_mode = 'fixed';
 
 // Colors
 const PLAYER_COLORS = {
@@ -37,6 +38,12 @@ async function updateState() {
         const data = await fetchState(game_id);
         if (data.success) {
             current_state = data.state;
+            if (old_player_index === null || current_state.current_player_index !== old_player_index) {
+                old_player_index = current_state.current_player_index;
+            }
+            if (settings_camera_mode === 'follow_turn') {
+                updateCameraTarget(current_state, user_id);
+            }
             updateScene(current_state);
             updateHUD();
             updateDice();
@@ -71,16 +78,10 @@ function updateDice() {
     if (dice_value === null) {
         dice_container.style.display = 'none'; 
         dice_container.style.opacity = '0';
-        /*
-        dice_value_element.textContent = '';
-        dice_element.textContent = '';
-        dice_element.style.display = 'none';
-        */
         last_dice_value = null;
         return;
     }
 
-    //dice_element.style.display = 'block';
     dice_container.style.display = 'flex'; 
 
     requestAnimationFrame(() => {
@@ -210,12 +211,27 @@ btn_menu.addEventListener('click', () => {
 btn_resume.addEventListener('click', () => {
    closeMenu();
 });
+
+// Close the game menu
 menu_overlay_element.addEventListener('click', (e) => {
     if (e.target === menu_overlay_element) {
         closeMenu();
     }
 });
 
+// Set camera mode
+menu_settings_camera_toggle_item.addEventListener('change', () => {
+    settings_camera_mode = menu_settings_camera_toggle_item.checked ? 'follow_turn' : 'fixed';
+    localStorage.setItem('settings_camera_mode', settings_camera_mode);
+
+    // Update Scene
+    setCameraMode(settings_camera_mode);
+    if (current_state) {
+        updateCameraTarget(current_state, user_id);
+    }
+});
+
+// Close / Leave the game
 btn_exit.addEventListener('click', () => {
     closeMenu();
     setTimeout(function() {

@@ -1,5 +1,5 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import { getInitialCameraTarget } from './scene.js';
+import { getCameraTarget, getInitialCameraTarget } from './scene.js';
 
 export let scene, camera, renderer;
 let game_canvas;
@@ -42,6 +42,15 @@ export function initRenderer(canvas) {
 
 export function renderLoop() {
     requestAnimationFrame(renderLoop);
+
+    if (camera && getCameraTarget()) {
+        // Smooth interpolation
+        camera.position.lerp(
+            getCameraTarget(), 
+            0.08
+        );
+        camera.lookAt(0,0,0);
+    }
     renderer.render(scene, camera);
 }
 
