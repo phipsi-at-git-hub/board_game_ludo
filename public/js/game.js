@@ -1,9 +1,10 @@
-import { initRenderer, renderLoop } from "./renderer.js";
+import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
 import { updateScene } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 
+const canvas = document.getElementById('game_canvas');
 const btn_roll = document.getElementById('btn-roll');
 // const btn_end = document.getElementById('btn-end');
 const btn_menu = document.getElementById('btn-menu');
@@ -11,6 +12,8 @@ const btn_resume = document.getElementById('btn-resume');
 const btn_exit = document.getElementById('btn-exit');
 const menu_overlay_element = document.getElementById('menu-overlay');
 const menu_element = document.getElementById('menu');
+
+const my_player_index = window.GAME_CONFIG.user_player_index;
 
 // Colors
 const PLAYER_COLORS = {
@@ -23,9 +26,9 @@ const PLAYER_COLORS = {
 let current_state = null;
 let last_dice_value = null;
 
-const canvas = document.getElementById('game_canvas');
 
 initRenderer(canvas);
+animateCameraTo(my_player_index, 2000);
 renderLoop();
 
 // --- Initial State Load ---

@@ -1,7 +1,10 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { getInitialCameraTarget } from './scene.js';
 
 export let scene, camera, renderer;
 let game_canvas;
+let camera_target = null;
+let is_camera_animating = false;
 
 export function initRenderer(canvas) {
     game_canvas = canvas;
@@ -52,4 +55,24 @@ function resizeRenderer() {
 
     camera.aspect = game_wrapper_width / game_wrapper_height;
     camera.updateProjectionMatrix();
+}
+
+export function animateCameraTo(player_index, duration = 2000) {
+    // Calculate target position
+    camera_target = getInitialCameraTarget(player_index);
+    is_camera_animating = true;
+
+    // Keep start time in mind
+    const start = performance.now();
+    const start_position = camera.position.clone();
+
+    function step(now) {
+        const t = Math.min((now - start) / duration, 1); // 0 .. 1
+        camera.position.lerpVectors(start_position, camera_target, t);
+        camera.lookAt(0,0,0);
+
+        if (t < 1) requestAnimationFrame(step);
+        else is_camera_animating = false;
+    }
+    requestAnimationFrame(step);
 }

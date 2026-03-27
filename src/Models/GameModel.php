@@ -2070,9 +2070,13 @@ final class GameModel extends BaseModel {
     public function getPlayerById(string $player_id): GameStatePlayerModel {
         return GameStatePlayerModel::getPlayerById($this->id, $player_id);
     }
+
+    public function getPlayerIndexByPlayerId(string $player_id) {
+        return $this->getPlayerById($player_id)->getPlayerIndex();
+    }
     
     // Get player given by player id
-    public function getPlayerByPlayerIndex(string $player_index): GameStatePlayerModel {
+    public function getPlayerByPlayerIndex(int $player_index): GameStatePlayerModel {
         return GameStatePlayerModel::getPlayerByPlayerIndex($this->id, $player_index);
     }
 

@@ -33,7 +33,7 @@ use App\Policies\GamePolicy;
 
         <?php if (!$game->isFinished()): ?>
         <form method="POST" action="/game/<?= ($game->isParticipant($user)) ? 'leave' : 'join' ?>/<?= $game->getId() ?>">
-        <?php if (GamePolicy::canJoin($user, $game, false)) { ?>
+        <?php if (GamePolicy::canJoin($user, $game, false) || $game->getPlayerCount() === 4) { ?>
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
             <button class="joined-btn <?= ($game->isParticipant($user)) ? 'has' : 'has-not' ?>-joined">
                 <?= htmlspecialchars(($game->isParticipant($user)) ? Localization::get('game.show.leave') : Localization::get('game.show.join')) ?>

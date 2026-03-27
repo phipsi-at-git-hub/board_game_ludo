@@ -125,6 +125,8 @@ return [
     'game.play.move_figure' => 'Bewege Figur ', 
     'game.play.position' => 'Position', 
     'game.play.absolute_position' => 'Absolute Position', 
+    'game.play.menu_title' => ' Menü', 
+    'game.play.menu_settings_camera_toggle' => 'Kameraperspektive wechselt zwischen aktiven Spielern', 
     'game.play.resume' => 'Spiel fortsetzen', 
     'game.play.back_to_detail' => '← Zurück zur Detailansicht', 
 

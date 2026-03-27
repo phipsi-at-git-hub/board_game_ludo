@@ -48,7 +48,14 @@ use App\Core\Localization;
     <!-- Menu -->
     <div id="menu-overlay">
         <div id="menu">
-            <h2><?= Localization::get('game.play.menu') ?></h2>
+            <h2><?= Localization::get('game.play.menu_title') ?></h2>
+
+            <p>
+                <label>
+                    <input type="checkbox" id="settings-camera-toggle">
+                    <?= Localization::get('game.play.menu_settings_camera_toggle') ?>
+                </label>
+            </p>
 
             <button id="btn-resume">
                 <?= Localization::get('game.play.resume') ?>
@@ -69,6 +76,7 @@ use App\Core\Localization;
     window.GAME_CONFIG = {
         game_id: "<?= $game->getId() ?>",
         user_id: "<?= $user->getId() ?>", 
+        user_player_index: "<?= $game->getPlayerIndexByPlayerId($user->getId()) ?>", 
         _csrf_token: "<?= Csrf::generate() ?>"
     };
 </script>

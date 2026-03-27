@@ -1,8 +1,9 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import { scene } from './renderer.js';
+import { scene, camera } from './renderer.js';
 
 const figure_meshes = {};
 let board_initialized = false;
+let camera_target_position = new THREE.Vector3();
 
 // Field Storage
 const mainFields = new Array(40);
@@ -50,6 +51,31 @@ export function updateScene(state) {
     }
 
     placeFigures(state);
+}
+
+// Initialize camera target after entering the scene
+export function getInitialCameraTarget(player_index) {
+    const radius = 12;  // Distance to board center
+    const height = 10; // Height above board
+    const tilt = -8 * Math.PI / 180;
+
+    // angle offset to own corner and board border
+    const base_angles = [
+        3 * Math.PI/2 + tilt, // player 0
+        Math.PI + tilt, // player 1
+        Math.PI / 2 + tilt, // player 2
+        0 + tilt, // player 3
+    ];
+
+    const angle = base_angles[player_index]?? 0;
+
+    camera_target_position.set(
+        Math.sin(angle) * radius, 
+        height, 
+        Math.cos(angle) * radius
+    );
+
+    return camera_target_position.clone();
 }
 
 // Initialize Board
