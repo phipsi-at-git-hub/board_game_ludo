@@ -32,7 +32,7 @@ use App\Core\Localization;
 
     <!-- Controls -->
     <div id="controls">
-        <button id="btn-roll">
+        <button id="btn-roll" class="btn">
             🎲 <?= Localization::get('game.play.roll_dice') ?>
         </button>
 
@@ -42,7 +42,7 @@ use App\Core\Localization;
         </button>
         -->
 
-        <button id="btn-menu">☰</button>
+        <button id="btn-menu" class="btn">☰</button>
     </div>
 
     <!-- Menu -->

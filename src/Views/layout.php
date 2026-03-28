@@ -1,9 +1,6 @@
 <?php
 use App\Core\Localization;
 use App\Core\Asset;
-
-$cssPath = __DIR__ . '/../../public/css/general.css';
-$cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
 ?>
 
 <!DOCTYPE html>
