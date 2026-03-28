@@ -12,7 +12,13 @@ use App\Core\Asset;
     </head>
     <body>
 
-        <?= $content ?>
+        <!-- Navigational Bar -->
+        <?php include VIEWS_PATH . '/partials/navbar.php'; ?>
+
+        <!-- Main Content -->
+        <div class="content-container">
+            <?= $content ?>
+        </div>
 
     </body>
 </html>

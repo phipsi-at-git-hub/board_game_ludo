@@ -7,8 +7,6 @@ use App\Controllers\AdminController;
 use App\Controllers\ApiGameController;
 use App\Controllers\AuthController;
 use App\Controllers\GameController;
-use App\Controllers\HomeController;
-use App\Controllers\MenuController;
 use App\Core\Middleware;
 use App\Core\Router;
 
@@ -25,8 +23,6 @@ $router->get('/reset-password/{token}', [AccountController::class, 'showResetFor
 $router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 
 // --- Authenticated routes ---
-$router->get('/', [HomeController::class, 'index'], [fn() => Middleware::auth()]);
-$router->get('/menu', [MenuController::class, 'index'], [fn() => Middleware::auth()]);
 $router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf()]);
 
 $router->group('/account', function($group) {
@@ -37,6 +33,7 @@ $router->group('/account', function($group) {
 }, [fn() => Middleware::auth()]);
 
 // --- Game routes ---
+$router->get('/', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
 $router->get('/lobby', [GameController::class, 'lobby'], [fn() => Middleware::auth()]);
 $router->group('/game', function($group) {
     $group->get('/create', [GameController::class, 'create']);

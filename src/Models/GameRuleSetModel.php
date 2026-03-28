@@ -222,9 +222,15 @@ final class GameRuleSetModel extends BaseModel {
         return $game_state_array;
     }
 
-    // Check Triple roll rule
+    // Helper - Check Triple roll rule
     public function canUseTripleRoll(): bool {
         return $this->leave_home_attempts_max === 3;
+    }
+
+    // Helper - Get all Rules
+    public function getAllRules(): array {
+        // ToDo: implement for easier access 
+        return [];
     }
 
     /**

@@ -10,7 +10,11 @@ use App\Models\UserModel;
 class AccountController extends BaseController {
     // Show profile
     public function profile() {
-        require __DIR__ . '/../Views/account/profile.php';
+        //require __DIR__ . '/../Views/account/profile.php';
+        $this->render(
+            'account/profile', 
+            []
+        ); 
     }
 
     // Update profile

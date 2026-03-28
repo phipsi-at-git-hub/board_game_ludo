@@ -23,7 +23,7 @@ class AuthController extends BaseController {
 
         if ($user) {
             Auth::login($user);
-            header('Location: /menu');
+            header('Location: /lobby');
             exit;
         }
 
@@ -39,7 +39,7 @@ class AuthController extends BaseController {
         $user = UserModel::create($username, $email, $password);
         Auth::login($user);
 
-        header('Location: /menu');
+        header('Location: /lobby');
         exit;
     }
 

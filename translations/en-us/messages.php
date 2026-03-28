@@ -8,11 +8,31 @@ return [
     'application.general.yes' => 'Yes', 
     'application.general.no' => 'No', 
 
+    // Application navbar
+    'application.navbar.btn_admin' => '🛡 Admin', 
+    'application.navbar.btn_account' => '👤 User Account', 
+    'application.navbar.btn_logout' => '🚪 Logout', 
+
     // Application - Menu
     'application.menu.title' => 'Main Menu', 
     'application.menu.lobby' => '🎮 Game Lobby', 
     'application.menu.account' => '👤 User Account', 
     'application.menu.admin' => '🛡 Admin', 
+
+    // Account - Profile
+    'account.profile.title' => '👤 User Account', 
+    'account.profile.information' => 'ℹ️ Profile Information', 
+    'account.profile.change_password' => '🔒 Change Password', 
+    'account.profile.delete_account' => '⚠️ Danger Zone', 
+    'account.profile.information.username' => 'Username', 
+    'account.profile.information.email' => 'Email', 
+    'account.profile.change_password.current_password' => 'Current Password', 
+    'account.profile.change_password.new_password' => 'New Password', 
+    'account.profile.change_password.confirm_password' => 'Confirm Password', 
+    'account.profile.delete_account.information' => 'This action cannot be undone.', 
+    'account.profile.btn.update_profile' => 'Update Profile', 
+    'account.profile.btn.change_password' => 'Change Password', 
+    'account.profile.btn.delete_account' => 'Delete Account', 
 
     // Game general
     'game.create.title' => 'Create new game',
@@ -23,6 +43,7 @@ return [
     
     // Game - Lobby
     'game.lobby.title' => '🎮 Game Lobby', 
+    'game.lobby.welcome' => 'Welcome', 
     'game.lobby.create_new_game' => '➕ Create new Game', 
     'game.lobby.open_games' => '📜 Open Games', 
     'game.lobby.my_games' => '🐦 My Games', 
@@ -42,6 +63,8 @@ return [
     'game.list.options' => 'Options',
     'game.list.name' => 'Name', 
     'game.list.action' => 'Action',
+    'game.list.details' => '👁 Details',
+    'game.list.details_icon' => '👁',
     'game.list.join' => '➕ Join',
     'game.list.join_icon' => '➕',
     'game.list.edit' => '✏️ Edit', 
@@ -59,7 +82,7 @@ return [
     'game.create.button_create' => 'Create Game', 
     'game.create.three' => '3', 
     'game.create.name' => 'Name', 
-    'game.create.game_name' => 'Game Name', 
+    'game.create.game_name' => '🎮 Game Name', 
     'game.create.game_options' => 'Game Options', 
     'game.create.game_rules' => 'Game Rules', 
 
@@ -71,6 +94,7 @@ return [
     'game.show.title' => 'Game', 
     'game.show.back_to_list' => '← Back to List', 
     'game.show.solo_test_creation_confirm' => 'Are you sure you want to create and run a Test Session from this Game?', 
+    'game.show.info' => 'ℹ️ Info', 
     'game.show.status' => 'Status', 
     'game.show.join' => 'Join',
     'game.show.leave' => 'Leave',
