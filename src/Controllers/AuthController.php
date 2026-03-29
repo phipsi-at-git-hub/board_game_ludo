@@ -8,11 +8,16 @@ use App\Models\UserModel;
 
 class AuthController extends BaseController {
     public function showLogin() {
-        require __DIR__ . '/../Views/auth/login.php';
+        $this->render(
+            'auth/login', 
+            []
+        );
     }
 
     public function showRegister() {
-        require __DIR__ . '/../Views/auth/register.php';
+        $this->render(
+            'auth/register', 
+            []);
     }
 
     public function login() {
@@ -28,7 +33,12 @@ class AuthController extends BaseController {
         }
 
         $error = 'Invalid login credentials.';
-        require __DIR__ . '/../Views/auth/login.php';
+        $this->render(
+            'auth/login', 
+            [
+                'error' => $error
+            ]
+        );
     }
 
     public function register() {

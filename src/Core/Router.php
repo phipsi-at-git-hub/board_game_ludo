@@ -85,6 +85,11 @@ class Router {
                 '([0-9a-fA-F\-]{36})', 
                 $path
             );
+            $pattern = preg_replace(
+                '#\{token\}#', 
+                '([0-9a-fA-F\-]{64})', 
+                $pattern
+            );
             //$pattern = "#^" . $pattern . "$#";
             $pattern = "#^" . rtrim($pattern, '/') . "/?$#";
 

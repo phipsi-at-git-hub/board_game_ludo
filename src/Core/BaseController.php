@@ -7,7 +7,11 @@ use App\Core\Auth;
 abstract class BaseController {
     // Renderer
     protected function render(string $view, array $data = []): void {
-        $data['current_user'] = Auth::user();
+        $data['current_user'] = null;
+        
+        if (Auth::user()) {
+            $data['current_user'] = Auth::user();
+        }
 
         extract($data);
 

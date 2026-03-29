@@ -1,9 +1,36 @@
-<?php use App\Core\Csrf; ?>
+<?php 
+use App\Core\Csrf; 
+use App\Core\Localization;
+?>
 
-<h1>Reset Password</h1>
-<form method="POST" action="">
-    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-    <input type="password" name="new_password" placeholder="New password" required><br>
-    <input type="password" name="confirm_password" placeholder="Confirm password" required><br>
-    <button type="submit">Reset Password</button>
-</form>
+<div class="auth-panel">
+    <div class="card auth-card">
+        <h1><?= Localization::get('account.reset_password.title') ?></h1>
+
+        <form method="POST" action="" class="form">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+
+            <div class="form-group">
+                <label><?= Localization::get('account.reset_password.new_password') ?></label>
+                <input type="password" name="new_password" placeholder="<?= Localization::get('account.reset_password.placeholder.password') ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label><?= Localization::get('account.reset_password.confirm_password') ?></label>
+                <input type="password" name="confirm_password" placeholder="<?= Localization::get('account.reset_password.placeholder.password') ?>" required>
+            </div>
+
+            <div class="nav-actions">
+                <button type="submit" class="btn btn-primary full-width">
+                    <?= Localization::get('account.reset_password.btn.reset') ?>
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-links">
+            <a href="/login"><?= Localization::get('account.reset_password.btn.back_to_login') ?></a>
+        </div>
+    </div>
+</div>
+
+ 

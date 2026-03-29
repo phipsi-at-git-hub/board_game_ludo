@@ -11,6 +11,7 @@ return [
     // Application navbar
     'application.navbar.btn_admin' => '🛡 Admin', 
     'application.navbar.btn_account' => '👤 Benutzer Account', 
+    'application.navbar.btn_login' => '👤 Login', 
     'application.navbar.btn_logout' => '🚪 Logout', 
 
     // Application - Menu
@@ -18,6 +19,46 @@ return [
     'application.menu.lobby' => '🎮 Spiel Lobby', 
     'application.menu.account' => '👤 Benutzer Account', 
     'application.menu.admin' => '🛡 Admin', 
+
+    // Auth - Login 
+    'auth.login.title' => '🔐 Login', 
+    'auth.login.email' => 'Email', 
+    'auth.login.placeholder.email' => 'example@provider.com', 
+    'auth.login.password' => 'Passwort', 
+    'auth.login.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'auth.login.btn.login' => 'Login', 
+    'auth.login.no_account' => 'Kein Benutzerkonto?', 
+    'auth.login.btn.register' => 'Registrieren', 
+    'auth.login.btn.forgot_password' => 'Passwort vergessen?', 
+
+    // Auth - Register
+    'auth.register.title' => 'Registrierung', 
+    'auth.register.username' => 'Benutzername', 
+    'auth.register.placeholder.username' => 'John Doe', 
+    'auth.register.email' => 'Email', 
+    'auth.register.placeholder.email' => 'example@provider.com', 
+    'auth.register.password' => 'Passwort', 
+    'auth.register.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'auth.register.confirm_password' => 'Passwort bestätigen', 
+    'auth.register.btn.register' => 'Registrieren', 
+    'auth.register.already_registered' => 'Bereits registriert?', 
+    'auth.register.btn.login' => 'Login', 
+
+    // Account - Forgot Password
+    'account.forgot_password.title' => '🔑 Passwort vergessen', 
+    'account.forgot_password.label' => 'Tippe deine Emailadresse ein und wir schicken dir einen Reset-Link.', 
+    'account.forgot_password.email' => 'Email', 
+    'account.forgot_password.placeholder.email' => 'example@provider.com', 
+    'account.forgot_password.btn.send' => 'Reset Link senden', 
+    'account.forgot_password.btn.back_to_login' => '← Zurück zum login', 
+
+    // Account - Reset Password
+    'account.reset_password.title' => '🔒 Passwort Zurücksetzen', 
+    'account.reset_password.new_password' => 'Neues Passwort', 
+    'account.reset_password.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'account.reset_password.confirm_password' => 'Passwort bestätigen', 
+    'account.reset_password.btn.reset' => 'Passwort zurücksetzen', 
+    'account.reset_password.btn.back_to_login' => '← Zurück zum login', 
 
     // Account - Profile
     'account.profile.title' => '👤 Benutzer Account', 

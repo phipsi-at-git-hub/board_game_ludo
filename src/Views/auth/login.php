@@ -1,12 +1,37 @@
-<?php use App\Core\Csrf; ?>
+<?php 
+use App\Core\Csrf;
+use App\Core\Localization;
+ ?>
 
-<h1>Login</h1>
-<?php if (!empty($error)) echo "<p style='color:red'>$error</p>"; ?>
-<form method="POST" action="/login">
-    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Password" required><br>
-    <button type="submit">Login</button>
-</form>
-<p>No account? <a href="/register">Register</a></p>
-<p>Forgot your password? <a href="/forgot-password">Request Reset Token</a></p>
+<div class="auth-panel">
+    <div class="card auth-card">
+        <h1><?= Localization::get('auth.login.title') ?></h1>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+
+        <form method="POST" action="/login" class="form">
+            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+
+            <div class="form-group">
+                <label><?= Localization::get('auth.login.email') ?></label>
+                <input type="email" name="email" placeholder="<?= Localization::get('auth.login.placeholder.email') ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label><?= Localization::get('auth.login.password') ?></label>
+                <input type="password" name="password" placeholder="<?= Localization::get('auth.login.placeholder.password') ?>" required>
+            </div>
+
+            <div class="nav-actions">
+                <button type="submit" class="btn btn-primary full-width"><?= Localization::get('auth.login.btn.login') ?></button>
+            </div>
+        </form>
+
+        <div class="auth-links">
+            <p><?= Localization::get('auth.login.no_account') ?> <a href="/register"><?= Localization::get('auth.login.btn.register') ?></a></p>
+            <p><a href="/forgot-password"><?= Localization::get('auth.login.btn.forgot_password') ?></a></p>
+        </div>
+    </div>
+</div>

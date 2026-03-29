@@ -62,7 +62,10 @@ class AccountController extends BaseController {
 
     // Reset password
     public function showForgotPassword() {
-        require __DIR__ . '/../Views/account/forgot_password.php';
+        $this->render(
+            'account/forgot_password',
+            []
+        );
     }
 
     // Reset password - Send link
@@ -72,12 +75,15 @@ class AccountController extends BaseController {
 
         // Send Email for password reset
         // ToDo
-        echo "Reset link: http://localhost:8080/reset_password.php/$token";
+        echo "Reset link: http://localhost:8080/reset-password/$token";
     }
 
     // Reset password - Reset form
     public function showResetForm(string $token) {
-        require __DIR__ . '/../Views/account/reset_password.php';
+        $this->render(
+            'account/reset_password', 
+            []
+        );
     }
 
     // Reset password - reset password

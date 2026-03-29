@@ -113,6 +113,14 @@ html, body {
     transform: scale(1.05);
 }
 
+.auth-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*min-height: 70vh;*/
+    margin: 30px auto;
+}
+
 /* Game List */
 .game-list, 
 .users-list {
@@ -329,6 +337,25 @@ a:hover {
     text-decoration: underline;
 }
 
+.auth.links {
+    margin-top: 16px;
+    font-size: 0.9rem;
+}
+
+.auth-links a {
+    text-decoration: none;
+}
+
+/* Errors */
+
+.alert.error {
+    background-color: #ffe5e5;
+    color: #d32f2f;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
 /* Navbar */
 .navbar {
     display: flex;
@@ -379,7 +406,7 @@ a:hover {
 /* Forms */
 input, select, textarea {
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #cccccc;
     font-size: 14px;
     width: 100%;
@@ -390,6 +417,32 @@ input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--tip-color);
     box-shadow: 0 0 4px rgba(68,176,68,0.4);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.form-group {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group input {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
 }
 
 /* Cards */
@@ -438,6 +491,13 @@ input:focus, select:focus, textarea:focus {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    text-align: center;
 }
 
 /* Status Badges */

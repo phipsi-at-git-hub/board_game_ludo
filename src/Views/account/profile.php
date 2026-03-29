@@ -85,8 +85,4 @@ use App\Core\Localization;
 
 </div>
 
-<div class="back-link">
-    <a href="/menu" class="btn-back">← Back to Main Menu</a>
-</div>
-
  

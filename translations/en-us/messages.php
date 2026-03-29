@@ -12,12 +12,53 @@ return [
     'application.navbar.btn_admin' => '🛡 Admin', 
     'application.navbar.btn_account' => '👤 User Account', 
     'application.navbar.btn_logout' => '🚪 Logout', 
+    'application.navbar.btn_login' => '👤 Login', 
 
     // Application - Menu
     'application.menu.title' => 'Main Menu', 
     'application.menu.lobby' => '🎮 Game Lobby', 
     'application.menu.account' => '👤 User Account', 
     'application.menu.admin' => '🛡 Admin', 
+
+    // Auth - Login 
+    'auth.login.title' => '🔐 Login', 
+    'auth.login.email' => 'Email', 
+    'auth.login.placeholder.email' => 'example@provider.com', 
+    'auth.login.password' => 'Password', 
+    'auth.login.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'auth.login.btn.login' => 'Login', 
+    'auth.login.no_account' => 'No account?', 
+    'auth.login.btn.register' => 'Register', 
+    'auth.login.btn.forgot_password' => 'Forgot password?', 
+
+    // Auth - Register
+    'auth.register.title' => '✨Register', 
+    'auth.register.username' => 'Username', 
+    'auth.register.placeholder.username' => 'John Doe', 
+    'auth.register.email' => 'Email', 
+    'auth.register.placeholder.email' => 'example@provider.com', 
+    'auth.register.password' => 'Password', 
+    'auth.register.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'auth.register.confirm_password' => 'Confirm Password', 
+    'auth.register.btn.register' => 'Register', 
+    'auth.register.already_registered' => 'Already registered?', 
+    'auth.register.btn.login' => 'Login', 
+
+    // Account - Forgot Password
+    'account.forgot_password.title' => '🔑 Forgot Password', 
+    'account.forgot_password.label' => 'Enter your email and we\'ll send you a reset link.', 
+    'account.forgot_password.email' => 'Email', 
+    'account.forgot_password.placeholder.email' => 'example@provider.com', 
+    'account.forgot_password.btn.send' => 'Send Reset Link', 
+    'account.forgot_password.btn.back_to_login' => '← Back to login', 
+
+    // Account - Reset Password
+    'account.reset_password.title' => '🔒 Reset Password', 
+    'account.reset_password.new_password' => 'New Password', 
+    'account.reset_password.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
+    'account.reset_password.confirm_password' => 'Confirm Password', 
+    'account.reset_password.btn.reset' => 'Reset Password', 
+    'account.reset_password.btn.back_to_login' => '← Back to login', 
 
     // Account - Profile
     'account.profile.title' => '👤 User Account', 
