@@ -215,7 +215,16 @@ return [
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
 
     // Admin
-    'admin.dashboard.title' => 'Admin Dashboard', 
-    'admin.users.manage' => 'Manage Users', 
-    'admin.games.manage' => 'Manage Games',
+    'admin.dashboard.title' => '🛠️ Admin Dashboard', 
+    'admin.dashboard.users_card.title' => '👤 Users', 
+    'admin.dashboard.users_card.total' => 'Total Users', 
+    'admin.dashboard.users_card.admin' => 'Admin',  
+    'admin.dashboard.users_card.user' => 'User', 
+    'admin.dashboard.games_card.title' => '🎲 Games', 
+    'admin.dashboard.games_card.total' => 'Total Games', 
+    'admin.dashboard.games_card.waiting' => 'Total Games', 
+    'admin.dashboard.games_card.active' => 'Total Games', 
+    'admin.dashboard.games_card.finished' => 'Total Games', 
+    'admin.dashboard.users_manage' => 'Manage Users  →', 
+    'admin.dashboard.games_manage' => 'Manage Games  →',
 ];

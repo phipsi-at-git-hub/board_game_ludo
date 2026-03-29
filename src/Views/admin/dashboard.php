@@ -1,7 +1,9 @@
-<?php use App\Core\Localization; ?>
+<?php 
+use App\Core\Localization; 
+?>
 
 <div class="panel">
-    <h1>Admin Dashboard 🛠️</h1>
+    <h1><?= Localization::get('admin.dashboard.title') ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
@@ -13,51 +15,51 @@
 
         <!-- Users -->
         <div class="card dashboard-card">
-            <h2>👤 Users</h2>
+            <h2><?= Localization::get('admin.dashboard.users_card.title') ?></h2>
 
             <div class="stats-main">
                 <div class="stat-big"><?= $stats['users_total'] ?></div>
-                <div class="stat-label">Total Users</div>
+                <div class="stat-label"><?= Localization::get('admin.dashboard.users_card.total') ?></div>
             </div>
 
             <div class="stats-sub">
                 <div>
                     <span class="stat-value"><?= $stats['admins_total'] ?></span>
-                    <span class="stat-text">Admins</span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.users_card.admin') ?></span>
                 </div>
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/users" class="btn btn-primary">Manage Users →</a>
+                <a href="/admin/users" class="btn btn-primary"><?= Localization::get('admin.dashboard.manage') ?></a>
             </div>
         </div>
 
         <!-- Games -->
         <div class="card dashboard-card">
-            <h2>🎲 Games</h2>
+            <h2><?= Localization::get('admin.dashboard.games_card.title') ?></h2>
 
             <div class="stats-main">
                 <div class="stat-big"><?= $stats['games_total'] ?></div>
-                <div class="stat-label">Total Games</div>
+                <div class="stat-label"><?= Localization::get('admin.dashboard.games_card.total') ?></div>
             </div>
 
             <div class="stats-sub">
                 <div>
                     <span class="stat-value"><?= $stats['games_waiting'] ?></span>
-                    <span class="stat-text">Waiting</span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.games_card.waiting') ?></span>
                 </div>
                 <div>
                     <span class="stat-value"><?= $stats['games_active'] ?></span>
-                    <span class="stat-text">Active</span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.games_card.active') ?></span>
                 </div>
                 <div>
                     <span class="stat-value"><?= $stats['games_finished'] ?></span>
-                    <span class="stat-text">Finished</span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.games_card.finished') ?></span>
                 </div>
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/games/list" class="btn btn-primary">Manage Games →</a>
+                <a href="/admin/games/list" class="btn btn-primary"><?= Localization::get('admin.dashboard.games_manage') ?></a>
             </div>
         </div>
 
