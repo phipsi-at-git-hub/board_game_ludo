@@ -3,7 +3,7 @@ import { scene, camera } from './renderer.js';
 
 const CAMERA_MODE_FIXED = 'fixed';
 const CAMERA_MODE_FOLLOW = 'follow_turn';
-const CAMERA_RADIUS = 12;  // Distance to board center
+const CAMERA_RADIUS = 7;  // Distance to board center
 const CAMERA_HEIGHT = 10; // Height above board
 const CAMERA_TILT = -8 * Math.PI / 180;
 const BASE_ANGLES = [
@@ -92,20 +92,6 @@ export function updateCameraTarget(state, user_id) {
 
 // Initialize camera target after entering the scene
 export function getInitialCameraTarget(player_index) {
-    //const radius = 12;  // Distance to board center
-    //const height = 10; // Height above board
-    //const tilt = -8 * Math.PI / 180;
-
-    // angle offset to own corner and board border
-    /*
-    const base_angles = [
-        3 * Math.PI/2 + CAMERA_TILT, // player 0
-        Math.PI + CAMERA_TILT, // player 1
-        Math.PI / 2 + CAMERA_TILT, // player 2
-        0 + CAMERA_TILT, // player 3
-    ];
-    */
-
     const angle = BASE_ANGLES[player_index]?? 0;
 
     camera_target_position.set(

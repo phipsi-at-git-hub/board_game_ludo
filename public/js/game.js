@@ -188,7 +188,7 @@ function closeMenu() {
 }
 
 // --- EVENT LISTENER ---
-// --- Roll Dice Button ---
+// Roll Dice Button 
 btn_roll.addEventListener('click', async () => {
     if (!isMyTurn()) return;
 

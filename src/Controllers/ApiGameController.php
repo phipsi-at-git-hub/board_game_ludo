@@ -68,7 +68,7 @@ class ApiGameController extends BaseController {
 
             $current_roll = $game->getStateModel()->getCurrentDiceRoll();
             if ($current_roll === null) {
-                return $this->jsonClean(['success' => false, 'error' => 'Dice not rolled yet'], 406);
+                return $this->jsonClean(['success' => false, 'error' => 'Dice not rolled yet'], 200);
             }
 
             $moves = $game->getAvailableMoves($user->getId(), $current_roll);

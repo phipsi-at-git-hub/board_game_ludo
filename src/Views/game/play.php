@@ -5,70 +5,65 @@ use App\Core\Localization;
 ?>
 
 <!-- 🎮 THREE.js Canvas -->
-<canvas id="game_canvas"></canvas>
+<div id="game-container">
+    <canvas id="game_canvas"></canvas>
 
-<!-- 🧩 UI -->
-<div id="ui">
+    <!-- 🧩 UI -->
+    <div id="ui">
 
-    <!-- HUD -->
-    <div id="hud">
-        <div>
-            🎮 <?= $game->getName() ?>
+        <!-- HUD -->
+        <div id="hud">
+            <div>
+                🎮 <?= $game->getName() ?>
+            </div>
+            <div>
+                <span><?= Localization::get('game.play.current_player') ?>:</span>
+                <span id="current-username"><?= $game->getCurrentPlayer()->getUsername() ?></span>
+            </div>
         </div>
-        <div>
-            <span><?= Localization::get('game.play.current_player') ?>:</span>
-            <span id="current-username"><?= $game->getCurrentPlayer()->getUsername() ?></span>
+
+        <!-- Dice -->
+        <div id="dice-container">
+        <div id="dice"></div>
+        <div id="dice-value"></div>
         </div>
-    </div>
 
-    <!-- Dice -->
-    <div id="dice-container">
-    <div id="dice"></div>
-    <div id="dice-value"></div>
-    </div>
+        <!-- Available Moves -->
+        <div id="moves-container"></div>
 
-    <!-- Available Moves -->
-     <div id="moves-container"></div>
-
-    <!-- Controls -->
-    <div id="controls">
-        <button id="btn-roll" class="btn btn-primary">
-            🎲 <?= Localization::get('game.play.roll_dice') ?>
-        </button>
-
-        <!--
-        <button id="btn-end">
-            ➡️ <?= Localization::get('game.play.pass_turn') ?>
-        </button>
-        -->
-
-        <button id="btn-menu" class="btn btn-primary">☰</button>
-    </div>
-
-    <!-- Menu -->
-    <div id="menu-overlay">
-        <div id="menu">
-            <h2><?= Localization::get('game.play.menu_title') ?></h2>
-
-            <p>
-                <label>
-                    <input type="checkbox" id="settings-camera-toggle">
-                    <?= Localization::get('game.play.menu_settings_camera_toggle') ?>
-                </label>
-            </p>
-
-            <button id="btn-resume" class="btn btn-primary">
-                <?= Localization::get('game.play.resume') ?>
+        <!-- Controls -->
+        <div id="controls">
+            <button id="btn-roll" class="btn btn-primary">
+                🎲 <?= Localization::get('game.play.roll_dice') ?>
             </button>
 
-            <br><br>
-
-            <button id="btn-exit" class="btn btn-primary">
-                <?= Localization::get('application.general.btn.back_to_detail') ?>
-            </button>
+            <button id="btn-menu" class="btn btn-primary"><?= Localization::get('application.general.icon.menu') ?></button>
         </div>
-    </div>
 
+        <!-- Menu -->
+        <div id="menu-overlay">
+            <div id="menu">
+                <h2><?= Localization::get('game.play.menu_title') ?></h2>
+
+                <p>
+                    <label>
+                        <input type="checkbox" id="settings-camera-toggle"><?= Localization::get('game.play.menu_settings_camera_toggle') ?>
+                    </label>
+                </p>
+
+                <button id="btn-resume" class="btn btn-primary">
+                    <?= Localization::get('game.play.resume') ?>
+                </button>
+
+                <br><br>
+
+                <button id="btn-exit" class="btn btn-primary">
+                    <?= Localization::get('application.general.btn.back_to_detail') ?>
+                </button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <!-- 🔧 Game Config -->
@@ -80,7 +75,6 @@ use App\Core\Localization;
         _csrf_token: "<?= Csrf::generate() ?>"
     };
 </script>
-<link rel="stylesheet" href="<?= Asset::asset('/css/game.css') ?>">
 
 <!-- 🎮 Game entry point -->
 <script type="module" src="<?= Asset::asset('/js/game.js') ?>"></script>

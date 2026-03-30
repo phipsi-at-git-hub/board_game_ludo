@@ -30,6 +30,7 @@ return [
     'application.general.icon.game_differ' => '⚙️', 
     'application.general.icon.private' => '⛔', 
     'application.general.icon.locked' => '🔒', 
+    'application.general.icon.menu' => '☰', 
 
     // Application navbar
     'application.navbar.btn_admin' => '🛡 Admin', 

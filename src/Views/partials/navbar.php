@@ -2,7 +2,7 @@
 use App\Core\Localization;
 ?>
 
-<nav class="navbar">
+<nav id="navbar" class="navbar">
     <div class="logo"><a href="/lobby" class="btn-home"><?= Localization::get('application.general.title') ?></a></div>
     <div class="nav-items">
         <?php if ($current_user !== null): ?>

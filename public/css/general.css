@@ -4,6 +4,8 @@
     --primary-color-dark: #e6b800;
     --secondary-color: #007bff;
     --secondary-color-dark: #005fc4;
+    --default-color: #f2f2f2;
+    --default-color-dark: #e0e0e0; 
     --tip-color: #44b044;
     --tip-color-dark: #36a036;
     --danger-color: #f44336;
@@ -18,10 +20,10 @@ html, body {
     color: #333;
 }
 
-.container {
+.content-container.game {
     max-width: 900px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 25px 30px;
 }
 
 /* Panels */
@@ -79,10 +81,6 @@ html, body {
     list-style: none;
     padding: 0;
     display: flex;
-    /*
-    flex-wrap: wrap;
-    gap: 10px;
-    */
     flex-direction: column;
     gap: 32px;
     align-items: center;
@@ -97,19 +95,20 @@ html, body {
 }
 
 .panel .nav-actions .nav-list li a.btn-back {
-    width: 200px;
-    background-color: #f2f2f2;
+    /*width: 200px;*/
+    background-color: var(--default-color);
     color: #333333;
     text-decoration: none;
     text-align: center;
     padding: 10px 18px;
     border-radius: 12px;
     font-weight: bold;
+    display: inline-block;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .panel .nav-actions .nav-list li a.btn-back:hover {
-    background-color: #e0e0e0;
+    background-color: var(--default-color-dark);
     transform: scale(1.05);
 }
 
@@ -117,7 +116,6 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /*min-height: 70vh;*/
     margin: 30px auto;
 }
 
@@ -175,7 +173,7 @@ html, body {
 
 .game-list th.type, 
 .game-list td.type {
-    width: 60px;
+    width: 70px;
     text-align: left;
 }
 
@@ -337,16 +335,19 @@ html, body {
 }
 
 .btn-primary { background-color: var(--primary-color); color: #000000; }
-.btn-primary:hover { background-color: var(--primary-color-dark); text-decoration: none; }
+.btn-primary:hover { background-color: var(--primary-color-dark); text-decoration: none; transform: scale(1.05); }
 
 .btn-secondary { background-color: var(--secondary-color);}
-.btn-secondary:hover { background-color: var(--secondary-color-dark); text-decoration: none; }
+.btn-secondary:hover { background-color: var(--secondary-color-dark); text-decoration: none; transform: scale(1.05); }
+
+.btn-default { background-color: var(--default-color);}
+.btn-default:hover { background-color: var(--default-color-dark); text-decoration: none; transform: scale(1.05); }
 
 .btn-save { background-color: var(--tip-color); }
-.btn-save:hover { background-color: var(--tip-color-dark); text-decoration: none; }
+.btn-save:hover { background-color: var(--tip-color-dark); text-decoration: none; transform: scale(1.05); }
 
 .btn-danger { background-color: var(--danger-color); }
-.btn-danger:hover { background-color: var(--danger-color-dark); text-decoration: none; }
+.btn-danger:hover { background-color: var(--danger-color-dark); text-decoration: none; transform: scale(1.05); }
 
 .btn:active {
     transform: translateY(2px);
@@ -407,6 +408,7 @@ a:hover {
     text-decoration: none;
     border-radius: 12px;
     padding: 10px 18px;
+    display: inline-block;
     transition: background-color 0.2s ease, transform 0.1s ease;
     cursor: pointer;
 }
@@ -415,6 +417,7 @@ a:hover {
     color: #333333;
     background-color: #f2f2f2;
     text-decoration: none;
+    transform: scale(1.05);
 }
 
 .navbar .nav-items {

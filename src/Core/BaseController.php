@@ -6,7 +6,16 @@ use App\Core\Auth;
 
 abstract class BaseController {
     // Renderer
-    protected function render(string $view, array $data = []): void {
+    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = []): void {
+        if (!$view) {
+            return;
+        }
+
+        // Prepare variables
+        if (!$page_title) {
+            $page_title = htmlspecialchars(Localization::get('application.general.title'));
+        }
+
         $data['current_user'] = null;
         
         if (Auth::user()) {
@@ -15,6 +24,7 @@ abstract class BaseController {
 
         extract($data);
 
+        // Create View and render it
         ob_start();
         require VIEWS_PATH . '/' . $view . '.php';
         $content = ob_get_clean();
