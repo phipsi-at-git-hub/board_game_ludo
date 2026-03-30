@@ -7,6 +7,29 @@ return [
     'application.general.title' => 'Ludo',
     'application.general.yes' => 'Yes', 
     'application.general.no' => 'No', 
+    'application.general.btn.back_to_login' => '← Back to login', 
+    'application.general.btn.back_to_lobby' => '← Back to Lobby', 
+    'application.general.btn.back_to_list' => '← Back to List', 
+    'application.general.btn.back_to_games' => '← Back to Games', 
+    'application.general.btn.back_to_users' => '← Back to Users', 
+    'application.general.btn.back_to_game' => '← Back to Game', 
+    'application.general.btn.back_to_user' => '← Back to User', 
+    'application.general.btn.back_to_detail' => '← Back to Detail View', 
+    'application.general.btn.back_to_dashboard' => '← Back to Dashboard', 
+    'application.general.btn.create_new_game' => '➕ Create new Game', 
+    'application.general.btn.create_new_user' => '➕ Create new User',  
+    'application.general.btn.save' => 'Save', 
+    'application.general.btn.update' => 'Update', 
+    'application.general.icon.details' => '👁',
+    'application.general.icon.create' => '➕',
+    'application.general.icon.join' => '➕',
+    'application.general.icon.edit' => '✏️', 
+    'application.general.icon.delete' => '🗑', 
+    'application.general.icon.test_solo' => '🧪', 
+    'application.general.icon.game_classic' => '🎲', 
+    'application.general.icon.game_differ' => '⚙️', 
+    'application.general.icon.private' => '⛔', 
+    'application.general.icon.locked' => '🔒', 
 
     // Application navbar
     'application.navbar.btn_admin' => '🛡 Admin', 
@@ -50,7 +73,6 @@ return [
     'account.forgot_password.email' => 'Email', 
     'account.forgot_password.placeholder.email' => 'example@provider.com', 
     'account.forgot_password.btn.send' => 'Send Reset Link', 
-    'account.forgot_password.btn.back_to_login' => '← Back to login', 
 
     // Account - Reset Password
     'account.reset_password.title' => '🔒 Reset Password', 
@@ -58,7 +80,6 @@ return [
     'account.reset_password.placeholder.password' => '0pT>K^gQ?pkxWK}Da8q#j!2V1#', 
     'account.reset_password.confirm_password' => 'Confirm Password', 
     'account.reset_password.btn.reset' => 'Reset Password', 
-    'account.reset_password.btn.back_to_login' => '← Back to login', 
 
     // Account - Profile
     'account.profile.title' => '👤 User Account', 
@@ -85,10 +106,8 @@ return [
     // Game - Lobby
     'game.lobby.title' => '🎮 Game Lobby', 
     'game.lobby.welcome' => 'Welcome', 
-    'game.lobby.create_new_game' => '➕ Create new Game', 
     'game.lobby.open_games' => '📜 Open Games', 
     'game.lobby.my_games' => '🐦 My Games', 
-    'game.lobby.back_to_menu' => '← Back to Main Menu', 
 
     // Game - List
     'game.list.title' => 'Open Games',
@@ -105,19 +124,13 @@ return [
     'game.list.name' => 'Name', 
     'game.list.action' => 'Action',
     'game.list.details' => '👁 Details',
-    'game.list.details_icon' => '👁',
     'game.list.join' => '➕ Join',
     'game.list.join_icon' => '➕',
     'game.list.edit' => '✏️ Edit', 
-    'game.list.edit_icon' => '✏️', 
     'game.list.test_solo' => '🧪 Solo Game for Testing', 
-    'game.list.test_solo_icon' => '🧪', 
     'game.list.delete' => '🗑 Delete', 
-    'game.list.delete_icon' => '🗑', 
     'game.list.delete_confirm' => 'Are you sure you want to delete the Game?', 
     'game.list.title' => 'Games list', 
-    'game.list.create_new_game' => '➕ Create new Game', 
-    'game.list.back_to_lobby' => '← Back to Lobby', 
 
     // Game - Create
     'game.create.button_create' => 'Create Game', 
@@ -133,7 +146,6 @@ return [
 
     // Game - Show - Detail
     'game.show.title' => 'Game', 
-    'game.show.back_to_list' => '← Back to List', 
     'game.show.solo_test_creation_confirm' => 'Are you sure you want to create and run a Test Session from this Game?', 
     'game.show.info' => 'ℹ️ Info', 
     'game.show.status' => 'Status', 
@@ -193,7 +205,6 @@ return [
     'game.play.menu_title' => ' Menu', 
     'game.play.menu_settings_camera_toggle' => 'Camera changes between Players', 
     'game.play.resume' => 'Resume Game', 
-    'game.play.back_to_detail' => '← Back to Detail View', 
 
     // Game - Options
     'game.options.is_private' => '⛔ Private Game',
@@ -214,7 +225,7 @@ return [
     'game.rules.allow_stack_own_figures' => '🧱 Allow stacking own figures',
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
 
-    // Admin
+    // Admin - Dashboard
     'admin.dashboard.title' => '🛠️ Admin Dashboard', 
     'admin.dashboard.users_card.title' => '👤 Users', 
     'admin.dashboard.users_card.total' => 'Total Users', 
@@ -227,4 +238,25 @@ return [
     'admin.dashboard.games_card.finished' => 'Total Games', 
     'admin.dashboard.users_manage' => 'Manage Users  →', 
     'admin.dashboard.games_manage' => 'Manage Games  →',
+
+    // Admin - Games List
+    'admin.games.list.title' => '🎲 Admin - Games', 
+    'admin.games.list.header.name' => 'Name', 
+    'admin.games.list.header.status' => 'Status', 
+    'admin.games.list.header.players' => 'Players',
+    'admin.games.list.header.type' => 'Type', 
+    'admin.games.list.header.options' => 'Options',  
+
+    // Admin - Users List
+    'admin.users.list.title' => '👤 Admin - Users', 
+    'admin.users.list.header.username' => 'Username', 
+    'admin.users.list.header.email' => 'Email', 
+    'admin.users.list.header.role' => 'Role', 
+    'admin.users.list.header.options' => 'Options', 
+    'admin.users.list.header.no_users' => 'No Users found.', 
+
+    // Admin - Users List
+    'admin.users.edit.title' => '👤 Admin - Edit User', 
+    'admin.users.edit.username' => 'Username', 
+    'admin.users.edit.email' => 'Email', 
 ];

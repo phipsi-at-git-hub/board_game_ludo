@@ -7,7 +7,7 @@ use App\Core\Localization;
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
+            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
         </ul>
     </div>
 
@@ -30,7 +30,7 @@ use App\Core\Localization;
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/users" class="btn btn-primary"><?= Localization::get('admin.dashboard.manage') ?></a>
+                <a href="/admin/users" class="btn btn-primary"><?= Localization::get('admin.dashboard.users_manage') ?></a>
             </div>
         </div>
 

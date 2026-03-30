@@ -786,11 +786,6 @@ final class GameModel extends BaseModel {
     /**
      * Database
      */
-    // Database - Retrieve all games
-    public static function all(): array {
-        $rows = static::fetchAll("SELECT * FROM games ORDER BY created_at DESC");
-        return array_map(fn($row) => self::fromArray($row), $rows);
-    }
 
     // Get all games
     public static function getAllGames(): array {

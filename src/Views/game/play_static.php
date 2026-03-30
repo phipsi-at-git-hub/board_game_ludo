@@ -8,9 +8,8 @@ use App\Core\Localization;
 <div class="back-link">
     <ul class="nav-list">
         <li><a href="/game/detail/<?= $game->getId() ?>" class="btn-back"><?= Localization::get('game.play.back_to_detail') ?></a></li>
-        <li><a href="/game/list" class="btn-back"><?= Localization::get('game.show.back_to_list') ?></a></li>
-        <li><a href="/lobby" class="btn-back"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
-        <li><a href="/menu" class="btn-back"><?= Localization::get('game.lobby.back_to_menu') ?></a></li>
+        <li><a href="/game/list" class="btn-back"><?= Localization::get('application.general.btn.back_to_list') ?></a></li>
+        <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
     </ul>
 </div>
 

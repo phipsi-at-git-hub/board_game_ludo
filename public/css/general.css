@@ -161,6 +161,12 @@ html, body {
     width: auto;
 }
 
+.game-list th.status, 
+.game-list td.status {
+    width: 85px;
+    text-align: center;
+}
+
 .game-list th.players, 
 .game-list td.players {
     width: 60px;
@@ -169,8 +175,8 @@ html, body {
 
 .game-list th.type, 
 .game-list td.type {
-    width: 65px;
-    text-align: center;
+    width: 60px;
+    text-align: left;
 }
 
 .game-list th.options, 
@@ -179,36 +185,40 @@ html, body {
     text-align: center;
 }
 
+.game-list th.options.admin, 
+.game-list td.options.admin {
+    width:105px; 
+    text-align: center;
+}
+
 .users-list th.username, 
 .users-list td.username {
-    width: 180px;
+    width: 240px;
 }
 
 .users-list th.email, 
 .users-list td.email {
-    width: 100%;
+    text-align: left;
 }
 
 .users-list th.role, 
 .users-list td.role {
-    width: 120px;
+    width: 70px;
+    text-align: center;
 }
 
 .users-list th.options, 
 .users-list td.options {
-    width: 120px;
+    width: 70px;
 }
 
 /* Badges */
 .role-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 10px;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .role-admin {
@@ -219,6 +229,22 @@ html, body {
 .role-user {
     background-color: #e0e0e0;
 }
+
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-waiting { background: #fff3cd; color: #856404; }
+.status-running, 
+.is-not-private-locked { background: #d1ecf1; color: #0c5460; }
+.status-finished, 
+.is-private-locked { background: #f8d7da; color: #721c24; }
 
 /* Admin Dashboard */
 .dashboard-grid {
@@ -347,7 +373,6 @@ a:hover {
 }
 
 /* Errors */
-
 .alert.error {
     background-color: #ffe5e5;
     color: #d32f2f;
@@ -460,12 +485,6 @@ input:focus, select:focus, textarea:focus {
     gap: 8px;
 }
 
-.status-badges {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
 .card-actions {
     display: flex;
     gap: 10px;
@@ -499,18 +518,3 @@ input:focus, select:focus, textarea:focus {
     padding: 24px;
     text-align: center;
 }
-
-/* Status Badges */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    display: inline-block;
-}
-
-.status-waiting { background: #fff3cd; color: #856404; }
-.status-running, 
-.is-not-private-locked { background: #d1ecf1; color: #0c5460; }
-.status-finished, 
-.is-private-locked { background: #f8d7da; color: #721c24; }

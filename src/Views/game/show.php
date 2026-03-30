@@ -9,8 +9,8 @@ use App\Core\Localization;
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
-            <li><a href="/game/list" class="btn-back"><?= Localization::get('game.show.back_to_list') ?></a></li>
+            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
+            <li><a href="/game/list" class="btn-back"><?= Localization::get('application.general.btn.back_to_list') ?></a></li>
         </ul>
     </div>
 

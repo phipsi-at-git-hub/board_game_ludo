@@ -11,7 +11,7 @@ use App\Core\Localization;
 
     <div class="nav-actions">
         <ul class="nav-list">
-            <li><a href="/game/create" class="btn-back"><?= Localization::get('game.list.create_new_game') ?></a></li>
+            <li><a href="/game/create" class="btn-back"><?= Localization::get('application.general.btn.create_new_game') ?></a></li>
             <li><a href="/game/list" class="btn-back"><?= Localization::get('game.lobby.open_games') ?></a></li>
             <li><a href="/game/my_games" class="btn-back"><?= Localization::get('game.lobby.my_games') ?></a></li>
         </ul>

@@ -4,22 +4,27 @@ use App\Core\Localization;
 ?>
 
 <div class="panel">
-    <h1>Admin - Users 👤</h1>
+    <h1><?= Localization::get('admin.users.list.title') ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
-            <li><a href="/admin" class="btn-back">← Back to Dashboard</a></li>
+            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
+            <li><a href="/admin" class="btn-back"><?= Localization::get('application.general.btn.back_to_dashboard') ?></a></li>
+        </ul>
+    </div>
+    <div class="nav-actions left">
+        <ul class="nav-list horizontal">
+            <li><a href="/admin/users/create" class="btn-back"><?= Localization::get('application.general.btn.create_new_user') ?></a></li>
         </ul>
     </div>
 
     <table class="table users-list">
         <thead>
             <tr>
-                <th class="username">Username</th>
-                <th class="email">Email</th>
-                <th class="role">Role</th>
-                <th class="options">Options</th>
+                <th class="username"><?= Localization::get('admin.users.list.header.username') ?></th>
+                <th class="email"><?= Localization::get('admin.users.list.header.email') ?></th>
+                <th class="role"><?= Localization::get('admin.users.list.header.role') ?></th>
+                <th class="options"><?= Localization::get('admin.users.list.header.options') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -35,14 +40,13 @@ use App\Core\Localization;
                         </td>
                         <td class="options">
                             <div class="btn-actions">
-                                <a href="/admin/users/edit/<?= $user->getId() ?>" class="btn action-btn btn-primary" title="Edit">✏️</a>
+                                <a href="/admin/users/edit/<?= $user->getId() ?>" class="btn action-btn btn-primary" title="Edit"><?= Localization::get('application.general.icon.edit') ?></a>
 
                                 <form action="/admin/users/<?= $user->getId() ?>" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                                    <button type="submit" class="btn action-btn btn-danger"
-                                        onclick="return confirm('Delete user: <?= htmlspecialchars($user->getUsername()) ?>?')">
-                                        🗑️
+                                    <button type="submit" class="btn action-btn btn-danger" onclick="return confirm('Delete user: <?= htmlspecialchars($user->getUsername()) ?>?')">
+                                        <?= Localization::get('application.general.icon.delete') ?>
                                     </button>
                                 </form>
                             </div>
@@ -51,7 +55,7 @@ use App\Core\Localization;
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4">No users found.</td>
+                    <td colspan="4"><?= Localization::get('admin.users.list.header.no_users') ?></td>
                 </tr>
             <?php endif; ?>
         </tbody>

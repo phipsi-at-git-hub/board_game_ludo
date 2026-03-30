@@ -101,26 +101,11 @@ class AdminController extends BaseController {
 
     // Games - List all games
     public function listGames(): void {
-        $games = GameModel::all();
+        $games = GameModel::getAllGames();
         $this->render(
             'admin/games/list', 
             [
                 'games' => $games
-            ]
-        );
-    }
-
-    // Games - Edit game
-    public function editGame(string $game_id): void {
-        $game = GameModel::findById($game_id);
-        if (!$game) {
-            http_response_code(404);
-            die('Game not found');
-        }
-        $this->render(
-            'admin/games/edit', 
-            [
-                'game' => $game
             ]
         );
     }

@@ -8,8 +8,7 @@ use App\Core\Localization;
 
     <div class="nav-actions left">
         <ul class="nav-list">
-            <!--<li><a href="/game/create" class="btn-back"><?= Localization::get('game.list.create_new_game') ?></a></li>-->
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('game.list.back_to_lobby') ?></a></li>
+            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
         </ul>
     </div>
 
@@ -38,26 +37,26 @@ use App\Core\Localization;
                     <td class="name"><?= htmlspecialchars($game->getName()) ?></td>
                     <td class="players"><?= (int) $game->getPlayerCount() ?> / <?= (int) $game->getPlayerMax() ?></td>
                     <td class="type">
-                        <?= ($game->getRuleSetModel()->isGameClassic()) ? "🎲" : "⚙️" ?>
-                        <?= ($game->isPrivate() ? "🔒" : "") ?>
-                        <?= ($game->isLocked() ? "⛔" : "") ?>
+                        <?= ($game->getRuleSetModel()->isGameClassic()) ? Localization::get('application.general.icon.game_classic') : Localization::get('application.general.icon.game_differ') ?>
+                        <?= ($game->isPrivate() ? Localization::get('application.general.icon.private') : "") ?>
+                        <?= ($game->isLocked() ? Localization::get('application.general.icon.locked') : "") ?>
                     </td>
                     <td>
                         <div class="btn-actions">
-                            <a href="/game/detail/<?= $game->getId() ?>" title="Details" class="btn action-btn btn-primary"><?= Localization::get('game.list.details_icon') ?></a>
+                            <a href="/game/detail/<?= $game->getId() ?>" title="Details" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.details') ?></a>
 
                             <?php if ($can_join): ?>
                                 <form method="POST" action="/game/join/<?= $game->getId() ?>">
                                     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                                     <button type="submit" class="btn action-btn btn-primary">
-                                        <?= Localization::get('game.list.join_icon') ?>
+                                        <?= Localization::get('application.general.icon.join') ?>
                                     </button>
                                 </form>
                             <?php endif; ?>
 
                             <?php if ($can_edit || $can_delete): ?>
                                 <?php if ($can_edit): ?>
-                                    <a href="/game/edit/<?= $game->getId() ?>" class="btn action-btn btn-primary"><?= Localization::get('game.list.edit_icon') ?></a>
+                                    <a href="/game/edit/<?= $game->getId() ?>" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.edit') ?></a>
                                 <?php endif; ?>
 
                                 <?php if ($can_delete): ?>
@@ -66,7 +65,7 @@ use App\Core\Localization;
                                         <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                                         <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
                                         <button type="submit" class="btn action-btn btn-danger">
-                                            <?= Localization::get('game.list.delete_icon') ?>
+                                            <?= Localization::get('application.general.icon.delete') ?>
                                         </button>
                                     </form>
                                 <?php endif; ?>
