@@ -1,5 +1,6 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { scene, camera } from './renderer.js';
+import { themeCreateBox, themeCreateFigure, themeGetBackground } from './theme_manager.js';
 
 const CAMERA_MODE_FIXED = 'fixed';
 const CAMERA_MODE_FOLLOW = 'follow_turn';
@@ -105,7 +106,8 @@ export function getInitialCameraTarget(player_index) {
 
 // Initialize Board
 function initBoard() {
-    scene.background = new THREE.Color(0x87CEEB);
+    //scene.background = new THREE.Color(0x87CEEB);
+    scene.background = new THREE.Color(themeGetBackground());
 
     const offsetX = (BOARD[0].length - 1) / 2;
     const offsetZ = (BOARD.length - 1) / 2;
@@ -163,10 +165,13 @@ function createCell(cell, x, z) {
 
 // Helper - Create Box
 function createBox(color, scale = 1) {
+    /*
     return new THREE.Mesh(
         new THREE.BoxGeometry(scale, 0.1, scale),
         new THREE.MeshStandardMaterial({ color })
     );
+    */
+   return themeCreateBox(color, scale);
 }
 
 // Parse player_index
@@ -226,10 +231,13 @@ function placeFigures(state) {
 
 // Helper - Create Figure
 function createFigure(color) {
+    /*
     return new THREE.Mesh(
         new THREE.SphereGeometry(0.4, 20, 20),
         new THREE.MeshStandardMaterial({ color })
     );
+    */
+   return themeCreateFigure(color);
 }
 
 // Getter - Get camera_target_position

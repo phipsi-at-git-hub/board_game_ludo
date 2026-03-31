@@ -1,3 +1,5 @@
+import { setTheme } from "./theme_manager.js";
+import { theme_candy } from "./themes/theme_candy.js";
 import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
 import { updateScene, updateCameraTarget, setCameraMode, getCameraTarget } from './scene.js';
@@ -27,7 +29,7 @@ const PLAYER_COLORS = {
 let current_state = null;
 let last_dice_value = null;
 
-
+setTheme(theme_candy); 
 initRenderer(canvas);
 animateCameraTo(my_player_index, 2000);
 renderLoop();
