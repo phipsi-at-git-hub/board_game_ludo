@@ -517,7 +517,7 @@ input:focus, select:focus, textarea:focus {
 
 .auth-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 320px;
     padding: 24px;
     text-align: center;
 }
