@@ -27,6 +27,7 @@ class AuthController extends BaseController {
         $user = UserModel::verify($email, $password);
 
         if ($user) {
+            $user->updateLastLogin();
             Auth::login($user);
             header('Location: /lobby');
             exit;

@@ -2,6 +2,8 @@
 // UserModel.php
 namespace App\Models;
 
+use App\Constants\Application;
+
 final class UserModel extends BaseModel {
     // ToDo: Use constant from application.php 
 
@@ -12,6 +14,8 @@ final class UserModel extends BaseModel {
     private string $email;
     private string $password_hash;
     private string $role;
+    private string $status;
+    private string $last_login;
     private string $created_at;
     private string $updated_at;
     private ?string $reset_token = null;
@@ -74,6 +78,42 @@ final class UserModel extends BaseModel {
         return self::findByEmail($email);
     }
 
+    // Save current User
+    public function save(): bool {
+        return $this->updateUser($this->toArray());
+    }
+
+    private function updateUser(array $user_array) {
+        return static::execute(
+            sprintf(
+                "UPDATE 
+                    users
+                SET
+                    username = :username, 
+                    email = :email, 
+                    role = :role, 
+                    status = :status 
+                WHERE 
+                    id = :id", 
+                
+                Application::TABLE_USERS, 
+
+                Application::USERNAME, 
+                Application::EMAIL, 
+                Application::ROLE, 
+                Application::STATUS, 
+
+                Application::ID
+            ), [
+                'username' => $user_array[Application::USERNAME], 
+                'email' => $user_array[Application::EMAIL], 
+                'role' => $user_array[Application::ROLE], 
+                'status' => (int)$user_array[Application::STATUS], 
+                'id' => $this->id
+            ]
+        );
+    }
+
     // User - Update user
     public function updateProfile(string $username, string $email): bool {
         $this->username = $username;
@@ -94,6 +134,28 @@ final class UserModel extends BaseModel {
         return static::execute(
             "DELETE FROM users WHERE id = :id", 
             [
+                'id' => $this->id
+            ]
+        );
+    }
+
+    // User - Update last_login
+    public function updateLastLogin(): bool {
+        return static::execute(
+            sprintf(
+                "UPDATE 
+                    users
+                SET
+                    last_login = NOW()
+                WHERE 
+                    id = :id", 
+                
+                Application::TABLE_USERS, 
+
+                Application::LAST_LOGIN, 
+
+                Application::ID
+            ), [
                 'id' => $this->id
             ]
         );
@@ -170,6 +232,7 @@ final class UserModel extends BaseModel {
         );
     }
 
+    // Helper - Create UserModel from Array
     private static function fromArray(array $data): self {
         $user = new self();
         $user->id = $data['id'];
@@ -177,9 +240,28 @@ final class UserModel extends BaseModel {
         $user->email = $data['email'];
         $user->password_hash = $data['password_hash'];
         $user->role = $data['role'] ?? 'user';
+        $user->status = $data['status'] ?? 'active'; 
+        $user->last_login = $data['last_login']; 
+        /*
         $user->created_at = $data['created_at'];
         $user->updated_at = $data['updated_at'];
+        */
         return $user;
+    }
+
+    // Helper - Create Array from GameModel
+    private function toArray(): array {
+        $user_array[Application::ID] = $this->id;
+        $user_array[Application::USERNAME] = $this->username;
+        $user_array[Application::EMAIL] = $this->email;
+        $user_array[Application::PASSWORD_HASH] = $this->password_hash;
+        $user_array[Application::ROLE] = $this->role;
+        $user_array[Application::STATUS] = $this->status;
+        $user_array[Application::LAST_LOGIN] = $this->last_login; 
+        $user_array[Application::CREATED_AT] = $this->created_at;
+        $user_array[Application::UPDATED_AT] = $this->updated_at;
+
+        return $user_array;
     }
 
     // Get the value of id 
@@ -212,19 +294,59 @@ final class UserModel extends BaseModel {
         return $this->role;
     }
 
+    // Check if User is User
+    public function isUser(): bool {
+        return $this->role === Application::USER;
+    }
+
     // Check if User is Admin
     public function isAdmin(): bool {
-        return $this->role === 'admin';
+        return $this->role === Application::ADMIN;
     }
 
     // Check if User is Moderator
     public function isModerator(): bool {
-        return $this->role === 'moderator';
+        return $this->role === Application::MODERATOR;
     }
 
     // Check if User is Game Master
     public function isGameMaster(): bool {
-        return $this->role === 'game_master';
+        return $this->role === Application::GAME_MASTER;
+    }
+
+    // Get the value of status
+    public function getStatus() {
+        return $this->status;
+    }
+
+    // Check if User is active
+    public function isActive(): bool {
+        return $this->status === Application::ACTIVE;
+    }
+
+    // Check if User is inactive
+    public function isInactive(): bool {
+        return $this->status === Application::INACTIVE;
+    }
+
+    // Check if User is closed
+    public function isClosed(): bool {
+        return $this->status === Application::CLOSED;
+    }
+
+    // Check if User is Blocked
+    public function isBlocked(): bool {
+        return $this->status === Application::BLOCKED;
+    }
+
+    // Check if User is Banned
+    public function isBanned(): bool {
+        return $this->status === Application::BANNED;
+    }
+
+    // Get last login
+    public function getLastLogin() {
+        return $this->last_login;
     }
 
      // Get the value of created_at

@@ -73,12 +73,20 @@ class Application {
     public const PASSWORD_HASH = 'password_hash';
     public const RESET_TOKEN = 'reset_token';
     public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
+    public const LAST_LOGIN = 'last_login';
 
     // User roles
     public const USER = 'user';
     public const ADMIN = 'admin';
     public const MODERATOR = 'moderator';
     public const GAME_MASTER = 'game_master';
+
+    // User status
+    public const ACTIVE = 'ACTIVE'; 
+    public const INACTIVE = 'INACTIVE'; 
+    public const CLOSED = 'CLOSED'; 
+    public const BLOCKED = 'BLOCKED'; 
+    public const BANNED = 'BANNED'; 
 
     // Game status
     public const STATUS_WAITING  = 'WAITING';

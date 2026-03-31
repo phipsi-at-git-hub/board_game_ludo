@@ -254,6 +254,7 @@ return [
     'admin.users.list.header.username' => 'Username', 
     'admin.users.list.header.email' => 'Email', 
     'admin.users.list.header.role' => 'Role', 
+    'admin.users.list.header.status' => 'Status', 
     'admin.users.list.header.options' => 'Options', 
     'admin.users.list.header.no_users' => 'No Users found.', 
 

@@ -24,6 +24,7 @@ use App\Core\Localization;
                 <th class="username"><?= Localization::get('admin.users.list.header.username') ?></th>
                 <th class="email"><?= Localization::get('admin.users.list.header.email') ?></th>
                 <th class="role"><?= Localization::get('admin.users.list.header.role') ?></th>
+                <th class="status"><?= Localization::get('admin.users.list.header.status') ?></th>
                 <th class="options"><?= Localization::get('admin.users.list.header.options') ?></th>
             </tr>
         </thead>
@@ -36,6 +37,11 @@ use App\Core\Localization;
                         <td class="role">
                             <span class="role-badge role-<?= strtolower($user->getRole()) ?>">
                                 <?= htmlspecialchars($user->getRole()) ?>
+                            </span>
+                        </td>
+                        <td class="status">
+                            <span class="status-badge status-<?= strtolower($user->getStatus()) ?>">
+                                <?= htmlspecialchars($user->getStatus()) ?> 
                             </span>
                         </td>
                         <td class="options">

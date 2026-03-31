@@ -160,7 +160,9 @@ html, body {
 }
 
 .game-list th.status, 
-.game-list td.status {
+.game-list td.status, 
+.users-list th.status, 
+.users-list td.status {
     width: 85px;
     text-align: center;
 }
@@ -191,7 +193,7 @@ html, body {
 
 .users-list th.username, 
 .users-list td.username {
-    width: 240px;
+    width: 220px;
 }
 
 .users-list th.email, 
@@ -238,10 +240,15 @@ html, body {
     display: inline-block;
 }
 
-.status-waiting { background: #fff3cd; color: #856404; }
+.status-inactive,
+.status-closed { background: var(--default-color); color: var(--default-color-dark);  };
+.status-waiting, 
+.status-blocked { background: #fff3cd; color: #856404; }
 .status-running, 
+.status-active, 
 .is-not-private-locked { background: #d1ecf1; color: #0c5460; }
 .status-finished, 
+.status.banned, 
 .is-private-locked { background: #f8d7da; color: #721c24; }
 
 /* Admin Dashboard */
