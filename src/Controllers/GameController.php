@@ -321,6 +321,24 @@ class GameController extends BaseController {
         $this->redirect("/game/detail/$game_id");
     }
 
+    // Reset game
+    public function reset(): void {
+        $game_id = $_POST['game_id'];
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        $is_owner = $game->getCreatedByUserId() === $user->getId();
+        $is_admin = $user->isAdmin();
+
+        if (!$is_admin && !($is_owner && $game->isWaiting())) {
+            http_response_code(403);
+            exit ('Unauthorized');
+        }
+
+        $game->resetGame();
+        $this->redirect("/game/detail/$game_id");
+    }
+
     // Play game
     public function play($game_id) {
         $game = GameModel::findById($game_id);

@@ -1605,6 +1605,29 @@ final class GameModel extends BaseModel {
         $this->setStatus(Application::STATUS_CANCELLED);
     }
 
+    // Game - Reset Game State, Figures and Game Status helper
+    public function resetGame(): void {
+        try {
+            $this->db->beginTransaction();
+            // Reset game state
+            $this->state_model->reset();
+
+            // Reset player's figures
+            foreach ($this->getAllPlayers() as $player) {
+                $player->resetFigures($this->rule_set_model->getAllFiguresStartAtHome());
+            }
+
+            // Set game to waiting
+            $this->updateStatus(Application::STATUS_WAITING);
+            $this->setStatus(Application::STATUS_WAITING);
+            $this->save();
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw$e;
+        }
+    }
+
     // Game - Join game - player 
     public function join(string $user_id): bool {
         if ($this->status !== Application::STATUS_WAITING) {

@@ -57,11 +57,19 @@ use App\Core\Localization;
                         </form>
                     <?php endif; ?>
 
-                    <?php if ($game->isRunning() && $game->isCreator($user)): ?>
+                    <?php if ($game->isRunning() && ($game->isCreator($user) || $user->isAdmin())): ?>
                         <form method="POST" action="/game/pause">
                             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
                             <button type="submit" class="btn btn-secondary"><?= Localization::get('game.show.pause') ?></button>
+                        </form>
+                    <?php endif; ?>
+
+                    <?php if ($user->isAdmin()): ?>
+                        <form method="POST" action="/game/reset">
+                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
+                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+                            <button type="submit" class="btn btn-secondary"><?= Localization::get('game.show.reset') ?></button>
                         </form>
                     <?php endif; ?>
 

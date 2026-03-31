@@ -127,9 +127,6 @@ final class GameStateFigureModel extends BaseModel {
         );
     }
 
-    // Reset given figure for given game
-    public static function resetFigure(): void {}
-
     // Delete all figures of given game
     public static function removeAllFigures($game_id): bool {
         return static::execute(
@@ -190,6 +187,13 @@ final class GameStateFigureModel extends BaseModel {
     /**
      * Setter
      */
+
+    // Reset given figure for given game
+    public function setFigure(string $area, int $position): void {
+        $this->setArea($area);
+        $this->setPosition($position);
+    }
+
     // Setter - Set Area
     public function setArea(string $area): bool {
         // ToDo: make it proof

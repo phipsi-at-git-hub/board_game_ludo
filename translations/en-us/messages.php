@@ -166,6 +166,7 @@ return [
     'game.show.start' => 'Start Game', 
     'game.show.pause' => 'Pause Game', 
     'game.show.play' => 'Play Game', 
+    'game.show.reset' => 'Reset Game', 
     'game.show.test_solo_create' => 'Create Solo Game for Testing', 
     'game.show.test_solo_start' => 'Start Solo Game for Testing', 
     'game.show.test_solo_play' => 'Play Solo Game for Testing', 

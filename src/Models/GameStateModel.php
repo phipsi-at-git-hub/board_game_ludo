@@ -158,6 +158,17 @@ final class GameStateModel extends BaseModel {
         return $game_state_array;
     }
 
+    // Helper - Reset GameState
+    public function reset() {
+        $this->setCurrentPlayerIndex(0);
+        $this->resetCurrentDiceRoll();
+        $this->resetCurrentTurnCounter();
+        $this->resetLeaveHomeAttemptsUsed();
+        $this->resetExtraRollsOnSixUsed();
+        $this->setWinnerUserId(null);
+        $this->save();
+    }
+
     /**
      * Getter
      */
@@ -210,7 +221,7 @@ final class GameStateModel extends BaseModel {
     }
 
     // Reset current turn counter
-    public function resetCurentTurnCounter(): void {
+    public function resetCurrentTurnCounter(): void {
         $this->current_turn_counter = 0;
     }
 

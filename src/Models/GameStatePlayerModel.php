@@ -213,6 +213,22 @@ final class GameStatePlayerModel extends BaseModel {
         return $game_state_player;
     }
 
+    // Helper - Reset Player's Figures to start value
+    public function resetFigures($all_figures_start_at_home): void {
+        $index = 0;
+        foreach ($this->getAllFigures() as $figure) {
+            if ($all_figures_start_at_home === false && $index === 0) {
+                $figure->setFigure(Application::AREA_FIELD, $index);
+                $figure->save();
+                $index++;
+                continue;
+            }
+            $figure->setFigure(Application::AREA_HOME, $index);
+            $figure->save();
+            $index++;
+        }
+    }
+
     // Helper - Has player Figures in home zone
     public function hasFiguresAtHome(): bool {
         foreach ($this->getAllFigures() as $figure) {

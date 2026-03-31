@@ -48,6 +48,7 @@ $router->group('/game', function($group) {
     $group->post('/start', [GameController::class, 'start'], [fn() => Middleware::csrf()]);
     $group->post('/pause', [GameController::class, 'pause'], [fn() => Middleware::csrf()]);
     $group->post('/cancel', [GameController::class, 'cancel'], [fn() => Middleware::csrf()]);
+    $group->post('/reset', [GameController::class, 'reset'], [fn() => Middleware::csrf()]);
     $group->get('/play/{id}', [GameController::class, 'play']);
     $group->get('/state/{id}', [GameController::class, 'state']);
     $group->post('/roll', [GameController::class, 'roll'], [fn() => Middleware::csrf()]);
