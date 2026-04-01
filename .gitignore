@@ -28,3 +28,6 @@ db_data/
 
 # JS
 /public/js/*.*.js
+
+# JS
+/public/js/*/*.*.js

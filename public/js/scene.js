@@ -1,6 +1,15 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { scene, camera } from './renderer.js';
-import { themeCreateBox, themeCreateFigure, themeGetBackground } from './theme_manager.js';
+import { 
+    themeCreateBox, 
+    themeCreateFigure, 
+    themeGetBackground, 
+    themeGetPlayerColors, 
+    themeGetCellSize, 
+    themeGetFieldOffsets, 
+    themeGetBoard 
+
+} from './theme_manager.js';
 
 const CAMERA_MODE_FIXED = 'fixed';
 const CAMERA_MODE_FOLLOW = 'follow_turn';
@@ -23,39 +32,6 @@ let camera_mode = CAMERA_MODE_FIXED;
 const mainFields = new Array(40);
 const homeFields = {};
 const goalFields = {};
-
-// Colors
-const PLAYER_COLORS = {
-    0: 0xff4444, 
-    1: 0x4444ff, 
-    2: 0x44ff44, 
-    3: 0xffff44 
-};
-
-// Offsets for multiple figures on same position
-const FIELD_OFFSETS = [
-    { x: -0.25, z: -0.25 },
-    { x: 0.25, z: -0.25 },
-    { x: -0.25, z: 0.25 },
-    { x: 0.25, z: 0.25 }
-];
-
-const CELL_SIZE = 1;
-
-// Board Matrix
-const BOARD = [
-    ["H0-1","H0-2","-","-","F-8","F-9","F-10","-","-","H1-0","H1-1"],
-    ["H0-0","H0-3","-","-","F-7","G1-0","F-11","-","-","H1-3","H1-2"],
-    ["-","-","-","-","F-6","G1-1","F-12","-","-","-","-"],
-    ["-","-","-","-","F-5","G1-2","F-13","-","-","-","-"],
-    ["F-0","F-1","F-2","F-3","F-4","G1-3","F-14","F-15","F-16","F-17","F-18"],
-    ["F-39","G0-0","G0-1","G0-2","G0-3","-","G2-3","G2-2","G2-1","G2-0","F-19"],
-    ["F-38","F-37","F-36","F-35","F-34","G3-3","F-24","F-23","F-22","F-21","F-20"],
-    ["-","-","-","-","F-33","G3-2","F-25","-","-","-","-"],
-    ["-","-","-","-","F-32","G3-1","F-26","-","-","-","-"],
-    ["H3-2","H3-3","-","-","F-31","G3-0","F-27","-","-","H2-3","H2-0"],
-    ["H3-1","H3-0","-","-","F-30","F-29","F-28","-","-","H2-2","H2-1"]
-];
 
 // Update Scene
 export function updateScene(state) {
@@ -106,11 +82,17 @@ export function getInitialCameraTarget(player_index) {
 
 // Initialize Board
 function initBoard() {
-    //scene.background = new THREE.Color(0x87CEEB);
     scene.background = new THREE.Color(themeGetBackground());
 
+    const CELL_SIZE = themeGetCellSize();
+    const BOARD = themeGetBoard();
+
+    if (!BOARD) {
+        console.error("No board defined in theme!");
+    }
+
     const offsetX = (BOARD[0].length - 1) / 2;
-    const offsetZ = (BOARD.length - 1) / 2;
+    const offsetZ = (BOARD.length -1 ) / 2;
 
     BOARD.forEach((row, zIndex) => {
         row.forEach((cell, xIndex) => {
@@ -126,6 +108,8 @@ function initBoard() {
 
 // Create Cells
 function createCell(cell, x, z) {
+    const PLAYER_COLORS = themeGetPlayerColors();
+
     // HOME
     if (cell.startsWith("H")) {
         const [player, index] = parsePlayerIndex(cell);
@@ -165,12 +149,6 @@ function createCell(cell, x, z) {
 
 // Helper - Create Box
 function createBox(color, scale = 1) {
-    /*
-    return new THREE.Mesh(
-        new THREE.BoxGeometry(scale, 0.1, scale),
-        new THREE.MeshStandardMaterial({ color })
-    );
-    */
    return themeCreateBox(color, scale);
 }
 
@@ -182,6 +160,8 @@ function parsePlayerIndex(str) {
 
 // Position Figures
 function placeFigures(state) {
+    const PLAYER_COLORS = themeGetPlayerColors();
+    const FIELD_OFFSETS = themeGetFieldOffsets();
     const occupancy = {};
 
     // Group Figures by area
@@ -231,12 +211,6 @@ function placeFigures(state) {
 
 // Helper - Create Figure
 function createFigure(color) {
-    /*
-    return new THREE.Mesh(
-        new THREE.SphereGeometry(0.4, 20, 20),
-        new THREE.MeshStandardMaterial({ color })
-    );
-    */
    return themeCreateFigure(color);
 }
 

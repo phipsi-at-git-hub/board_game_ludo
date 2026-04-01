@@ -42,3 +42,45 @@ export function themeGetBackground() {
     // Fallback Background
     return 0x87CEEB
 }
+
+export function themeGetPlayerColors() {
+    if (current_theme && current_theme.GetPlayerColors) {
+        return current_theme.GetPlayerColors();
+    }
+
+    return {
+        0: 0xff4444, 
+        1: 0x4444ff, 
+        2: 0x44ff44, 
+        3: 0xffff44 
+    };
+}
+
+export function themeGetCellSize() {
+    if (current_theme && current_theme.getCellSize) {
+        return current_theme.getCellSize();
+    }
+
+    return 1;
+}
+
+export function themeGetFieldOffsets() {
+    if (current_theme && current_theme.getFieldOffsets) {
+        return current_theme.getFieldOffsets();
+    }
+
+    return [
+        { x: -0.25, z: -0.25 },
+        { x: 0.25, z: -0.25 },
+        { x: -0.25, z: 0.25 },
+        { x: 0.25, z: 0.25 }
+    ];
+}
+
+export function themeGetBoard() {
+    if (current_theme && current_theme.getBoard) {
+        return current_theme.getBoard();
+    }
+
+    return null;
+}
