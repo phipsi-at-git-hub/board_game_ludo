@@ -1,4 +1,5 @@
-import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+//import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import * as THREE from "three";
 import { scene, camera } from './renderer.js';
 import { 
     themeCreateBox, 
@@ -113,7 +114,7 @@ function createCell(cell, x, z) {
     // HOME
     if (cell.startsWith("H")) {
         const [player, index] = parsePlayerIndex(cell);
-        const mesh = createBox(PLAYER_COLORS[player], 0.8);
+        const mesh = createBox(PLAYER_COLORS[player], 0.8, 'home');
         mesh.position.set(x, 0.05, z);
         scene.add(mesh);
 
@@ -125,7 +126,7 @@ function createCell(cell, x, z) {
     // GOAL
     if (cell.startsWith("G")) {
         const [player, index] = parsePlayerIndex(cell);
-        const mesh = createBox(PLAYER_COLORS[player], 0.8);
+        const mesh = createBox(PLAYER_COLORS[player], 0.8, "goal");
         mesh.position.set(x, 0.05, z);
         scene.add(mesh);
 
@@ -138,7 +139,7 @@ function createCell(cell, x, z) {
     if (cell.startsWith("F")) {
         let pos = parseInt(cell.split('-')[1]);
         const index = parseInt(cell.split("-")[1]);
-        const mesh = (pos === 0 || pos === 10 || pos === 20 || pos === 30) ? createBox(PLAYER_COLORS[pos/10], 1) : createBox(0xdddddd, 0.9);
+        const mesh = (pos === 0 || pos === 10 || pos === 20 || pos === 30) ? createBox(PLAYER_COLORS[pos/10], 1, "start") : createBox(0xdddddd, 0.9);
         mesh.position.set(x, 0.05, z);
         scene.add(mesh);
 
@@ -148,8 +149,8 @@ function createCell(cell, x, z) {
 }
 
 // Helper - Create Box
-function createBox(color, scale = 1) {
-   return themeCreateBox(color, scale);
+function createBox(color, scale = 1, type = null) {
+   return themeCreateBox(color, scale, type);
 }
 
 // Parse player_index

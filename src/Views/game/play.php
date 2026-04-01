@@ -76,5 +76,15 @@ use App\Core\Localization;
     };
 </script>
 
+<!-- 🔧 THREE.js Import Map -->
+ <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.183.2/build/three.module.js",
+            "three/RoundedBoxGeometry": "https://unpkg.com/three@0.183.2/examples/jsm/geometries/RoundedBoxGeometry.js"
+        }
+    }
+ </script>
+
 <!-- 🎮 Game entry point -->
 <script type="module" src="<?= Asset::asset('/js/game.js') ?>"></script>

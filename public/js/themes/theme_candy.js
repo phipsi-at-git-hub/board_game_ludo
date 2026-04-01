@@ -1,4 +1,7 @@
-import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+//import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/RoundedBoxGeometry";
+
 
 export const theme_candy = {
     getBackground() {
@@ -44,15 +47,25 @@ export const theme_candy = {
         ];
     }, 
 
-    createBox(color, scale = 1) {
-        return new THREE.Mesh(
-            new THREE.BoxGeometry(scale, 0.2, scale), 
-            new THREE.MeshStandardMaterial({
-                color, 
-                roughness: 0.3, 
-                metalness: 0.1
-            })
-        );
+    createBox(color, scale = 1, type = null) {
+        let height = 0.2;
+        let radius = 0.1;
+
+        if (type === "start" || type === "goal") {
+            height = 0.1;
+            radius = 0.15;
+        }
+
+        //const geometry = new THREE.BoxGeometry(scale, height, scale);
+        const geometry = new RoundedBoxGeometry(scale, height, scale, 4, radius);
+        geometry.translate(0, height / 2, 0);
+        const material = new THREE.MeshStandardMaterial({
+            color, 
+            roughness: 0.3, 
+            metalness: 0.1
+        });
+
+        return new THREE.Mesh(geometry, material);
     }, 
 
     createFigure(color) {

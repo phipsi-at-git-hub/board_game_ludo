@@ -1,4 +1,5 @@
-import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+//import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import * as THREE from "three";
 
 let current_theme = null; 
 
@@ -10,9 +11,9 @@ export function getTheme() {
     return current_theme;
 }
 
-export function themeCreateBox(color, scale = 1) {
+export function themeCreateBox(color, scale = 1, type = null) {
     if (current_theme && current_theme.createBox) {
-        return current_theme.createBox(color, scale);
+        return current_theme.createBox(color, scale, type);
     }
 
     // Fallback Game Board
