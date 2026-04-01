@@ -85,3 +85,11 @@ export function themeGetBoard() {
 
     return null;
 }
+
+export function themeCreateBoardGround() {
+    if (current_theme && current_theme.createBoardGround) {
+        return current_theme.createBoardGround();
+    }
+
+    return null;
+}

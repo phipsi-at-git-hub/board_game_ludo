@@ -19,7 +19,7 @@ export function initRenderer(canvas) {
     );
 
     camera.position.set(0, 15, 10); 
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, -1, 0);
 
     renderer = new THREE.WebGLRenderer({
         canvas, 
@@ -49,7 +49,7 @@ export function renderLoop() {
             getCameraTarget(), 
             0.08
         );
-        camera.lookAt(0,0,0);
+        camera.lookAt(0,-1,0);
     }
     renderer.render(scene, camera);
 }
@@ -78,7 +78,7 @@ export function animateCameraTo(player_index, duration = 2000) {
     function step(now) {
         const t = Math.min((now - start) / duration, 1); // 0 .. 1
         camera.position.lerpVectors(start_position, camera_target, t);
-        camera.lookAt(0,0,0);
+        camera.lookAt(0,-1,0);
 
         if (t < 1) requestAnimationFrame(step);
         else is_camera_animating = false;

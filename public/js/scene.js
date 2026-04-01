@@ -8,7 +8,8 @@ import {
     themeGetPlayerColors, 
     themeGetCellSize, 
     themeGetFieldOffsets, 
-    themeGetBoard 
+    themeGetBoard, 
+    themeCreateBoardGround 
 
 } from './theme_manager.js';
 
@@ -83,8 +84,17 @@ export function getInitialCameraTarget(player_index) {
 
 // Initialize Board
 function initBoard() {
+    // Set background color of scene
     scene.background = new THREE.Color(themeGetBackground());
 
+    // Set background color of window
+    document.body.style.backgroundColor = "#" + themeGetBackground().toString(16).padStart(6, "0"); 
+
+    // Create Board Ground
+    scene.add(themeCreateBoardGround());
+
+
+    // Get Board properties from theme
     const CELL_SIZE = themeGetCellSize();
     const BOARD = themeGetBoard();
 
@@ -92,9 +102,11 @@ function initBoard() {
         console.error("No board defined in theme!");
     }
 
+    // Calculate offsets
     const offsetX = (BOARD[0].length - 1) / 2;
     const offsetZ = (BOARD.length -1 ) / 2;
 
+    // Add game cells on board
     BOARD.forEach((row, zIndex) => {
         row.forEach((cell, xIndex) => {
             if (cell === "-") return;

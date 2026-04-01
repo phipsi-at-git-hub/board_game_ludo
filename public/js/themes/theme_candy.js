@@ -47,6 +47,29 @@ export const theme_candy = {
         ];
     }, 
 
+    createBoardGround() {
+        const PADDING = 2;
+        const BOARD = this.getBoard(); 
+        const CELL_SIZE = this.getCellSize();
+        const width = (BOARD[0].length * CELL_SIZE) + PADDING;
+        const height = (BOARD.length * CELL_SIZE) + PADDING;
+
+        const geometry = new RoundedBoxGeometry(width, 0.2, height, 0.3, 6);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xfff0f6, // soft pink
+            //color: 0xe6f7ff, // soft blue
+            //color: 0xfff5e6, // vanilla creme 
+            //color: 0x2d1b4e, // dark purple
+            roughness: 0.25, 
+            metalness: 0.1
+        });
+
+        const plane = new THREE.Mesh(geometry, material);
+        plane.position.y = -0.05;
+
+        return plane;
+    }, 
+
     createBox(color, scale = 1, type = null) {
         let height = 0.2;
         let radius = 0.1;
