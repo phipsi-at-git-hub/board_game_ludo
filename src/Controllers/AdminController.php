@@ -18,10 +18,12 @@ class AdminController extends BaseController {
     public function dashboard(): void {
         $stats = [
             'users_total' => UserModel::countAll(), 
+            'users_active' => UserModel::countByStatus('active'), 
+            'users_inactive' => UserModel::countByStatus('inactive'), 
             'admins_total' => UserModel::countByRole('admin'), 
             'games_total' => GameModel::countAll(), 
             'games_waiting' => GameModel::countByStatus('waiting'), 
-            'games_active' => GameModel::countByStatus('active'), 
+            'games_active' => GameModel::countByStatus('running'), 
             'games_finished' => GameModel::countByStatus('finished'), 
         ];
 

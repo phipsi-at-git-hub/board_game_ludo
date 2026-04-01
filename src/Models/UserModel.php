@@ -54,6 +54,14 @@ final class UserModel extends BaseModel {
         return static::count("SELECT COUNT(*) FROM users");
     }
 
+    // User - Count all users with specific status
+    public static function countByStatus(string $status): int {
+        return static::count(
+            "SELECT COUNT(*) FROM users WHERE status = :status", 
+            ['status' => $status]
+        );
+    }
+
     // User - Count all users with specific role
     public static function countByRole(string $role): int {
         return static::count(

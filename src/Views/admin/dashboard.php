@@ -24,6 +24,14 @@ use App\Core\Localization;
 
             <div class="stats-sub">
                 <div>
+                    <span class="stat-value"><?= $stats['users_active'] ?></span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.users_card.active') ?></span>
+                </div>
+                <div>
+                    <span class="stat-value"><?= $stats['users_inactive'] ?></span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.users_card.inactive') ?></span>
+                </div>
+                <div>
                     <span class="stat-value"><?= $stats['admins_total'] ?></span>
                     <span class="stat-text"><?= Localization::get('admin.dashboard.users_card.admin') ?></span>
                 </div>
@@ -50,7 +58,7 @@ use App\Core\Localization;
                 </div>
                 <div>
                     <span class="stat-value"><?= $stats['games_active'] ?></span>
-                    <span class="stat-text"><?= Localization::get('admin.dashboard.games_card.active') ?></span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.games_card.running') ?></span>
                 </div>
                 <div>
                     <span class="stat-value"><?= $stats['games_finished'] ?></span>
