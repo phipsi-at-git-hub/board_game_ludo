@@ -1,6 +1,6 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { getCameraTarget, getInitialCameraTarget } from './scene.js';
-import { themeCreateLights } from './theme_manager.js';
+import { themeGetRendererConfig, themeCreateLights } from './theme_manager.js';
 
 export let scene, camera, renderer;
 let game_canvas;
@@ -28,18 +28,28 @@ export function initRenderer(canvas) {
         antialias: true
     });
 
-    // Define renderer
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoftShadowMap has been deprecated
+    // Get Renderer config from theme
+    const renderer_config = themeGetRendererConfig();
+    for (const key in renderer_config) {
+        const value  = renderer_config[key]; 
+
+        if (key === "shadowMapType" && typeof value === "string") {
+            renderer.shadowMap.type = THREE[value];
+        } else if ((key === "shadowMapEnabled" || key == "shadowMap.enabled") && typeof value === "boolean") {
+            renderer.shadowMap.enabled = value;
+        } else if (key === "toneMapping" && typeof value === "string") {
+            renderer.toneMapping = THREE[value];
+        } else if (key === "outputEncoding" && typeof value === "string") {
+            renderer.outputEncoding = THREE[value]; 
+        } else if (key in renderer) {
+            renderer[key] = value;
+        } else {
+            console.warn(`Renderer has not the following property: '${key}'`);
+        }
+    }
 
     const  game_wrapper = canvas.parentElement;
     renderer.setSize(game_wrapper.clientWidth, game_wrapper.clientHeight);
-
-    /*
-    const light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(5, 10, 5);
-    scene.add(light);
-    */
 
     const theme_lights_factory = themeCreateLights();
     if (theme_lights_factory) {

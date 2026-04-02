@@ -11,6 +11,14 @@ export function getTheme() {
     return current_theme;
 }
 
+export function themeGetRendererConfig() {
+    if (current_theme && current_theme.getRendererConfig) {
+        return current_theme.getRendererConfig();
+    }
+
+    return null;
+}
+
 export function themeCreateBox(color, scale = 1, type = null) {
     if (current_theme && current_theme.createBox) {
         return current_theme.createBox(color, scale, type);

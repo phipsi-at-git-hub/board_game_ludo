@@ -25,6 +25,16 @@ export const theme_candy = {
         };
     }, 
 
+    getRendererConfig() {
+        return {
+            shadowMapEnabled: true, 
+            shadowMapType: "PCFShadowMap", // PCFSoftShadowMap has ben deprecated
+            toneMapping: "ACESFilmicToneMapping", 
+            toneMappingExposure: 1.3, 
+            outputEncoding: "sRGBEncoding" 
+        };
+    }, 
+
     getFieldOffsets() {
         return [
             { x: -0.25, z: -0.25 },
@@ -64,8 +74,10 @@ export const theme_candy = {
         );
         const material = new THREE.MeshStandardMaterial({
             color: BOARD_GROUND_COLOR, 
-            roughness: 0.25, 
-            metalness: 0.1
+            roughness: 0.2, 
+            metalness: 0.1, 
+            emissive: new THREE.Color(BOARD_GROUND_COLOR).multiplyScalar(0.1), 
+            emissiveIntensity: 0.2
         });
 
         const plane = new THREE.Mesh(geometry, material);
@@ -90,8 +102,10 @@ export const theme_candy = {
         geometry.translate(0, height / 2, 0);
         const material = new THREE.MeshStandardMaterial({
             color, 
-            roughness: 0.3, 
-            metalness: 0.1
+            roughness: 0.15, 
+            metalness: 0.25, 
+            emissive: new THREE.Color(color).multiplyScalar(0.1), 
+            emissiveIntensity: 0.2
         });
 
         const box = new THREE.Mesh(geometry, material);
@@ -106,8 +120,10 @@ export const theme_candy = {
         const geometry = new THREE.SphereGeometry(0.45, 24, 24);
         const material = new THREE.MeshStandardMaterial({
             color, 
-            roughness: 0.2, 
-            metalness: 0.3
+            roughness: 0.15, 
+            metalness: 0.3, 
+            emissive: new THREE.Color(color).multiplyScalar(0.2), 
+            emissiveIntensity: 0.3
         });
         const mesh = new THREE.Mesh( geometry, material); 
 
