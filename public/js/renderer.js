@@ -1,5 +1,6 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { getCameraTarget, getInitialCameraTarget } from './scene.js';
+import { themeCreateLights } from './theme_manager.js';
 
 export let scene, camera, renderer;
 let game_canvas;
@@ -21,20 +22,35 @@ export function initRenderer(canvas) {
     camera.position.set(0, 15, 10); 
     camera.lookAt(0, -1, 0);
 
+    // Initiate renderer
     renderer = new THREE.WebGLRenderer({
         canvas, 
         antialias: true
     });
 
+    // Define renderer
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoftShadowMap has been deprecated
+
     const  game_wrapper = canvas.parentElement;
     renderer.setSize(game_wrapper.clientWidth, game_wrapper.clientHeight);
 
+    /*
     const light = new THREE.DirectionalLight(0xffffff, 3);
     light.position.set(5, 10, 5);
     scene.add(light);
+    */
 
-    const grid = new THREE.GridHelper(13, 13); 
-    scene.add(grid);
+    const theme_lights_factory = themeCreateLights();
+    if (theme_lights_factory) {
+        theme_lights_factory.forEach(createLight => {
+            scene.add(createLight());
+        });
+    }
+
+    // Grid for Debug
+    //const grid = new THREE.GridHelper(13, 13); 
+    //scene.add(grid);
 
     resizeRenderer();
     window.addEventListener('resize', resizeRenderer);

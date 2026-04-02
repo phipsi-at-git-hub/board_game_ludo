@@ -2,12 +2,19 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/RoundedBoxGeometry";
 
+const CELL_SIZE = 1;
+const PADDING = 2;
+const BOX_HEIGHT = 0.2;
+const BOX_RADIUS = 0.1;
+const BOARD_GROUND_HEIGHT = 0.2;
+const BOARD_GROUND_COLOR = 0xfff0f6; // soft pinkt
+//const BOARD_GROUND_COLOR = 0xe6f7ff; // soft blue
+//const BOARD_GROUND_COLOR = 0xfff5e6; // vanilla creme 
+//const BOARD_GROUND_COLOR = 0x2d1b4e; // dark purple
 
 export const theme_candy = {
-    getBackground() {
-        //return 0xfff0f6; // soft pink
-        return 0x87ceeb;
-    }, 
+    getBackground: () => 0x87ceeb,  
+    getCellSize: () => CELL_SIZE, 
 
     getPlayerColors() {
         return {
@@ -16,10 +23,6 @@ export const theme_candy = {
             2: 0x44ff44, 
             3: 0xffff44 
         };
-    }, 
-
-    getCellSize() {
-        return 1;
     }, 
 
     getFieldOffsets() {
@@ -48,35 +51,38 @@ export const theme_candy = {
     }, 
 
     createBoardGround() {
-        const PADDING = 2;
         const BOARD = this.getBoard(); 
-        const CELL_SIZE = this.getCellSize();
         const width = (BOARD[0].length * CELL_SIZE) + PADDING;
         const height = (BOARD.length * CELL_SIZE) + PADDING;
 
-        const geometry = new RoundedBoxGeometry(width, 0.2, height, 0.3, 6);
+        const geometry = new RoundedBoxGeometry(
+            width, 
+            BOARD_GROUND_HEIGHT, 
+            height, 
+            0.3, 
+            6
+        );
         const material = new THREE.MeshStandardMaterial({
-            color: 0xfff0f6, // soft pink
-            //color: 0xe6f7ff, // soft blue
-            //color: 0xfff5e6, // vanilla creme 
-            //color: 0x2d1b4e, // dark purple
+            color: BOARD_GROUND_COLOR, 
             roughness: 0.25, 
             metalness: 0.1
         });
 
         const plane = new THREE.Mesh(geometry, material);
-        plane.position.y = -0.05;
+        plane.position.y = 0.05;
+
+        plane.receiveShadow = true;
 
         return plane;
     }, 
 
     createBox(color, scale = 1, type = null) {
-        let height = 0.2;
-        let radius = 0.1;
+        let height = BOX_HEIGHT;
+        let radius = BOX_RADIUS;
 
         if (type === "start" || type === "goal") {
-            height = 0.1;
-            radius = 0.15;
+            height = BOX_HEIGHT / 2;
+            radius = BOX_RADIUS * 1.5;
         }
 
         //const geometry = new THREE.BoxGeometry(scale, height, scale);
@@ -88,7 +94,12 @@ export const theme_candy = {
             metalness: 0.1
         });
 
-        return new THREE.Mesh(geometry, material);
+        const box = new THREE.Mesh(geometry, material);
+        
+        box.castShadow = true;
+        box.receiveShadow = true;
+        
+        return box;
     }, 
 
     createFigure(color) {
@@ -109,6 +120,37 @@ export const theme_candy = {
         top.position.y = 0.35;
         mesh.add(top);
 
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
         return mesh;
-    } 
+    }, 
+
+    createLights() {
+        return [
+            () => new THREE.AmbientLight(0xffffff, 0.65), 
+            () => {
+                const dir = new THREE.DirectionalLight(0xffffff, 2.2);
+                dir.position.set(10, 18, 10); 
+                dir.castShadow = true;
+
+                // Shadows
+                dir.shadow.mapSize.width = 2048;
+                dir.shadow.mapSize.height = 2048;
+                dir.shadow.radius = 4;
+
+                return dir;
+            }, 
+            () => {
+                const point_1 = new THREE.PointLight(0xff66cc, 0.9, 30);
+                point_1.position.set(-5, 6, 5);
+                return point_1;
+            }, 
+            () => {
+                const point_2 = new THREE.PointLight(0x66ccff, 1, 30); 
+                point_2.position.set(5, 6, -5); 
+                return point_2;
+            }
+        ];
+    }
 };

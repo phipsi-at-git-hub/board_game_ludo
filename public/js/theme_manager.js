@@ -93,3 +93,11 @@ export function themeCreateBoardGround() {
 
     return null;
 }
+
+export function themeCreateLights() {
+    if (current_theme && current_theme.createLights) {
+        return current_theme.createLights();
+    }
+
+    return null; 
+}
