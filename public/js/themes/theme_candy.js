@@ -16,6 +16,7 @@ export const theme_candy = {
     getBackground: () => 0x87ceeb,  
     getCellSize: () => CELL_SIZE, 
 
+    // Define the colors of the Player
     getPlayerColors() {
         return {
             0: 0xff4444, 
@@ -25,6 +26,7 @@ export const theme_candy = {
         };
     }, 
 
+    // Define the Renderer Configuration 
     getRendererConfig() {
         return {
             shadowMapEnabled: true, 
@@ -35,6 +37,7 @@ export const theme_candy = {
         };
     }, 
 
+    // Define offsets for Figures on same Field
     getFieldOffsets() {
         return [
             { x: -0.25, z: -0.25 },
@@ -44,6 +47,7 @@ export const theme_candy = {
         ];
     }, 
 
+    // Define the Game Board Structure
     getBoard() {
         return [
             ["H0-1","H0-2","-","-","F-8","F-9","F-10","-","-","H1-0","H1-1"],
@@ -60,6 +64,10 @@ export const theme_candy = {
         ];
     }, 
 
+    /**
+     * 3D Objects of scene
+     */
+    // Create Game Board itself
     createBoardGround() {
         const BOARD = this.getBoard(); 
         const width = (BOARD[0].length * CELL_SIZE) + PADDING;
@@ -88,6 +96,284 @@ export const theme_candy = {
         return plane;
     }, 
 
+    // Assets
+    // Assets - Setup all Assets in the scene
+    getAssets() {
+        const BOARD = this.getBoard();
+        const width = BOARD[0].length * CELL_SIZE;
+        const height = BOARD.length * CELL_SIZE;
+        const offsetX = width / 2;
+        const offsetZ = height / 2;
+        const colors = this. getPlayerColors();
+
+        return [
+            {
+                // Trees
+                id: "tree_0", 
+                mesh: this.createAssetTree(), 
+                position: { x: offsetX - 1.5, y: 0, z: -offsetZ + 3 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                id: "tree_1", 
+                mesh: this.createAssetTree(), 
+                position: { x: offsetX - 2.5, y: 0, z: -offsetZ + 2.75 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1.4
+            }, 
+            {
+                id: "tree_2", 
+                mesh: this.createAssetTree(), 
+                position: { x: offsetX - 3.25, y: 0, z: -offsetZ + 1.55 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1.3
+            }, 
+            {
+                // Rocks
+                id: "rock_0", 
+                mesh: this.createRockStack(), 
+                position: { x: -offsetX + 2.5, y: 0.1, z: offsetZ - 2.5 }, 
+                rotation: { y: Math.PI / 1.2 }, 
+                scale: 1
+            }, 
+            {
+                id: "rock_1", 
+                mesh: this.createRockStack(), 
+                position: { x: -offsetX + 3.5, y: 0.1, z: offsetZ - 2.0 }, 
+                rotation: { y: Math.PI / 1.9 }, 
+                scale: 0.8
+            }, 
+            {
+                // Player 0
+                id: "gate_0", 
+                mesh: this.createGate(colors[0]), 
+                position: { x: -offsetX + 0.5, y: 0, z: -offsetZ + 2 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_0_0", 
+                mesh: this.createFence(), 
+                position: { x: -offsetX + 1.5, y: 0, z: -offsetZ + 2 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_0_1", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX + 2, y: 0, z: -offsetZ + 2 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_0_2", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX + 2, y: 0, z: -offsetZ + 0 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_0_3", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX, y: 0.1, z: -offsetZ }, 
+                rotation: { y: Math.PI * 1.5 }, 
+                scale: 1
+            }, 
+            {
+                // Player 1
+                id: "gate_1", 
+                mesh: this.createGate(colors[1]), 
+                position: { x: offsetX - 2, y: 0, z: -offsetZ + 0.5 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_1_0", 
+                mesh: this.createFence(), 
+                position: { x: offsetX - 2, y: 0, z: -offsetZ + 1 }, 
+                rotation: { y: Math.PI * 1.5 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_1_1", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX - 2 , y: 0, z: -offsetZ + 2 }, 
+                rotation: { y: 0 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_1_2", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX, y: 0, z: -offsetZ }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_1_3", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX, y: 0.1, z: -offsetZ + 2 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                // Player 2
+                id: "gate_2", 
+                mesh: this.createGate(colors[2]), 
+                position: { x: offsetX - 0.5, y: 0, z: offsetZ - 2 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_2_0", 
+                mesh: this.createFence(), 
+                position: { x: offsetX - 1.5, y: 0, z: offsetZ - 2 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_2_1", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX - 2, y: 0, z: offsetZ - 2 }, 
+                rotation: { y: Math.PI * 1.5 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_2_2", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX - 2, y: 0, z: offsetZ }, 
+                rotation: { y: Math.PI * 2}, 
+                scale: 1
+            }, 
+            {
+                id: "fence_2_3", 
+                mesh: this.createFence(4), 
+                position: { x: offsetX, y: 0.1, z: offsetZ }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                // Player 3
+                id: "gate_3", 
+                mesh: this.createGate(colors[3]), 
+                position: { x: -offsetX + 2, y: 0, z: offsetZ - 0.5 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_3_0", 
+                mesh: this.createFence(), 
+                position: { x: -offsetX + 2, y: 0, z: offsetZ - 1 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_3_1", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX + 2, y: 0, z: offsetZ - 2 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_3_2", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX, y: 0, z: offsetZ }, 
+                rotation: { y: 0 }, 
+                scale: 1
+            }, 
+            {
+                id: "fence_3_3", 
+                mesh: this.createFence(4), 
+                position: { x: -offsetX, y: 0.1, z: offsetZ - 2 }, 
+                rotation: { y: Math.PI * 1.5 }, 
+                scale: 1
+            }, 
+        ];
+    }, 
+
+    // Asset - Create Tree
+    createAssetTree() {
+        const group = new THREE.Group();
+
+        const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1, 0.1, 0.6, 8), 
+            new THREE.MeshStandardMaterial({ color: 0x8b5a2b })
+        );
+        trunk.position.y = 0.3;
+
+        const crown = new THREE.Mesh(
+            new THREE.SphereGeometry(0.4, 16, 16), 
+            new THREE.MeshStandardMaterial({ color: 0x66ff99 })
+        );
+        crown.position.y = 0.9;
+
+        trunk.castShadow = true;
+        crown.castShadow = trunk;
+
+        group.add(trunk, crown);
+        return group;
+    }, 
+
+    // Asset - Create Lego Stack
+    createRockStack() {
+        const group = new THREE.Group();
+
+        for (let i = 0; i < 3; i++) {
+            const brick = new THREE.Mesh(
+                new RoundedBoxGeometry(0.6, 0.2, 0.6, 4, 0.05), 
+                new THREE.MeshStandardMaterial({
+                    color: [0xff6666, 0x66ccff, 0xffff66][i % 3], 
+                    roughness: 0.2
+                })
+            );
+            brick.position.y = i *0.2;
+            brick.castShadow = true;
+            group.add(brick);
+        }
+        return group;
+    }, 
+
+    // Asset - Create Gate
+    createGate(color) {
+        const group = new THREE.Group();
+        const left = new THREE.Mesh(
+            new THREE.BoxGeometry(0.2, 0.8, 0.2), 
+            new THREE.MeshStandardMaterial({ color }) 
+        );
+        left.position.set(-0.4, 0.4, 0);
+
+        const right = left.clone();
+        right.position.x = 0.4;
+
+        const top = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 0.2, 0.2), 
+            new THREE.MeshStandardMaterial({ color }) 
+        );
+        top.position.y = 0.9;
+
+        [left, right, top].forEach(m => m.castShadow = true); 
+
+        group.add(left, right, top);
+        return group;
+    }, 
+
+    // Asset - Create Fence
+    createFence(length = 2) {
+        const group = new THREE.Group();
+         for (let i = 0; i < length; i++) {
+            const post = new THREE.Mesh(
+                new THREE.BoxGeometry(0.1, 0.5, 0.1), 
+                new THREE.MeshStandardMaterial({ color: 0xffffff })
+            );
+            post.position.set(i * 0.5, 0.2, 0);
+            post.castShadow = true;
+            //post.receiveShadow = true;
+            group.add(post);
+         }
+         return group;
+    }, 
+
+    // Create Field Boxes - Where the figures are placed
     createBox(color, scale = 1, type = null) {
         let height = BOX_HEIGHT;
         let radius = BOX_RADIUS;
@@ -116,6 +402,7 @@ export const theme_candy = {
         return box;
     }, 
 
+    // Create Figure
     createFigure(color) {
         const geometry = new THREE.SphereGeometry(0.45, 24, 24);
         const material = new THREE.MeshStandardMaterial({
@@ -142,6 +429,7 @@ export const theme_candy = {
         return mesh;
     }, 
 
+    // Create Lights 
     createLights() {
         return [
             () => new THREE.AmbientLight(0xffffff, 0.65), 

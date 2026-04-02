@@ -59,8 +59,8 @@ export function initRenderer(canvas) {
     }
 
     // Grid for Debug
-    //const grid = new THREE.GridHelper(13, 13); 
-    //scene.add(grid);
+    const grid = new THREE.GridHelper(13, 13); 
+    scene.add(grid);
 
     resizeRenderer();
     window.addEventListener('resize', resizeRenderer);

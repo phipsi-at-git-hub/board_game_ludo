@@ -109,3 +109,11 @@ export function themeCreateLights() {
 
     return null; 
 }
+
+export function themeGetAssets() {
+    if (current_theme && current_theme.getAssets) {
+        return current_theme.getAssets();
+    }
+
+    return null;
+}

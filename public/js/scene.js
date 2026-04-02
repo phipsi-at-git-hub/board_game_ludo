@@ -9,7 +9,8 @@ import {
     themeGetCellSize, 
     themeGetFieldOffsets, 
     themeGetBoard, 
-    themeCreateBoardGround 
+    themeCreateBoardGround, 
+    themeGetAssets
 
 } from './theme_manager.js';
 
@@ -116,6 +117,33 @@ function initBoard() {
 
             createCell(cell, worldX, worldZ);
         });
+    });
+
+    // Add assets on board
+    const theme_assets = themeGetAssets();
+    theme_assets.forEach(asset => {
+        const mesh = asset.mesh;
+
+        if (!mesh) return;
+
+        // Set assets position
+        mesh.position.set(
+            asset.position.x, 
+            asset.position.y || 0, 
+            asset.position.z 
+        );
+
+        // Set assets rotation
+        if (asset.rotation) {
+            mesh.rotation.y = asset.rotation.y;
+        }
+
+        // Set assets scale
+        if (asset.scale) {
+            mesh.scale.setScalar(asset.scale);
+        }
+
+        scene.add(mesh);
     });
 }
 
