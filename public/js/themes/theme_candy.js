@@ -121,21 +121,21 @@ export const theme_candy = {
             {
                 // Trees
                 id: "tree_0", 
-                mesh: this.createAssetTree(), 
+                mesh: this.createAssetTreeA(), 
                 position: { x: -offsetX - 1.5, y: 0, z: offsetZ + 3 }, 
                 rotation: { y: Math.PI / 2 }, 
                 scale: 1
             }, 
             {
                 id: "tree_1", 
-                mesh: this.createAssetTree(), 
+                mesh: this.createAssetTreeB(), 
                 position: { x: -offsetX - 2.5, y: 0, z: offsetZ + 2.75 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.4
             }, 
             {
                 id: "tree_2", 
-                mesh: this.createAssetTree(), 
+                mesh: this.createAssetTreeC(), 
                 position: { x: -offsetX - 3.25, y: 0, z: offsetZ + 1.55 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.3
@@ -143,17 +143,38 @@ export const theme_candy = {
             {
                 // Rocks
                 id: "rock_0", 
-                mesh: this.createRockStack(), 
+                mesh: this.createRockStackA(), 
                 position: { x: offsetX + 2.5, y: 0.1, z: -offsetZ - 2.5 }, 
                 rotation: { y: Math.PI / 1.2 }, 
                 scale: 1
             }, 
             {
                 id: "rock_1", 
-                mesh: this.createRockStack(), 
+                mesh: this.createRockStackA(), 
                 position: { x: offsetX + 3.5, y: 0.1, z: -offsetZ - 2.0 }, 
                 rotation: { y: Math.PI / 1.9 }, 
                 scale: 0.8
+            }, 
+            {
+                id: "rock_2", 
+                mesh: this.createRockStackB(), 
+                position: { x: offsetX + 3.2, y: 0.1, z: -offsetZ - 2.8 }, 
+                rotation: { y: Math.PI / 1.4 }, 
+                scale: 0.8
+            }, 
+            {
+                id: "rock_3", 
+                mesh: this.createRockStackC(), 
+                position: { x: -offsetX - 2.5, y: 0.1, z: -offsetZ - 2.3 }, 
+                rotation: { y: Math.PI / 1.2 }, 
+                scale: 0.8
+            }, 
+            {
+                id: "rock_4", 
+                mesh: this.createRockStackC(), 
+                position: { x: -offsetX - 3.1, y: 0.1, z: -offsetZ - 2.7 }, 
+                rotation: { y: Math.PI / 0.6 }, 
+                scale: 1.2
             }, 
 
             ...[0, 1, 2, 3].map(i => {
@@ -215,8 +236,54 @@ export const theme_candy = {
         return group;
     }, 
 
-    // Asset - Create Tree
-    createAssetTree() {
+    // Asset - Create Tree A
+    createAssetTreeA() {
+        const group = new THREE.Group();
+
+        const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.08, 0.08, 0.5, 8), 
+            new THREE.MeshStandardMaterial({ color: 0x8b5a2b })
+        );
+        trunk.position.y = 0.25;
+
+        const crown = new THREE.Mesh(
+            new THREE.SphereGeometry(0.35, 16, 16), 
+            new THREE.MeshStandardMaterial({ color: 0x66ff99 })
+        );
+        crown.position.y = 0.75;
+
+        trunk.castShadow = true;
+        crown.castShadow = true;
+
+        group.add(trunk, crown);
+        return group;
+    }, 
+
+    // Asset - Create Tree B
+    createAssetTreeB() {
+        const group = new THREE.Group();
+
+        const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.07, 0.07, 0.8, 8), 
+            new THREE.MeshStandardMaterial({ color: 0x8b5a2b })
+        );
+        trunk.position.y = 0.4;
+
+        const crown = new THREE.Mesh(
+            new THREE.SphereGeometry(0.35, 0.7, 16), 
+            new THREE.MeshStandardMaterial({ color: 0x33cc66 })
+        );
+        crown.position.y = 0.95;
+
+        trunk.castShadow = true;
+        crown.castShadow = true;
+
+        group.add(trunk, crown);
+        return group;
+    }, 
+
+    // Asset - Create Tree C
+    createAssetTreeC() {
         const group = new THREE.Group();
 
         const trunk = new THREE.Mesh(
@@ -226,10 +293,22 @@ export const theme_candy = {
         trunk.position.y = 0.3;
 
         const crown = new THREE.Mesh(
-            new THREE.SphereGeometry(0.4, 16, 16), 
+            new THREE.SphereGeometry(0.45, 16, 16), 
             new THREE.MeshStandardMaterial({ color: 0x66ff99 })
         );
-        crown.position.y = 0.9;
+        crown.position.y = 0.85;
+
+        // Fruits
+        for (let i = 0; i < 5; i++) {
+            const fruits = new THREE.Mesh(
+                new THREE.SphereGeometry(0.07, 8, 8), 
+                new THREE.MeshStandardMaterial({ color: [0xff4444, 0xffcc44, 0x44ccff][i % 3] })
+            );
+
+            const angle = (i / 5) * Math.PI * 2; 
+            fruits.position.set(Math.cos(angle) * 0.25, 0.35, Math.sin(angle) * 0.25);
+            crown.add(fruits);
+        }
 
         trunk.castShadow = true;
         crown.castShadow = true;
@@ -238,8 +317,8 @@ export const theme_candy = {
         return group;
     }, 
 
-    // Asset - Create Lego Stack
-    createRockStack() {
+    // Asset - Create Rock Stack A
+    createRockStackA() {
         const group = new THREE.Group();
 
         for (let i = 0; i < 3; i++) {
@@ -250,9 +329,57 @@ export const theme_candy = {
                     roughness: 0.2
                 })
             );
-            brick.position.y = i *0.2;
+            brick.position.y = i * 0.2;
             brick.castShadow = true;
             group.add(brick);
+        }
+        return group;
+    }, 
+
+    // Asset - Create Rock Stack B
+    createRockStackB() {
+        const group = new THREE.Group();
+
+        for (let i = 0; i < 4; i++) {
+            const brick = new THREE.Mesh(
+                new RoundedBoxGeometry(0.6, 0.25, 0.6, 4, 0.05), 
+                new THREE.MeshStandardMaterial({
+                    color: [0xff9999, 0x66aaff, 0xffff99, 0xccff66][i % 4], 
+                    roughness: 0.2
+                })
+            );
+            brick.position.y = i * 0.25;
+            brick.castShadow = true;
+            group.add(brick);
+        }
+        return group;
+    }, 
+
+    // Asset - Create Rock Stack C
+    createRockStackC() {
+        const group = new THREE.Group();
+        const sizes = [
+            { x: 0.5, y: 0.2, z: 0.4 }, 
+            { x: 0.35, y: 0.15, z: 0.5 }, 
+            { x: 0.4, y: 0.25, z: 0.3 }
+        ];
+        const colors = [0x999999, 0xaaaaaa, 0x888888];
+
+        for (let i = 0; i < sizes.length; i++) {
+            const rock = new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    sizes[i].x, 
+                    sizes[i].y, 
+                    sizes[i].z 
+                ), 
+                new THREE.MeshStandardMaterial({
+                    color: colors[i], 
+                    roughness: 0.3
+                })
+            );
+            rock.position.y = sizes[i].y / 2;
+            rock.castShadow = true;
+            group.add(rock);
         }
         return group;
     }, 
