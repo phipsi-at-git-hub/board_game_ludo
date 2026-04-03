@@ -102,30 +102,41 @@ export const theme_candy = {
         const BOARD = this.getBoard();
         const width = BOARD[0].length * CELL_SIZE;
         const height = BOARD.length * CELL_SIZE;
-        const offsetX = width / 2;
-        const offsetZ = height / 2;
+        const offsetX = -width / 2;
+        const offsetZ = -height / 2;
         const colors = this. getPlayerColors();
+        const base_position = {
+            x: offsetX, 
+            y: 0, 
+            z: offsetZ
+        };
+        const base_rotations = [
+            0, 
+            Math.PI / 2, 
+            Math.PI, 
+            Math.PI * 1.5 
+        ];
 
         return [
             {
                 // Trees
                 id: "tree_0", 
                 mesh: this.createAssetTree(), 
-                position: { x: offsetX - 1.5, y: 0, z: -offsetZ + 3 }, 
+                position: { x: -offsetX - 1.5, y: 0, z: offsetZ + 3 }, 
                 rotation: { y: Math.PI / 2 }, 
                 scale: 1
             }, 
             {
                 id: "tree_1", 
                 mesh: this.createAssetTree(), 
-                position: { x: offsetX - 2.5, y: 0, z: -offsetZ + 2.75 }, 
+                position: { x: -offsetX - 2.5, y: 0, z: offsetZ + 2.75 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.4
             }, 
             {
                 id: "tree_2", 
                 mesh: this.createAssetTree(), 
-                position: { x: offsetX - 3.25, y: 0, z: -offsetZ + 1.55 }, 
+                position: { x: -offsetX - 3.25, y: 0, z: offsetZ + 1.55 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.3
             }, 
@@ -133,162 +144,75 @@ export const theme_candy = {
                 // Rocks
                 id: "rock_0", 
                 mesh: this.createRockStack(), 
-                position: { x: -offsetX + 2.5, y: 0.1, z: offsetZ - 2.5 }, 
+                position: { x: offsetX + 2.5, y: 0.1, z: -offsetZ - 2.5 }, 
                 rotation: { y: Math.PI / 1.2 }, 
                 scale: 1
             }, 
             {
                 id: "rock_1", 
                 mesh: this.createRockStack(), 
-                position: { x: -offsetX + 3.5, y: 0.1, z: offsetZ - 2.0 }, 
+                position: { x: offsetX + 3.5, y: 0.1, z: -offsetZ - 2.0 }, 
                 rotation: { y: Math.PI / 1.9 }, 
                 scale: 0.8
             }, 
-            {
-                // Player 0
-                id: "gate_0", 
-                mesh: this.createGate(colors[0]), 
-                position: { x: -offsetX + 0.5, y: 0, z: -offsetZ + 2 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_0_0", 
-                mesh: this.createFence(), 
-                position: { x: -offsetX + 1.5, y: 0, z: -offsetZ + 2 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_0_1", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX + 2, y: 0, z: -offsetZ + 2 }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_0_2", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX + 2, y: 0, z: -offsetZ + 0 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_0_3", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX, y: 0.1, z: -offsetZ }, 
-                rotation: { y: Math.PI * 1.5 }, 
-                scale: 1
-            }, 
-            {
-                // Player 1
-                id: "gate_1", 
-                mesh: this.createGate(colors[1]), 
-                position: { x: offsetX - 2, y: 0, z: -offsetZ + 0.5 }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_1_0", 
-                mesh: this.createFence(), 
-                position: { x: offsetX - 2, y: 0, z: -offsetZ + 1 }, 
-                rotation: { y: Math.PI * 1.5 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_1_1", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX - 2 , y: 0, z: -offsetZ + 2 }, 
-                rotation: { y: 0 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_1_2", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX, y: 0, z: -offsetZ }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_1_3", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX, y: 0.1, z: -offsetZ + 2 }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                // Player 2
-                id: "gate_2", 
-                mesh: this.createGate(colors[2]), 
-                position: { x: offsetX - 0.5, y: 0, z: offsetZ - 2 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_2_0", 
-                mesh: this.createFence(), 
-                position: { x: offsetX - 1.5, y: 0, z: offsetZ - 2 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_2_1", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX - 2, y: 0, z: offsetZ - 2 }, 
-                rotation: { y: Math.PI * 1.5 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_2_2", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX - 2, y: 0, z: offsetZ }, 
-                rotation: { y: Math.PI * 2}, 
-                scale: 1
-            }, 
-            {
-                id: "fence_2_3", 
-                mesh: this.createFence(4), 
-                position: { x: offsetX, y: 0.1, z: offsetZ }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                // Player 3
-                id: "gate_3", 
-                mesh: this.createGate(colors[3]), 
-                position: { x: -offsetX + 2, y: 0, z: offsetZ - 0.5 }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_3_0", 
-                mesh: this.createFence(), 
-                position: { x: -offsetX + 2, y: 0, z: offsetZ - 1 }, 
-                rotation: { y: Math.PI / 2 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_3_1", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX + 2, y: 0, z: offsetZ - 2 }, 
-                rotation: { y: Math.PI }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_3_2", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX, y: 0, z: offsetZ }, 
-                rotation: { y: 0 }, 
-                scale: 1
-            }, 
-            {
-                id: "fence_3_3", 
-                mesh: this.createFence(4), 
-                position: { x: -offsetX, y: 0.1, z: offsetZ - 2 }, 
-                rotation: { y: Math.PI * 1.5 }, 
-                scale: 1
-            }, 
+
+            ...[0, 1, 2, 3].map(i => {
+                const rotation = base_rotations[i];
+                const cos = Math.cos(rotation);
+                const sin = Math.sin(rotation);
+
+                const rotated_x = base_position.x * cos - base_position.z * sin;
+                const rotated_z = base_position.x * sin + base_position.z * cos;
+
+                return {
+                    id: `home_${i}`, 
+                    mesh: this.createAssetHomeZone(colors[i]), 
+                    position: {
+                        x: rotated_x , 
+                        y: 0, 
+                        z: rotated_z
+                    }, 
+                    rotation: {
+                        y: -rotation
+                    }, 
+                    scale: 1
+                };
+            }), 
         ];
+    }, 
+
+    // Asset - Create Home Zone
+    createAssetHomeZone(color) {
+        const group = new THREE.Group();
+
+        // Gate
+        const gate = this.createAssetGate(color)
+        gate.position.set(0.5, 0, 2);
+        gate.rotation.y = Math.PI;
+        group.add(gate);
+
+        // Fences
+        const fence_0 = this.createAssetFence();
+        fence_0.position.set(1.5, 0, 2);
+        fence_0.rotation.y = Math.PI;
+        group.add(fence_0);
+        
+        const fence_1 = this.createAssetFence(4);
+        fence_1.position.set(2, 0, 2);
+        fence_1.rotation.y = Math.PI / 2;
+        group.add(fence_1);
+
+        const fence_2 = this.createAssetFence(4);
+        fence_2.position.set(2, 0, 0);
+        fence_2.rotation.y = Math.PI;
+        group.add(fence_2);
+
+        const fence_3 = this.createAssetFence(4);
+        fence_3.position.set(0, 0.1, 0);
+        fence_3.rotation.y = Math.PI * 1.5;
+        group.add(fence_3);
+
+        return group;
     }, 
 
     // Asset - Create Tree
@@ -308,7 +232,7 @@ export const theme_candy = {
         crown.position.y = 0.9;
 
         trunk.castShadow = true;
-        crown.castShadow = trunk;
+        crown.castShadow = true;
 
         group.add(trunk, crown);
         return group;
@@ -334,7 +258,7 @@ export const theme_candy = {
     }, 
 
     // Asset - Create Gate
-    createGate(color) {
+    createAssetGate(color) {
         const group = new THREE.Group();
         const left = new THREE.Mesh(
             new THREE.BoxGeometry(0.2, 0.8, 0.2), 
@@ -358,7 +282,7 @@ export const theme_candy = {
     }, 
 
     // Asset - Create Fence
-    createFence(length = 2) {
+    createAssetFence(length = 2) {
         const group = new THREE.Group();
          for (let i = 0; i < length; i++) {
             const post = new THREE.Mesh(
@@ -439,8 +363,14 @@ export const theme_candy = {
                 dir.castShadow = true;
 
                 // Shadows
-                dir.shadow.mapSize.width = 2048;
-                dir.shadow.mapSize.height = 2048;
+                dir.shadow.camera.left = -15;
+                dir.shadow.camera.right = 15;
+                dir.shadow.camera.top = 15;
+                dir.shadow.camera.bottom = -15;
+                dir.shadow.camera.near = 1;
+                dir.shadow.camera.far = 50;
+                dir.shadow.mapSize.width = 4096;
+                dir.shadow.mapSize.height = 4096;
                 dir.shadow.radius = 4;
 
                 return dir;
