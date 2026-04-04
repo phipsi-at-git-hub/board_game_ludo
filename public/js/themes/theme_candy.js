@@ -122,23 +122,37 @@ export const theme_candy = {
                 // Trees
                 id: "tree_0", 
                 mesh: this.createAssetTreeA(), 
-                position: { x: -offsetX - 1.5, y: 0, z: offsetZ + 3 }, 
+                position: { x: -offsetX - 1.5, y: 0, z: -offsetZ - 3 }, 
                 rotation: { y: Math.PI / 2 }, 
                 scale: 1
             }, 
             {
                 id: "tree_1", 
                 mesh: this.createAssetTreeB(), 
-                position: { x: -offsetX - 2.5, y: 0, z: offsetZ + 2.75 }, 
+                position: { x: -offsetX - 2.5, y: 0, z: -offsetZ - 2.75 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.4
             }, 
             {
                 id: "tree_2", 
                 mesh: this.createAssetTreeC(), 
-                position: { x: -offsetX - 3.25, y: 0, z: offsetZ + 1.55 }, 
+                position: { x: -offsetX - 3.25, y: 0, z: -offsetZ - 1.55 }, 
                 rotation: { y: Math.PI }, 
                 scale: 1.3
+            }, 
+            {
+                id: "tree_3", 
+                mesh: this.createAssetTreeB(), 
+                position: { x: -offsetX - 2.75, y: 0, z: -offsetZ - 0.75 }, 
+                rotation: { y: Math.PI }, 
+                scale: 1.4
+            }, 
+            {
+                id: "tree_4", 
+                mesh: this.createAssetTreeA(), 
+                position: { x: -offsetX - 3.5, y: 0, z: -offsetZ - 0.5 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
             }, 
             {
                 // Rocks
@@ -175,6 +189,35 @@ export const theme_candy = {
                 position: { x: -offsetX - 3.1, y: 0.1, z: -offsetZ - 2.7 }, 
                 rotation: { y: Math.PI / 0.6 }, 
                 scale: 1.2
+            }, 
+            {
+                id: "rock_5", 
+                mesh: this.createRockStackC(), 
+                position: { x: -offsetX - 1.1, y: 0.1, z: offsetZ + 2.7 }, 
+                rotation: { y: Math.PI / 0.6 }, 
+                scale: 1.5
+            }, 
+            {
+                id: "rock_6", 
+                mesh: this.createRockStackC(), 
+                position: { x: -offsetX - 1.5, y: 0.1, z: offsetZ + 3.2 }, 
+                rotation: { y: Math.PI * 0.8 }, 
+                scale: 2.1
+            }, 
+            {
+                id: "rock_7", 
+                mesh: this.createRockStackC(), 
+                position: { x: -offsetX - 2.1, y: 0.1, z: offsetZ + 3.2 }, 
+                rotation: { y: Math.PI * 1.2 }, 
+                scale: 1.7
+            }, 
+            {
+                // Fire Truck
+                id: "fire_truck_0", 
+                mesh: this.createAssetFireTruck(), 
+                position: { x: offsetX + 3, y: 0.1, z: offsetZ + 2 }, 
+                rotation: { y: Math.PI / 2 }, 
+                scale: 1
             }, 
 
             ...[0, 1, 2, 3].map(i => {
@@ -381,6 +424,51 @@ export const theme_candy = {
             rock.castShadow = true;
             group.add(rock);
         }
+        return group;
+    }, 
+
+    // Asset - Create Fire Truck
+    createAssetFireTruck() {
+        const group = new THREE.Group();
+        const body = new THREE.Mesh(
+            new RoundedBoxGeometry(1.2, 0.5, 0.6, 4, 0.1), 
+            new THREE.MeshStandardMaterial({ color: 0xff4444, roughness: 0.2 })
+        ); 
+        body.position.y = 0.25;
+        group.add(body); 
+
+        const cabin = new THREE.Mesh(
+            new RoundedBoxGeometry(0.5, 0.4, 0.57, 4, 0.1), 
+            new THREE.MeshStandardMaterial({ color: 0xff6666, roughness: 0.2 })
+        );
+        cabin.position.set(-0.31, 0.45, 0);
+        group.add(cabin);
+
+        const wheel_geometry = new THREE.CylinderGeometry(0.15, 0.15, 0.1, 16);
+        const wheel_material = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.5 }); 
+        const wheel_position = [
+            [-0.45, 0.1, -0.25], 
+            [0.45, 0.1, -0.25], 
+            [-0.45, 0.1, 0.25], 
+            [0.45, 0.1, 0.25], 
+        ];
+        wheel_position.forEach(position => {
+            const wheel = new THREE.Mesh(wheel_geometry, wheel_material);
+            wheel.rotation.z = Math.PI / 2;
+            wheel.position.set(...position);
+            wheel.castShadow = true;
+            group.add(wheel);
+        });
+
+        const light = new THREE.Mesh(
+            new RoundedBoxGeometry(0.2, 0.1, 0.2, 4, 0.05), 
+            new THREE.MeshStandardMaterial({ color: 0xffff44, emissive: 0xffff66, emissiveIntensity: 0.8 })
+        );
+        light.position.set(-0.3, 0.65, 0);
+        group.add(light);
+
+        group.traverse(m => m.castShadow = true); 
+
         return group;
     }, 
 
