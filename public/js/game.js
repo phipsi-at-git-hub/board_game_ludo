@@ -2,7 +2,7 @@ import { setTheme } from "./theme_manager.js";
 import { theme_candy } from "./themes/theme_candy.js";
 import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
-import { updateScene, updateCameraTarget, setCameraMode, getCameraTarget } from './scene.js';
+import { updateScene, updateCameraTarget, setCameraMode, getCameraTarget, startWinAnimation } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 
@@ -29,6 +29,8 @@ const PLAYER_COLORS = {
 let current_state = null;
 let last_dice_value = null;
 
+let win_animation_played = false;
+
 setTheme(theme_candy); 
 initRenderer(canvas);
 animateCameraTo(my_player_index, 2000);
@@ -51,6 +53,14 @@ async function updateState() {
             updateDice();
             updateControls();
             if (current_state.current_dice_roll) showAvailableMoves();
+
+            // Start animation for the winner of the game
+            if (current_state.winner_player_index !== undefined && current_state.winner_player_index !== null) {
+                if (!win_animation_played) {
+                    startWinAnimation(current_state.winner_player_index);
+                    win_animation_played = true;
+                }
+            }
         }
     } catch (e) {
         console.error('State fetch failed', e);

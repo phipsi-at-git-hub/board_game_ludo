@@ -10,7 +10,9 @@ import {
     themeGetFieldOffsets, 
     themeGetBoard, 
     themeCreateBoardGround, 
-    themeGetAssets
+    themeGetAssets, 
+    themeGetWinAssets, 
+    themeStartWinAnimation
 
 } from './theme_manager.js';
 
@@ -30,6 +32,9 @@ const figure_meshes = {};
 let board_initialized = false;
 let camera_target_position = new THREE.Vector3();
 let camera_mode = CAMERA_MODE_FIXED;
+
+let win_assets_loaded = false;
+let win_assets = null; 
 
 // Field Storage
 const mainFields = new Array(40);
@@ -263,4 +268,35 @@ export function getCameraTarget() {
 // Setter - Set camera_mode
 export function setCameraMode(mode) {
     camera_mode = mode;
+}
+
+// Make sure to have win assets in scene
+function ensureWinAssets() {
+    if (win_assets_loaded) return;
+
+    win_assets = themeGetWinAssets(); 
+    if (!win_assets) return; 
+
+    Object.values(win_assets).flat().forEach(asset => {
+        if (asset.mesh) {
+            scene.add(asset.mesh);
+        }
+    }); 
+    win_assets_loaded = true;
+}
+
+// Start the animation after game is won
+export function startWinAnimation(winner_index) {
+    ensureWinAssets(); 
+
+    const PLAYER_COLORS = themeGetPlayerColors(); 
+    const winner_color = PLAYER_COLORS[winner_index] || 0xffffff; 
+
+    const context = {
+        scene, 
+        assets: win_assets, 
+        winner_color
+    };
+
+    themeStartWinAnimation(context);
 }

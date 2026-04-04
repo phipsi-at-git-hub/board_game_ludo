@@ -601,5 +601,61 @@ export const theme_candy = {
                 return point_2;
             }
         ];
-    }
+    }, 
+
+    // Win Assets 
+    getWinAssets() {
+        const rockets = []; 
+
+        for (let i = 0; i < 5; i++) {
+            const rocket = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05, 0.05, 0.5, 8), 
+                new THREE.MeshStandardMaterial({
+                    color: 0xffffff, 
+                    emissive: 0xffaaaa, 
+                    emissiveIntensity: 0.5
+                })
+            );
+
+            rocket.position.set(
+                (Math.random() - 0.5) * 6, 
+                0.2, 
+                (Math.random() - 0.5) * 6
+            );
+
+            rockets.push({ 
+                id: `win_rocket_${i}`, 
+                mesh: rocket
+            });
+        }
+        return { rockets };
+    },
+
+    // Win Animation
+    startWinAnimation(context) {
+        return;
+        const  { scene, assets, winner_color } = context; 
+
+        if (!assets || !assets.rockets) return;
+
+        assets.rockets.forEach(r => {
+            const mesh = r.mesh;
+
+            let t = 0;
+            const speed = 0.05 + Math.random() * 0.05;
+
+            function animate() {
+                t += speed;
+                mesh.position.y += 0.2;
+
+                if (mesh.position.y > 5) {
+                    mesh.material.color.set(winner_color); 
+                    mesh.scale.setScalar(2 + Math.random());
+                } else {
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        });
+    }, 
 };
