@@ -1,11 +1,13 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import { getCameraTarget, getInitialCameraTarget } from './scene.js';
+import { getCameraTarget, getInitialCameraTarget, updateAnimations } from './scene.js';
 import { themeGetRendererConfig, themeCreateLights } from './theme_manager.js';
 
 export let scene, camera, renderer;
+let render_loop_started = false; 
 let game_canvas;
 let camera_target = null;
 let is_camera_animating = false;
+let last_time = performance.now(); 
 
 export function initRenderer(canvas) {
     game_canvas = canvas;
@@ -68,7 +70,11 @@ export function initRenderer(canvas) {
 
 export function renderLoop() {
     requestAnimationFrame(renderLoop);
-
+    
+    const now = performance.now(); 
+    const delta_time = (now - last_time) / 1000;
+    last_time = now; 
+    
     if (camera && getCameraTarget()) {
         // Smooth interpolation
         camera.position.lerp(
@@ -77,6 +83,8 @@ export function renderLoop() {
         );
         camera.lookAt(0,-1,0);
     }
+    
+    updateAnimations(delta_time);
     renderer.render(scene, camera);
 }
 

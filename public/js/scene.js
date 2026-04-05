@@ -29,6 +29,7 @@ const BASE_ANGLES = [
 ];
 
 const figure_meshes = {};
+const figure_animations = {}; 
 let board_initialized = false;
 let camera_target_position = new THREE.Vector3();
 let camera_mode = CAMERA_MODE_FIXED;
@@ -228,14 +229,16 @@ function placeFigures(state) {
     Object.values(occupancy).forEach(group => {
         group.forEach((entry, i) => {
             const { player, figure } = entry;
+            const mesh_key = player.player_index + '-' + figure.figure_index;
 
-            if (!figure_meshes[player.player_index + '-' + figure.figure_index]) {
+            if (!figure_meshes[mesh_key]) {
                 const mesh = createFigure(PLAYER_COLORS[player.player_index]);
                 scene.add(mesh);
-                figure_meshes[player.player_index + '-' + figure.figure_index] = mesh;
+                figure_meshes[mesh_key] = mesh;
+                mesh.position.set(0, 0.5, 0);
             }
 
-            const mesh = figure_meshes[player.player_index + '-' + figure.figure_index];
+            const mesh = figure_meshes[mesh_key];
 
             // Get root position of fields
             let basePos;
@@ -246,12 +249,41 @@ function placeFigures(state) {
             // Only use offset if multiple figures occupy the same position
             const offset = group.length > 1 ? FIELD_OFFSETS[i % FIELD_OFFSETS.length] : { x: 0, z: 0 };
 
-            mesh.position.set(
-                basePos.x + offset.x,
-                0.5,
-                basePos.z + offset.z
+            const target_position = new THREE.Vector3(
+                basePos.x + offset.x, 
+                0.5, 
+                basePos.z + offset.z 
             );
+
+            // Animation
+            if (figure_meshes[mesh_key].initialized) {
+                figure_animations[mesh_key] = {
+                    position_start: mesh.position.clone(), 
+                    position_end: target_position, 
+                    progress: 0
+                };
+            } else {
+                mesh.position.copy(target_position); 
+                figure_meshes[mesh_key].initialized = true;
+            }
         });
+    });
+}
+
+export function updateAnimations(delta_time) {
+    Object.entries(figure_animations).forEach(([key, animation]) => {
+        animation.progress += delta_time / 0.5; 
+
+        if (animation.progress > 1) animation.progress = 1;
+
+        const mesh = figure_meshes[key]; 
+        if (!mesh) return;
+
+        mesh.position.lerpVectors(animation.position_start, animation.position_end, animation.progress); 
+
+        if (animation.progress >= 1) {
+            delete figure_animations[key];
+        }
     });
 }
 
