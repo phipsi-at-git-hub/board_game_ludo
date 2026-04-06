@@ -240,6 +240,7 @@ function placeFigures(state) {
                 // Initial state
                 mesh.userData.last_position = figure.position;
                 mesh.userData.last_area = figure.area;
+                mesh.userData.is_animating = false;
             }
 
             const mesh = figure_meshes[mesh_key];
@@ -260,27 +261,27 @@ function placeFigures(state) {
             );
 
             // Calculate path
-            const path = getPathPositions(mesh, figure, player, offset);
+            //const path = getPathPositions(mesh, figure, player, offset);
 
-            // Animation
+            // Animate
             if (!mesh.initialized) {
+                // Initiate
                 mesh.position.copy(target_position);
                 mesh.initialized = true;
-
                 mesh.userData.last_position = figure.position;
                 mesh.userData.last_area = figure.area;
-            } else if (path.length > 0 && !mesh.userData.is_animating && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
-                mesh.userData.is_animating = true; 
-                figure_animations[mesh_key] = {
-                    path, 
-                    current_step: 0, 
-                    progress: 0, 
-                    step_duration: 0.18 
-                };
-            } else {
-                mesh.position.copy(target_position); 
-                mesh.userData.last_position = figure.position;
-                mesh.userData.last_area = figure.area;
+            } else if (!mesh.userData.is_animating && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
+                // Only start animation if no animation is already running
+                const path = getPathPositions(mesh, figure, player, offset);
+                if (path.length > 0) {
+                    mesh.userData.is_animating = true; 
+                    figure_animations[mesh_key] = {
+                        path, 
+                        current_step: 0, 
+                        progress: 0, 
+                        step_duration: 0.18 
+                    };
+                }
             }
         });
     });
@@ -290,10 +291,9 @@ function placeFigures(state) {
 export function updateAnimations(delta_time) {
     Object.entries(figure_animations).forEach(([key, animation]) => {
         const mesh = figure_meshes[key];
-        if (!mesh) return;
-
-        if (!animation.path || animation.path.length === 0) {
+        if (!mesh || !animation.path || animation.path.length === 0) {
             delete figure_animations[key]; 
+            if (mesh) mesh.userData.is_animating = false;
             return;
         }
 
@@ -301,10 +301,15 @@ export function updateAnimations(delta_time) {
         const previous = animation.current_step === 0 ? { position: mesh.position.clone() } : animation.path[animation.current_step -1];
 
         animation.progress += delta_time / animation.step_duration; 
+        if (animation.progress > 1) animation.progress = 1;
+
+        mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
 
         // Hopping effect
         const height = Math.sin(animation.progress * Math.PI) * 0.25;
+        mesh.position.y = 0.5 + height;
 
+        // Animation done
         if (animation.progress >= 1) {
             animation.progress = 0;
             animation.current_step++;
@@ -319,11 +324,8 @@ export function updateAnimations(delta_time) {
                 mesh.userData.is_animating = false;
 
                 delete figure_animations[key];
-                return;
             }
         }
-        mesh.position.lerpVectors(previous.position, current.position, animation.progress);
-        mesh.position.y = 0.5 + height;
     });
 }
 
