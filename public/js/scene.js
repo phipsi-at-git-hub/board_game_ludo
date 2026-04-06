@@ -332,6 +332,7 @@ function getPathPositions(mesh, figure, player, offset) {
     const path = [];
     const last_area = mesh.userData.last_area;
     const last_position = mesh.userData.last_position; 
+    const player_index = player.player_index;
 
     // Field -> Field
     if (last_area === "field" && figure.area === "field") {
@@ -353,6 +354,80 @@ function getPathPositions(mesh, figure, player, offset) {
         }
     }
 
+    // Field -> Goal
+    else if (last_area === "field" && figure.area === "goal") {
+        let current = last_position;
+        let last_index_before_goal_entry = getLastIndexBeforeGoal(player_index);
+
+        // Walking to end of field
+        while (current !== last_index_before_goal_entry) {
+            current = (current + 1) % mainFields.length;
+
+            const position = mainFields[current].position.clone();
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z 
+                ), 
+                index: current, 
+                area: "field" 
+            }); 
+        }
+
+        // Jump into goal area
+        const goal_entry = goalFields[player_index][0];
+        if (goal_entry) {
+            const position = goal_entry.position.clone();
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z 
+                ), 
+                index: 0, 
+                area: "goal" 
+            });
+        }
+
+        // Walking in goal area
+        for (let i = 0; i <= figure.position; i++) {
+            const goal_field = goalFields[player_index][i];
+            if (!goal_field) continue;
+
+            const position = goal_field.position.clone();
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z 
+                ), 
+                index: i, 
+                area: "goal" 
+            });
+        }
+    }
+
+    // Goal -> Goal 
+    else if (last_area === "goal" && figure.area === "goal") {
+        let current = last_position;
+        for (let i = current + 1; i <= figure.position; i++) {
+            const goal_field = goalFields[player_index][i]; 
+            if (!goal_field) continue;
+
+            const position = goal_field.position.clone(); 
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z 
+                ), 
+                index: i, 
+                area: "goal" 
+            });
+        }
+    }
+
     // Home -> Field
     else if (last_area === "home" && figure.area === "field") {
         const position = mainFields[figure.position].position.clone();
@@ -366,24 +441,13 @@ function getPathPositions(mesh, figure, player, offset) {
             area: "field" 
         });
     }
-
-    // Field -> Goal
-    else if (figure.area === "goal") {
-        const goal_field = goalFields[player.player_index][figure.position]; 
-        if (goal_field) {
-            const position = goal_field.position.clone();
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    0.5, 
-                    position.z + offset.z 
-                ), 
-                index: figure.position, 
-                area: "goal" 
-            }); 
-        }
-    }
     return path;
+}
+
+// Helper - Get last field index for given player before entering the goal area
+function getLastIndexBeforeGoal(player_index) {
+    const last_field_before_goal = [39, 9, 19, 29];
+    return last_field_before_goal[player_index] ?? 0;
 }
 
 // Helper - Create Figure
