@@ -269,7 +269,8 @@ function placeFigures(state) {
 
                 mesh.userData.last_position = figure.position;
                 mesh.userData.last_area = figure.area;
-            } else if (path.length > 0 && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
+            } else if (path.length > 0 && !mesh.userData.is_animating && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
+                mesh.userData.is_animating = true; 
                 figure_animations[mesh_key] = {
                     path, 
                     current_step: 0, 
@@ -310,10 +311,12 @@ export function updateAnimations(delta_time) {
 
             if (animation.current_step >= animation.path.length) {
                 mesh.position.copy(current.position);
+                mesh.position.y = 0.5; // Reset
 
                 // Update state
                 mesh.userData.last_position = current.index;
                 mesh.userData.last_area = current.area;
+                mesh.userData.is_animating = false;
 
                 delete figure_animations[key];
                 return;
