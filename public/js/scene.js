@@ -236,6 +236,10 @@ function placeFigures(state) {
                 scene.add(mesh);
                 figure_meshes[mesh_key] = mesh;
                 mesh.position.set(0, 0.5, 0);
+
+                // Initial state
+                mesh.userData.last_position = figure.position;
+                mesh.userData.last_area = figure.area;
             }
 
             const mesh = figure_meshes[mesh_key];
@@ -255,36 +259,128 @@ function placeFigures(state) {
                 basePos.z + offset.z 
             );
 
+            // Calculate path
+            const path = getPathPositions(mesh, figure, player, offset);
+
             // Animation
-            if (figure_meshes[mesh_key].initialized) {
+            if (!mesh.initialized) {
+                mesh.position.copy(target_position);
+                mesh.initialized = true;
+
+                mesh.userData.last_position = figure.position;
+                mesh.userData.last_area = figure.area;
+            } else if (path.length > 0 && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
                 figure_animations[mesh_key] = {
-                    position_start: mesh.position.clone(), 
-                    position_end: target_position, 
-                    progress: 0
+                    path, 
+                    current_step: 0, 
+                    progress: 0, 
+                    step_duration: 0.18 
                 };
             } else {
                 mesh.position.copy(target_position); 
-                figure_meshes[mesh_key].initialized = true;
+                mesh.userData.last_position = figure.position;
+                mesh.userData.last_area = figure.area;
             }
         });
     });
 }
 
+// Update Figure animations
 export function updateAnimations(delta_time) {
     Object.entries(figure_animations).forEach(([key, animation]) => {
-        animation.progress += delta_time / 0.5; 
-
-        if (animation.progress > 1) animation.progress = 1;
-
-        const mesh = figure_meshes[key]; 
+        const mesh = figure_meshes[key];
         if (!mesh) return;
 
-        mesh.position.lerpVectors(animation.position_start, animation.position_end, animation.progress); 
+        if (!animation.path || animation.path.length === 0) {
+            delete figure_animations[key]; 
+            return;
+        }
+
+        const current = animation.path[animation.current_step]; 
+        const previous = animation.current_step === 0 ? { position: mesh.position.clone() } : animation.path[animation.current_step -1];
+
+        animation.progress += delta_time / animation.step_duration; 
+
+        // Hopping effect
+        const height = Math.sin(animation.progress * Math.PI) * 0.25;
 
         if (animation.progress >= 1) {
-            delete figure_animations[key];
+            animation.progress = 0;
+            animation.current_step++;
+
+            if (animation.current_step >= animation.path.length) {
+                mesh.position.copy(current.position);
+
+                // Update state
+                mesh.userData.last_position = current.index;
+                mesh.userData.last_area = current.area;
+
+                delete figure_animations[key];
+                return;
+            }
         }
+        mesh.position.lerpVectors(previous.position, current.position, animation.progress);
+        mesh.position.y = 0.5 + height;
     });
+}
+
+// Helper - Get path positions for figure animation
+function getPathPositions(mesh, figure, player, offset) {
+    const path = [];
+    const last_area = mesh.userData.last_area;
+    const last_position = mesh.userData.last_position; 
+
+    // Field -> Field
+    if (last_area === "field" && figure.area === "field") {
+        let current = last_position;
+
+        while (current !== figure.position) {
+            current = (current + 1) % mainFields.length;
+
+            const position = mainFields[current].position.clone();
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z
+                ),
+                index: current, 
+                area: "field"
+            });
+        }
+    }
+
+    // Home -> Field
+    else if (last_area === "home" && figure.area === "field") {
+        const position = mainFields[figure.position].position.clone();
+        path.push({
+            position: new THREE.Vector3(
+                position.x + offset.x, 
+                0.5, 
+                position.z + offset.z 
+            ), 
+            index: figure.position, 
+            area: "field" 
+        });
+    }
+
+    // Field -> Goal
+    else if (figure.area === "goal") {
+        const goal_field = goalFields[player.player_index][figure.position]; 
+        if (goal_field) {
+            const position = goal_field.position.clone();
+            path.push({
+                position: new THREE.Vector3(
+                    position.x + offset.x, 
+                    0.5, 
+                    position.z + offset.z 
+                ), 
+                index: figure.position, 
+                area: "goal" 
+            }); 
+        }
+    }
+    return path;
 }
 
 // Helper - Create Figure
