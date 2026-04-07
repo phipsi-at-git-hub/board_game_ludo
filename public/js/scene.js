@@ -303,10 +303,26 @@ export function updateAnimations(delta_time) {
         animation.progress += delta_time / animation.step_duration; 
         if (animation.progress > 1) animation.progress = 1;
 
+        // Check for figures on next position
+        let jump_multiplier = 1;
+
+        Object.entries(figure_meshes).forEach(([other_key, other_mesh]) => {
+            if (other_key === key) return;
+
+            const other_position = other_mesh.userData.last_position;
+            const other_area = other_mesh.userData.last_area;
+
+            // If figure close, jump higher
+            if (other_position === current.index && other_area === current.area) {
+                jump_multiplier = 6;
+            }
+        });
+
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
 
         // Hopping effect
-        const height = Math.sin(animation.progress * Math.PI) * 0.25;
+        const base_height = 0.25;
+        const height = Math.sin(animation.progress * Math.PI) * base_height * jump_multiplier;
         mesh.position.y = 0.5 + height;
 
         // Animation done
