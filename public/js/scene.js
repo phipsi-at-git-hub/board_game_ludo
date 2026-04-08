@@ -16,6 +16,10 @@ import {
 
 } from './theme_manager.js';
 
+const AREA_HOME = "home"; 
+const AREA_FIELD = "field"; 
+const AREA_GOAL = "goal"; 
+
 const CAMERA_MODE_FIXED = 'fixed';
 const CAMERA_MODE_FOLLOW = 'follow_turn';
 const CAMERA_RADIUS = 7;  // Distance to board center
@@ -27,6 +31,7 @@ const BASE_ANGLES = [
     Math.PI / 2 + CAMERA_TILT, // player 2
     0 + CAMERA_TILT, // player 3
 ];
+const HOP_TIME = 0.5; // Time to animate one figure hop / jump in ms
 
 const figure_meshes = {};
 const figure_animations = {}; 
@@ -172,7 +177,7 @@ function createCell(cell, x, z) {
     // GOAL
     if (cell.startsWith("G")) {
         const [player, index] = parsePlayerIndex(cell);
-        const mesh = createBox(PLAYER_COLORS[player], 0.8, "goal");
+        const mesh = createBox(PLAYER_COLORS[player], 0.8, AREA_GOAL);
         mesh.position.set(x, 0.05, z);
         scene.add(mesh);
 
@@ -215,8 +220,8 @@ function placeFigures(state) {
     state.players.forEach(player => {
         player.figures.forEach(figure => {
             let key;
-            if (figure.area === "home") key = `home_${player.player_index}_${figure.position}`;
-            else if (figure.area === "goal") key = `goal_${player.player_index}_${figure.position}`;
+            if (figure.area === AREA_HOME) key = `home_${player.player_index}_${figure.position}`;
+            else if (figure.area === AREA_GOAL) key = `goal_${player.player_index}_${figure.position}`;
             else key = `field_${figure.position}`;
 
             occupancy[key] ??= [];
@@ -247,8 +252,8 @@ function placeFigures(state) {
 
             // Get root position of fields
             let basePos;
-            if (figure.area === "home") basePos = homeFields[player.player_index][figure.position].position;
-            else if (figure.area === "goal") basePos = goalFields[player.player_index][figure.position].position;
+            if (figure.area === AREA_HOME) basePos = homeFields[player.player_index][figure.position].position;
+            else if (figure.area === AREA_GOAL) basePos = goalFields[player.player_index][figure.position].position;
             else basePos = mainFields[figure.position].position;
 
             // Only use offset if multiple figures occupy the same position
@@ -279,7 +284,7 @@ function placeFigures(state) {
                         path, 
                         current_step: 0, 
                         progress: 0, 
-                        step_duration: 0.18 
+                        step_duration: HOP_TIME 
                     };
                 }
             }
@@ -303,26 +308,10 @@ export function updateAnimations(delta_time) {
         animation.progress += delta_time / animation.step_duration; 
         if (animation.progress > 1) animation.progress = 1;
 
-        // Check for figures on next position
-        let jump_multiplier = 1;
-
-        Object.entries(figure_meshes).forEach(([other_key, other_mesh]) => {
-            if (other_key === key) return;
-
-            const other_position = other_mesh.userData.last_position;
-            const other_area = other_mesh.userData.last_area;
-
-            // If figure close, jump higher
-            if (other_position === current.index && other_area === current.area) {
-                jump_multiplier = 6;
-            }
-        });
-
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
 
         // Hopping effect
-        const base_height = 0.25;
-        const height = Math.sin(animation.progress * Math.PI) * base_height * jump_multiplier;
+        const height = Math.sin(animation.progress * Math.PI) * 0.25;
         mesh.position.y = 0.5 + height;
 
         // Animation done
@@ -353,7 +342,7 @@ function getPathPositions(mesh, figure, player, offset) {
     const player_index = player.player_index;
 
     // Field -> Field
-    if (last_area === "field" && figure.area === "field") {
+    if (last_area === AREA_FIELD && figure.area === AREA_FIELD) {
         let current = last_position;
 
         while (current !== figure.position) {
@@ -367,18 +356,18 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z
                 ),
                 index: current, 
-                area: "field"
+                area: AREA_FIELD 
             });
         }
     }
 
     // Field -> Goal
-    else if (last_area === "field" && figure.area === "goal") {
+    else if (last_area === AREA_FIELD && figure.area === AREA_GOAL) {
         let current = last_position;
-        let last_index_before_goal_entry = getLastIndexBeforeGoal(player_index);
+        let last_position_before_goal_entry = getLastPositionBeforeGoal(player_index);
 
         // Walking to end of field
-        while (current !== last_index_before_goal_entry) {
+        while (current !== last_position_before_goal_entry) {
             current = (current + 1) % mainFields.length;
 
             const position = mainFields[current].position.clone();
@@ -389,7 +378,7 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z 
                 ), 
                 index: current, 
-                area: "field" 
+                area: AREA_FIELD 
             }); 
         }
 
@@ -404,7 +393,7 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z 
                 ), 
                 index: 0, 
-                area: "goal" 
+                area: AREA_GOAL 
             });
         }
 
@@ -421,13 +410,13 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z 
                 ), 
                 index: i, 
-                area: "goal" 
+                area: AREA_GOAL 
             });
         }
     }
 
     // Goal -> Goal 
-    else if (last_area === "goal" && figure.area === "goal") {
+    else if (last_area === AREA_GOAL && figure.area === AREA_GOAL) {
         let current = last_position;
         for (let i = current + 1; i <= figure.position; i++) {
             const goal_field = goalFields[player_index][i]; 
@@ -441,13 +430,13 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z 
                 ), 
                 index: i, 
-                area: "goal" 
+                area: AREA_GOAL 
             });
         }
     }
 
     // Home -> Field
-    else if (last_area === "home" && figure.area === "field") {
+    else if (last_area === AREA_HOME && figure.area === AREA_FIELD) {
         const position = mainFields[figure.position].position.clone();
         path.push({
             position: new THREE.Vector3(
@@ -456,14 +445,32 @@ function getPathPositions(mesh, figure, player, offset) {
                 position.z + offset.z 
             ), 
             index: figure.position, 
-            area: "field" 
+            area: AREA_FIELD 
         });
     }
     return path;
 }
 
+// Helper - Get mesh at given position in area
+function getMeshAt(area, position) {
+    if (area === AREA_HOME) return homeFields[position];
+    if (area === AREA_FIELD) return mainFields[position];
+    if (area === AREA_GOAL) return goalFields[position];
+    return null;
+}
+
+// Helper - Check if given position is occupied by any mesh but the given mesh
+function isPositionOccupied(current_mesh, area, position) {
+    let is_occupied = Object.values(figure_meshes).some(mesh => 
+        mesh !== current_mesh && 
+        mesh.userData.last_area === area && 
+        mesh.userData.last_position === position 
+    );
+    return is_occupied;
+}
+
 // Helper - Get last field index for given player before entering the goal area
-function getLastIndexBeforeGoal(player_index) {
+function getLastPositionBeforeGoal(player_index) {
     const last_field_before_goal = [39, 9, 19, 29];
     return last_field_before_goal[player_index] ?? 0;
 }
