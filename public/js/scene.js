@@ -279,6 +279,12 @@ function placeFigures(state) {
                 // Only start animation if no animation is already running
                 const path = getPathPositions(mesh, figure, player, offset);
                 if (path.length > 0) {
+                    path.unshift({
+                        position: mesh.position.clone(), 
+                        index: mesh.userData.last_position, 
+                        area: mesh.userData.last_area, 
+                        jump_over: false
+                    });
                     mesh.userData.is_animating = true; 
                     figure_animations[mesh_key] = {
                         path, 
@@ -311,7 +317,7 @@ export function updateAnimations(delta_time) {
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
 
         // Hopping effect
-        const height = Math.sin(animation.progress * Math.PI) * 0.25;
+        const height = (!previous.position.equals(current.position)) ? Math.sin(animation.progress * Math.PI) * 0.25 : 0;
         mesh.position.y = 0.5 + height;
 
         // Animation done
@@ -356,7 +362,8 @@ function getPathPositions(mesh, figure, player, offset) {
                     position.z + offset.z
                 ),
                 index: current, 
-                area: AREA_FIELD 
+                area: AREA_FIELD, 
+                jump_over: isPositionOccupied(mesh, AREA_FIELD, current) 
             });
         }
     }
@@ -459,6 +466,35 @@ function getMeshAt(area, position) {
     return null;
 }
 
+// Helper - Calculate the hopping height for the figure
+function calculateHopHeight(y_start, y_end) {
+    //const y_field_level = 0.5; // ToDo: get the y level dynamically by the height of the field 
+    //const y_figure_head_level = 1.5; // ToDo: get thy y level dynamically by the height and position of the figure to jump over
+    const base_jump_height = 0.5;
+
+    let y_jump_top_level;
+
+    // Just a (bunny) hop - Single level
+    if (y_start === y_end) {
+        y_jump_top_level = y_start + base_jump_height;
+    } 
+
+    // Jump on top / the same level of obstruction in the way - First field level is below the second field level
+    if (y_start < y_end) {
+        y_jump_top_level = y_end + base_jump_height;
+    }
+
+    // Jump down from obstruction level - First field level is above the second field level
+    if ( y_start > y_end) {
+        y_jump_top_level = y_start + base_jump_height;
+    }
+
+    return y_jump_top_level
+}
+
+// Helper - calculate height within the animation at given progress / time
+function calculateHopeHeightAtMoment(animation, jump_over, progress) {}
+
 // Helper - Check if given position is occupied by any mesh but the given mesh
 function isPositionOccupied(current_mesh, area, position) {
     let is_occupied = Object.values(figure_meshes).some(mesh => 
@@ -466,6 +502,7 @@ function isPositionOccupied(current_mesh, area, position) {
         mesh.userData.last_area === area && 
         mesh.userData.last_position === position 
     );
+    console.log("Area: " + area + " / Position: " + position + " is occupied? " + is_occupied);
     return is_occupied;
 }
 
