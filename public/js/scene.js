@@ -302,7 +302,8 @@ function placeFigures(state) {
 export function updateAnimations(delta_time) {
     Object.entries(figure_animations).forEach(([key, animation]) => {
         const mesh = figure_meshes[key];
-        if (!mesh || !animation.path || animation.path.length === 0) {
+        //if (!mesh || !animation.path || animation.path.length === 0) {
+        if (!mesh || !animation.path || animation.path.length < 2) {
             delete figure_animations[key]; 
             if (mesh) mesh.userData.is_animating = false;
             return;
