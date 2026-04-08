@@ -326,8 +326,13 @@ export function updateAnimations(delta_time) {
 
         // Hopping effect
         //const height = (!previous.position.equals(current.position)) ? Math.sin(animation.progress * Math.PI) * 0.25 : 0;
-        const height = Math.sin(animation.progress * Math.PI) * 0.25;
-        mesh.position.y = 0.5 + height;
+        //const height = Math.sin(animation.progress * Math.PI) * 0.25;
+        //mesh.position.y = 0.5 + height;
+
+        const y_start = previous.position.y;
+        const y_end = current.position.y;
+        const y_top = Math.max(y_start, y_end) + 0.25;
+        mesh.position.y = calculateHopeHeightAtMoment(y_start, y_end, y_top, animation.progress);
 
         // Animation done
         if (animation.progress >= 1) {
@@ -502,7 +507,13 @@ function calculateHopHeight(y_start, y_end) {
 }
 
 // Helper - calculate height within the animation at given progress / time
-function calculateHopeHeightAtMoment(animation, jump_over, progress) {}
+function calculateHopeHeightAtMoment(y_start, y_end, y_top, progress) {
+    const a = 2 * (y_start + y_end - 2 * y_top); 
+    const b = y_end - y_start - a;
+    const c = y_start;
+
+    return a * progress * progress + b * progress + c;
+}
 
 // Helper - Check if given position is occupied by any mesh but the given mesh
 function isPositionOccupied(current_mesh, area, position) {
