@@ -308,8 +308,15 @@ export function updateAnimations(delta_time) {
             return;
         }
 
+        // First step in path is always the position the mesh is at -> no animations needed
+        if (animation.current_step === 0) {
+            mesh.position.copy(animation.path[0].position);
+            animation.current_step++;
+            return;
+        }
+
         const current = animation.path[animation.current_step]; 
-        const previous = animation.current_step === 0 ? { position: mesh.position.clone() } : animation.path[animation.current_step -1];
+        const previous = animation.current_step === 0 ? current : animation.path[animation.current_step -1];
 
         animation.progress += delta_time / animation.step_duration; 
         if (animation.progress > 1) animation.progress = 1;
@@ -317,7 +324,8 @@ export function updateAnimations(delta_time) {
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
 
         // Hopping effect
-        const height = (!previous.position.equals(current.position)) ? Math.sin(animation.progress * Math.PI) * 0.25 : 0;
+        //const height = (!previous.position.equals(current.position)) ? Math.sin(animation.progress * Math.PI) * 0.25 : 0;
+        const height = Math.sin(animation.progress * Math.PI) * 0.25;
         mesh.position.y = 0.5 + height;
 
         // Animation done
@@ -502,7 +510,7 @@ function isPositionOccupied(current_mesh, area, position) {
         mesh.userData.last_area === area && 
         mesh.userData.last_position === position 
     );
-    console.log("Area: " + area + " / Position: " + position + " is occupied? " + is_occupied);
+    //console.log("Area: " + area + " / Position: " + position + " is occupied? " + is_occupied);
     return is_occupied;
 }
 
