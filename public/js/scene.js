@@ -268,9 +268,6 @@ function placeFigures(state) {
                 basePos.z + offset.z 
             );
 
-            // Calculate path
-            //const path = getPathPositions(mesh, figure, player, offset);
-
             // Animate
             if (!mesh.initialized) {
                 // Initiate
@@ -326,18 +323,7 @@ export function updateAnimations(delta_time) {
         if (animation.progress > 1) animation.progress = 1;
 
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
-
-        // Hopping effect
-        //const height = (!previous.position.equals(current.position)) ? Math.sin(animation.progress * Math.PI) * 0.25 : 0;
-        //const height = Math.sin(animation.progress * Math.PI) * 0.25;
-        //mesh.position.y = 0.5 + height;
-
-        //const y_start = previous.position.y;
-        //const y_end = current.position.y;
-        //const y_top = Math.max(y_start, y_end) + 0.25;
-        //const y_heights = calculateHopHeight(current, getNextPathStep(animation, animation.current_step));
         const y_heights = calculateHopHeight(previous, current);
-        //console.log(y_heights);
         mesh.position.y = calculateHopHeightAtMoment(y_heights.y_start, y_heights.y_end, y_heights. y_top, animation.progress);
 
         // Animation done
@@ -378,7 +364,7 @@ function getPathPositions(mesh, figure, player, offset) {
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
-                    0.5, 
+                    getPositionBaseHeight(AREA_FIELD, current), 
                     position.z + offset.z
                 ),
                 index: current, 
@@ -401,7 +387,7 @@ function getPathPositions(mesh, figure, player, offset) {
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
-                    0.5, 
+                    getPositionBaseHeight(AREA_FIELD, current), 
                     position.z + offset.z 
                 ), 
                 index: current, 
@@ -416,7 +402,7 @@ function getPathPositions(mesh, figure, player, offset) {
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
-                    0.5, 
+                    getPositionBaseHeight(AREA_GOAL, current), 
                     position.z + offset.z 
                 ), 
                 index: 0, 
@@ -433,7 +419,7 @@ function getPathPositions(mesh, figure, player, offset) {
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
-                    0.5, 
+                    getPositionBaseHeight(AREA_GOAL, current), 
                     position.z + offset.z 
                 ), 
                 index: i, 
@@ -453,7 +439,7 @@ function getPathPositions(mesh, figure, player, offset) {
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
-                    0.5, 
+                    getPositionBaseHeight(AREA_GOAL, current), 
                     position.z + offset.z 
                 ), 
                 index: i, 
@@ -468,7 +454,7 @@ function getPathPositions(mesh, figure, player, offset) {
         path.push({
             position: new THREE.Vector3(
                 position.x + offset.x, 
-                0.5, 
+                    BASE_HEIGHT, 
                 position.z + offset.z 
             ), 
             index: figure.position, 
@@ -501,8 +487,6 @@ function calculateHopHeight(current_mesh, next_mesh = null) {
         };
     }
 
-    //console.log('current_mesh(' + current_mesh.area + '/' + current_mesh.index + ') to next_mesh(' + next_mesh.area + '/' + next_mesh.index + ')');
-
     const y_end = getPositionBaseHeight(next_mesh.area, next_mesh.index);
     const y_top = Math.max(y_start, y_end) + BASE_JUMP_HEIGHT;
 
@@ -520,7 +504,6 @@ function calculateHopHeightAtMoment(y_start, y_end, y_top, progress) {
 
 // Helper - Get top height of given position
 function getPositionBaseHeight(area, position) {
-    //console.log('getPositionBaseHeight(' + area + ', ' + position + ')');
     const is_occupied = isPositionOccupied(area, position);
     if (!is_occupied) return BASE_HEIGHT;
 
@@ -540,10 +523,6 @@ function isPositionOccupied(area, position) {
         mesh.userData.last_area === area && 
         mesh.userData.last_position === position 
     );
-    //console.log('Params fo function: area = ' + area + ', position = ' + position);
-    //console.log('How many Figures on Board: ' + Object.values(figure_meshes).length);
-    //console.log('Is occupied: ' + is_occupied);
-    //console.log(figure_meshes);
     return is_occupied;
 }
 
@@ -554,7 +533,6 @@ function isPositionOccupiedByOtherMesh(current_mesh, area, position) {
         mesh.userData.last_area === area && 
         mesh.userData.last_position === position 
     );
-    //console.log("Area: " + area + " / Position: " + position + " is occupied? " + is_occupied);
     return is_occupied;
 }
 
