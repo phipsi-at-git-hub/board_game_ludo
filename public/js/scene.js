@@ -232,6 +232,14 @@ function placeFigures(state) {
         });
     });
 
+    // Detect visual transitions (field vacated and occupied in the same frame)
+    const transition_map = {};
+    Object.values(figure_meshes).forEach(mesh => {
+        if (!mesh.userData) return;
+
+        const key = `${mesh.userData.last_area}_${mesh.userData.last_position}`;
+        transition_map[key] = true;
+    });
 
     // Position Figures
     Object.values(occupancy).forEach(group => {
@@ -264,7 +272,7 @@ function placeFigures(state) {
 
             const target_position = new THREE.Vector3(
                 basePos.x + offset.x, 
-                0.5, 
+                BASE_HEIGHT, 
                 basePos.z + offset.z 
             );
 
@@ -277,13 +285,13 @@ function placeFigures(state) {
                 mesh.userData.last_area = figure.area;
             } else if (!mesh.userData.is_animating && (mesh.userData.last_position !== figure.position || mesh.userData.last_area !== figure.area)) {
                 // Only start animation if no animation is already running
-                const path = getPathPositions(mesh, figure, player, offset);
+                const path = getPathPositions(mesh, figure, player, offset, transition_map);
                 if (path.length > 0) {
                     path.unshift({
                         position: mesh.position.clone(), 
                         index: mesh.userData.last_position, 
                         area: mesh.userData.last_area, 
-                        jump_over: false
+                        // jump_over: false
                     });
                     mesh.userData.is_animating = true; 
                     figure_animations[mesh_key] = {
@@ -319,6 +327,12 @@ export function updateAnimations(delta_time) {
         const current = animation.path[animation.current_step]; 
         const previous = animation.current_step === 0 ? current : animation.path[animation.current_step -1];
 
+        // Prevent overlap on transition fields
+        if (current.has_transition_conflict && animation.progress === 0) {
+            // short delay
+            animation.progress -= 0.05; 
+        }
+
         animation.progress += delta_time / animation.step_duration; 
         if (animation.progress > 1) animation.progress = 1;
 
@@ -347,11 +361,24 @@ export function updateAnimations(delta_time) {
 }
 
 // Helper - Get path positions for figure animation
-function getPathPositions(mesh, figure, player, offset) {
+function getPathPositions(mesh, figure, player, offset, transition_map) {
     const path = [];
     const last_area = mesh.userData.last_area;
     const last_position = mesh.userData.last_position; 
     const player_index = player.player_index;
+
+    // Helper - push step to path
+    const pushStep = (position, index, area = AREA_FIELD) => {
+        path.push({
+            position: new THREE.Vector3(
+                position.x + offset.x, 
+                getPositionBaseHeight(AREA_FIELD, index), 
+                position.z + offset.z
+            ), 
+            index, 
+            area 
+        });
+    };
 
     // Field -> Field
     if (last_area === AREA_FIELD && figure.area === AREA_FIELD) {
@@ -361,16 +388,7 @@ function getPathPositions(mesh, figure, player, offset) {
             current = (current + 1) % mainFields.length;
 
             const position = mainFields[current].position.clone();
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    getPositionBaseHeight(AREA_FIELD, current), 
-                    position.z + offset.z
-                ),
-                index: current, 
-                area: AREA_FIELD, 
-                jump_over: isPositionOccupiedByOtherMesh(mesh, AREA_FIELD, current) 
-            });
+            pushStep(position, current);
         }
     }
 
@@ -384,21 +402,15 @@ function getPathPositions(mesh, figure, player, offset) {
             current = (current + 1) % mainFields.length;
 
             const position = mainFields[current].position.clone();
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    getPositionBaseHeight(AREA_FIELD, current), 
-                    position.z + offset.z 
-                ), 
-                index: current, 
-                area: AREA_FIELD 
-            }); 
+            pushStep(position, current);
         }
 
         // Jump into goal area
         const goal_entry = goalFields[player_index][0];
         if (goal_entry) {
             const position = goal_entry.position.clone();
+            //pushStep(position, current, AREA_GOAL);
+            /*
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
@@ -408,6 +420,7 @@ function getPathPositions(mesh, figure, player, offset) {
                 index: 0, 
                 area: AREA_GOAL 
             });
+            */
         }
 
         // Walking in goal area
@@ -416,6 +429,7 @@ function getPathPositions(mesh, figure, player, offset) {
             if (!goal_field) continue;
 
             const position = goal_field.position.clone();
+            //pushStep(position, i, AREA_GOAL);
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
@@ -436,6 +450,7 @@ function getPathPositions(mesh, figure, player, offset) {
             if (!goal_field) continue;
 
             const position = goal_field.position.clone(); 
+            //pushStep(position, i, AREA_GOAL);
             path.push({
                 position: new THREE.Vector3(
                     position.x + offset.x, 
@@ -444,13 +459,15 @@ function getPathPositions(mesh, figure, player, offset) {
                 ), 
                 index: i, 
                 area: AREA_GOAL 
-            });
+            }); 
         }
     }
 
     // Home -> Field
     else if (last_area === AREA_HOME && figure.area === AREA_FIELD) {
         const position = mainFields[figure.position].position.clone();
+        pushStep(position, figure.position);
+        /*
         path.push({
             position: new THREE.Vector3(
                 position.x + offset.x, 
@@ -460,7 +477,39 @@ function getPathPositions(mesh, figure, player, offset) {
             index: figure.position, 
             area: AREA_FIELD 
         });
+        */
     }
+
+    // Field -> Home
+    else if (last_area === AREA_FIELD && figure.area === AREA_HOME) {
+        const position = homeFields[player.player_index]?.[figure.position]?.position;
+
+        if (position) {
+            pushStep(position, figure.position, AREA_HOME);
+            /*
+            path.push({
+                position: new THREE.Vector3(
+                    end.x, 
+                    BASE_HEIGHT, 
+                    end.z 
+                ), 
+                index: figure.position, 
+                area: AREA_HOME 
+            });
+            */
+        }
+    }
+
+    // Mark potential transition targets
+    for (let i = 0; i < path.length; i++) {
+        const step = path[i];
+        const key = `${step.area}_${step.index}`;
+
+        if (transition_map?.[key]) {
+            step.has_transition_conflict = true;
+        }
+    }
+
     return path;
 }
 
