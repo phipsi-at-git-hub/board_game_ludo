@@ -372,7 +372,7 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
         path.push({
             position: new THREE.Vector3(
                 position.x + offset.x, 
-                getPositionBaseHeight(AREA_FIELD, index), 
+                getPositionBaseHeight(area, index), 
                 position.z + offset.z
             ), 
             index, 
@@ -386,7 +386,6 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
 
         while (current !== figure.position) {
             current = (current + 1) % mainFields.length;
-
             const position = mainFields[current].position.clone();
             pushStep(position, current);
         }
@@ -395,50 +394,23 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
     // Field -> Goal
     else if (last_area === AREA_FIELD && figure.area === AREA_GOAL) {
         let current = last_position;
-        let last_position_before_goal_entry = getLastPositionBeforeGoal(player_index);
+        const last_position_before_goal_entry = getLastPositionBeforeGoal(player_index);
+        const goal_start_index = 0;
 
         // Walking to end of field
         while (current !== last_position_before_goal_entry) {
             current = (current + 1) % mainFields.length;
-
             const position = mainFields[current].position.clone();
             pushStep(position, current);
         }
 
-        // Jump into goal area
-        const goal_entry = goalFields[player_index][0];
-        if (goal_entry) {
-            const position = goal_entry.position.clone();
-            //pushStep(position, current, AREA_GOAL);
-            /*
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    getPositionBaseHeight(AREA_GOAL, current), 
-                    position.z + offset.z 
-                ), 
-                index: 0, 
-                area: AREA_GOAL 
-            });
-            */
-        }
-
         // Walking in goal area
-        for (let i = 0; i <= figure.position; i++) {
+        for (let i = goal_start_index; i <= figure.position; i++) {
             const goal_field = goalFields[player_index][i];
             if (!goal_field) continue;
 
             const position = goal_field.position.clone();
-            //pushStep(position, i, AREA_GOAL);
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    getPositionBaseHeight(AREA_GOAL, current), 
-                    position.z + offset.z 
-                ), 
-                index: i, 
-                area: AREA_GOAL 
-            });
+            pushStep(position, i, AREA_GOAL);
         }
     }
 
@@ -450,16 +422,7 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
             if (!goal_field) continue;
 
             const position = goal_field.position.clone(); 
-            //pushStep(position, i, AREA_GOAL);
-            path.push({
-                position: new THREE.Vector3(
-                    position.x + offset.x, 
-                    getPositionBaseHeight(AREA_GOAL, current), 
-                    position.z + offset.z 
-                ), 
-                index: i, 
-                area: AREA_GOAL 
-            }); 
+            pushStep(position, i, AREA_GOAL);
         }
     }
 
@@ -467,36 +430,13 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
     else if (last_area === AREA_HOME && figure.area === AREA_FIELD) {
         const position = mainFields[figure.position].position.clone();
         pushStep(position, figure.position);
-        /*
-        path.push({
-            position: new THREE.Vector3(
-                position.x + offset.x, 
-                    BASE_HEIGHT, 
-                position.z + offset.z 
-            ), 
-            index: figure.position, 
-            area: AREA_FIELD 
-        });
-        */
     }
 
     // Field -> Home
     else if (last_area === AREA_FIELD && figure.area === AREA_HOME) {
         const position = homeFields[player.player_index]?.[figure.position]?.position;
-
         if (position) {
             pushStep(position, figure.position, AREA_HOME);
-            /*
-            path.push({
-                position: new THREE.Vector3(
-                    end.x, 
-                    BASE_HEIGHT, 
-                    end.z 
-                ), 
-                index: figure.position, 
-                area: AREA_HOME 
-            });
-            */
         }
     }
 
