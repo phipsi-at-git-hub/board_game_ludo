@@ -1,6 +1,5 @@
 import * as THREE from "three"; 
-import {
-    CAMERA_MODE_FIXED, 
+import { 
     CAMERA_MODE_FOLLOW, 
     CAMERA_MODE_DEFAULT, 
     CAMERA_RADIUS, 

@@ -1,26 +1,15 @@
 //import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import * as THREE from "three";
-import { scene, camera } from './renderer.js';
-import {
-    updateCameraTarget, 
-    getInitialCameraTarget, 
-    getCameraTarget, 
-    setCameraMode
-} from "./systems/camera.js"; 
+import { scene } from './renderer.js';
 import { 
-    themeCreateBox, 
     themeCreateFigure, 
-    themeGetBackground, 
     themeGetPlayerColors, 
-    themeGetCellSize, 
     themeGetFieldOffsets, 
-    themeGetBoard, 
-    themeCreateBoardGround, 
-    themeGetAssets, 
     themeGetWinAssets, 
     themeStartWinAnimation
 
 } from './theme_manager.js';
+import { initBoard, board_state } from "./systems/board.js";
 
 const AREA_HOME = "home"; 
 const AREA_FIELD = "field"; 
@@ -38,135 +27,14 @@ let board_initialized = false;
 let win_assets_loaded = false;
 let win_assets = null; 
 
-// Field Storage
-const mainFields = new Array(40);
-const homeFields = {};
-const goalFields = {};
-
 // Update Scene
 export function updateScene(state) {
     if (!board_initialized) {
-        initBoard();
+        initBoard(scene);
         board_initialized = true;
     }
 
     placeFigures(state);
-}
-
-// Initialize Board
-function initBoard() {
-    // Set background color of scene
-    scene.background = new THREE.Color(themeGetBackground());
-
-    // Set background color of window
-    document.body.style.backgroundColor = "#" + themeGetBackground().toString(16).padStart(6, "0"); 
-
-    // Create Board Ground
-    scene.add(themeCreateBoardGround());
-
-
-    // Get Board properties from theme
-    const CELL_SIZE = themeGetCellSize();
-    const BOARD = themeGetBoard();
-
-    if (!BOARD) {
-        console.error("No board defined in theme!");
-    }
-
-    // Calculate offsets
-    const offsetX = (BOARD[0].length - 1) / 2;
-    const offsetZ = (BOARD.length -1 ) / 2;
-
-    // Add game cells on board
-    BOARD.forEach((row, zIndex) => {
-        row.forEach((cell, xIndex) => {
-            if (cell === "-") return;
-
-            const worldX = (xIndex - offsetX) * CELL_SIZE;
-            const worldZ = (zIndex - offsetZ) * CELL_SIZE;
-
-            createCell(cell, worldX, worldZ);
-        });
-    });
-
-    // Add assets on board
-    const theme_assets = themeGetAssets();
-    theme_assets.forEach(asset => {
-        const mesh = asset.mesh;
-
-        if (!mesh) return;
-
-        // Set assets position
-        mesh.position.set(
-            asset.position.x, 
-            asset.position.y || 0, 
-            asset.position.z 
-        );
-
-        // Set assets rotation
-        if (asset.rotation) {
-            mesh.rotation.y = asset.rotation.y;
-        }
-
-        // Set assets scale
-        if (asset.scale) {
-            mesh.scale.setScalar(asset.scale);
-        }
-
-        scene.add(mesh);
-    });
-}
-
-// Create Cells
-function createCell(cell, x, z) {
-    const PLAYER_COLORS = themeGetPlayerColors();
-
-    // HOME
-    if (cell.startsWith("H")) {
-        const [player, index] = parsePlayerIndex(cell);
-        const mesh = createBox(PLAYER_COLORS[player], 0.8, 'home');
-        mesh.position.set(x, 0.05, z);
-        scene.add(mesh);
-
-        homeFields[player] ??= [];
-        homeFields[player][index] = mesh;
-        return;
-    }
-
-    // GOAL
-    if (cell.startsWith("G")) {
-        const [player, index] = parsePlayerIndex(cell);
-        const mesh = createBox(PLAYER_COLORS[player], 0.8, AREA_GOAL);
-        mesh.position.set(x, 0.05, z);
-        scene.add(mesh);
-
-        goalFields[player] ??= [];
-        goalFields[player][index] = mesh;
-        return;
-    }
-
-    // FIELD
-    if (cell.startsWith("F")) {
-        let pos = parseInt(cell.split('-')[1]);
-        const index = parseInt(cell.split("-")[1]);
-        const mesh = (pos === 0 || pos === 10 || pos === 20 || pos === 30) ? createBox(PLAYER_COLORS[pos/10], 1, "start") : createBox(0xdddddd, 0.9);
-        mesh.position.set(x, 0.05, z);
-        scene.add(mesh);
-
-        mainFields[index] = mesh;
-        return;
-    }
-}
-
-// Helper - Create Box
-function createBox(color, scale = 1, type = null) {
-   return themeCreateBox(color, scale, type);
-}
-
-// Parse player_index
-function parsePlayerIndex(str) {
-    const match = str.match(/[HG](\d+)-(\d+)/);
-    return [parseInt(match[1]), parseInt(match[2])];
 }
 
 // Position Figures
@@ -219,9 +87,9 @@ function placeFigures(state) {
 
             // Get root position of fields
             let basePos;
-            if (figure.area === AREA_HOME) basePos = homeFields[player.player_index][figure.position].position;
-            else if (figure.area === AREA_GOAL) basePos = goalFields[player.player_index][figure.position].position;
-            else basePos = mainFields[figure.position].position;
+            if (figure.area === AREA_HOME) basePos = board_state.homeFields[player.player_index][figure.position].position;
+            else if (figure.area === AREA_GOAL) basePos = board_state.goalFields[player.player_index][figure.position].position;
+            else basePos = board_state.mainFields[figure.position].position;
 
             // Only use offset if multiple figures occupy the same position
             const offset = group.length > 1 ? FIELD_OFFSETS[i % FIELD_OFFSETS.length] : { x: 0, z: 0 };
@@ -341,8 +209,8 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
         let current = last_position;
 
         while (current !== figure.position) {
-            current = (current + 1) % mainFields.length;
-            const position = mainFields[current].position.clone();
+            current = (current + 1) % board_state.mainFields.length;
+            const position = board_state.mainFields[current].position.clone();
             pushStep(position, current);
         }
     }
@@ -355,14 +223,14 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
 
         // Walking to end of field
         while (current !== last_position_before_goal_entry) {
-            current = (current + 1) % mainFields.length;
-            const position = mainFields[current].position.clone();
+            current = (current + 1) % board_state.mainFields.length;
+            const position = board_state.mainFields[current].position.clone();
             pushStep(position, current);
         }
 
         // Walking in goal area
         for (let i = goal_start_index; i <= figure.position; i++) {
-            const goal_field = goalFields[player_index][i];
+            const goal_field = board_state.goalFields[player_index][i];
             if (!goal_field) continue;
 
             const position = goal_field.position.clone();
@@ -374,7 +242,7 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
     else if (last_area === AREA_GOAL && figure.area === AREA_GOAL) {
         let current = last_position;
         for (let i = current + 1; i <= figure.position; i++) {
-            const goal_field = goalFields[player_index][i]; 
+            const goal_field = board_state.goalFields[player_index][i]; 
             if (!goal_field) continue;
 
             const position = goal_field.position.clone(); 
@@ -384,13 +252,13 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
 
     // Home -> Field
     else if (last_area === AREA_HOME && figure.area === AREA_FIELD) {
-        const position = mainFields[figure.position].position.clone();
+        const position = board_state.mainFields[figure.position].position.clone();
         pushStep(position, figure.position);
     }
 
     // Field -> Home
     else if (last_area === AREA_FIELD && figure.area === AREA_HOME) {
-        const position = homeFields[player.player_index]?.[figure.position]?.position;
+        const position = board_state.homeFields[player.player_index]?.[figure.position]?.position;
         if (position) {
             pushStep(position, figure.position, AREA_HOME);
         }
@@ -411,9 +279,9 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
 
 // Helper - Get mesh at given position in area
 function getFieldMeshAt(area, position) {
-    if (area === AREA_HOME) return homeFields[position];
-    if (area === AREA_FIELD) return mainFields[position];
-    if (area === AREA_GOAL) return goalFields[position];
+    if (area === AREA_HOME) return board_state.homeFields[position];
+    if (area === AREA_FIELD) return board_state.mainFields[position];
+    if (area === AREA_GOAL) return board_state.goalFields[position];
     return null;
 }
 

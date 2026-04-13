@@ -1,7 +1,7 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { getCameraTarget, getInitialCameraTarget } from './systems/camera.js';
 import { updateAnimations } from './scene.js';
-import { themeGetRendererConfig, themeCreateLights } from './theme_manager.js';
+import { themeGetRendererConfig, themeCreateLights, themeGetBackground } from './theme_manager.js';
 
 export let scene, camera, renderer;
 let render_loop_started = false; 
@@ -14,6 +14,11 @@ export function initRenderer(canvas) {
     game_canvas = canvas;
 
     scene = new THREE.Scene();
+    // Set background color of scene
+    scene.background = new THREE.Color(themeGetBackground());
+
+    // Set background color of window
+    document.body.style.backgroundColor = "#" + themeGetBackground().toString(16).padStart(6, "0"); 
 
     camera = new THREE.PerspectiveCamera(
         75, 

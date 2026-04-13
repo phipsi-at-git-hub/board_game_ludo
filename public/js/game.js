@@ -1,8 +1,11 @@
+// Give Server some time to build everything correctly
+//await new Promise(r => setTimeout(r, 100));
+
 import { setTheme } from "./theme_manager.js";
 import { theme_candy } from "./themes/theme_candy.js";
-import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
-import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
-import { updateCameraTarget, getCameraTarget, setCameraMode } from "./systems/camera.js";
+import { initRenderer, renderLoop, animateCameraTo } from "./renderer.js";
+import { fetchState, rollDice, getAvailableMoves, applyMove } from './api.js';
+import { updateCameraTarget, setCameraMode } from "./systems/camera.js";
 import { updateScene, startWinAnimation } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
