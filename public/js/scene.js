@@ -16,15 +16,13 @@ import {
     getLastPositionBeforeGoal
 
 } from "./core/movement.js";
-
-const AREA_HOME = "home"; 
-const AREA_FIELD = "field"; 
-const AREA_GOAL = "goal"; 
-
-const HOP_TIME = 0.5; // Time to animate one figure hop / jump in ms
-const BASE_HEIGHT = 0.5;
-const FIGURE_HEIGHT = 1;
-const BASE_JUMP_HEIGHT = 0.25;
+import { 
+    AREA_HOME, 
+    AREA_FIELD, 
+    AREA_GOAL, 
+    HOP_TIME, 
+    BASE_HEIGHT
+} from "./core/consts.js";
 
 const figure_meshes = {};
 const figure_animations = {}; 
