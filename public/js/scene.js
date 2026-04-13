@@ -10,6 +10,12 @@ import {
 
 } from './theme_manager.js';
 import { initBoard, board_state } from "./systems/board.js";
+import { calculateHopHeight, calculateHopHeightAtMoment } from "./core/math.js";
+import { 
+    getPositionBaseHeight, 
+    getLastPositionBeforeGoal
+
+} from "./core/movement.js";
 
 const AREA_HOME = "home"; 
 const AREA_FIELD = "field"; 
@@ -161,7 +167,7 @@ export function updateAnimations(delta_time) {
         if (animation.progress > 1) animation.progress = 1;
 
         mesh.position.lerpVectors(previous.position, current.position, animation.progress); 
-        const y_heights = calculateHopHeight(previous, current);
+        const y_heights = calculateHopHeight(previous.position.y, getPositionBaseHeight(current.area, current.index, figure_meshes));
         mesh.position.y = calculateHopHeightAtMoment(y_heights.y_start, y_heights.y_end, y_heights. y_top, animation.progress);
 
         // Animation done
@@ -196,7 +202,7 @@ function getPathPositions(mesh, figure, player, offset, transition_map) {
         path.push({
             position: new THREE.Vector3(
                 position.x + offset.x, 
-                getPositionBaseHeight(area, index), 
+                getPositionBaseHeight(area, index, figure_meshes), 
                 position.z + offset.z
             ), 
             index, 
@@ -287,73 +293,6 @@ function getFieldMeshAt(area, position) {
 
 // Helper - Get Figure mesh at given position in area
 function getFigureMeshAt(area, position) {}
-
-// Helper - Calculate the hopping height for the figure
-function calculateHopHeight(current_mesh, next_mesh = null) {
-    const y_start = current_mesh.position.y;
-
-    if (!next_mesh) {
-        return {
-            y_start, 
-            y_end: y_start, 
-            y_top: y_start + BASE_JUMP_HEIGHT 
-        };
-    }
-
-    const y_end = getPositionBaseHeight(next_mesh.area, next_mesh.index);
-    const y_top = Math.max(y_start, y_end) + BASE_JUMP_HEIGHT;
-
-    return { y_start, y_end, y_top };
-}
-
-// Helper - calculate height within the animation at given progress / time
-function calculateHopHeightAtMoment(y_start, y_end, y_top, progress) {
-    const a = 2 * (y_start + y_end - 2 * y_top); 
-    const b = y_end - y_start - a;
-    const c = y_start;
-
-    return a * progress * progress + b * progress + c;
-}
-
-// Helper - Get top height of given position
-function getPositionBaseHeight(area, position) {
-    const is_occupied = isPositionOccupied(area, position);
-    if (!is_occupied) return BASE_HEIGHT;
-
-    return BASE_HEIGHT + FIGURE_HEIGHT;
-}
-
-// Helper - Get next position on path
-function getNextPathStep(animation, current_step) {
-    if (!animation || !animation.path) return null;
-    if (current_step + 1 >= animation.path.length) return null;
-    return animation.path[current_step + 1];
-}
-
-// Helper - Check if given position is occupied by any mesh
-function isPositionOccupied(area, position) {
-    let is_occupied = Object.values(figure_meshes).some(mesh =>
-        mesh.userData.last_area === area && 
-        mesh.userData.last_position === position 
-    );
-    return is_occupied;
-}
-
-// Helper - Check if given position is occupied by any mesh but the given mesh
-function isPositionOccupiedByOtherMesh(current_mesh, area, position) {
-    let is_occupied = Object.values(figure_meshes).some(mesh => 
-        mesh !== current_mesh && 
-        mesh.userData.last_area === area && 
-        mesh.userData.last_position === position 
-    );
-    return is_occupied;
-}
-
-// Helper - Get last field index for given player before entering the goal area
-function getLastPositionBeforeGoal(player_index) {
-    const last_field_before_goal = [39, 9, 19, 29];
-    return last_field_before_goal[player_index] ?? 0;
-}
 
 // Helper - Create Figure
 function createFigure(color) {
