@@ -2,7 +2,8 @@ import { setTheme } from "./theme_manager.js";
 import { theme_candy } from "./themes/theme_candy.js";
 import { initRenderer, renderLoop, animateCameraTo, camera } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove, passTurn } from './api.js';
-import { updateScene, updateCameraTarget, setCameraMode, getCameraTarget, startWinAnimation } from './scene.js';
+import { updateCameraTarget, getCameraTarget, setCameraMode } from "./systems/camera.js";
+import { updateScene, startWinAnimation } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 

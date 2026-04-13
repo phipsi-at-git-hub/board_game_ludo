@@ -1,6 +1,12 @@
 //import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import * as THREE from "three";
 import { scene, camera } from './renderer.js';
+import {
+    updateCameraTarget, 
+    getInitialCameraTarget, 
+    getCameraTarget, 
+    setCameraMode
+} from "./systems/camera.js"; 
 import { 
     themeCreateBox, 
     themeCreateFigure, 
@@ -20,17 +26,6 @@ const AREA_HOME = "home";
 const AREA_FIELD = "field"; 
 const AREA_GOAL = "goal"; 
 
-const CAMERA_MODE_FIXED = 'fixed';
-const CAMERA_MODE_FOLLOW = 'follow_turn';
-const CAMERA_RADIUS = 7;  // Distance to board center
-const CAMERA_HEIGHT = 10; // Height above board
-const CAMERA_TILT = -8 * Math.PI / 180;
-const BASE_ANGLES = [
-    3 * Math.PI/2 + CAMERA_TILT, // player 0
-    Math.PI + CAMERA_TILT, // player 1
-    Math.PI / 2 + CAMERA_TILT, // player 2
-    0 + CAMERA_TILT, // player 3
-];
 const HOP_TIME = 0.5; // Time to animate one figure hop / jump in ms
 const BASE_HEIGHT = 0.5;
 const FIGURE_HEIGHT = 1;
@@ -39,8 +34,6 @@ const BASE_JUMP_HEIGHT = 0.25;
 const figure_meshes = {};
 const figure_animations = {}; 
 let board_initialized = false;
-let camera_target_position = new THREE.Vector3();
-let camera_mode = CAMERA_MODE_FIXED;
 
 let win_assets_loaded = false;
 let win_assets = null; 
@@ -58,43 +51,6 @@ export function updateScene(state) {
     }
 
     placeFigures(state);
-}
-
-// Update Camera target
-export function updateCameraTarget(state, user_id) {
-    if (!state || !state.players) return;
-
-    let player_index; 
-    if (camera_mode === CAMERA_MODE_FOLLOW) {
-        // Active player
-        player_index = state.current_player_index;
-    } else {
-        // Fixed player is the user itself 
-        const player_me = state.players.find(p => p.user_id === user_id);
-        if (!player_me) return;
-        player_index = player_me.player_index;
-    }
-
-    const angle = BASE_ANGLES[player_index] ?? 0;
-    
-    camera_target_position.set(
-        Math.sin(angle) * CAMERA_RADIUS, 
-        CAMERA_HEIGHT, 
-        Math.cos(angle) * CAMERA_RADIUS
-    );
-}
-
-// Initialize camera target after entering the scene
-export function getInitialCameraTarget(player_index) {
-    const angle = BASE_ANGLES[player_index]?? 0;
-
-    camera_target_position.set(
-        Math.sin(angle) * CAMERA_RADIUS, 
-        CAMERA_HEIGHT, 
-        Math.cos(angle) * CAMERA_RADIUS
-    );
-
-    return camera_target_position.clone();
 }
 
 // Initialize Board
@@ -306,7 +262,7 @@ function placeFigures(state) {
     });
 }
 
-// Update Figure animations
+// Animations - Update Figure animations
 export function updateAnimations(delta_time) {
     Object.entries(figure_animations).forEach(([key, animation]) => {
         const mesh = figure_meshes[key];
@@ -534,16 +490,6 @@ function getLastPositionBeforeGoal(player_index) {
 // Helper - Create Figure
 function createFigure(color) {
    return themeCreateFigure(color);
-}
-
-// Getter - Get camera_target_position
-export function getCameraTarget() {
-    return camera_target_position;
-}
-
-// Setter - Set camera_mode
-export function setCameraMode(mode) {
-    camera_mode = mode;
 }
 
 // Make sure to have win assets in scene
