@@ -17,15 +17,7 @@ export const board_state = {
 }
 
 // Initialize Board
-export function initBoard(scene) {
-    /*
-    // Set background color of scene
-    scene.background = new THREE.Color(themeGetBackground());
-
-    // Set background color of window
-    document.body.style.backgroundColor = "#" + themeGetBackground().toString(16).padStart(6, "0"); 
-    */
-
+export function initBoard(scene) { 
     // Create Board Ground
     scene.add(themeCreateBoardGround());
 

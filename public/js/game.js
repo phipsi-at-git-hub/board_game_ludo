@@ -1,5 +1,5 @@
 // Give Server some time to build everything correctly
-//await new Promise(r => setTimeout(r, 100));
+//await new Promise(r => setTimeout(r, 500));
 
 import { setTheme } from "./theme_manager.js";
 import { theme_candy } from "./themes/theme_candy.js";
@@ -32,6 +32,7 @@ const PLAYER_COLORS = {
 
 let current_state = null;
 let last_dice_value = null;
+let available_moves_rendered = false
 
 let win_animation_played = false;
 
@@ -134,6 +135,8 @@ function updateControls() {
 // --- MOVES ---
 // --- Available Moves (optional UI for selecting moves) ---
 async function showAvailableMoves() {
+    // Only request available moves once - if available moves already rendered don't request them again
+    if (available_moves_rendered) return;
     if (!isMyTurn()) return;
     const moves_data = await getAvailableMoves(game_id);
     if (!moves_data.success) return;
@@ -165,6 +168,8 @@ function renderMoves(moves) {
         });
         moves_container.appendChild(btn);
     });
+
+    available_moves_rendered = true;
 }
 
 function resetMoves() {
@@ -184,6 +189,8 @@ async function handleMove(move) {
         updateHUD();
         updateDice();
         resetMoves();
+
+        available_moves_rendered = false;
 
         // Load new moves after executing current move
         await showAvailableMoves();
