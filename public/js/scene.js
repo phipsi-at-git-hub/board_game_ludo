@@ -23,6 +23,11 @@ import {
     HOP_TIME, 
     BASE_HEIGHT
 } from "./core/consts.js";
+import { createSceneState } from "./state/scene_state.js";
+import { computeDiff } from "./core/state_diff.js";
+
+let scene_state_initialized = false;
+let scene_state;
 
 const figure_meshes = {};
 const figure_animations = {}; 
@@ -33,11 +38,19 @@ let win_assets = null;
 
 // Update Scene
 export function updateScene(state) {
+    // Initialize Board
     if (!board_initialized) {
         initBoard(scene);
         board_initialized = true;
     }
 
+    // Initialize SceneState
+    if (!scene_state_initialized) {
+        scene_state_initialized = true;
+        scene_state = createSceneState(state);
+    }
+
+    // Place Figures and handle Figure animations
     placeFigures(state);
 }
 

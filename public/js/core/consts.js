@@ -28,3 +28,7 @@ export const HOP_TIME = 0.5; // Time to animate one figure hop / jump in ms
 export const BASE_HEIGHT = 0.5;
 export const FIGURE_HEIGHT = 1;
 export const BASE_JUMP_HEIGHT = 0.25;
+
+// Diff types
+export const DIFF_FIGURE_SPAWNED = "figure_spawned"; 
+export const DIFF_FIGURE_MOVED = "figure_moved"; 
