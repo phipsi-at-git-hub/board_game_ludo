@@ -23,7 +23,7 @@ import {
     HOP_TIME, 
     BASE_HEIGHT
 } from "./core/consts.js";
-import { createSceneState } from "./state/scene_state.js";
+import { applyDiffFromGameState, createSceneState } from "./state/scene_state.js";
 import { computeDiff } from "./core/state_diff.js";
 
 let scene_state_initialized = false;
@@ -51,9 +51,11 @@ export function updateScene(state) {
         scene_state = createSceneState(state);
     }
 
-    // Check for diffs between SceneState and GameState
+    // Check for diff between GameState and SceneState
     state_diff = computeDiff(state, scene_state);
     //console.log(state_diff);
+    scene_state = applyDiffFromGameState(state_diff, scene_state, null);
+    //console.log(scene_state);
 
     // Place Figures and handle Figure animations
     placeFigures(state);

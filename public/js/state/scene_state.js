@@ -43,14 +43,15 @@ export function createSceneState(game_state) {
 
 // SceneState - Apply diffs between GameState and SceneState to SceneState
 export function applyDiffFromGameState(diff, scene_state, systems) {
-    for (const event of diff) {
+    diff.forEach(event => {
         if (event.type === DIFF_FIGURE_SPAWNED) {
+            // ToDo: does this ever happen?
             handleFigureSpawned(event, scene_state, systems);
         } 
         if (event.type === DIFF_FIGURE_MOVED) {
             handleFigureMoved(event, scene_state, systems); 
         }
-    }
+    });
 
     return scene_state; 
 }
@@ -67,7 +68,7 @@ function handleFigureSpawned(event, scene_state, systems) {
     figure.position = to.position; 
 
     // 2. Ensure visuals
-    systems.figure_system.createFigure(figure_id, figure, scene_state); 
+    //systems.figure_system.createFigure(figure_id, figure, scene_state); 
 }
 
 // Helper - Type handler figure moved
@@ -81,10 +82,11 @@ function handleFigureMoved(event, scene_state, systems) {
     figure.area = to.area; 
     figure.position = to.position; 
 
-    // 2. Trigger animation
+    // 2. Trigger animation 
+    /*
     systems.animation_system.enqueueMove({
         figure_id, 
         from, 
         to 
-    });
+    });*/
 }
