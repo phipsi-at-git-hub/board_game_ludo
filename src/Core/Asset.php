@@ -21,6 +21,8 @@ class Asset {
 
         // 1. Look for files in directories
         $files = []; 
+        $newest_original = 0;
+        $oldest_busted = null; 
         foreach ($directories as $dir) {
             if (!is_dir($dir))  {
                 continue;
@@ -31,13 +33,29 @@ class Asset {
             foreach ($iterator as $file) {
                 // Skip already busted files
                 if (preg_match('/\.\d+\./', $file->getPathname())) {
+                    // save busted asset file age
+                    $mtime = filemtime($file->getPathname());
+                    if ($oldest_busted === null || $mtime < $oldest_busted) {
+                        $oldest_busted = $mtime; 
+                    }
                     continue;
                 }
 
                 if ($file->isFile()) {
                     $files[] = $file->getPathname();
+
+                    // save updated time original asset file
+                    $mtime = $file->getMTime();
+                    if ($mtime > $newest_original) {
+                        $newest_original = $mtime;
+                    }
                 }
             }
+        }
+
+        // 1.1 Early exit if no newer original then busted asset
+        if ($oldest_busted !== null && $newest_original < $oldest_busted) {
+            return; 
         }
 
         // 2. Create mapping (original to busted)

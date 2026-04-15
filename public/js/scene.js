@@ -28,6 +28,7 @@ import { computeDiff } from "./core/state_diff.js";
 
 let scene_state_initialized = false;
 let scene_state;
+let state_diff;
 
 const figure_meshes = {};
 const figure_animations = {}; 
@@ -49,6 +50,10 @@ export function updateScene(state) {
         scene_state_initialized = true;
         scene_state = createSceneState(state);
     }
+
+    // Check for diffs between SceneState and GameState
+    state_diff = computeDiff(state, scene_state);
+    //console.log(state_diff);
 
     // Place Figures and handle Figure animations
     placeFigures(state);
