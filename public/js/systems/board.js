@@ -1,4 +1,4 @@
-import * as THREE from "three"; 
+//import * as THREE from "three"; 
 import { AREA_HOME, AREA_GOAL, AREA_FIELD } from "../core/consts.js";
 import { 
     themeGetBoard, 

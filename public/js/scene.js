@@ -25,6 +25,7 @@ import {
 } from "./core/consts.js";
 import { applyDiffFromGameState, createSceneState } from "./state/scene_state.js";
 import { computeDiff } from "./core/state_diff.js";
+import { syncFigures } from "./systems/figures.js";
 
 let scene_state_initialized = false;
 let scene_state;
@@ -58,7 +59,8 @@ export function updateScene(state) {
     //console.log(scene_state);
 
     // Place Figures and handle Figure animations
-    placeFigures(state);
+    //placeFigures(state);
+    syncFigures(scene_state, board_state, scene); 
 }
 
 // Position Figures
