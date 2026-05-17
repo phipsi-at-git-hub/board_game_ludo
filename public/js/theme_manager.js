@@ -116,18 +116,4 @@ export function themeGetAssets() {
     }
 
     return null;
-}
-
-export function themeGetWinAssets() {
-    if (current_theme && current_theme.getWinAssets) {
-        return current_theme.getWinAssets();
-    }
-    return null;
-}
-
-export function themeStartWinAnimation(context) {
-    if (current_theme && current_theme.startWinAnimation) {
-        return current_theme.startWinAnimation(context);
-    }
-    return null;
-}
+} 

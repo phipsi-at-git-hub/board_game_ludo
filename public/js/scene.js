@@ -4,9 +4,7 @@ import { scene } from './renderer.js';
 import { 
     themeCreateFigure, 
     themeGetPlayerColors, 
-    themeGetFieldOffsets, 
-    themeGetWinAssets, 
-    themeStartWinAnimation
+    themeGetFieldOffsets 
 
 } from './theme_manager.js';
 import { initBoard, board_state } from "./systems/board.js";
@@ -32,10 +30,7 @@ let state_diff;
 
 const figure_meshes = {};
 const figure_animations = {}; 
-let board_initialized = false;
-
-let win_assets_loaded = false;
-let win_assets = null; 
+let board_initialized = false; 
 
 // Update Scene
 export function updateScene(state) {
@@ -315,35 +310,4 @@ function getFigureMeshAt(area, position) {}
 // Helper - Create Figure
 function createFigure(color) {
    return themeCreateFigure(color);
-}
-
-// Make sure to have win assets in scene
-function ensureWinAssets() {
-    if (win_assets_loaded) return;
-
-    win_assets = themeGetWinAssets(); 
-    if (!win_assets) return; 
-
-    Object.values(win_assets).flat().forEach(asset => {
-        if (asset.mesh) {
-            scene.add(asset.mesh);
-        }
-    }); 
-    win_assets_loaded = true;
-}
-
-// Start the animation after game is won
-export function startWinAnimation(winner_index) {
-    ensureWinAssets(); 
-
-    const PLAYER_COLORS = themeGetPlayerColors(); 
-    const winner_color = PLAYER_COLORS[winner_index] || 0xffffff; 
-
-    const context = {
-        scene, 
-        assets: win_assets, 
-        winner_color
-    };
-
-    themeStartWinAnimation(context);
-}
+} 

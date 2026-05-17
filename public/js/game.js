@@ -6,7 +6,7 @@ import { theme_candy } from "./themes/theme_candy.js";
 import { initRenderer, renderLoop, animateCameraTo } from "./renderer.js";
 import { fetchState, rollDice, getAvailableMoves, applyMove } from './api.js';
 import { updateCameraTarget, setCameraMode } from "./systems/camera.js";
-import { updateScene, startWinAnimation } from './scene.js';
+import { updateScene } from './scene.js';
 
 const { game_id, user_id } = window.GAME_CONFIG;
 
@@ -32,9 +32,7 @@ const PLAYER_COLORS = {
 
 let current_state = null;
 let last_dice_value = null;
-let available_moves_rendered = false
-
-let win_animation_played = false;
+let available_moves_rendered = false; 
 
 setTheme(theme_candy); 
 initRenderer(canvas);
@@ -61,10 +59,7 @@ async function updateState() {
 
             // Start animation for the winner of the game
             if (current_state.winner_player_index !== undefined && current_state.winner_player_index !== null) {
-                if (!win_animation_played) {
-                    startWinAnimation(current_state.winner_player_index);
-                    win_animation_played = true;
-                }
+                // ToDo: implement later
             }
         }
     } catch (e) {
