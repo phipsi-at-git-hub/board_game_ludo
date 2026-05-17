@@ -1,5 +1,5 @@
 //import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import * as THREE from "three"; 
+import * as THREE from "three";
 import { getCameraTarget, getInitialCameraTarget } from './systems/camera.js';
 import { updateAnimations } from './scene.js';
 import { themeGetRendererConfig, themeCreateLights, themeGetBackground } from './theme_manager.js';
