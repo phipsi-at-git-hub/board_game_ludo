@@ -85,6 +85,7 @@ class Application {
     public const MAINTENANCE_MESSAGE = 'maintenance_message'; 
     public const SYSTEM_NOTICE_ENABLED = 'system_notice_enabled'; 
     public const SYSTEM_NOTICE_MESSAGE = 'system_notice_message'; 
+    public const UPDATED_BY = 'updated_by'; 
 
     // User roles
     public const USER = 'user';

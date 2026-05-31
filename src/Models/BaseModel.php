@@ -133,4 +133,16 @@ abstract class BaseModel {
     protected static function stringOrNull($value): ?string {
         return $value === null ? null : (string) $value;
     }
+
+    // Helper - Helps with hydration of UUID
+    protected static function hydrateUUIDOrNull(array $row, string $key): ?string {
+        if (
+            !array_key_exists($key, $row) 
+            || $row[$key] === null 
+            || strlen($row[$key]) !== 36 
+        ) {
+            return null;
+        }
+        return (string) $row[$key];
+    }
 }

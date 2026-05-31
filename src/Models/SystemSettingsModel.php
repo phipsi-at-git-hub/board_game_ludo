@@ -26,7 +26,7 @@ final class SystemSettingsModel extends BaseModel {
     private const DEFAULT_SYSTEM_NOTICE_ENABLED = true; 
     private const DEFAULT_SYSTEM_NOTICE_MESSAGE = 'system.message.system_recovery_mode'; 
 
-    public function initializeDefaultSettings(): self {
+    public static function initializeDefaultSettings(): self {
         $system_settings = new self; 
 
         $system_settings->registration_enabled = self::DEFAULT_REGISTRATION_ENABLED; 
@@ -39,5 +39,96 @@ final class SystemSettingsModel extends BaseModel {
         $system_settings->system_notice_message = self::DEFAULT_SYSTEM_NOTICE_MESSAGE; 
 
         return $system_settings; 
+    }
+
+    public static function findSystemSettings(): self {
+        $system_settings = new self;
+
+        // Load all settings of system
+        $row = static::fetchOne(
+            sprintf(
+                "SELECT *
+                FROM %s s
+                LIMIT 1", 
+
+                Application::TABLE_SYSTEM_SETTINGS
+            ), 
+            []
+        );
+
+        /*
+        if ($row === null || !self::isValid($row)) {
+            return self::initializeDefaultSettings(); 
+        }
+        */
+
+        $system_settings = self::fromArray($row);
+
+        if (!$system_settings->isValid()) {
+            return self::initializeDefaultSettings(); 
+        }
+        return $system_settings; 
+    }
+
+    // Helper - Validate SystemSettings
+    public function isValid(): bool {
+        if ($this->updated_by === null) {
+            return false; 
+        }
+
+        if ($this->maintenance_mode_enabled && (trim($this->maintenance_message) === '' || $this->maintenance_message === null)) {
+            return false;
+        }
+
+        if ($this->system_notice_enabled && (trim($this->system_notice_message) === '' || $this->system_notice_message === null)) {
+            return false; 
+        }
+        return true;
+    }
+
+    // Helper - Create SystemSettings from Array
+    private static function fromArray(array $data): self {
+        $system_settings = new self;
+
+        /*
+        $system_settings->registration_enabled = $data[Application::REGISTRATION_ENABLED];
+        $system_settings->login_enabled = $data[Application::LOGIN_ENABLED];
+        $system_settings->game_creation_enabled = $data[Application::GAME_CREATION_ENABLED];
+        $system_settings->game_play_enabled = $data[Application::GAME_PLAY_ENABLED];
+        $system_settings->maintenance_mode_enabled = $data[Application::MAINTENANCE_MODE_ENABLED];
+        $system_settings->maintenance_message = $data[Application::MAINTENANCE_MESSAGE]; 
+        $system_settings->system_notice_enabled = $data[Application::SYSTEM_NOTICE_ENABLED]; 
+        $system_settings->system_notice_message = $data[Application::SYSTEM_NOTICE_MESSAGE]; 
+        $system_settings->updated_at = $data[Application::UPDATED_AT]; 
+        $system_settings->updated_by = $data[Application::UPDATED_BY]; 
+        */
+
+        $system_settings->registration_enabled = self::hydrateBoolean($data, Application::REGISTRATION_ENABLED);
+        $system_settings->login_enabled = self::hydrateBoolean($data, Application::LOGIN_ENABLED);
+        $system_settings->game_creation_enabled = self::hydrateBoolean($data, Application::GAME_CREATION_ENABLED);
+        $system_settings->game_play_enabled = self::hydrateBoolean($data, Application::GAME_PLAY_ENABLED);
+        $system_settings->maintenance_mode_enabled = self::hydrateBoolean($data, Application::MAINTENANCE_MODE_ENABLED);
+        $system_settings->maintenance_message = self::hydrateStringOrNull($data, Application::MAINTENANCE_MESSAGE);
+        $system_settings->system_notice_enabled = self::hydrateBoolean($data, Application::SYSTEM_NOTICE_ENABLED);
+        $system_settings->system_notice_message = self::hydrateStringOrNull($data, Application::SYSTEM_NOTICE_MESSAGE);
+        $system_settings->updated_at = self::hydrateString($data, Application::UPDATED_AT);
+        $system_settings->updated_by = self::hydrateUUIDOrNull($data, Application::UPDATED_BY);
+
+        return $system_settings;
+    }
+
+    // Helper - Create Array from SystemSettings
+    private function toArray(): array {
+        $system_settings_array[Application::REGISTRATION_ENABLED] = $this->registration_enabled;
+        $system_settings_array[Application::LOGIN_ENABLED] = $this->login_enabled;
+        $system_settings_array[Application::GAME_CREATION_ENABLED] = $this->game_creation_enabled;
+        $system_settings_array[Application::GAME_PLAY_ENABLED] = $this->game_play_enabled;
+        $system_settings_array[Application::MAINTENANCE_MODE_ENABLED] = $this->maintenance_mode_enabled;
+        $system_settings_array[Application::MAINTENANCE_MESSAGE] = $this->maintenance_message;
+        $system_settings_array[Application::SYSTEM_NOTICE_ENABLED] = $this->system_notice_enabled; 
+        $system_settings_array[Application::SYSTEM_NOTICE_MESSAGE] = $this->system_notice_message; 
+        $system_settings_array[Application::UPDATED_BY] = $this->updated_by; 
+
+        return $system_settings_array;
     }
 }
