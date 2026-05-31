@@ -22,4 +22,9 @@ final class SystemSettings {
     public static function isLoaded(): bool {
         return self::$system_settings !== null; 
     }
+
+    public static function isSystemOffline(): bool {
+        self::get();
+        return !self::$system_settings->getSystemEnabled();
+    }
 }

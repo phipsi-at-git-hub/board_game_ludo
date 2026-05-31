@@ -9,18 +9,24 @@ use App\Controllers\AuthController;
 use App\Controllers\GameController;
 use App\Core\Middleware;
 use App\Core\Router;
+use App\Core\SystemSettings;
 
 $router = new Router();
 
-// --- Guest routes ---
-$router->get('/login', [AuthController::class, 'showLogin'], [fn() => Middleware::guest()]);
-$router->post('/login', [AuthController::class, 'login'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
-$router->get('/register', [AuthController::class, 'showRegister'], [fn() => Middleware::guest()]);
-$router->post('/register', [AuthController::class, 'register'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
-$router->get('/forgot-password', [AccountController::class, 'showForgotPassword'], [fn() => Middleware::guest()]);
-$router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
-$router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
-$router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+// If system settings system_enabled is false set up specific routes
+if (SystemSettings::isSystemOffline()) {
+    $router->get('/emergency_login', [AuthController::class, 'showLogin'], [fn() => Middleware::guest()]);
+} else {
+    // --- Guest routes ---
+    $router->get('/login', [AuthController::class, 'showLogin'], [fn() => Middleware::guest()]);
+    $router->post('/login', [AuthController::class, 'login'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+    $router->get('/register', [AuthController::class, 'showRegister'], [fn() => Middleware::guest()]);
+    $router->post('/register', [AuthController::class, 'register'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+    $router->get('/forgot-password', [AccountController::class, 'showForgotPassword'], [fn() => Middleware::guest()]);
+    $router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+    $router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
+    $router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+}
 
 // --- Authenticated routes ---
 $router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf()]);
