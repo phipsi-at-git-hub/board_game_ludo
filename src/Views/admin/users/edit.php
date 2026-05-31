@@ -2,6 +2,7 @@
 
 use App\Core\Localization;
 // /Views/admin/users/edit.php
+/** @var object $user */
 ?>
 <div class="panel">
     <h1><?= Localization::get('admin.users.edit.title') ?></h1>

@@ -1,5 +1,6 @@
 <?php 
 use App\Core\Localization; 
+/** @var array $stats */
 ?>
 
 <div class="panel">

@@ -16,6 +16,7 @@ class Application {
     public const TABLE_STATE = 'game_state';
     public const TABLE_PLAYERS = 'game_state_players';
     public const TABLE_FIGURES = 'game_state_figures';
+    public const TABLE_SYSTEM_SETTINGS = 'system_settings'; 
 
     // Database field names - common
     public const ID = 'id';
@@ -74,6 +75,16 @@ class Application {
     public const RESET_TOKEN = 'reset_token';
     public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
     public const LAST_LOGIN = 'last_login';
+
+    // Database field names - system_settings
+    public const REGISTRATION_ENABLED = 'registration_enabled'; 
+    public const LOGIN_ENABLED = 'login_enabled'; 
+    public const GAME_CREATION_ENABLED = 'game_creation_enabled'; 
+    public const GAME_PLAY_ENABLED = 'game_play_enabled'; 
+    public const MAINTENANCE_MODE_ENABLED = 'maintenance_mode_enabled'; 
+    public const MAINTENANCE_MESSAGE = 'maintenance_message'; 
+    public const SYSTEM_NOTICE_ENABLED = 'system_notice_enabled'; 
+    public const SYSTEM_NOTICE_MESSAGE = 'system_notice_message'; 
 
     // User roles
     public const USER = 'user';
