@@ -7,6 +7,10 @@ use App\Core\Localization;
     <div class="card auth-card">
         <h1><?= Localization::get('auth.register.title') ?></h1>
 
+        <?php if (!empty($error)): ?>
+            <div class="alert error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+
         <form method="POST" action="/register" class="form">
             <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
 

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\BaseController;
+use App\Core\SystemSettings;
 use App\Models\UserModel;
 
 class AuthController extends BaseController {
@@ -26,14 +27,18 @@ class AuthController extends BaseController {
 
         $user = UserModel::verify($email, $password);
 
-        if ($user) {
+        if (
+            $user 
+            && $user->isActive() 
+            && (SystemSettings::isLoginEnabled() || $user->isAdmin())
+        ) {
             $user->updateLastLogin();
             Auth::login($user);
             header('Location: /lobby');
             exit;
         }
 
-        $error = 'Invalid login credentials.';
+        $error = (!SystemSettings::isLoginEnabled() && $user) ? 'Login not allowed.' : 'Invalid login credentials.';
         $this->render(
             'auth/login', 
             [
@@ -43,6 +48,17 @@ class AuthController extends BaseController {
     }
 
     public function register() {
+        if (!SystemSettings::isRegistrationEnabled()) {
+            $error = 'User Registration not allowed.';
+            $this->render(
+                'auth/register', 
+                [
+                    'error' => $error
+                ]
+            );
+            return; 
+        }
+
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';

@@ -1,5 +1,12 @@
 <?php
 use App\Core\Asset;
+
+/** 
+ * @var String $page_title
+ * @var array $css_array
+ * @var String $content 
+ * @var String $content_css_class 
+ */
 ?>
 
 <!DOCTYPE html>

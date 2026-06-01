@@ -2,6 +2,12 @@
 use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Core\SystemSettings;
+
+/**
+ * @var Object $game 
+ * @var Object $user
+ */
 ?>
 
 <div class="panel">
@@ -73,7 +79,7 @@ use App\Core\Localization;
                         </form>
                     <?php endif; ?>
 
-                    <?php if ($game->isRunning()): ?>
+                    <?php if ($game->isRunning() && (SystemSettings::isGamePlayEnabled() || $user->isAdmin())): ?>
                         <a href="/game/play/<?= $game->getId() ?>" class="btn btn-save play"><?= Localization::get('game.show.play') ?></a>
                     <?php endif; ?>
             </div>
