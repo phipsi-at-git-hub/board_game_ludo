@@ -2,7 +2,8 @@
 // Core/SystemSettings.php
 namespace App\Core; 
 
-use App\Models\SystemSettingsModel; 
+use App\Models\SystemSettingsModel;
+use App\Models\UserModel;
 
 final class SystemSettings {
     private static ?SystemSettingsModel $system_settings = null; 
@@ -30,7 +31,7 @@ final class SystemSettings {
     public static function isOffline(): bool {
         return !self::isSystemEnabled();
     }
-    
+
     // Helper - Is system enabled
     public static function isSystemEnabled(): bool {
         return self::get()->getSystemEnabled();
@@ -59,5 +60,30 @@ final class SystemSettings {
     // Helper - Is maintenance mode enabled
     public static function isMaintenanceModeEnabled(): bool {
         return self::get()->getMaintenanceModeEnabled(); 
+    }
+
+    // Helper - show maintenance message
+    public static function showMaintenanceMessage(): String|null {
+        return self::get()->getMaintenanceMessage(); 
+    }
+
+    // Helper - Is system notice enabled
+    public static function isSystemNoticeEnabled(): bool {
+        return self::get()->getSystemNoticeEnabled(); 
+    }
+
+    // Helper - Show system notice enabled
+    public static function showSystemNoticeMessage(): String|null {
+        return self::get()->getSystemNoticeMessage(); 
+    }
+
+    // Helper - Updated at
+    public static function wasUpdatedAt(): String {
+        return self::get()->getUpdatedAt(); 
+    }
+
+    // Helper - Updated by
+    public static function wasUpdatedBy(): UserModel {
+        return UserModel::findById(self::get()->getUpdatedBy()); 
     }
 }

@@ -91,7 +91,7 @@ return [
     'game.lobby.back_to_menu' => '← Zurück zum Hauptmenü', 
 
     // Game - List
-    'game.list.title' => 'Offene Spiele',
+    //'game.list.title' => 'Offene Spiele',
     'game.list.empty' => 'Keine offenen Spiele vorhanden.',
     'game.list.id' => 'Spiel-ID',
     'game.list.creator' => 'Ersteller',
@@ -124,7 +124,7 @@ return [
     'game.create.three' => '3', 
     'game.create.name' => '🎮 Name', 
     'game.create.game_name' => 'Spielname', 
-    'game.create.game_options' => 'Spieloptionen', 
+    //'game.create.game_options' => 'Spieloptionen', 
     'game.create.game_options' => 'Spielregeln', 
 
     // Game - Edit

@@ -3,6 +3,9 @@ use App\Core\Auth;
 use App\Core\Csrf;
 use App\Core\Localization;
 
+/**
+ * @var Object $current_user
+ */
 ?>
 
 <div class="panel">

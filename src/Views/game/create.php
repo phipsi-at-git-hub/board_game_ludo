@@ -2,6 +2,10 @@
 use App\Core\Csrf; 
 use App\Constants\Application;
 use App\Core\Localization;
+
+/**
+ * @var \App\Models\GameRuleSetModel $rule_set
+ */
 ?>
 
 <div class="panel">

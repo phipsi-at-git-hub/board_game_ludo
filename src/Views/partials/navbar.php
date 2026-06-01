@@ -1,5 +1,7 @@
 <?php 
 use App\Core\Localization;
+
+/** @var \App\Models\UserModel $current_user */
 ?>
 
 <nav id="navbar" class="navbar">

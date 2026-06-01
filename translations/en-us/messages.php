@@ -7,6 +7,10 @@ return [
     'application.general.title' => 'Ludo',
     'application.general.yes' => 'Yes', 
     'application.general.no' => 'No', 
+    'application.general.online' => 'online', 
+    'application.general.offline' => 'offline', 
+    'application.general.on' => 'on', 
+    'application.general.off' => 'off', 
     'application.general.btn.back_to_login' => '← Back to login', 
     'application.general.btn.back_to_lobby' => '← Back to Lobby', 
     'application.general.btn.back_to_list' => '← Back to List', 
@@ -111,7 +115,7 @@ return [
     'game.lobby.my_games' => '🐦 My Games', 
 
     // Game - List
-    'game.list.title' => 'Open Games',
+    //'game.list.title' => 'Open Games',
     'game.list.empty' => 'No open games available.',
     'game.list.id' => 'Game ID',
     'game.list.creator' => 'Created by',
@@ -240,8 +244,20 @@ return [
     'admin.dashboard.games_card.waiting' => 'Total Games', 
     'admin.dashboard.games_card.running' => 'Running Games', 
     'admin.dashboard.games_card.finished' => 'Finished Games', 
+    'admin.dashboard.system_status.title' => '⚙️ System Status', //🔋
+    'admin.dashboard.current_state' => 'Current State', 
+    'admin.dashboard.login_enabled' => 'Login enabled for Users', 
+    'admin.dashboard.registration_enabled' => 'User Registration enabled', 
+    'admin.dashboard.game_creation_enabled' => 'Creating games enabled', 
+    'admin.dashboard.game_play_enabled' => 'Playing games enabled', 
+    'admin.dashboard.system_enabled' => 'System enabled', 
+    'admin.dashboard.maintenance_mode_enabled' => 'Maintenance mode enabled', 
+    'admin.dashboard.system_notice_enabled' => 'System notice enabled', 
+    'admin.dashboard.maintenance_mode_message' => 'Maintenance mode message', 
+    'admin.dashboard.system_notice_message' => 'System notice message', 
     'admin.dashboard.users_manage' => 'Manage Users  →', 
     'admin.dashboard.games_manage' => 'Manage Games  →',
+    'admin.dashboard.system_settings_manage' => 'Manage System Settings  →', 
 
     // Admin - Games List
     'admin.games.list.title' => '🎲 Admin - Games', 
@@ -264,4 +280,6 @@ return [
     'admin.users.edit.title' => '👤 Admin - Edit User', 
     'admin.users.edit.username' => 'Username', 
     'admin.users.edit.email' => 'Email', 
+
+    // Maintenance
 ];
