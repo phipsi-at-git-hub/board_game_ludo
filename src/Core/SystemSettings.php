@@ -28,6 +28,11 @@ final class SystemSettings {
     /**
      * Helper
      */
+    // Helper - Is system settings valid
+    public static function isValid(): bool {
+        return self::get()->isValid();
+    }
+    
     // Helper - Is system offline
     public static function isOffline(): bool {
         return !self::isSystemEnabled();
@@ -84,7 +89,7 @@ final class SystemSettings {
     }
 
     // Helper - Updated by
-    public static function wasUpdatedBy(): UserModel {
+    public static function wasUpdatedBy(): ?UserModel {
         return UserModel::findById(self::get()->getUpdatedBy()); 
     }
 

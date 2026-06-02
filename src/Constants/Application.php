@@ -11,6 +11,12 @@ class Application {
     public const GENERAL_ON = 'on'; 
     public const GENERAL_OFF = 'off'; 
     public const GENERAL_PARTIAL = 'partial'; 
+    public const GENERAL_HEALTH = 'health'; 
+    public const GENERAL_DEV = 'dev'; 
+    public const GENERAL_PROD = 'prod'; 
+    public const GENERAL_HEALTHY = 'healthy'; 
+    public const GENERAL_CRITICAL = 'critical'; 
+    public const GENERAL_WARNING = 'warning'; 
 
     // Database tables
     public const TABLE_USERS = 'users'; 
