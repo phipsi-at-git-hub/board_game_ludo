@@ -8,6 +8,9 @@ class Application {
     public const GENERAL_JOIN = 'join';
     public const GENERAL_EDIT = 'edit';
     public const GENERAL_DELETE = 'delete';
+    public const GENERAL_ON = 'on'; 
+    public const GENERAL_OFF = 'off'; 
+    public const GENERAL_PARTIAL = 'partial'; 
 
     // Database tables
     public const TABLE_USERS = 'users'; 

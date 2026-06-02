@@ -1,7 +1,8 @@
 <?php 
 // Core/SystemSettings.php
-namespace App\Core; 
+namespace App\Core;
 
+use App\Constants\Application;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 
@@ -85,5 +86,44 @@ final class SystemSettings {
     // Helper - Updated by
     public static function wasUpdatedBy(): UserModel {
         return UserModel::findById(self::get()->getUpdatedBy()); 
+    }
+
+    // Helper - Get system settings authentication status as String
+    public static function getAuthenticationStatus(): string {
+        $login = self::get()->getLoginEnabled(); 
+        $registration = self::get()->getRegistrationEnabled(); 
+        if ($login && $registration) {
+            return Application::GENERAL_ON; 
+        }
+        if ($login xor $registration) {
+            return Application::GENERAL_PARTIAL; 
+        }
+        return Application::GENERAL_OFF; 
+    }
+
+    // Helper - Get system settings games status as String
+    public static function getGamesStatus(): string {
+        $creation = self::get()->getGameCreationEnabled(); 
+        $play = self::get()->getGamePlayEnabled(); 
+        if ($creation && $play) {
+            return Application::GENERAL_ON; 
+        }
+        if ($creation xor $play) {
+            return Application::GENERAL_PARTIAL; 
+        }
+        return Application::GENERAL_OFF; 
+    }
+
+    // Helper - Get system settings maintenance status as String
+    public static function getMaintenanceStatus(): string {
+        $maintenance_mode = self::get()->getMaintenanceModeEnabled(); 
+        $system_notice = self::get()->getSystemNoticeEnabled(); 
+        if ($maintenance_mode && $system_notice) {
+            return Application::GENERAL_ON; 
+        }
+        if ($maintenance_mode xor $system_notice) {
+            return Application::GENERAL_PARTIAL; 
+        }
+        return Application::GENERAL_OFF;
     }
 }
