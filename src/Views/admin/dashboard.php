@@ -100,7 +100,7 @@ use App\Core\SystemSettings;
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/system_settings" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_settings_manage') ?></a>
+                <a href="/admin/system/settings" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_settings_manage') ?></a>
             </div>
         </div>
 
@@ -115,12 +115,12 @@ use App\Core\SystemSettings;
 
             <div class="stats-sub">
                 <div>
-                    <span class="stat-value"><?= SystemHealth::isDatabaseHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
-                    <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.database') ?></span>
-                </div>
-                <div>
                     <span class="stat-value"><?= SystemHealth::isEnvironmentHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
                     <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.environment') ?></span>
+                </div>
+                <div>
+                    <span class="stat-value"><?= SystemHealth::isDatabaseHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.database') ?></span>
                 </div>
                 <div>
                     <span class="stat-value"><?= SystemHealth::isGameHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
@@ -130,7 +130,7 @@ use App\Core\SystemSettings;
 
             
             <div class="nav-actions">
-                <a href="/admin/system_health" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_health_show') ?></a>
+                <a href="/admin/system/health" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_health_show') ?></a>
             </div>
 
         </div>

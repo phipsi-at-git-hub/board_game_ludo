@@ -10,7 +10,7 @@ final class SystemHealth {
     public static function isHealthy(): bool {
         return 
             self::checkDatabase() 
-            && self::checkSystemSettings() 
+            && self::checkGame() 
             && self::checkEnvironment(); 
     }
 
@@ -19,7 +19,55 @@ final class SystemHealth {
         if (!self::checkDatabase() || !self::checkEnvironment()) {
             return Application::GENERAL_CRITICAL; 
         }
+        if (!self::isGameHealthy()) {
+            return Application::GENERAL_WARNING;
+        }
         return Application::GENERAL_HEALTHY; 
+    }
+
+    // Health - Database
+    public static function getDatabaseDetails(): array {
+        $db = Database::getInstance(); 
+        $time_start = microtime(true); 
+
+        try {
+            $result = $db->fetch('SELECT 1 AS ok'); 
+            $time_latency = round((microtime(true) - $time_start) * 1000, 2); 
+            $connection_info = $db->query("SHOW STATUS LIKE 'Threads_connected'"); 
+
+            return [
+                'status' => 'ok', 
+                'reachable' => 'true', 
+                'latency_ms' => $time_latency, 
+                'threads_connected' => $connection_info[0]['Value'] ?? null, 
+                'connections_ok' => (isset($connection_info[0]['Value']) && $connection_info[0]['Value'] > 0) ? true : false,  
+                'db_name' => $_ENV['DB_NAME'] ?? null, 
+            ]; 
+        } catch (Throwable $e) {
+            return [
+                'status' => 'fail', 
+                'reachable' => 'false', 
+                'error' => $e->getMessage(), 
+            ]; 
+        }
+    }
+
+    // Health - Environment
+    public static function getEnvironmentDetails(): array {
+        return [
+            'status' => (self::checkEnvironment()) ? 'ok' : 'fail', 
+            'app_env' => Env::get(), 
+            'is_dev' => Env::isDev(), 
+            'is_prod' => Env::isProd(), 
+            'debug' => filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN), 
+            'app_name' => $_ENV['APP_NAME'] ?? null, 
+            'php_version' => PHP_VERSION, 
+        ]; 
+    }
+
+    // Health - Game
+    public static function getGameDetails(): array {
+        return GameHealth::getApiHealthDetails();
     }
 
     /**
@@ -57,7 +105,7 @@ final class SystemHealth {
 
     // Helper - Game Check
     public static function checkGame(): bool {
-        return true;
+        return GameHealth::getStatus();
     }
 
     // Helper - Is database healthy

@@ -1,6 +1,11 @@
 <?php
 use App\Core\Csrf;
 use App\Core\Localization;
+
+/**
+ * @var array $games
+ * @var UserModel $current_user
+ */
 ?>
 
 <div class="panel">

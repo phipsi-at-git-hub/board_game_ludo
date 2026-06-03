@@ -287,6 +287,13 @@ return [
     'admin.users.edit.username' => 'Username', 
     'admin.users.edit.email' => 'Email', 
 
+    // System Settings / Status
+    'admin.system.settings.overview.title' => '⚙️ Admin System Settings', 
+
+    // System Health
+    'admin.system.health.overview.title' => '🔋 Admin System Health', 
+    '' => '', 
+
     // Maintenance
     'admin.system_settings.login_enabled' => 'Login enabled for Users', 
     'admin.system_settings.registration_enabled' => 'User Registration enabled', 

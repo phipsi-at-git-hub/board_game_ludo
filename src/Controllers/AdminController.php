@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\BaseController;
 use App\Core\Middleware;
 use App\Core\Csrf;
+use App\Core\SystemHealth;
 use App\Models\UserModel;
 use App\Models\GameModel;
 
@@ -149,5 +150,27 @@ class AdminController extends BaseController {
 
         header('Location /admin/games');
         exit;
+    }
+
+    // System Settings - Overview
+    public function systemSettings(): void {
+        echo 'systemSettings';
+    }
+
+    // System Health - Overview
+    public function systemHealth(): void {
+        $overall = SystemHealth::getStatus();
+        $database = SystemHealth::getDatabaseDetails(); 
+        $environment = SystemHealth::getEnvironmentDetails(); 
+        $game = SystemHealth::getGameDetails(); 
+        $this->render(
+            'admin/system/health', 
+            [
+                'overall' => $overall, 
+                'database' => $database, 
+                'environment' => $environment, 
+                'game' => $game
+            ]
+        ); 
     }
 }

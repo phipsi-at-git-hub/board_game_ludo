@@ -5,18 +5,18 @@ namespace App\Core;
 use App\Constants\Application;
 use App\Controllers\ApiGameController;
 use App\Models\GameModel;
-/*
-use App\Models\GameRuleSetModel;
-use App\Models\GameStateFigureModel;
-use App\Models\GameStateModel;
-use App\Models\GameStatePlayerModel;
-*/
 use Throwable;
 
 final class GameHealth {
     // Overall Game Health
     public static function getStatus(): string {
-        return Application::GENERAL_OFF; 
+        if (self::isHealthy()) {
+            return Application::GENERAL_HEALTHY; 
+        }
+        if (self::isGameEngineAvailable() && self::isApiControllerAvailable()) {
+            return Application::GENERAL_WARNING; 
+        }
+        return Application::GENERAL_CRITICAL; 
     }
 
     // Game engine aka game models available 
@@ -27,14 +27,6 @@ final class GameHealth {
         } catch (Throwable $e) {
             return false; 
         }
-        /*
-        return
-            class_exists(GameModel::class) 
-            && class_exists(GameRuleSetModel::class) 
-            && class_exists(GameStateModel::class) 
-            && class_exists(GameStatePlayerModel::class) 
-            && class_exists(GameStateFigureModel::class); 
-        */
     }
 
     // Game API status
@@ -51,7 +43,7 @@ final class GameHealth {
 
     // Game API available
     public static function isApiAvailable(): bool {
-        $url = rtrim($_ENV['APP_URL'], '/') . '/api/game/health'; 
+        $url = rtrim($_ENV['APP_URL'], '/') . API_PATH . 'health'; 
 
         $response = Http::callUrlSimple($url); 
         if ($response === false) {
@@ -64,6 +56,27 @@ final class GameHealth {
             && $data['status'] === 'ok';
     }
 
+    // Game API - get details
+    public static function getApiHealthDetails(): array {
+        $url = rtrim($_ENV['APP_URL'], '/') . API_PATH . 'health'; 
+        $response = Http::callUrlDetailed($url, 3); 
+
+        if ($response === null) {
+            return []; 
+        }
+        $decoded = null; 
+
+        if (isset($response['body'])) {
+            $decoded = json_decode($response['body'] ?? '', true); 
+        }
+        $response['valid_json'] = is_array($decoded); 
+        $response['status_ok'] = ($decoded['status'] ?? null) === 'ok'; 
+        $response['api'] = self::isApiControllerAvailable(); 
+        $response['engine'] = self::isGameEngineAvailable(); 
+
+        return $response; 
+    }
+
     /**
      * Helper
      */
@@ -71,6 +84,7 @@ final class GameHealth {
     public static function isHealthy(): bool {
         return 
             self::isGameEngineAvailable() 
+            && self::isApiControllerAvailable()
             && self::isApiAvailable();
     }
 }

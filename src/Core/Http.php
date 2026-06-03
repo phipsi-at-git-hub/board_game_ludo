@@ -30,6 +30,7 @@ final class Http {
 
     // HTTP - Detailed HTTP request (cURL) for health diagnostics, debugging, system monitoring
     public static function callUrlDetailed(string $url, int $timeout = 5): ?array {
+        $time_start = microtime(true); 
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true, 
@@ -37,13 +38,23 @@ final class Http {
             CURLOPT_FOLLOWLOCATION => true, 
         ]);
         $response = curl_exec($ch); 
-        $result = [
-            'body' => $response, 
-            'http_code' => curl_getinfo($ch, CURLINFO_HTTP_CODE), 
-            'error' => curl_error($ch), 
-            'errno' => curl_errno($ch), 
-        ];
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+        $error = curl_error($ch); 
+        $errno = curl_errno($ch); 
+
         curl_close($ch); 
+
+        $time_latency = round((microtime(true) - $time_start) * 1000, 2); 
+
+        $result = [
+            'url' => $url, 
+            'reachable' => $response !== false && $http_code === 200, 
+            'http_code' => $http_code, 
+            'latency' => $time_latency,
+            'body' => $response, 
+            'error' => $error, 
+            'errno' => $errno, 
+        ];
 
         if ($response === false) {
             return null;
