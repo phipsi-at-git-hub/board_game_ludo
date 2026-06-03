@@ -75,6 +75,7 @@ $router->group('/api/game', function($group) {
     $group->post('/apply_move', [ApiGameController::class, 'applyMove'], [fn() => Middleware::csrf()]);
     $group->post('/pass_turn', [ApiGameController::class, 'passTurn'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
+$router->get('/api/game/health', [ApiGameController::class, 'health']);
 
 // --- Admin routes ---
 $router->group('/admin', function($group) {

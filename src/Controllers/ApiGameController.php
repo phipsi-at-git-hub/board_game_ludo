@@ -158,4 +158,14 @@ class ApiGameController extends BaseController {
             'state' => $game->getGameStateSnapshot()
         ]);
     }
+
+    // API - Health - Health check
+    public function health() {
+        return $this->jsonClean(
+            [
+                'success' => true, 
+                'status' => 'ok'
+            ], 200
+            );
+    }
 }

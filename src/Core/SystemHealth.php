@@ -19,9 +19,6 @@ final class SystemHealth {
         if (!self::checkDatabase() || !self::checkEnvironment()) {
             return Application::GENERAL_CRITICAL; 
         }
-        if (!self::checkSystemSettings()) {
-            return Application::GENERAL_WARNING; 
-        }
         return Application::GENERAL_HEALTHY; 
     }
 
@@ -58,6 +55,11 @@ final class SystemHealth {
         }
     }
 
+    // Helper - Game Check
+    public static function checkGame(): bool {
+        return true;
+    }
+
     // Helper - Is database healthy
     public static function isDatabaseHealthy(): bool {
         return self::checkDatabase(); 
@@ -71,5 +73,10 @@ final class SystemHealth {
     // Helper - Is environment healthy
     public static function isEnvironmentHealthy(): bool {
         return self::checkEnvironment(); 
+    }
+
+    // Helper - Is game healthy
+    public static function isGameHealthy(): bool {
+        return GameHealth::isHealthy();
     }
 }

@@ -14,11 +14,11 @@ final class Env {
     }
 
     public static function isDev(): bool {
-        return self::get() === 'dev';
+        return self::get() === 'dev' || self::get() === ' development';
     }
 
     public static function isProd(): bool {
-        return self::get() === 'prod';
+        return self::get() === 'prod' || self::get() === 'production';
     }
 
     public static function is(string $env): bool {

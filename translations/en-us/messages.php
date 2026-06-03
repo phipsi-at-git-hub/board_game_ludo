@@ -259,7 +259,7 @@ return [
     'admin.dashboard.health_card.overall_health' => 'Current Health', 
     'admin.dashboard.health_card.database' => 'Database', 
     'admin.dashboard.health_card.environment' => 'Environment', 
-    'admin.dashboard.health_card.system_settings' => 'System Settings', 
+    'admin.dashboard.health_card.game' => 'Game', 
     'admin.dashboard.users_manage' => 'Manage Users  →', 
     'admin.dashboard.games_manage' => 'Manage Games  →',
     'admin.dashboard.system_settings_manage' => 'Manage System Settings  →', 

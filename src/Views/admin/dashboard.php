@@ -123,8 +123,8 @@ use App\Core\SystemSettings;
                     <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.environment') ?></span>
                 </div>
                 <div>
-                    <span class="stat-value"><?= SystemHealth::isSystemSettingsHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
-                    <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.system_settings') ?></span>
+                    <span class="stat-value"><?= SystemHealth::isGameHealthy() ? strtoupper(Localization::get('application.general.okay')) : strtoupper(Localization::get('application.general.not_okay')) ?></span>
+                    <span class="stat-text"><?= Localization::get('admin.dashboard.health_card.game') ?></span>
                 </div>
             </div>
 
