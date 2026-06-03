@@ -11,6 +11,8 @@ class Application {
     public const GENERAL_ON = 'on'; 
     public const GENERAL_OFF = 'off'; 
     public const GENERAL_PARTIAL = 'partial'; 
+    public const GENERAL_OK = 'ok'; 
+    public const GENERAL_FAIL = 'fail'; 
     public const GENERAL_HEALTH = 'health'; 
     public const GENERAL_DEV = 'dev'; 
     public const GENERAL_PROD = 'prod'; 

@@ -73,6 +73,8 @@ final class GameHealth {
         $response['status_ok'] = ($decoded['status'] ?? null) === 'ok'; 
         $response['api'] = self::isApiControllerAvailable(); 
         $response['engine'] = self::isGameEngineAvailable(); 
+        // ToDo: implement health checks for all important api resources / calls
+        $response['resources'] = []; 
 
         return $response; 
     }

@@ -34,6 +34,7 @@ final class SystemHealth {
             $result = $db->fetch('SELECT 1 AS ok'); 
             $time_latency = round((microtime(true) - $time_start) * 1000, 2); 
             $connection_info = $db->query("SHOW STATUS LIKE 'Threads_connected'"); 
+            $version_info = $db->fetch("SELECT VERSION() AS version, @@version_comment AS comment");
 
             return [
                 'status' => 'ok', 
@@ -42,11 +43,21 @@ final class SystemHealth {
                 'threads_connected' => $connection_info[0]['Value'] ?? null, 
                 'connections_ok' => (isset($connection_info[0]['Value']) && $connection_info[0]['Value'] > 0) ? true : false,  
                 'db_name' => $_ENV['DB_NAME'] ?? null, 
+                'db_host' => $_ENV['DB_HOST'] ?? null, 
+                'db_version' => $version_info['version'] ?? null, 
+                'db_comment' => $version_info['comment'] ?? null, 
             ]; 
         } catch (Throwable $e) {
             return [
                 'status' => 'fail', 
                 'reachable' => 'false', 
+                'latency_ms' => null, 
+                'threads_connected' => null, 
+                'connections_ok' => false,  
+                'db_name' => $_ENV['DB_NAME'] ?? null, 
+                'db_host' => $_ENV['DB_HOST'] ?? null, 
+                'db_version' => null, 
+                'db_comment' => null, 
                 'error' => $e->getMessage(), 
             ]; 
         }
@@ -62,6 +73,8 @@ final class SystemHealth {
             'debug' => filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN), 
             'app_name' => $_ENV['APP_NAME'] ?? null, 
             'php_version' => PHP_VERSION, 
+            'memory_limit' => ini_get('memory_limit'), 
+            'timezone' => date_default_timezone_get(), 
         ]; 
     }
 
