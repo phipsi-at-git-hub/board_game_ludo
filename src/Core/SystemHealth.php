@@ -3,7 +3,6 @@
 namespace App\Core; 
 
 use App\Constants\Application;
-use AppendIterator;
 use Throwable;
 
 final class SystemHealth {
