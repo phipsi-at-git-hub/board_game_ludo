@@ -116,7 +116,11 @@ use App\Core\Localization;
             <div class="card-body meta-grid">
 
                 <div><?= Localization::get('admin.system.health.card.environment.app.label') ?></div>
-                <div><?= htmlspecialchars($environment['app_env'] ?? '-') ?></div>
+                <div>
+                    <span class="status-badge status-<?= ($environment['app_env'] === Application::GENERAL_PROD) ? 'ok' : 'fail' ?>">
+                        <?= strtoupper(htmlspecialchars($environment['app_env'] ?? '-')) ?>
+                    </span>
+                </div>
 
                 <div><?= Localization::get('admin.system.health.card.environment.debug.label') ?></div>
                 <div>
