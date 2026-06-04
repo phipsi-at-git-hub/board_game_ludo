@@ -292,7 +292,14 @@ return [
 
     // System Health
     'admin.system.health.overview.title' => '🔋 Admin System Health', 
-    '' => '', 
+    'admin.system.health.card.overview.title' => '🩺 System Health Overview', 
+    'admin.system.health.card.overall.health' => 'Current Health', 
+    'admin.system.health.card.overall.database' => 'Database', 
+    'admin.system.health.card.overall.environment' => 'Environment', 
+    'admin.system.health.card.overall.game' => 'Game', 
+    'admin.system.health.card.database.title' => '🗄 Database', 
+    'admin.system.health.card.environment.title' => '⚙️ Environment', 
+    'admin.system.health.card.game.title' => '🎮 Game', 
 
     // Maintenance
     'admin.system_settings.login_enabled' => 'Login enabled for Users', 

@@ -1,4 +1,6 @@
 <?php
+
+use App\Constants\Application;
 use App\Core\Localization;
 
 /**
@@ -27,133 +29,182 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <!-- Overall -->
-    <div class="card">
-        <div class="card-header">
-            <h2>🩺 System Health</h2>
+    <!-- System Overview -->
+    <div class="card dashboard-card">
+        <h2> <?= Localization::get('admin.system.health.card.overview.title') ?></h2>
 
-            <div class="status-badges">
-                <span class="status-badge status-<?= strtolower($overall) ?>">
-                    <?= strtoupper($overall) ?>
-                </span>
+        <div class="stats-main">
+            <div class="stat-big">
+                <?= strtoupper($overall) ?>
             </div>
+            <div class="stat-label">
+                <?= Localization::get('admin.system.health.card.overall.health') ?>
+            </div>
+        </div>
+
+        <div class="stats-sub">
+
+            <div>
+                <span class="stat-value">
+                    <?= strtoupper($database['status']) ?>
+                </span>
+                <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.database') ?></span>
+            </div>
+
+            <div>
+                <span class="stat-value">
+                    <?= strtoupper($environment['status']) ?>
+                </span>
+                <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.environment') ?></span>
+            </div>
+
+            <div>
+                <span class="stat-value">
+                    <?= $game['status_ok'] ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
+                </span>
+                <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.game') ?></span>
+            </div>
+
         </div>
     </div>
 
-    <div class="health-grid">
+    <!-- Detail Cards -->
+    <div class="overview-grid">
 
         <!-- DATABASE -->
-        <div class="card">
+        <div class="card overview-card">
             <div class="card-header">
                 <h2>🗄 Database</h2>
-
-                <div class="status-badges">
-                    <span class="status-badge status-<?= strtolower($database['status']) ?>">
-                        <?= strtoupper($database['status']) ?>
-                    </span>
-                </div>
             </div>
 
             <div class="card-body meta-grid">
-                <div>Database</div>
-                <div><?= htmlspecialchars($database['db_name']) ?></div>
+
+                <div>Host</div>
+                <div><?= htmlspecialchars($database['db_host'] ?? '-') ?></div>
+
+                <div>Name</div>
+                <div><?= htmlspecialchars($database['db_name'] ?? '-') ?></div>
+
+                <div>System</div>
+                <div><?= htmlspecialchars($database['db_system'] ?? 'MySQL') ?></div>
+
+                <div>Version</div>
+                <div><?= htmlspecialchars($database['db_version'] ?? '-') ?></div>
 
                 <div>Latency</div>
-                <div><?= $database['latency_ms'] ?> ms</div>
-
-                <div>Connection</div>
                 <div>
-                    <span class="status-badge status-<?= $database['connections_ok'] ? 'ok' : 'fail' ?>">
-                        <?= $database['connections_ok'] ? 'OK' : 'FAIL' ?>
+                    <span class="status-badge status-<?= $database['latency_state'] ?>">
+                        <?= htmlspecialchars($database['latency_ms'] ?? '-') ?> ms
                     </span>
                 </div>
 
-                <div>Version</div>
-                <div><?= htmlspecialchars($database['db_version']) ?></div>
+                <div>Connections</div>
+                <div><?= htmlspecialchars($database['threads_connected'] ?? '-') ?></div>
+
+                <?php if (isset($database['db_size'])): ?>
+                    <div>Size</div>
+                    <div><?= htmlspecialchars($database['db_size']) ?></div>
+                <?php endif; ?>
+
             </div>
         </div>
 
         <!-- ENVIRONMENT -->
-        <div class="card">
+        <div class="card overview-card">
             <div class="card-header">
                 <h2>⚙️ Environment</h2>
-
-                <div class="status-badges">
-                    <span class="status-badge status-<?= strtolower($environment['status']) ?>">
-                        <?= strtoupper($environment['status']) ?>
-                    </span>
-                </div>
             </div>
 
             <div class="card-body meta-grid">
+
                 <div>APP_ENV</div>
-                <div><?= htmlspecialchars($environment['app_env']) ?></div>
+                <div><?= htmlspecialchars($environment['app_env'] ?? '-') ?></div>
 
                 <div>Debug</div>
                 <div>
-                    <span class="status-badge status-<?= $environment['debug'] ? 'warning' : 'ok' ?>">
-                        <?= $environment['debug'] ? 'ON' : 'OFF' ?>
+                    <span class="status-badge status-<?= ($environment['debug'] ?? false) ? 'warning' : 'ok' ?>">
+                        <?= ($environment['debug'] ?? false) ? 'ON' : 'OFF' ?>
                     </span>
                 </div>
 
                 <div>PHP</div>
-                <div><?= htmlspecialchars($environment['php_version']) ?></div>
+                <div><?= htmlspecialchars($environment['php_version'] ?? '-') ?></div>
 
                 <div>Memory Limit</div>
-                <div><?= htmlspecialchars($environment['memory_limit']) ?></div>
+                <div><?= htmlspecialchars($environment['memory_limit'] ?? '-') ?></div>
+
+                <?php if (isset($environment['disk_free'])): ?>
+                    <div>Free Disk</div>
+                    <div><?= htmlspecialchars($environment['disk_free']) ?></div>
+                <?php endif; ?>
+
+                <?php if (isset($environment['app_size'])): ?>
+                    <div>App Size</div>
+                    <div><?= htmlspecialchars($environment['app_size']) ?></div>
+                <?php endif; ?>
+
+                <?php if (isset($environment['disk_free_space'])): ?>
+                    <div>Free Space</div>
+                    <div><?= htmlspecialchars($environment['disk_free_space']) ?></div>
+                <?php endif; ?>
+
+                <?php if (isset($environment['disk_total_space'])): ?>
+                    <div>Total Space</div>
+                    <div><?= htmlspecialchars($environment['disk_total_space']) ?></div>
+                <?php endif; ?>
+
+                <?php if (isset($environment['disk_free_2_total_space'])): ?>
+                    <div>Used Space</div>
+                    <div>
+                        <span class="status-badge status-<?= $environment['disk_free_2_total_space_state'] ?>">
+                            <?= htmlspecialchars($environment['disk_free_2_total_space']) ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
+
             </div>
         </div>
 
         <!-- GAME -->
-        <div class="card">
+        <div class="card overview-card">
             <div class="card-header">
                 <h2>🎮 Game</h2>
-
-                <div class="status-badges">
-                    <span class="status-badge status-<?= ($game['status_ok']) ? 'ok' : 'fail' ?>">
-                        <?= ($game['status_ok']) ? 'ok' : 'fail' ?>
-                    </span>
-                </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body meta-grid">
 
-                <div class="meta-grid">
-                    <div>API Health</div>
-                    <div>
-                        <span class="status-badge status-<?= $game['api'] ? 'ok' : 'fail' ?>">
-                            <?= $game['api'] ? 'OK' : 'FAIL' ?>
-                        </span>
-                    </div>
-
-                    <div>API Latency</div>
-                    <div><?= $game['latency'] ?> ms</div>
-
-                    <div>Engine</div>
-                    <div>
-                        <span class="status-badge status-<?= $game['engine'] ? 'ok' : 'fail' ?>">
-                            <?= $game['engine'] ? 'OK' : 'FAIL' ?>
-                        </span>
-                    </div>
+                <div>Engine Health</div>
+                <div>
+                    <span class="status-badge status-<?= ($game['engine'] ?? false) ? 'ok' : 'fail' ?>">
+                        <?= ($game['engine'] ?? false) ? 'OK' : 'FAIL' ?>
+                    </span>
                 </div>
 
-                <hr>
-
-                <h3>API Resources</h3>
-
-                <div class="meta-grid">
-
-                    <?php foreach ($game['resources'] as $resource => $status): ?>
-                        <div><?= htmlspecialchars($resource) ?></div>
-
-                        <div>
-                            <span class="status-badge status-<?= $status ? 'ok' : 'fail' ?>">
-                                <?= $status ? 'OK' : 'FAIL' ?>
-                            </span>
-                        </div>
-                    <?php endforeach; ?>
-
+                <div>API Health</div>
+                <div>
+                    <span class="status-badge status-<?= ($game['api'] ?? false) ? 'ok' : 'fail' ?>">
+                        <?= ($game['api'] ?? false) ? 'OK' : 'FAIL' ?>
+                    </span>
                 </div>
+
+                <div>API Reachable</div>
+                <div>
+                    <span class="status-badge status-<?= ($game['reachable'] ?? false) ? 'ok' : 'fail' ?>">
+                        <?= ($game['reachable'] ?? false) ? 'OK' : 'FAIL' ?>
+                    </span>
+                </div>
+
+                <div>Latency</div>
+                <div>
+                    <span class="status-badge status-<?= $game['latency_state'] ?>">
+                        <?= htmlspecialchars($game['latency'] ?? '-') ?> ms
+                    </span>
+                </div>
+
+                <?php if (isset($game['version'])): ?>
+                    <div>Version</div>
+                    <div><?= htmlspecialchars($game['version']) ?></div>
+                <?php endif; ?>
 
             </div>
         </div>

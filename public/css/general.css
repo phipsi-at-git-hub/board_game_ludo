@@ -243,12 +243,17 @@ html, body {
 .status-inactive,
 .status-closed { background: var(--default-color); color: var(--default-color-dark); } 
 .status-waiting, 
+.status-warning, 
 .status-blocked { background: #fff3cd; color: #856404; }
 .status-running, 
 .status-active, 
+.status-ok, 
+.status-healthy, 
 .is-not-private-locked { background: #d1ecf1; color: #0c5460; }
 .status-finished, 
-.status.banned, 
+.status-banned, 
+.status-warning, 
+.status-fail, 
 .is-private-locked { background: #f8d7da; color: #721c24; }
 
 /* Admin Dashboard */
@@ -527,4 +532,26 @@ input:focus, select:focus, textarea:focus {
     max-width: 320px;
     padding: 24px;
     text-align: center;
+}
+
+/* Generic Overview Cards */
+.overview-grid {
+    display: flex; 
+    gap: 16px; 
+    flex-wrap: wrap; 
+}
+
+.overview-card {
+    flex: 1 1 255px; 
+}
+
+.overview-label {
+    font-size: 0.9rem; 
+    color: #666666;
+    margin-bottom: 10px; 
+    font-weight: bold; 
+}
+
+.overview-grid .overview-card .status-badge {
+    margin-top: 4px; 
 }
