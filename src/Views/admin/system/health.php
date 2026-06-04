@@ -74,37 +74,35 @@ use App\Core\Localization;
         <!-- DATABASE -->
         <div class="card overview-card">
             <div class="card-header">
-                <h2>🗄 Database</h2>
+                <h2><?= Localization::get('admin.system.health.card.database.title') ?></h2>
             </div>
 
             <div class="card-body meta-grid">
 
-                <div>Host</div>
+                <div><?= Localization::get('admin.system.health.card.db.host.label') ?></div>
                 <div><?= htmlspecialchars($database['db_host'] ?? '-') ?></div>
 
-                <div>Name</div>
+                <div><?= Localization::get('admin.system.health.card.db.name.label') ?></div>
                 <div><?= htmlspecialchars($database['db_name'] ?? '-') ?></div>
 
-                <div>System</div>
+                <div><?= Localization::get('admin.system.health.card.db.system.label') ?></div>
                 <div><?= htmlspecialchars($database['db_system'] ?? 'MySQL') ?></div>
 
-                <div>Version</div>
+                <div><?= Localization::get('admin.system.health.card.db.version.label') ?></div>
                 <div><?= htmlspecialchars($database['db_version'] ?? '-') ?></div>
 
-                <div>Latency</div>
+                <div><?= Localization::get('admin.system.health.card.db.latency.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= $database['latency_state'] ?>">
                         <?= htmlspecialchars($database['latency_ms'] ?? '-') ?> ms
                     </span>
                 </div>
 
-                <div>Connections</div>
+                <div><?= Localization::get('admin.system.health.card.db.connections.label') ?></div>
                 <div><?= htmlspecialchars($database['threads_connected'] ?? '-') ?></div>
 
-                <?php if (isset($database['db_size'])): ?>
-                    <div>Size</div>
-                    <div><?= htmlspecialchars($database['db_size']) ?></div>
-                <?php endif; ?>
+                <div><?= Localization::get('admin.system.health.card.db.size.label') ?></div>
+                <div><?= htmlspecialchars($database['db_size']) ?></div>
 
             </div>
         </div>
@@ -112,55 +110,39 @@ use App\Core\Localization;
         <!-- ENVIRONMENT -->
         <div class="card overview-card">
             <div class="card-header">
-                <h2>⚙️ Environment</h2>
+                <h2><?= Localization::get('admin.system.health.card.environment.title') ?></h2>
             </div>
 
             <div class="card-body meta-grid">
 
-                <div>APP_ENV</div>
+                <div><?= Localization::get('admin.system.health.card.environment.app.label') ?></div>
                 <div><?= htmlspecialchars($environment['app_env'] ?? '-') ?></div>
 
-                <div>Debug</div>
+                <div><?= Localization::get('admin.system.health.card.environment.debug.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= ($environment['debug'] ?? false) ? 'warning' : 'ok' ?>">
                         <?= ($environment['debug'] ?? false) ? 'ON' : 'OFF' ?>
                     </span>
                 </div>
 
-                <div>PHP</div>
+                <div><?= Localization::get('admin.system.health.card.environment.php.label') ?></div>
                 <div><?= htmlspecialchars($environment['php_version'] ?? '-') ?></div>
 
-                <div>Memory Limit</div>
+                <div><?= Localization::get('admin.system.health.card.environment.memory_limit.label') ?></div>
                 <div><?= htmlspecialchars($environment['memory_limit'] ?? '-') ?></div>
 
-                <?php if (isset($environment['disk_free'])): ?>
-                    <div>Free Disk</div>
-                    <div><?= htmlspecialchars($environment['disk_free']) ?></div>
-                <?php endif; ?>
+                <div><?= Localization::get('admin.system.health.card.environment.space_free.label') ?></div>
+                <div><?= htmlspecialchars($environment['disk_free_space']) ?></div>
 
-                <?php if (isset($environment['app_size'])): ?>
-                    <div>App Size</div>
-                    <div><?= htmlspecialchars($environment['app_size']) ?></div>
-                <?php endif; ?>
+                <div><?= Localization::get('admin.system.health.card.environment.space_total.label') ?></div>
+                <div><?= htmlspecialchars($environment['disk_total_space']) ?></div>
 
-                <?php if (isset($environment['disk_free_space'])): ?>
-                    <div>Free Space</div>
-                    <div><?= htmlspecialchars($environment['disk_free_space']) ?></div>
-                <?php endif; ?>
-
-                <?php if (isset($environment['disk_total_space'])): ?>
-                    <div>Total Space</div>
-                    <div><?= htmlspecialchars($environment['disk_total_space']) ?></div>
-                <?php endif; ?>
-
-                <?php if (isset($environment['disk_free_2_total_space'])): ?>
-                    <div>Used Space</div>
-                    <div>
-                        <span class="status-badge status-<?= $environment['disk_free_2_total_space_state'] ?>">
-                            <?= htmlspecialchars($environment['disk_free_2_total_space']) ?>
-                        </span>
-                    </div>
-                <?php endif; ?>
+                <div><?= Localization::get('admin.system.health.card.environment.space_used.label') ?></div>
+                <div>
+                    <span class="status-badge status-<?= $environment['disk_free_2_total_space_state'] ?>">
+                        <?= htmlspecialchars($environment['disk_free_2_total_space']) ?>
+                    </span>
+                </div>
 
             </div>
         </div>
@@ -168,33 +150,33 @@ use App\Core\Localization;
         <!-- GAME -->
         <div class="card overview-card">
             <div class="card-header">
-                <h2>🎮 Game</h2>
+                <h2><?= Localization::get('admin.system.health.card.game.title') ?></h2>
             </div>
 
             <div class="card-body meta-grid">
 
-                <div>Engine Health</div>
+                <div><?= Localization::get('admin.system.health.card.game.engine_health.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= ($game['engine'] ?? false) ? 'ok' : 'fail' ?>">
                         <?= ($game['engine'] ?? false) ? 'OK' : 'FAIL' ?>
                     </span>
                 </div>
 
-                <div>API Health</div>
+                <div><?= Localization::get('admin.system.health.card.game.api_health.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= ($game['api'] ?? false) ? 'ok' : 'fail' ?>">
                         <?= ($game['api'] ?? false) ? 'OK' : 'FAIL' ?>
                     </span>
                 </div>
 
-                <div>API Reachable</div>
+                <div><?= Localization::get('admin.system.health.card.game.api_reachable.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= ($game['reachable'] ?? false) ? 'ok' : 'fail' ?>">
                         <?= ($game['reachable'] ?? false) ? 'OK' : 'FAIL' ?>
                     </span>
                 </div>
 
-                <div>Latency</div>
+                <div><?= Localization::get('admin.system.health.card.game.latency.label') ?></div>
                 <div>
                     <span class="status-badge status-<?= $game['latency_state'] ?>">
                         <?= htmlspecialchars($game['latency'] ?? '-') ?> ms
@@ -202,7 +184,7 @@ use App\Core\Localization;
                 </div>
 
                 <?php if (isset($game['version'])): ?>
-                    <div>Version</div>
+                    <div><?= Localization::get('admin.system.health.card.game.version.label') ?></div>
                     <div><?= htmlspecialchars($game['version']) ?></div>
                 <?php endif; ?>
 

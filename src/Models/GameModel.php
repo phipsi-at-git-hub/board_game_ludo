@@ -9,6 +9,7 @@ use LogicException;
 use Throwable;
 
 final class GameModel extends BaseModel {
+    private const GAME_ENGINE_VERSION = '0.4.0'; 
     private const PLAYERS_MAX = 4;
     private const FIGURES_PER_PLAYER = 4;
     private const FIELD_LENGTH = 40;
@@ -773,6 +774,11 @@ final class GameModel extends BaseModel {
             $slots[$position] = true;
         }
         return !in_array(false, $slots, true);
+    }
+
+    // Game Engine - Get version
+    public function getVersion(): string {
+        return self::GAME_ENGINE_VERSION; 
     }
 
     // Game Engine - Set winner of the game
