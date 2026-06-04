@@ -117,15 +117,15 @@ use App\Core\Localization;
 
                 <div><?= Localization::get('admin.system.health.card.environment.app.label') ?></div>
                 <div>
-                    <span class="status-badge status-<?= ($environment['app_env'] === Application::GENERAL_PROD) ? 'ok' : 'fail' ?>">
+                    <span class="status-badge status-<?= ($environment['app_env'] === Application::GENERAL_PROD) ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
                         <?= strtoupper(htmlspecialchars($environment['app_env'] ?? '-')) ?>
                     </span>
                 </div>
 
                 <div><?= Localization::get('admin.system.health.card.environment.debug.label') ?></div>
                 <div>
-                    <span class="status-badge status-<?= ($environment['debug'] ?? false) ? 'warning' : 'ok' ?>">
-                        <?= ($environment['debug'] ?? false) ? 'ON' : 'OFF' ?>
+                    <span class="status-badge status-<?= ($environment['debug'] ?? false) ? Application::GENERAL_WARNING : Application::GENERAL_OK ?>">
+                        <?= ($environment['debug'] ?? false) ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </div>
 
@@ -161,22 +161,22 @@ use App\Core\Localization;
 
                 <div><?= Localization::get('admin.system.health.card.game.engine_health.label') ?></div>
                 <div>
-                    <span class="status-badge status-<?= ($game['engine'] ?? false) ? 'ok' : 'fail' ?>">
-                        <?= ($game['engine'] ?? false) ? 'OK' : 'FAIL' ?>
+                    <span class="status-badge status-<?= ($game['engine'] ?? false) ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= ($game['engine'] ?? false) ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
                     </span>
                 </div>
 
                 <div><?= Localization::get('admin.system.health.card.game.api_health.label') ?></div>
                 <div>
-                    <span class="status-badge status-<?= ($game['api'] ?? false) ? 'ok' : 'fail' ?>">
-                        <?= ($game['api'] ?? false) ? 'OK' : 'FAIL' ?>
+                    <span class="status-badge status-<?= ($game['api'] ?? false) ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= ($game['api'] ?? false) ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
                     </span>
                 </div>
 
                 <div><?= Localization::get('admin.system.health.card.game.api_reachable.label') ?></div>
                 <div>
-                    <span class="status-badge status-<?= ($game['reachable'] ?? false) ? 'ok' : 'fail' ?>">
-                        <?= ($game['reachable'] ?? false) ? 'OK' : 'FAIL' ?>
+                    <span class="status-badge status-<?= ($game['reachable'] ?? false) ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= ($game['reachable'] ?? false) ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
                     </span>
                 </div>
 
