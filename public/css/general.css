@@ -511,6 +511,7 @@ input:focus, select:focus, textarea:focus {
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: 6px 12px;
+    align-items: center;
 }
 
 .card.players-container {
