@@ -124,6 +124,16 @@ final class SystemSettingsModel extends BaseModel {
         return $system_settings_array;
     }
 
+    // Helper - get system notice message as string
+    public function getMaintenanceMessageString(): string {
+        return ($this->maintenance_message) ?? '';
+    }
+
+    // Helper - get system notice message as string
+    public function getSystemNoticeMessageString(): string {
+        return ($this->system_notice_message) ?? '';
+    }
+
     /**
      * Getter
      */ 

@@ -320,7 +320,7 @@ return [
     'admin.system.health.card.game.latency.label' => 'Latency', 
     'admin.system.health.card.game.version.label' => 'Version', 
 
-    // Maintenance
+    // System Settings
     'admin.system_settings.login_enabled' => 'Login enabled for Users', 
     'admin.system_settings.registration_enabled' => 'User Registration enabled', 
     'admin.system_settings.game_creation_enabled' => 'Creating games enabled', 
@@ -330,4 +330,13 @@ return [
     'admin.system_settings.system_notice_enabled' => 'System notice enabled', 
     'admin.system_settings.maintenance_mode_message' => 'Maintenance mode message', 
     'admin.system_settings.system_notice_message' => 'System notice message', 
+
+    'system.settings.maintenance.message.000.title' => 'Empty Maintenance Message', 
+    'system.settings.maintenance.message.001.title' => 'Maintenance Message 001', 
+    'system.settings.maintenance.message.002.title' => 'Maintenance Message 002', 
+    'system.settings.maintenance.message.003.title' => 'Maintenance Message 003', 
+    'system.settings.system.notice.000.title' => 'Empty System Notice Message', 
+    'system.settings.system.notice.001.title' => 'System Notice Message 001', 
+    'system.settings.system.notice.002.title' => 'System Notice Message 002', 
+    'system.settings.system.notice.003.title' => 'System Notice Message 003', 
 ];

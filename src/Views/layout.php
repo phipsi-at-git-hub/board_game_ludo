@@ -29,5 +29,7 @@ use App\Core\Asset;
             <?= $content ?>
         </div>
 
+        <script src="<?= Asset::asset('js/main.js') ?>"></script>
+
     </body>
 </html>

@@ -8,6 +8,7 @@ use App\Core\Csrf;
 use App\Core\SystemHealth;
 use App\Models\UserModel;
 use App\Models\GameModel;
+use App\Models\SystemSettingsModel;
 
 class AdminController extends BaseController {
     public function __construct() {
@@ -154,7 +155,27 @@ class AdminController extends BaseController {
 
     // System Settings - Overview
     public function systemSettings(): void {
-        echo 'systemSettings';
+        $system_settings = SystemSettingsModel::findSystemSettings();
+        $maintenance_messages = [
+            'system.settings.maintenance.message.000.title', 
+            'system.settings.maintenance.message.001.title', 
+            'system.settings.maintenance.message.002.title', 
+            'system.settings.maintenance.message.003.title', 
+        ]; 
+        $notice_messages = [
+            'system.settings.system.notice.000.title', 
+            'system.settings.system.notice.001.title', 
+            'system.settings.system.notice.002.title', 
+            'system.settings.system.notice.003.title', 
+        ]; 
+        $this->render(
+            'admin/system/settings', 
+            [
+                'system_settings' => $system_settings, 
+                'maintenance_messages' => $maintenance_messages, 
+                'notice_messages' => $notice_messages, 
+            ]
+        );
     }
 
     // System Health - Overview
