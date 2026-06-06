@@ -86,6 +86,7 @@ $router->group('/admin', function($group) {
     $group->delete('/users/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf()]);
     $group->get('/games/list', [AdminController::class, 'listGames']);
     $group->get('/system/settings', [AdminController::class, 'systemSettings']);
+    $group->post('/system/settings/update', [AdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]);
     $group->get('/system/health', [AdminController::class, 'systemHealth']);
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 return $router;

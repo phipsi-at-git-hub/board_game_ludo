@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Constants\Application; 
 
 final class SystemSettingsModel extends BaseModel {
+    private string $id; 
     private bool $registration_enabled; 
     private bool $login_enabled; 
     private bool $system_enabled; 
@@ -73,6 +74,93 @@ final class SystemSettingsModel extends BaseModel {
         return $system_settings; 
     }
 
+    public function update() {
+        return static::execute(
+            sprintf(
+                "UPDATE 
+                    %s
+                SET
+                    %s = :registration_enabled, 
+                    %s = :login_enabled, 
+                    %s = :game_creation_enabled, 
+                    %s = :game_play_enabled,  
+                    %s = :maintenance_mode_enabled, 
+                    %s = :maintenance_message, 
+                    %s = :system_notice_enabled, 
+                    %s = :system_notice_message, 
+                    %s = :system_enabled 
+                WHERE 
+                    %s = :id", 
+                
+                Application::TABLE_SYSTEM_SETTINGS, 
+
+                Application::REGISTRATION_ENABLED, 
+                Application::LOGIN_ENABLED, 
+                Application::GAME_CREATION_ENABLED, 
+                Application::GAME_PLAY_ENABLED, 
+                Application::MAINTENANCE_MODE_ENABLED, 
+                Application::MAINTENANCE_MESSAGE, 
+                Application::SYSTEM_NOTICE_ENABLED, 
+                Application::SYSTEM_NOTICE_MESSAGE, 
+                Application::SYSTEM_ENABLED, 
+
+                Application::ID
+            ), [
+                Application::REGISTRATION_ENABLED => (int)$this->registration_enabled, 
+                Application::LOGIN_ENABLED => (int)$this->login_enabled, 
+                Application::GAME_CREATION_ENABLED => (int)$this->game_creation_enabled, 
+                Application::GAME_PLAY_ENABLED => (int)$this->game_play_enabled, 
+                Application::MAINTENANCE_MODE_ENABLED => (int)$this->maintenance_mode_enabled, 
+                Application::MAINTENANCE_MESSAGE => (string)$this->maintenance_message, 
+                Application::SYSTEM_NOTICE_ENABLED => (int)$this->system_notice_enabled, 
+                Application::SYSTEM_NOTICE_MESSAGE => (string)$this->system_notice_message, 
+                Application::SYSTEM_ENABLED => (int)$this->system_enabled, 
+                Application::ID => (string)$this->id
+            ]
+        );
+    }
+
+    public function updateFromArray(array $data): void {
+        if (array_key_exists(Application::REGISTRATION_ENABLED, $data)) {
+            $this->registration_enabled = self::hydrateBoolean($data, Application::REGISTRATION_ENABLED); 
+        }
+        if (array_key_exists(Application::LOGIN_ENABLED, $data)) {
+            $this->login_enabled = self::hydrateBoolean($data, Application::LOGIN_ENABLED); 
+        }
+        if (array_key_exists(Application::GAME_CREATION_ENABLED, $data)) {
+            $this->game_creation_enabled = self::hydrateBoolean($data, Application::GAME_CREATION_ENABLED); 
+        }
+        if (array_key_exists(Application::GAME_PLAY_ENABLED, $data)) {
+            $this->game_play_enabled = self::hydrateBoolean($data, Application::GAME_PLAY_ENABLED); 
+        }
+        if (array_key_exists(Application::SYSTEM_ENABLED, $data)) {
+            $this->system_enabled = self::hydrateBoolean($data, Application::SYSTEM_ENABLED); 
+        }
+        if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) {
+            $this->maintenance_mode_enabled = self::hydrateBoolean($data, Application::MAINTENANCE_MODE_ENABLED); 
+        }
+        if (array_key_exists(Application::MAINTENANCE_MESSAGE, $data)) {
+            $this->maintenance_message = self::hydrateString($data, Application::MAINTENANCE_MESSAGE); 
+        }
+        if (array_key_exists(Application::SYSTEM_NOTICE_ENABLED, $data)) {
+            $this->system_notice_enabled = self::hydrateBoolean($data, Application::SYSTEM_NOTICE_ENABLED); 
+        }
+        if (array_key_exists(Application::SYSTEM_NOTICE_MESSAGE, $data)) {
+            $this->system_notice_message = self::hydrateString($data, Application::SYSTEM_NOTICE_MESSAGE); 
+        }
+    }
+
+    // Helper - Set Booleans to false
+    public function updateBooleansToFalse(): void {
+        $this->registration_enabled = false; 
+        $this->login_enabled = false; 
+        $this->system_enabled = false; 
+        $this->game_creation_enabled = false; 
+        $this->game_play_enabled = false; 
+        $this->maintenance_mode_enabled = false;  
+        $this->system_notice_enabled = false; 
+    }
+
     // Helper - Validate SystemSettings
     public function isValid(): bool {
         if ($this->updated_by === null) {
@@ -93,6 +181,21 @@ final class SystemSettingsModel extends BaseModel {
     private static function fromArray(array $data): self {
         $system_settings = new self;
 
+        if (array_key_exists(Application::ID, $data)) $system_settings->id = (string)$data[Application::ID]; 
+        if (array_key_exists(Application::REGISTRATION_ENABLED, $data)) $system_settings->registration_enabled = (bool)$data[Application::REGISTRATION_ENABLED];
+        if (array_key_exists(Application::LOGIN_ENABLED, $data)) $system_settings->login_enabled = (bool)$data[Application::LOGIN_ENABLED];
+        if (array_key_exists(Application::SYSTEM_ENABLED, $data)) $system_settings->system_enabled = (bool)$data[Application::SYSTEM_ENABLED];
+        if (array_key_exists(Application::GAME_CREATION_ENABLED, $data)) $system_settings->game_creation_enabled = (bool)$data[Application::GAME_CREATION_ENABLED];
+        if (array_key_exists(Application::GAME_PLAY_ENABLED, $data)) $system_settings->game_play_enabled = (bool)$data[Application::GAME_PLAY_ENABLED];
+        if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) $system_settings->maintenance_mode_enabled = (bool)$data[Application::MAINTENANCE_MODE_ENABLED];
+        if (array_key_exists(Application::MAINTENANCE_MESSAGE, $data)) $system_settings->maintenance_message = (string)$data[Application::MAINTENANCE_MESSAGE];
+        if (array_key_exists(Application::SYSTEM_NOTICE_ENABLED, $data)) $system_settings->system_notice_enabled = (bool)$data[Application::SYSTEM_NOTICE_ENABLED];
+        if (array_key_exists(Application::SYSTEM_NOTICE_MESSAGE, $data)) $system_settings->system_notice_message = (string)$data[Application::SYSTEM_NOTICE_MESSAGE];
+        if (array_key_exists(Application::UPDATED_AT, $data)) $system_settings->updated_at = (string)$data[Application::UPDATED_AT];
+        if (array_key_exists(Application::UPDATED_BY, $data)) $system_settings->updated_by = (string)$data[Application::UPDATED_BY];
+
+        /*
+        $system_settings->id = self::hydrateString($data, Application::ID); 
         $system_settings->registration_enabled = self::hydrateBoolean($data, Application::REGISTRATION_ENABLED);
         $system_settings->login_enabled = self::hydrateBoolean($data, Application::LOGIN_ENABLED);
         $system_settings->system_enabled = self::hydrateBoolean($data, Application::SYSTEM_ENABLED);
@@ -104,12 +207,13 @@ final class SystemSettingsModel extends BaseModel {
         $system_settings->system_notice_message = self::hydrateStringOrNull($data, Application::SYSTEM_NOTICE_MESSAGE);
         $system_settings->updated_at = self::hydrateString($data, Application::UPDATED_AT);
         $system_settings->updated_by = self::hydrateUUIDOrNull($data, Application::UPDATED_BY);
+        */
 
         return $system_settings;
     }
 
     // Helper - Create Array from SystemSettings
-    private function toArray(): array {
+    public function toArray(): array {
         $system_settings_array[Application::REGISTRATION_ENABLED] = $this->registration_enabled;
         $system_settings_array[Application::LOGIN_ENABLED] = $this->login_enabled;
         $system_settings_array[Application::SYSTEM_ENABLED] = $this->system_enabled;
@@ -137,6 +241,10 @@ final class SystemSettingsModel extends BaseModel {
     /**
      * Getter
      */ 
+    // Getter - get array of model
+    public function getArrayOfModel() {
+        return $this->toArray();
+    }
     // Getter - get registration enabled
     public function getRegistrationEnabled() {
         return $this->registration_enabled;

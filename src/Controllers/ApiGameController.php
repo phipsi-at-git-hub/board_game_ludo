@@ -166,6 +166,6 @@ class ApiGameController extends BaseController {
                 'success' => true, 
                 'status' => 'ok'
             ], 200
-            );
+        );
     }
 }

@@ -2,13 +2,14 @@
 // AdminController.php
 namespace App\Controllers;
 
+use App\Constants\Application;
 use App\Core\BaseController;
-use App\Core\Middleware;
 use App\Core\Csrf;
+use App\Core\Middleware;
 use App\Core\SystemHealth;
-use App\Models\UserModel;
 use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
+use App\Models\UserModel;
 
 class AdminController extends BaseController {
     public function __construct() {
@@ -175,6 +176,30 @@ class AdminController extends BaseController {
                 'maintenance_messages' => $maintenance_messages, 
                 'notice_messages' => $notice_messages, 
             ]
+        );
+    }
+
+    // System Settings - Update
+    public function updateSystemSettings() {
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST) {
+            $system_settings = SystemSettingsModel::findSystemSettings(); 
+            $system_settings->updateBooleansToFalse(); 
+            $system_settings->updateFromArray($_POST); 
+            $system_settings->update();
+            return $this->jsonClean(
+                [
+                    'success' => true, 
+                    'status' => 'ok', 
+                    'message' => 'Success', 
+                ], 200
+            );
+        }
+        return $this->jsonClean(
+            [
+                'success' => false, 
+                'status' => 'fail', 
+                'error' => 'Error'
+            ], 400
         );
     }
 
