@@ -1,0 +1,197 @@
+/* ==========================================
+   Selection Components
+   ========================================== */
+
+.selection-layout {
+    display: flex;
+    gap: 20px;
+}
+
+.selection-list {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.selection-preview {
+    flex: 1;
+    border-left: 1px solid #eeeeee;
+    padding-left: 16px;
+}
+
+/* ==========================================
+   Cards
+   ========================================== */
+
+.card {
+    background: rgba(255,255,255,0.95);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 16px;
+}
+
+.game-card .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.meta-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 12px;
+    align-items: center;
+}
+
+.card.players-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.player-card {
+    flex: 1 1 150px;
+    padding: 12px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 320px;
+    padding: 24px;
+    text-align: center;
+}
+
+/* ==========================================
+   Overview Cards
+   ========================================== */
+
+.overview-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.overview-card {
+    flex: 1 1 255px;
+}
+
+.overview-label {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.overview-grid .overview-card .status-badge {
+    margin-top: 4px;
+}
+
+/* ==========================================
+   Nested Cards
+   ========================================== */
+
+.nested-card {
+    margin: 12px 0 20px 0;
+    padding: 12px;
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+}
+
+.nested-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+/* ==========================================
+   Status & Role Badges
+   ========================================== */
+
+.role-badge,
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.role-admin {
+    background-color: #ff9800;
+    color: #000000;
+}
+
+.role-user {
+    background-color: #e0e0e0;
+}
+
+.status-inactive,
+.status-closed {
+    background: var(--default-color);
+    color: var(--default-color-dark);
+}
+
+.status-waiting,
+.status-warning,
+.status-blocked {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-running,
+.status-active,
+.status-ok,
+.status-healthy,
+.is-not-private-locked {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-finished,
+.status-banned,
+.status-fail,
+.is-private-locked {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ==========================================
+   Toggle Containers
+   ========================================== */
+
+[data-toggle-target] {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all .3s ease;
+}
+
+[data-toggle-target].active {
+    max-height: 600px;
+    opacity: 1;
+}
+
+[data-toggle-target][data-size="small"].active {
+    max-height: 120px;
+}
+
+[data-toggle-target][data-size="medium"].active {
+    max-height: 300px;
+}
+
+[data-toggle-target][data-size="large"].active {
+    max-height: 600px;
+}

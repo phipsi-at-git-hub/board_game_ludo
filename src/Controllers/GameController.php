@@ -64,9 +64,11 @@ class GameController extends BaseController {
             header("Location: /game/detail/$game_id");
             exit;
         }
-        
+        $rule_set = (new GameRuleSetModel())->initializeDefaultRuleSet();
+
         $this->render(
-            'game/create'
+            'game/create', 
+            ['rule_set' => $rule_set]
         );
     }
 

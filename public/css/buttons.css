@@ -1,0 +1,149 @@
+/* 
+   Buttons
+*/
+
+/* ==========================================
+   Button Container
+   ========================================== */
+
+.btn-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+
+.btn-actions button,
+.btn-actions a {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+/* ==========================================
+   Base Button
+   ========================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    margin: 4px 0;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.1s ease, background 0.2s ease;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+}
+
+/* ==========================================
+   Button Variants
+   ========================================== */
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #000000;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-color-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.btn-default {
+    background-color: var(--default-color);
+}
+
+.btn-default:hover {
+    background-color: var(--default-color-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.btn-save {
+    background-color: var(--tip-color);
+}
+
+.btn-save:hover {
+    background-color: var(--tip-color-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-color-dark);
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   Specialized Buttons
+   ========================================== */
+
+.panel .nav-actions .nav-list li a.btn-back {
+    background-color: var(--default-color);
+    color: #333333;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.panel .nav-actions .nav-list li a.btn-back:hover {
+    background-color: var(--default-color-dark);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   Message Selection Buttons
+   ========================================== */
+
+.message-item {
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.message-item:hover {
+    background: #f5f5f5;
+    transform: translateX(2px);
+}
+
+.message-item.active {
+    border-color: var(--secondary-color);
+    font-weight: bold;
+}

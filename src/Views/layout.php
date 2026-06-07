@@ -15,6 +15,9 @@ use App\Core\Asset;
         <meta charset="UTF-8">
         <title><?= $page_title ?></title>
         <link rel="stylesheet" href="<?= Asset::asset('css/general.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::asset('css/components.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::asset('css/forms.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::asset('css/buttons.css') ?>">
         <?php foreach ($css_array as $css): ?>
             <link rel="stylesheet" href="<?= Asset::asset("css/$css.css") ?>">
         <?php endforeach; ?>

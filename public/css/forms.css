@@ -1,0 +1,141 @@
+/* 
+   Forms, Input, Select, Textarea, Switches, Form Layout
+*/
+
+/* ------------------------------
+   GLOBAL FORM ELEMENTS
+------------------------------ */
+
+input,
+select,
+textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* Focus state */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--tip-color);
+    box-shadow: 0 0 4px rgba(68,176,68,0.4);
+}
+
+/* ------------------------------
+   PANEL FORM SCOPING
+------------------------------ */
+
+.panel input[type="text"],
+.panel input[type="email"],
+.panel input[type="password"],
+.panel select,
+.panel textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ------------------------------
+   FORM STRUCTURE
+------------------------------ */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.form-group {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group input {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* ------------------------------
+   SWITCH SYSTEM (LEGACY + MODERN FOUNDATION)
+------------------------------ */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 32px;
+}
+
+.switch input {
+    display: none;
+}
+
+/* ON state */
+.switch input:checked + .slider {
+    background: #d1ecf1; /* override of var(--tip-color usage in original) */
+}
+
+/* Thumb move */
+.switch input:checked + .slider::before {
+    transform: translateX(32px);
+}
+
+/* Slider base */
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    border-radius: 999px;
+
+    /*background: var(--default-color-dark); */
+    /*background: var(--danger-color); */
+    background: #f8d7da; /* OFF state */
+    transition: background-color 0.25s ease;
+}
+
+/* Thumb */
+.slider::before {
+    content: "";
+    position: absolute;
+
+    width: 24px;
+    height: 24px;
+
+    left: 4px;
+    top: 4px;
+
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+
+    /*background: var(--primary-color); */
+    background: var(--default-color);
+    transition: transform 0.25s ease;
+}
+
+/* ------------------------------
+   OPTIONAL: FORM ERROR FEEDBACK
+------------------------------ */
+/*
+.alert.error {
+    background-color: #ffe5e5;
+    color: #d32f2f;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+*/
