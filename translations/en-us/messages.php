@@ -289,6 +289,33 @@ return [
 
     // System Settings / Status
     'admin.system.settings.overview.title' => '⚙️ Admin System Settings', 
+    'admin.system.settings.card.overview.title' => '⚙️ System Overview', 
+    'admin.system_settings.card.current_state' => 'Current State', 
+    'admin.system_settings.card.authentication' => 'Authentication', 
+    'admin.system_settings.card.games' => 'Games', 
+    'admin.system_settings.card.maintenance' => 'Maintenance', 
+    'admin.system_settings.card.user.title' => '👤 Authentication', 
+    'admin.system_settings.card.user.registration_enabled' => 'User Registration', 
+    'admin.system_settings.card.user.login_enabled' => 'Login for Users', 
+    'admin.system_settings.card.game.title' => '🎮 Games', 
+    'admin.system_settings.card.game.creation_enabled' => 'Creating games', 
+    'admin.system_settings.card.game.play_enabled' => 'Playing games', 
+    'admin.system_settings.card.maintenance.title' => '🛠 Maintenance', 
+    'admin.system_settings.card.maintenance.system_enabled' => 'System enabled', 
+    'admin.system_settings.card.maintenance.maintenance_mode_enabled' => 'Maintenance mode', 
+    'admin.system_settings.card.maintenance.system_notice_enabled' => 'System notice', 
+    'admin.system_settings.card.maintenance.maintenance_mode.message' => '🛠 Maintenance Messages', 
+    'admin.system_settings.card.maintenance.system_notice.message' => '📢 System notice Messages', 
+    'admin.system_settings.card.maintenance.preview' => 'Preview', 
+
+    'system.settings.maintenance.message.000.title' => 'Empty Maintenance Message', 
+    'system.settings.maintenance.message.001.title' => 'Maintenance Message 001', 
+    'system.settings.maintenance.message.002.title' => 'Maintenance Message 002', 
+    'system.settings.maintenance.message.003.title' => 'Maintenance Message 003', 
+    'system.settings.system.notice.000.title' => 'Empty System Notice Message', 
+    'system.settings.system.notice.001.title' => 'System Notice Message 001', 
+    'system.settings.system.notice.002.title' => 'System Notice Message 002', 
+    'system.settings.system.notice.003.title' => 'System Notice Message 003', 
 
     // System Health
     'admin.system.health.overview.title' => '🔋 Admin System Health', 
@@ -319,24 +346,4 @@ return [
     'admin.system.health.card.game.api_reachable.label' => 'API Reachable', 
     'admin.system.health.card.game.latency.label' => 'Latency', 
     'admin.system.health.card.game.version.label' => 'Version', 
-
-    // System Settings
-    'admin.system_settings.login_enabled' => 'Login enabled for Users', 
-    'admin.system_settings.registration_enabled' => 'User Registration enabled', 
-    'admin.system_settings.game_creation_enabled' => 'Creating games enabled', 
-    'admin.system_settings.game_play_enabled' => 'Playing games enabled', 
-    'admin.system_settings.system_enabled' => 'System enabled', 
-    'admin.system_settings.maintenance_mode_enabled' => 'Maintenance mode enabled', 
-    'admin.system_settings.system_notice_enabled' => 'System notice enabled', 
-    'admin.system_settings.maintenance_mode_message' => 'Maintenance mode message', 
-    'admin.system_settings.system_notice_message' => 'System notice message', 
-
-    'system.settings.maintenance.message.000.title' => 'Empty Maintenance Message', 
-    'system.settings.maintenance.message.001.title' => 'Maintenance Message 001', 
-    'system.settings.maintenance.message.002.title' => 'Maintenance Message 002', 
-    'system.settings.maintenance.message.003.title' => 'Maintenance Message 003', 
-    'system.settings.system.notice.000.title' => 'Empty System Notice Message', 
-    'system.settings.system.notice.001.title' => 'System Notice Message 001', 
-    'system.settings.system.notice.002.title' => 'System Notice Message 002', 
-    'system.settings.system.notice.003.title' => 'System Notice Message 003', 
 ];

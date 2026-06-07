@@ -13,9 +13,9 @@ use App\Models\SystemSettingsModel;
 
 <div class="panel">
 
-    <div id="form-response" class="ajax-response"></div>
+    <div id="form-response_b" class="ajax-response"></div>
 
-    <h1><?= Localization::get('admin.system.settings.title') ?></h1>
+    <h1><?= Localization::get('admin.system.settings.overview.title') ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
@@ -34,7 +34,7 @@ use App\Models\SystemSettingsModel;
 
     <!-- Overview -->
     <div class="card">
-        <h2>⚙️ System Overview</h2>
+        <h2><?= Localization::get('admin.system.settings.card.overview.title') ?></h2>
 
         <div class="stats-sub">
             <div>
@@ -43,7 +43,7 @@ use App\Models\SystemSettingsModel;
                         <?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? 'ON' : 'OFF' ?>
                     </span>
                 </span>
-                <span class="stat-text">User</span>
+                <span class="stat-text"><?= Localization::get('admin.system_settings.card.authentication') ?></span>
             </div>
 
             <div>
@@ -52,7 +52,7 @@ use App\Models\SystemSettingsModel;
                         <?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? 'ON' : 'OFF' ?>
                     </span>
                 </span>
-                <span class="stat-text">Game</span>
+                <span class="stat-text"><?= Localization::get('admin.system_settings.card.games') ?></span>
             </div>
 
             <div>
@@ -61,7 +61,7 @@ use App\Models\SystemSettingsModel;
                         <?= !$system_settings->getMaintenanceModeEnabled() ? 'ON' : 'OFF' ?>
                     </span>
                 </span>
-                <span class="stat-text">System</span>
+                <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>
             </div>
         </div>
     </div>
@@ -83,10 +83,10 @@ use App\Models\SystemSettingsModel;
 
             <!-- User -->
             <div class="card dashboard-card">
-                <h2>👤 User</h2>
+                <h2><?= Localization::get('admin.system_settings.card.user.title') ?></h2>
 
                 <div class="setting-row">
-                    <span>Registration</span>
+                    <span><?= Localization::get('admin.system_settings.card.user.registration_enabled') ?></span>
 
                     <label class="switch">
                         <input 
@@ -100,7 +100,7 @@ use App\Models\SystemSettingsModel;
                 </div>
 
                 <div class="setting-row">
-                    <span>Login</span>
+                    <span><?= Localization::get('admin.system_settings.card.user.login_enabled') ?></span>
 
                     <label class="switch">
                         <input 
@@ -116,10 +116,10 @@ use App\Models\SystemSettingsModel;
 
             <!-- Game -->
             <div class="card dashboard-card">
-                <h2>🎮 Game</h2>
+                <h2><?= Localization::get('admin.system_settings.card.game.title') ?></h2>
 
                 <div class="setting-row">
-                    <span>Game Creation</span>
+                    <span><?= Localization::get('admin.system_settings.card.game.creation_enabled') ?></span>
 
                     <label class="switch">
                         <input 
@@ -133,7 +133,7 @@ use App\Models\SystemSettingsModel;
                 </div>
 
                 <div class="setting-row">
-                    <span>Game Play</span>
+                    <span><?= Localization::get('admin.system_settings.card.game.play_enabled') ?></span>
 
                     <label class="switch">
                         <input 
@@ -149,10 +149,10 @@ use App\Models\SystemSettingsModel;
 
             <!-- System -->
             <div class="card dashboard-card">
-                <h2>🛠 System</h2>
+                <h2><?= Localization::get('admin.system_settings.card.maintenance.title') ?></h2>
 
                 <div class="setting-row">
-                    <span>System</span>
+                    <span><?= Localization::get('admin.system_settings.card.maintenance.system_enabled') ?></span>
 
                     <label class="switch">
                         <input 
@@ -168,7 +168,7 @@ use App\Models\SystemSettingsModel;
                 <div class="setting-group" data-toggle-group>
 
                     <div class="setting-row">
-                        <span>Maintenance Mode</span>
+                        <span><?= Localization::get('admin.system_settings.card.maintenance.maintenance_mode_enabled') ?></span>
 
                         <label class="switch">
                             <input 
@@ -185,7 +185,7 @@ use App\Models\SystemSettingsModel;
                     <div class="collapse <?= $system_settings->getMaintenanceModeEnabled() ? 'active' : '' ?>" data-toggle-target>
                         <!-- Maintenance Messages -->
                         <div class="nested-card">
-                            <h3>🛠 Maintenance Messages</h3>
+                            <h3><?= Localization::get('admin.system_settings.card.maintenance.maintenance_mode.message') ?></h3>
 
                             <div class="selection-layout">
 
@@ -209,7 +209,7 @@ use App\Models\SystemSettingsModel;
                                 </div>
 
                                 <div class="selection-preview">
-                                    <h4>Preview</h4>
+                                    <h4><?= Localization::get('admin.system_settings.card.maintenance.preview') ?></h4>
 
                                     <p>
                                         <?= Localization::get($system_settings->getMaintenanceMessageString()) ?>
@@ -227,7 +227,7 @@ use App\Models\SystemSettingsModel;
                 <div class="setting-group" data-toggle-group>
 
                     <div class="setting-row">
-                        <span>System Notice</span>
+                        <span><?= Localization::get('admin.system_settings.card.maintenance.system_notice_enabled') ?></span>
 
                         <label class="switch">
                             <input 
@@ -245,7 +245,7 @@ use App\Models\SystemSettingsModel;
 
                         <!-- Notice Messages -->
                         <div class="nested-card">
-                            <h3>📢 System Notices Message</h3>
+                            <h3><?= Localization::get('admin.system_settings.card.maintenance.system_notice.message') ?></h3>
 
                             <div class="selection-layout">
 
@@ -269,7 +269,7 @@ use App\Models\SystemSettingsModel;
                                 </div>
 
                                 <div class="selection-preview">
-                                    <h4>Preview</h4>
+                                    <h4><?= Localization::get('admin.system_settings.card.maintenance.preview') ?></h4>
 
                                     <p>
                                         <?= Localization::get($system_settings->getSystemNoticeMessageString()) ?>

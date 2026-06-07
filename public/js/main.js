@@ -46,7 +46,7 @@ function submitForm(form) {
 
                 setTimeout(() => {
                     target.classList.remove('success', 'active'); 
-                }, 5000); 
+                }, 3000); 
             }
             return; 
         }

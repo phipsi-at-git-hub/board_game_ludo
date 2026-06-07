@@ -124,16 +124,6 @@ abstract class BaseModel {
         return json_decode($row[$key], true);
     }
 
-    // Helper - int or NULL
-    protected static function intOrNull($value): ?int {
-        return $value === null ? null : (int) $value;
-    }
-
-    // Helper - string or NULL
-    protected static function stringOrNull($value): ?string {
-        return $value === null ? null : (string) $value;
-    }
-
     // Helper - Helps with hydration of UUID
     protected static function hydrateUUIDOrNull(array $row, string $key): ?string {
         if (
@@ -144,5 +134,20 @@ abstract class BaseModel {
             return null;
         }
         return (string) $row[$key];
+    }
+
+    // Helper - int or NULL
+    protected static function intOrNull(int $value): ?int {
+        return $value === null ? null : (int) $value;
+    }
+
+    // Helper - string or NULL
+    protected static function stringOrNull(string $value): ?string {
+        return $value === null ? null : (string) $value;
+    }
+
+    // Helper - Boolean
+    protected static function bool4DB(bool $value): bool {
+        return $value ? 1 : 0;
     }
 }
