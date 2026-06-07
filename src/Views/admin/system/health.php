@@ -29,7 +29,7 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <!-- System Overview -->
+    <!-- Overview -->
     <div class="card dashboard-card">
         <h2> <?= Localization::get('admin.system.health.card.overview.title') ?></h2>
 
@@ -46,21 +46,27 @@ use App\Core\Localization;
 
             <div>
                 <span class="stat-value">
-                    <?= strtoupper($database['status']) ?>
+                    <span class="status-badge status-<?= $database['status'] ?>">
+                        <?= strtoupper($database['status']) ?>
+                    </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.database') ?></span>
             </div>
 
             <div>
                 <span class="stat-value">
-                    <?= strtoupper($environment['status']) ?>
+                    <span class="status-badge status-<?= $environment['status'] ?>">
+                        <?= strtoupper($environment['status']) ?>
+                    </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.environment') ?></span>
             </div>
 
             <div>
                 <span class="stat-value">
-                    <?= $game['status_ok'] ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
+                    <span class="status-badge status-<?= ($game['status_ok']) ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= $game['status_ok'] ? strtoupper(Application::GENERAL_OK) : strtoupper(Application::GENERAL_FAIL) ?>
+                    </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system.health.card.overall.game') ?></span>
             </div>
