@@ -1,7 +1,9 @@
 <?php
 
+use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Core\SystemSettings;
 use App\Models\SystemSettingsModel;
 
 /**
@@ -36,11 +38,20 @@ use App\Models\SystemSettingsModel;
     <div class="card">
         <h2><?= Localization::get('admin.system.settings.card.overview.title') ?></h2>
 
+        <div class="stats-main">
+            <div class="stat-big">
+                <?= SystemSettings::isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?>
+            </div>
+            <div class="stat-label">
+                <?= Localization::get('admin.system_settings.card.current_state') ?>
+            </div>
+        </div>
+
         <div class="stats-sub">
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? 'ok' : 'fail' ?>">
-                        <?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? 'ON' : 'OFF' ?>
+                    <span class="status-badge status-<?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.authentication') ?></span>
@@ -48,8 +59,8 @@ use App\Models\SystemSettingsModel;
 
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? 'ok' : 'fail' ?>">
-                        <?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? 'ON' : 'OFF' ?>
+                    <span class="status-badge status-<?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                        <?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.games') ?></span>
@@ -57,8 +68,8 @@ use App\Models\SystemSettingsModel;
 
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? 'ok' : 'warning' ?>">
-                        <?= !$system_settings->getMaintenanceModeEnabled() ? 'ON' : 'OFF' ?>
+                    <span class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>">
+                        <?= !$system_settings->getMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>
