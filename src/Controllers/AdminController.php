@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Constants\Application;
 use App\Core\BaseController;
 use App\Core\Csrf;
+use App\Core\Localization;
 use App\Core\Middleware;
 use App\Core\SystemHealth;
 use App\Models\GameModel;
@@ -190,7 +191,7 @@ class AdminController extends BaseController {
                 [
                     'success' => true, 
                     'status' => 'ok', 
-                    'message' => 'Success', 
+                    'message' => Localization::get('application.response.messages.save.success'), 
                 ], 200
             );
         }
@@ -198,6 +199,7 @@ class AdminController extends BaseController {
             [
                 'success' => false, 
                 'status' => 'fail', 
+                'message' => Localization::get('application.response.messages.save.failed'), 
                 'error' => 'Error'
             ], 400
         );

@@ -48,6 +48,10 @@ return [
     'application.navbar.btn_logout' => '🚪 Logout', 
     'application.navbar.btn_login' => '👤 Login', 
 
+    // Application form response messages
+    'application.response.messages.save.success' => 'Successfully saved', 
+    'application.response.messages.save.failed' => 'Failed to save', 
+
     // Application - Menu
     'application.menu.title' => 'Main Menu', 
     'application.menu.lobby' => '🎮 Game Lobby', 
