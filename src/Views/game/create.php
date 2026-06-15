@@ -22,29 +22,35 @@ use App\Core\Localization;
 
         <fieldset>
             <legend><?= Localization::get('game.create.name') ?></legend>
-            <label>
-                <?= Localization::get('game.create.game_name') ?>
+            <label><?= Localization::get('game.create.game_name') ?>
                 <input type="text" name="<?= Application::GAME_NAME ?>">
             </label>
         </fieldset>
 
         <fieldset>
             <legend><?= Localization::get('game.create.game_options') ?></legend>
-            <label>
-                <?= Localization::get('game.options.is_private') ?>
-                <select name="<?= Application::IS_PRIVATE; ?>">
-                    <option value="0" selected><?= Localization::get('application.general.no') ?></option>
-                    <option value="1"><?= Localization::get('application.general.yes') ?></option>
+
+            <div class="form-group">
+                <label>
+                    <?= Localization::get('game.options.is_private') ?>
+                </label>
+
+                <select name="<?= Application::IS_PRIVATE; ?>" data-ui="switch" class="enhanced">
+                    <option value="0" data-state="inactive" selected><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active"><?= Localization::get('application.general.yes') ?></option>
                 </select>
-            </label>
-            <br><br>
-            <label>
-                <?= Localization::get('game.options.is_locked') ?>
-                <select name="<?= Application::IS_LOCKED; ?>">
-                    <option value="0" selected><?= Localization::get('application.general.no') ?></option>
-                    <option value="1"><?= Localization::get('application.general.yes') ?></option>
+            </div>
+            <br>
+            <div class="form-group">
+                <label>
+                    <?= Localization::get('game.options.is_locked') ?>
+                </label>
+                
+                <select name="<?= Application::IS_LOCKED; ?>" data-ui="switch" class="enhanced">
+                    <option value="0" data-state="inactive" selected><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active"><?= Localization::get('application.general.yes') ?></option>
                 </select>
-            </label>
+            </div>
         </fieldset>
 
         <fieldset>

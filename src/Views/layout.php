@@ -28,10 +28,11 @@ use App\Core\Asset;
         <?php include VIEWS_PATH . '/partials/navbar.php'; ?>
 
         <!-- Main Content -->
-        <div class="content-container <?= $content_css_class ?>">
+        <div class="content-container <?= $content_css_class ?? '' ?>">
             <?= $content ?>
         </div>
 
+        <script src="<?= Asset::asset('js/forms.js') ?>"></script>
         <script src="<?= Asset::asset('js/main.js') ?>"></script>
 
     </body>

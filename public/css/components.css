@@ -146,6 +146,7 @@
 
 .status-waiting,
 .status-warning,
+.status-mid, 
 .status-blocked {
     background: #fff3cd;
     color: #856404;
