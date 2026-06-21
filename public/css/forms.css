@@ -145,6 +145,10 @@ textarea:focus {
 }
 
 /* Badge colors */
+.switch-group.default {
+    background: var(--default-color-dark);
+}
+
 .switch-group.inactive {
     background: var(--status-inactive-background);
 }
@@ -182,11 +186,17 @@ textarea:focus {
     background: transparent;
     font-size: 14px;
     font-weight: 500;
+    white-space: nowrap; 
     cursor: pointer;
     color: var(--status-inactive-text);
     transition:
         color 0.2s ease,
         transform 0.15s ease;
+}
+
+/* default */
+.switch-group.default .switch-option {
+    color: var(--text-color);
 }
 
 /* inactive */
