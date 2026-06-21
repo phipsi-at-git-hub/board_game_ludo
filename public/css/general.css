@@ -239,24 +239,6 @@ html, body {
     color: #777777;
 }
 
-/* Admin System Settings */ 
-.setting-row {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 12px 0; 
-}
-
-.setting-row + .setting-row {
-    margin-top: 12px; 
-}
-
-.setting-row.section-separator {
-    margin-top: 16px; 
-    padding-top: 16px; 
-    border-top: 1px solid #eeeeee; 
-}
-
 /* Links */
 a {
     color: var(--secondary-color);

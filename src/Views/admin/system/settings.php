@@ -96,7 +96,7 @@ use App\Models\SystemSettingsModel;
             <div class="card dashboard-card">
                 <h2><?= Localization::get('admin.system_settings.card.user.title') ?></h2>
 
-                <div class="setting-row">
+                <div class="form-row">
                     <span><?= Localization::get('admin.system_settings.card.user.registration_enabled') ?></span>
 
                     <label class="switch">
@@ -110,7 +110,7 @@ use App\Models\SystemSettingsModel;
                     </label>
                 </div>
 
-                <div class="setting-row">
+                <div class="form-row">
                     <span><?= Localization::get('admin.system_settings.card.user.login_enabled') ?></span>
 
                     <label class="switch">
@@ -129,7 +129,7 @@ use App\Models\SystemSettingsModel;
             <div class="card dashboard-card">
                 <h2><?= Localization::get('admin.system_settings.card.game.title') ?></h2>
 
-                <div class="setting-row">
+                <div class="form-row">
                     <span><?= Localization::get('admin.system_settings.card.game.creation_enabled') ?></span>
 
                     <label class="switch">
@@ -143,7 +143,7 @@ use App\Models\SystemSettingsModel;
                     </label>
                 </div>
 
-                <div class="setting-row">
+                <div class="form-row">
                     <span><?= Localization::get('admin.system_settings.card.game.play_enabled') ?></span>
 
                     <label class="switch">
@@ -162,7 +162,7 @@ use App\Models\SystemSettingsModel;
             <div class="card dashboard-card">
                 <h2><?= Localization::get('admin.system_settings.card.maintenance.title') ?></h2>
 
-                <div class="setting-row">
+                <div class="form-row">
                     <span><?= Localization::get('admin.system_settings.card.maintenance.system_enabled') ?></span>
 
                     <label class="switch">
@@ -178,7 +178,7 @@ use App\Models\SystemSettingsModel;
 
                 <div class="setting-group" data-toggle-group>
 
-                    <div class="setting-row">
+                    <div class="form-row">
                         <span><?= Localization::get('admin.system_settings.card.maintenance.maintenance_mode_enabled') ?></span>
 
                         <label class="switch">
@@ -237,7 +237,7 @@ use App\Models\SystemSettingsModel;
 
                 <div class="setting-group" data-toggle-group>
 
-                    <div class="setting-row">
+                    <div class="form-row">
                         <span><?= Localization::get('admin.system_settings.card.maintenance.system_notice_enabled') ?></span>
 
                         <label class="switch">

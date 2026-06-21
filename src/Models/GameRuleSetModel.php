@@ -19,7 +19,7 @@ final class GameRuleSetModel extends BaseModel {
     private bool $strict_goal_order;
 
     // Define Default values
-    private const DEFAULT_ALLOW_BOTS = true;
+    private const DEFAULT_ALLOW_BOTS = false;
     private const DEFAULT_ALL_FIGURES_START_AT_HOME = false;
     private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
     private const DEFAULT_LEAVE_HOME_ATTEMPT = Application::ENUM_FIRST_FIGURE;

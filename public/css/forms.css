@@ -2,11 +2,9 @@
    FORMS UI SYSTEM
    Badge-based Inputs + Switches + Slider Selects
 */
-
 /* ------------------------------
    GLOBAL FORM ELEMENTS
 ------------------------------ */
-
 input,
 select,
 textarea {
@@ -28,17 +26,66 @@ textarea:focus {
 }
 
 /* ------------------------------
-   DEFAULT FORM GROUP LAYOUT
+   FORM LAYOUT
 ------------------------------ */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
 .form-group {
-    display: flex; 
-    justify-content: space-between; 
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group input {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
 }
 
 /* ------------------------------
-   CHECKBOX SWITCH (unchanged core behavior)
+   INLINE FORM ROW
+   Label left, Control right
 ------------------------------ */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    /*padding: 12px 0; */
+}
 
+.form-row + .setting-group, 
+.setting-group + .setting-group, 
+.form-row + .form-row {
+    margin-top: 12px;
+}
+
+.form-row.section-separator {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eeeeee;
+}
+
+/* optional */
+.form-row label {
+    margin: 0;
+}
+
+/* ------------------------------
+   CHECKBOX SWITCH
+------------------------------ */
 .switch {
     position: relative;
     display: inline-block;
@@ -53,31 +100,29 @@ textarea:focus {
 .slider {
     position: absolute;
     inset: 0;
-    border-radius: 999px;
     cursor: pointer;
-
-    background: #f8d7da; /* OFF */
-    transition: background-color 0.25s ease;
+    border-radius: 999px;
+    background: #f8d7da;
+    transition:
+        background-color 0.25s ease;
 }
 
 .slider::before {
     content: "";
     position: absolute;
-
     width: 24px;
     height: 24px;
     left: 4px;
     top: 4px;
-
     border-radius: 50%;
     background: var(--default-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-
-    transition: transform 0.25s ease;
+    transition:
+        transform 0.25s ease;
 }
 
 .switch input:checked + .slider {
-    background: #d1ecf1; /* ON */
+    background: #d1ecf1;
 }
 
 .switch input:checked + .slider::before {
@@ -85,80 +130,82 @@ textarea:focus {
 }
 
 /* ------------------------------
-   SELECT SWITCH (BADGE SLIDER SYSTEM)
-   ≤ 3 OPTIONS ONLY
+   SELECT SWITCH
+   ≤ 3 OPTIONS
 ------------------------------ */
-
 .switch-group {
     position: relative;
     display: inline-flex;
-    align-items: stretch;
-
+    align-items: center;
     padding: 4px;
-    border-radius: 999px; /* badge-like pill */
-    
-    background: #f8d7da; /* inactive base */
-
+    border-radius: 999px;
     overflow: hidden;
+    transition:
+        background-color 0.25s ease;
+}
+
+/* Badge colors */
+.switch-group.inactive {
+    background: #f8d7da;
+}
+
+.switch-group.mid {
+    background: #fff3cd;
 }
 
 .switch-group.active {
     background: #d1ecf1;
 }
-.switch-group.mid {
-    background: #fff3cd;
-}
-.switch-group.inactive {
-    background: #f8d7da;
-}
 
-/* MOVING SLIDER INDICATOR */
+/* Moving slider */
 .switch-indicator {
     position: absolute;
     top: 4px;
     bottom: 4px;
-
     left: 4px;
-    width: calc((100% / var(--option-count) - 4px));
-
-    background: #d1ecf1; /* active badge */
+    width: calc((100% / var(--option-count)) - 4px);
     background: var(--default-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 999px;
-
-    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-
+    box-shadow:0 2px 4px rgba(0,0,0,0.25);
+    transition:
+        transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
 }
 
-/* OPTIONS */
+/* Option buttons */
 .switch-option {
     position: relative;
     z-index: 1;
-
     flex: 1;
     padding: 8px 14px;
-
     border: none;
     background: transparent;
-
     font-size: 14px;
     font-weight: 500;
-
     cursor: pointer;
-
-    color: #721c24; /* inactive badge text */
-
-    transition: transform 0.15s ease, color 0.2s ease;
+    color: #721c24;
+    transition:
+        color 0.2s ease,
+        transform 0.15s ease;
 }
 
-.switch-option:hover {
-    /*transform: translateY(-1px);*/
+/* inactive */
+.switch-group.inactive .switch-option {
+    color: #721c24;
 }
 
-/* active text */
-.switch-option.active {
+/* warning */
+.switch-group.mid .switch-option {
+    color: #856404;
+}
+
+/* active */
+.switch-group.active .switch-option {
     color: #0c5460;
+}
+
+/* selected option */
+.switch-option.active {
     font-weight: 600;
 }
 
@@ -175,13 +222,18 @@ textarea:focus {
 
 /* full width */
 .switch-group.full-width {
+    display: flex;
     width: 100%;
+}
+
+.switch-group.full-width .switch-option {
+    flex: 1;
+    text-align: center;
 }
 
 /* ------------------------------
    HIDE ORIGINAL SELECT
 ------------------------------ */
-
 select[data-ui="switch"].switch-enhanced {
     display: none;
 }
