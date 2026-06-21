@@ -1,5 +1,6 @@
 /* Variables */
 :root {
+    /* Brand Colors */
     --primary-color: #ffcc00;
     --primary-color-dark: #e6b800;
     --secondary-color: #007bff;
@@ -10,14 +11,62 @@
     --tip-color-dark: #36a036;
     --danger-color: #f44336;
     --danger-color-dark: #d32f2f;
+    --sky-color: #87ceeb; 
+
+    /* Neutral Colors */
+    --white-color: #ffffff; 
+    --black-color: #000000; 
+
+    --text-color: #333333; 
+    --text-light-color: #555555; 
+    --text-muted-color: #666666; 
+    --text-subtle-color: #777777; 
+
+    /* Border Colors */
+    --border-color: #cccccc; 
+    --border-light-color: #dddddd; 
+    --border-lighter-color: #eeeeee; 
+    --border-soft-color: #f0f0f0; 
+    --border-dark-color: #bbbbbb; 
+
+    /* Background Colors */
+    --background-light-color: #f5f5f5; 
+    --background-lighter-color: #f9f9f9; 
+    --background-soft-color: #fafafa; 
+
+    /* Badge System Colors */
+    --status-active-background: #d1ecf1; 
+    --status-active-text: #0c5460; 
+    --status-mid-background: #fff3cd; 
+    --status-mid-text: #856404; 
+    --status-inactive-background: #f8d7da; 
+    --status-inactive-text: #721c24; 
+
+    /* Badge Role Colors */
+    --role-admin-background: #ff9800; 
+    --role-admin-text: var(--black-color); 
+    --role-user-background: #e0e0e0; 
+    --role-user-text: var(--text-color); 
+
+    /* Navbar AJAX Colors */
+    --ajax-success-background: #d1f5d3; 
+    --ajax-success-border: #a7e3ad; 
+    --ajax-success-text: #1f6b2a; 
+    --ajax-warning-background: var(--status-mid-background); 
+    --ajax-warning-border: #ffecb5; 
+    --ajax-warning-text: #664d03; 
+    --ajax-error-background: var(--status-inactive-background); 
+    --ajax-error-border: #f1aeb6; 
+    --ajax-error-text: #842029; 
 }
+
 /* Global Layout and Container */
 html, body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background: #87CEEB;
-    color: #333;
+    background: var(--sky-color);
+    color: var(--text-color);
 }
 
 .content-container.game {
@@ -28,7 +77,7 @@ html, body {
 
 /* Panels */
 .panel {
-    background-color: #ffffff; 
+    background-color: var(--white-color); 
     max-width: 900px; 
     margin: 30px auto; 
     padding: 25px 30px; 
@@ -39,14 +88,14 @@ html, body {
 
 .panel .page-title {
     font-size: 2rem;
-    color: #333333;
+    color: var(--text-color);
     margin-bottom: 20px;
     text-align: center;
 }
 
 .panel .welcome-text {
     font-size: 1.2rem;
-    color: #555555;
+    color: var(--text-light-color);
     margin-bottom: 25px;
     text-align: center;
 }
@@ -105,13 +154,13 @@ html, body {
 .users-list td {
     padding: 10px 12px;
     text-align: left;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid var(--border-light-color);
 }
 
 .game-list th, 
 .users-list th {
-    border-bottom: 2px solid #bbbbbb;
-    background-color: #f9f9f9;
+    border-bottom: 2px solid var(--border-dark-color);
+    background-color: var(--background-lighter-color);
 }
 
 .game-list td, 
@@ -123,7 +172,7 @@ html, body {
 .game-list td:not(:last-child), 
 .users-list th:not(:last-child), 
 .users-list td:not(:last-child) {
-    border-right: 1px solid #eeeeee;
+    border-right: 1px solid var(--border-lighter-color);
 }
 
 .game-list th.name, 
@@ -199,7 +248,7 @@ html, body {
     text-align: center;
     margin: 12px 0;
     padding-bottom: 12px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid var(--border-lighter-color);
 }
 
 .stat-big {
@@ -209,7 +258,7 @@ html, body {
 
 .stat-label {
     font-size: 0.9rem;
-    color: #666666;
+    color: var(--text-muted-color);
 }
 
 .stats-sub {
@@ -225,7 +274,7 @@ html, body {
 }
 
 .stats-sub div:not(:last-child) {
-    border-right: 1px solid #f0f0f0;
+    border-right: 1px solid var(--border-soft-color);
 }
 
 .stat-value {
@@ -236,7 +285,7 @@ html, body {
 
 .stat-text {
     font-size: 0.8rem;
-    color: #777777;
+    color: var(--text-subtle-color);
 }
 
 /* Links */
@@ -261,7 +310,7 @@ a:hover {
 /* Errors */
 .alert.error {
     background-color: #ffe5e5;
-    color: #d32f2f;
+    color: var(--danger-color-dark);
     padding: 8px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -284,11 +333,11 @@ a:hover {
 .navbar .logo {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #333333;
+    color: var(--text-color);
 }
 
 .navbar .logo a.btn-home {
-    color: #333333;
+    color: var(--text-color);
     text-decoration: none;
     border-radius: 12px;
     padding: 10px 18px;
@@ -298,8 +347,8 @@ a:hover {
 }
 
 .navbar .logo a.btn-home:hover {
-    color: #333333;
-    background-color: #f2f2f2;
+    color: var(--text-color);
+    background-color: var(--default-color);
     text-decoration: none;
     transform: scale(1.05);
 }
@@ -322,8 +371,8 @@ a:hover {
     padding: 0; 
     font-size: 0; 
     border-radius: 12px; 
-    background: #f5f5f5; 
-    color: #333333; 
+    background: var(--background-light-color); 
+    color: var(--text-color); 
     opacity: 0; 
     transform: translateY(4px); 
     transition: all 0.2s ease; 
@@ -337,17 +386,17 @@ a:hover {
 }
 
 .navbar .ajax-response.success {
-    background: #d1f5d3; 
-    color: #1f6b2a; 
-    border: 1px solid #a7e3ad; 
+    background: var(--ajax-success-background); 
+    color: var(--ajax-success-text); 
+    border: 1px solid var(--ajax-success-border); 
 }
 .navbar .ajax-response.warning {
-    background: #fff3cd; 
-    color: #664d03; 
-    border: 1px solid #ffecb5; 
+    background: var(--ajax-warning-background); 
+    color: var(--ajax-warning-text); 
+    border: 1px solid var(--ajax-warning-border); 
 }
 .navbar .ajax-response.error {
-    background: #f8d7da; 
-    color: #842029; 
-    border: 1px solid #f1aeb6; 
+    background: var(--ajax-error-background); 
+    color: var(--ajax-error-text); 
+    border: 1px solid var(--ajax-error-border); 
 }

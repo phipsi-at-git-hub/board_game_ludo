@@ -40,7 +40,7 @@
     font-weight: bold;
     transition: transform 0.1s ease, background 0.2s ease;
     text-decoration: none;
-    color: #ffffff;
+    color: var(--white-color);
 }
 
 .btn:active {
@@ -109,7 +109,7 @@
 
 .panel .nav-actions .nav-list li a.btn-back {
     background-color: var(--default-color);
-    color: #333333;
+    color: var(--text-color);
     text-decoration: none;
     text-align: center;
     padding: 10px 18px;
@@ -129,8 +129,8 @@
    ========================================== */
 
 .message-item {
-    background: #ffffff;
-    border: 1px solid #dddddd;
+    background: var(--white-color);
+    border: 1px solid var(--border-light-color);
     border-radius: 10px;
     padding: 10px 12px;
     text-align: left;
@@ -139,7 +139,7 @@
 }
 
 .message-item:hover {
-    background: #f5f5f5;
+    background: var(--background-light-color);
     transform: translateX(2px);
 }
 

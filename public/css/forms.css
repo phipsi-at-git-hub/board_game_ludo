@@ -10,7 +10,7 @@ select,
 textarea {
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-color);
     font-size: 14px;
     width: 100%;
     margin-bottom: 12px;
@@ -21,7 +21,7 @@ input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: #44b044;
+    border-color: var(--tip-color);
     box-shadow: 0 0 4px rgba(68,176,68,0.35);
 }
 
@@ -45,7 +45,7 @@ textarea:focus {
 .form-group input {
     padding: 8px;
     border-radius: 10px;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-color);
     width: 100%;
     box-sizing: border-box;
 }
@@ -75,7 +75,7 @@ textarea:focus {
 .form-row.section-separator {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border-lighter-color);
 }
 
 /* optional */
@@ -102,7 +102,7 @@ textarea:focus {
     inset: 0;
     cursor: pointer;
     border-radius: 999px;
-    background: #f8d7da;
+    background: var(--status-inactive-background);
     transition:
         background-color 0.25s ease;
 }
@@ -122,7 +122,7 @@ textarea:focus {
 }
 
 .switch input:checked + .slider {
-    background: #d1ecf1;
+    background: var(--status-active-background);
 }
 
 .switch input:checked + .slider::before {
@@ -146,15 +146,15 @@ textarea:focus {
 
 /* Badge colors */
 .switch-group.inactive {
-    background: #f8d7da;
+    background: var(--status-inactive-background);
 }
 
 .switch-group.mid {
-    background: #fff3cd;
+    background: var(--status-mid-background);
 }
 
 .switch-group.active {
-    background: #d1ecf1;
+    background: var(--status-active-background);
 }
 
 /* Moving slider */
@@ -183,7 +183,7 @@ textarea:focus {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    color: #721c24;
+    color: var(--status-inactive-text);
     transition:
         color 0.2s ease,
         transform 0.15s ease;
@@ -191,17 +191,17 @@ textarea:focus {
 
 /* inactive */
 .switch-group.inactive .switch-option {
-    color: #721c24;
+    color: var(--status-inactive-text);
 }
 
 /* warning */
 .switch-group.mid .switch-option {
-    color: #856404;
+    color: var(--status-mid-text);
 }
 
 /* active */
 .switch-group.active .switch-option {
-    color: #0c5460;
+    color: var(--status-active-text);
 }
 
 /* selected option */

@@ -16,7 +16,7 @@
 
 .selection-preview {
     flex: 1;
-    border-left: 1px solid #eeeeee;
+    border-left: 1px solid var(--border-lighter-color);
     padding-left: 16px;
 }
 
@@ -61,7 +61,7 @@
 .player-card {
     flex: 1 1 150px;
     padding: 12px;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -89,7 +89,7 @@
 
 .overview-label {
     font-size: 0.9rem;
-    color: #666666;
+    color: var(--text-muted-color);
     margin-bottom: 10px;
     font-weight: bold;
 }
@@ -105,8 +105,8 @@
 .nested-card {
     margin: 12px 0 20px 0;
     padding: 12px;
-    background: #fafafa;
-    border: 1px solid #eeeeee;
+    background: var(--background-soft-color);
+    border: 1px solid var(--border-lighter-color);
     border-radius: 10px;
 }
 
@@ -130,12 +130,13 @@
 }
 
 .role-admin {
-    background-color: #ff9800;
-    color: #000000;
+    background-color: var(--role-admin-background);
+    color: var(--role-admin-text);
 }
 
 .role-user {
-    background-color: #e0e0e0;
+    background-color: var(--role-user-background);
+    color: var(--role-user-text); 
 }
 
 .status-inactive,
@@ -148,8 +149,8 @@
 .status-warning,
 .status-mid, 
 .status-blocked {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--status-mid-background);
+    color: var(--status-mid-text);
 }
 
 .status-running,
@@ -157,16 +158,16 @@
 .status-ok,
 .status-healthy,
 .is-not-private-locked {
-    background: #d1ecf1;
-    color: #0c5460;
+    background: var(--status-active-background);
+    color: var(--status-active-text);
 }
 
 .status-finished,
 .status-banned,
 .status-fail,
 .is-private-locked {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--status-inactive-background);
+    color: var(--status-inactive-text);
 }
 
 /* ==========================================
