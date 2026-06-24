@@ -3,6 +3,7 @@ function initForms() {
     initMessageButtons();
     initAutoSave();
     initSwitchSelects();
+    initBadgeSelects(); 
 }
 
 /* ------------------------------
@@ -178,4 +179,148 @@ function initSwitchSelects() {
 
         select.insertAdjacentElement('afterend', switch_group);
     });
+}
+
+/* ------------------------------
+   BADGE SELECTS (>3 options)
+------------------------------ */
+function initBadgeSelects() {
+
+    document.querySelectorAll('select[data-ui="badge-select"]').forEach(select => {
+
+        const options = [...select.options];
+        if (options.length < 2) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'badge-select';
+
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'badge-select-trigger';
+
+        const label = document.createElement('span');
+        label.className = 'badge-select-label';
+
+        const arrow = document.createElement('span');
+        arrow.className = 'badge-select-arrow';
+        arrow.innerHTML = '▼';
+
+        trigger.append(label, arrow);
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'badge-select-dropdown';
+
+        /* ------------------------------
+           ACTIVE STATE UPDATE
+        ------------------------------ */
+        const setActive = (option) => {
+
+            label.textContent = option.text;
+
+            dropdown.querySelectorAll('.badge-option')
+                .forEach(b => b.classList.remove('active'));
+
+            const active = dropdown.querySelector(
+                `.badge-option[data-value="${CSS.escape(option.value)}"]`
+            );
+
+            if (active) active.classList.add('active');
+
+            wrapper.classList.remove('default', 'inactive', 'mid', 'active', 'warning');
+
+            if (option.dataset.state) {
+                wrapper.classList.add(option.dataset.state);
+            }
+        };
+
+        /* ------------------------------
+           OPTIONS BUILD
+        ------------------------------ */
+        options.forEach(option => {
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'badge-option';
+            btn.textContent = option.text;
+            btn.dataset.value = option.value;
+
+            btn.addEventListener('click', () => {
+
+                select.value = option.value;
+
+                setActive(option);
+
+                wrapper.classList.remove('open');
+
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+
+            dropdown.appendChild(btn);
+
+            if (option.selected) {
+                setActive(option);
+            }
+        });
+
+        /* ------------------------------
+           TOGGLE
+        ------------------------------ */
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            wrapper.classList.toggle('open');
+        });
+
+        /* ------------------------------
+           WIDTH CALCULATION (FIXED)
+           -> MAX OPTION WIDTH ONCE
+        ------------------------------ */
+        const measure = document.createElement('span');
+        measure.style.position = 'absolute';
+        measure.style.visibility = 'hidden';
+        measure.style.whiteSpace = 'nowrap';
+
+        document.body.appendChild(measure);
+
+        let maxWidth = 0;
+
+        options.forEach(option => {
+            measure.textContent = option.text;
+            const w = measure.getBoundingClientRect().width;
+            if (w > maxWidth) maxWidth = w;
+        });
+
+        document.body.removeChild(measure);
+
+        const PADDING = getCssVariables('--badge-select-padding', 60); 
+        const MAX_WIDTH = getCssVariables('--badge-select-max-width', 200);
+
+        const finalWidth = Math.min(maxWidth + PADDING, MAX_WIDTH);
+
+        wrapper.style.width = `${finalWidth}px`;
+
+        /* ------------------------------
+           INSERT
+        ------------------------------ */
+        wrapper.append(trigger, dropdown);
+
+        select.classList.add('badge-select-enhanced');
+
+        select.insertAdjacentElement('afterend', wrapper);
+    });
+
+    /* close on outside click */
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.badge-select.open')
+            .forEach(el => el.classList.remove('open'));
+    });
+}
+
+function getCssVariables(var_name, fallback = 0) {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(var_name).trim();
+    if (!raw) return fallback; 
+
+    // remove px at the end of line and convert to number
+    const value = parseFloat(raw); 
+
+    return isNaN(value) ? fallback : value; 
 }

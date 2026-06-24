@@ -58,6 +58,11 @@
     --ajax-error-background: var(--status-inactive-background); 
     --ajax-error-border: #f1aeb6; 
     --ajax-error-text: #842029; 
+
+    /* Max Element Width */ 
+    --badge-select-max-width: 200px; 
+    --badge-select-min-width: 140px; 
+    --badge-select-padding: 60px;
 }
 
 /* Global Layout and Container */
