@@ -185,9 +185,7 @@ function initSwitchSelects() {
    BADGE SELECTS (>3 options)
 ------------------------------ */
 function initBadgeSelects() {
-
     document.querySelectorAll('select[data-ui="badge-select"]').forEach(select => {
-
         const options = [...select.options];
         if (options.length < 2) return;
 
@@ -214,20 +212,13 @@ function initBadgeSelects() {
            ACTIVE STATE UPDATE
         ------------------------------ */
         const setActive = (option) => {
-
             label.textContent = option.text;
+            dropdown.querySelectorAll('.badge-option').forEach(b => b.classList.remove('active'));
 
-            dropdown.querySelectorAll('.badge-option')
-                .forEach(b => b.classList.remove('active'));
-
-            const active = dropdown.querySelector(
-                `.badge-option[data-value="${CSS.escape(option.value)}"]`
-            );
-
+            const active = dropdown.querySelector(`.badge-option[data-value="${CSS.escape(option.value)}"]`);
             if (active) active.classList.add('active');
 
             wrapper.classList.remove('default', 'inactive', 'mid', 'active', 'warning');
-
             if (option.dataset.state) {
                 wrapper.classList.add(option.dataset.state);
             }
@@ -245,16 +236,11 @@ function initBadgeSelects() {
             btn.dataset.value = option.value;
 
             btn.addEventListener('click', () => {
-
                 select.value = option.value;
-
                 setActive(option);
-
                 wrapper.classList.remove('open');
-
                 select.dispatchEvent(new Event('change', { bubbles: true }));
             });
-
             dropdown.appendChild(btn);
 
             if (option.selected) {
@@ -280,9 +266,7 @@ function initBadgeSelects() {
         measure.style.whiteSpace = 'nowrap';
 
         document.body.appendChild(measure);
-
         let maxWidth = 0;
-
         options.forEach(option => {
             measure.textContent = option.text;
             const w = measure.getBoundingClientRect().width;
@@ -293,9 +277,7 @@ function initBadgeSelects() {
 
         const PADDING = getCssVariables('--badge-select-padding', 60); 
         const MAX_WIDTH = getCssVariables('--badge-select-max-width', 200);
-
         const finalWidth = Math.min(maxWidth + PADDING, MAX_WIDTH);
-
         wrapper.style.width = `${finalWidth}px`;
 
         /* ------------------------------
