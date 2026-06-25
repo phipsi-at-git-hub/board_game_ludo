@@ -9,6 +9,8 @@ return [
     'application.general.no' => 'No', 
     'application.general.online' => 'online', 
     'application.general.offline' => 'offline', 
+    'application.general.active' => 'active', 
+    'application.general.inactive' => 'inactive', 
     'application.general.on' => 'on', 
     'application.general.off' => 'off', 
     'application.general.partial' => 'partial', 
@@ -17,6 +19,10 @@ return [
     'application.general.critical' => 'critical', 
     'application.general.okay' => 'ok', 
     'application.general.not_okay' => 'not ok', 
+    'application.general.user' => 'User', 
+    'application.general.moderator' => 'Moderator', 
+    'application.general.game_master' => 'Game Master', 
+    'application.general.admin' => 'Administrator', 
     'application.general.btn.back_to_login' => '← Back to login', 
     'application.general.btn.back_to_lobby' => '← Back to Lobby', 
     'application.general.btn.back_to_list' => '← Back to List', 
@@ -286,10 +292,20 @@ return [
     'admin.users.list.header.options' => 'Options', 
     'admin.users.list.header.no_users' => 'No Users found.', 
 
-    // Admin - Users List
+    // Admin - User Edit
     'admin.users.edit.title' => '👤 Admin - Edit User', 
-    'admin.users.edit.username' => 'Username', 
-    'admin.users.edit.email' => 'Email', 
+    'admin.users.edit.card.account.title' => 'Account', 
+    'admin.users.edit.card.account.username' => 'Username', 
+    'admin.users.edit.card.account.email' => 'Email', 
+    'admin.users.edit.card.permissions.title' => 'Permissions',  
+    'admin.users.edit.card.permissions.role' => 'User Role',  
+    'admin.users.edit.card.permissions.status' => 'User Status', 
+    'admin.users.edit.card.password.title' => 'Password', 
+    'admin.users.edit.card.password.new' => 'New Password', 
+    'admin.users.edit.card.password.confirm' => 'Confirm Password', 
+    'admin.users.edit.card.password.hint' => 'Password Hint', 
+    'admin.users.edit.card.security.title' => 'Security', 
+    'admin.users.edit.card.security.reset_password_description' => 'Password Description', 
 
     // System Settings / Status
     'admin.system.settings.overview.title' => '⚙️ Admin System Settings', 

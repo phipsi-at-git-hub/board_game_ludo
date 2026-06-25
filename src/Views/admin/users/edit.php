@@ -46,11 +46,11 @@ use App\Core\Localization;
 
             <!-- Account -->
             <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.account') ?></h2>
+                <h2><?= Localization::get('admin.users.edit.card.account.title') ?></h2>
 
                 <div class="form-group">
                     <label for="username">
-                        <?= Localization::get('admin.users.edit.username') ?>
+                        <?= Localization::get('admin.users.edit.card.account.username') ?>
                     </label>
 
                     <input
@@ -63,7 +63,7 @@ use App\Core\Localization;
 
                 <div class="form-group">
                     <label for="email">
-                        <?= Localization::get('admin.users.edit.email') ?>
+                        <?= Localization::get('admin.users.edit.card.account.email') ?>
                     </label>
 
                     <input
@@ -77,11 +77,11 @@ use App\Core\Localization;
 
             <!-- Permissions -->
             <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.permissions') ?></h2>
+                <h2><?= Localization::get('admin.users.edit.card.permissions.title') ?></h2>
 
                 <div class="form-row">
                     <label for="role">
-                        <?= Localization::get('admin.users.edit.role') ?>
+                        <?= Localization::get('admin.users.edit.card.permissions.role') ?>
                     </label>
 
                     <select id="role" name="role" data-ui="badge-select">
@@ -89,32 +89,32 @@ use App\Core\Localization;
                         <option
                             value="USER"
                             <?= $user->getRole() === Application::USER ? 'selected' : '' ?>>
-                            USER
+                            <?= Localization::get('application.general.' . strtolower(Application::USER)) ?>
                         </option>
 
                         <option
                             value="MODERATOR"
                             <?= $user->getRole() === Application::MODERATOR ? 'selected' : '' ?>>
-                            MODERATOR
+                            <?= Localization::get('application.general.' . strtolower(Application::MODERATOR)) ?>
                         </option>
 
                         <option
                             value="GAME_MASTER"
                             <?= $user->getRole() === Application::GAME_MASTER ? 'selected' : '' ?>>
-                            GAME MASTER
+                            <?= Localization::get('application.general.' . strtolower(Application::GAME_MASTER)) ?>
                         </option>
 
                         <option
                             value="ADMIN"
                             <?= $user->getRole() === Application::ADMIN ? 'selected' : '' ?>>
-                            ADMIN
+                            <?= Localization::get('application.general.' . strtolower(Application::ADMIN)) ?>
                         </option>
 
                     </select>
                 </div>
 
                 <div class="form-row">
-                    <?= Localization::get('admin.users.edit.status') ?>
+                    <?= Localization::get('admin.users.edit.card.permissions.status') ?>
 
                     <select
                         name="status"
@@ -122,17 +122,17 @@ use App\Core\Localization;
                         class="enhanced">
 
                         <option
-                            value="ACTIVE"
-                            data-state="active"
-                            <?= $user->getStatus() === 'ACTIVE' ? 'selected' : '' ?>>
-                            <?= Localization::get('application.general.active') ?>
-                        </option>
-
-                        <option
                             value="INACTIVE"
                             data-state="inactive"
                             <?= $user->getStatus() === 'INACTIVE' ? 'selected' : '' ?>>
-                            <?= Localization::get('application.general.inactive') ?>
+                            <?= Localization::get('application.general.' . strtolower(Application::INACTIVE)) ?>
+                        </option>
+
+                        <option
+                            value="ACTIVE"
+                            data-state="active"
+                            <?= $user->getStatus() === 'ACTIVE' ? 'selected' : '' ?>>
+                            <?= Localization::get('application.general.' . strtolower(Application::ACTIVE)) ?>
                         </option>
 
                     </select>
@@ -141,11 +141,11 @@ use App\Core\Localization;
 
             <!-- Password -->
             <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.password') ?></h2>
+                <h2><?= Localization::get('admin.users.edit.card.password.title') ?></h2>
 
                 <div class="form-group">
                     <label for="password">
-                        <?= Localization::get('admin.users.edit.new_password') ?>
+                        <?= Localization::get('admin.users.edit.card.password.new') ?>
                     </label>
 
                     <input
@@ -157,7 +157,7 @@ use App\Core\Localization;
 
                 <div class="form-group">
                     <label for="password_confirm">
-                        <?= Localization::get('admin.users.edit.password_confirm') ?>
+                        <?= Localization::get('admin.users.edit.card.password.confirm') ?>
                     </label>
 
                     <input
@@ -168,16 +168,16 @@ use App\Core\Localization;
                 </div>
 
                 <small>
-                    <?= Localization::get('admin.users.edit.password_hint') ?>
+                    <?= Localization::get('admin.users.edit.card.password.hint') ?>
                 </small>
             </div>
 
             <!-- Security -->
             <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.security') ?></h2>
+                <h2><?= Localization::get('admin.users.edit.card.security.title') ?></h2>
 
                 <p>
-                    <?= Localization::get('admin.users.edit.reset_password_description') ?>
+                    <?= Localization::get('admin.users.edit.card.security.reset_password_description') ?>
                 </p>
 
                 <div class="nav-actions">
@@ -185,7 +185,7 @@ use App\Core\Localization;
                         href="/admin/users/send-reset/<?= $user->getId() ?>"
                         class="btn btn-warning">
 
-                        <?= Localization::get('admin.users.edit.send_reset_mail') ?>
+                        <?= Localization::get('admin.users.edit.card.security.send_reset_mail') ?>
 
                     </a>
                 </div>
