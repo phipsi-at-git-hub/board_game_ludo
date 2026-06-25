@@ -14,6 +14,7 @@ use App\Core\Asset;
     <head>
         <meta charset="UTF-8">
         <title><?= $page_title ?></title>
+        <link rel="stylesheet" href="<?= Asset::asset('css/variables.css') ?>">
         <link rel="stylesheet" href="<?= Asset::asset('css/general.css') ?>">
         <link rel="stylesheet" href="<?= Asset::asset('css/components.css') ?>">
         <link rel="stylesheet" href="<?= Asset::asset('css/forms.css') ?>">
