@@ -6,6 +6,7 @@ use App\Core\Localization;
 
 /**
  * @var \App\Models\GameRuleSetModel $rule_set
+ * @var array $rule_set_presets 
  */
 ?>
 
@@ -23,7 +24,10 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <form method="POST" action="/game/store">
+    <form 
+        method="POST" 
+        action="/game/store"
+        data-ruleset-presets="<?= htmlspecialchars(json_encode($rule_set_presets), ENT_QUOTES, 'UTF-8') ?>">
 
         <input
             type="hidden"
@@ -55,8 +59,8 @@ use App\Core\Localization;
                             <?= Localization::get('game.ruleset.classic') ?>
                         </option>
 
-                        <option value="competitive" data-state="mid">
-                            <?= Localization::get('game.ruleset.competitive') ?>
+                        <option value="advanced" data-state="mid">
+                            <?= Localization::get('game.ruleset.advanced') ?>
                         </option>
 
                         <option value="custom" data-state="default">

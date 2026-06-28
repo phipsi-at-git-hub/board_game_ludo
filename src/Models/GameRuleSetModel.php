@@ -53,7 +53,28 @@ final class GameRuleSetModel extends BaseModel {
         return $rule_set;
     }
 
-    //Find game by game id
+    // Preset Ruleset - Classic
+    public static function createClassic(): self {
+        return (new self)->initializeDefaultRuleSet(); 
+    }
+
+    // Preset Ruleset - Advanced
+    public static function createAdvanced(): self {
+        $rule_set = (new self)->initializeDefaultRuleSet(); 
+
+        $rule_set->all_figures_start_at_home = true; 
+        $rule_set->leave_home_attempts_max = 1;
+        $rule_set->extra_roll_on_six_limit = 3;
+        $rule_set->force_leaving_home_on_six = true; 
+        $rule_set->force_capture_enemy_figures = true; 
+        $rule_set->force_extra_lap_on_overflow = true;
+        $rule_set->allow_stack_own_figures = true;
+        $rule_set->strict_goal_order = true; 
+
+        return $rule_set; 
+    }
+
+    // Find game by game id
     public static function findByGameId(string $game_id): ?array {
         return static::fetchOne(
             "SELECT * FROM game_rule_set WHERE game_id = :gid LIMIT 1",
@@ -207,6 +228,8 @@ final class GameRuleSetModel extends BaseModel {
 
     // Helper - Create Array from GameRuleSetModel
     private function toArray(): array {
+        $game_state_array = []; 
+
         $game_state_array[Application::ALLOW_BOTS] = $this->allow_bots;
         $game_state_array[Application::ALL_FIGURES_START_AT_HOME] = $this->all_figures_start_at_home;
         $game_state_array[Application::LEAVE_HOME_ATTEMPT] = $this->leave_home_attempt;
@@ -231,6 +254,18 @@ final class GameRuleSetModel extends BaseModel {
     public function getAllRules(): array {
         // ToDo: implement for easier access 
         return [];
+    }
+
+    // Helper - Get ruleset presets as array
+    public static function getPresetsAsArray(): array {
+        return [
+            Application::GAME_RULESET_CLASSIC => [
+                Application::DTO_RULESET => self::createClassic()->toArray(), 
+            ], 
+            Application::GAME_RULESET_ADVANCED => [
+                Application::DTO_RULESET => self::createAdvanced()->toArray(), 
+            ], 
+        ]; 
     }
 
     /**

@@ -28,7 +28,10 @@ class GameController extends BaseController {
 
         $this->render(
             'game/create', 
-            ['rule_set' => $rule_set]
+            [
+                'rule_set' => $rule_set, 
+                'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
+            ]
         );
     }
 

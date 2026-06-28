@@ -118,6 +118,10 @@ class Application {
     public const STATUS_FINISHED = 'FINISHED';
     public const STATUS_CANCELLED = 'CANCELLED';
 
+    public const GAME_RULESET_CLASSIC = 'classic'; 
+    public const GAME_RULESET_ADVANCED = 'advanced'; 
+    public const GAME_RULESET_CUSTOM = 'custom'; 
+
     // Game general
     public const PLAYER_COUNT = 'player_count';
     public const AVAILABLE_MOVES = 'available_moves'; 
@@ -154,6 +158,7 @@ class Application {
     public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow'; 
     public const DTO_IS_PASS = 'is_pass'; 
     public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll'; 
+    public const DTO_RULESET = 'ruleset'; 
 
     // Figure Areas
     public const AREA_HOME  = 'home';

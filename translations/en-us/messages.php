@@ -161,7 +161,7 @@ return [
     'game.create.card.game.name' => '🎮 Game Name', 
     'game.create.card.game.ruleset' => '⚙️ Ruleset', 
     'game.ruleset.classic' => 'Classic', 
-    'game.ruleset.competitive' => 'Competitive', 
+    'game.ruleset.advanced' => 'Competitive', 
     'game.ruleset.custom' => 'Custom', 
     'game.create.card.rules.title' => 'Game Rules', 
     'game.create.card.rules.group.starting.title' => 'Starting', 
