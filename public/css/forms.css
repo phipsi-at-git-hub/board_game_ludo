@@ -2,6 +2,25 @@
    FORMS UI SYSTEM
    Badge-based Inputs + Switches + Slider Selects
 */
+/*
+    UI PRINCIPLES
+
+    1. Interactive areas are stable.
+    Layout never changes on hover.
+
+    2. Hover darkens, never brightens.
+
+    3. Motion belongs to state indicators,
+    not to containers.
+
+    4. Only one element should animate per interaction.
+
+    5. Hover indicates interactivity.
+    Active indicates state.
+
+    6. Animations should support the user,
+    never compete for attention.
+*/
 /* ------------------------------
    GLOBAL FORM ELEMENTS
 ------------------------------ */
