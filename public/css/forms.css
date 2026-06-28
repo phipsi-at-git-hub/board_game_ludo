@@ -172,8 +172,24 @@ textarea:focus {
     border-radius: 999px;
     box-shadow:0 2px 4px rgba(0,0,0,0.25);
     transition:
-        transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        transform 0.28s cubic-bezier(0.4, 0, 0.2, 1); 
     z-index: 0;
+}
+
+.switch-indicator-inner {
+    width: 100%; 
+    height: 100%; 
+    background: var(--default-color); 
+    border-radius: 999px; 
+    box-shadow: 0 2px 4px rgb(0, 0, 0, 0.25); 
+    transition: 
+        scale 0.15s ease, 
+        box-shadow 0.15s ease; 
+}
+
+.switch-group:has(.switch-option:not(.active):hover) .switch-indicator-inner {
+    scale: 1.03; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.30); 
 }
 
 /* Option buttons */
@@ -265,7 +281,7 @@ textarea:focus {
     padding: 8px 14px;
     border: none;
     border-radius: 999px;
-    background: var(--default-color-dark);
+    background: var(--default-color);
     color: var(--text-color);
     cursor: pointer;
     white-space: nowrap;
@@ -274,6 +290,13 @@ textarea:focus {
         background .2s ease,
         transform .15s ease;
 }
+
+
+.badge-select-trigger:hover, 
+.badge-select-trigger.active {
+    background: var(--default-color-dark);
+    /* transform: scale(1.05); */
+} 
 
 /* Label */
 .badge-select-label {

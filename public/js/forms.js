@@ -127,9 +127,14 @@ function initSwitchSelects() {
         // set CSS variable for slider width
         switch_group.style.setProperty('--option-count', options.length);
 
-
+        // add switch indicator
         const indicator = document.createElement('div');
         indicator.className = 'switch-indicator';
+        
+        const indicator_inner = document.createElement('div'); 
+        indicator_inner.className = 'switch-indicator-inner'; 
+
+        indicator.appendChild(indicator_inner); 
 
         switch_group.appendChild(indicator);
 
@@ -239,6 +244,7 @@ function initBadgeSelects() {
                 select.value = option.value;
                 setActive(option);
                 wrapper.classList.remove('open');
+                trigger.classList.remove('active'); 
                 select.dispatchEvent(new Event('change', { bubbles: true }));
             });
             dropdown.appendChild(btn);
@@ -254,6 +260,7 @@ function initBadgeSelects() {
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
             wrapper.classList.toggle('open');
+            trigger.classList.toggle('active'); 
         });
 
         /* ------------------------------
@@ -294,6 +301,8 @@ function initBadgeSelects() {
     document.addEventListener('click', () => {
         document.querySelectorAll('.badge-select.open')
             .forEach(el => el.classList.remove('open'));
+        document.querySelectorAll('.badge-select-trigger.active')
+            .forEach(el => el.classList.remove('active'));
     });
 }
 
