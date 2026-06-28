@@ -103,12 +103,12 @@ textarea:focus {
     cursor: pointer;
     border-radius: 999px;
     background: var(--status-inactive-background);
-    transition:
-        background-color 0.25s ease;
+    transition: 
+        background-color 0.25s ease, 
+        filter 0.25s ease;
 }
 
-.slider::before {
-    content: "";
+.slider-indicator {
     position: absolute;
     width: 24px;
     height: 24px;
@@ -118,15 +118,26 @@ textarea:focus {
     background: var(--default-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.25);
     transition:
-        transform 0.25s ease;
+        transform 0.25s ease, 
+        scale 0.15s ease, 
+        box-shadow 0.15s ease; 
+}
+
+.switch:hover .slider-indicator {
+    scale: 1.03; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.30); 
+}
+
+.switch:hover .slider {
+    filter: brightness(0.95); 
 }
 
 .switch input:checked + .slider {
     background: var(--status-active-background);
 }
 
-.switch input:checked + .slider::before {
-    transform: translateX(32px);
+.switch input:checked + .slider .slider-indicator {
+    transform: translateX(32px); 
 }
 
 /* ------------------------------
@@ -141,7 +152,8 @@ textarea:focus {
     border-radius: 999px;
     overflow: hidden;
     transition:
-        background-color 0.25s ease;
+        background-color 0.25s ease, 
+        filter 0.25s ease;
 }
 
 /* Badge colors */
@@ -184,7 +196,12 @@ textarea:focus {
     box-shadow: 0 2px 4px rgb(0, 0, 0, 0.25); 
     transition: 
         scale 0.15s ease, 
-        box-shadow 0.15s ease; 
+        box-shadow 0.15s ease, 
+        filter 0.5s ease; 
+}
+
+.switch-group:has(.switch-option:not(.active):hover) {
+    filter: brightness(0.95); 
 }
 
 .switch-group:has(.switch-option:not(.active):hover) .switch-indicator-inner {

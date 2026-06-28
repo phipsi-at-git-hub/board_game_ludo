@@ -106,7 +106,9 @@ use App\Models\SystemSettingsModel;
                             value="1" 
                             <?= $system_settings->getRegistrationEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
-                        <span class="slider"></span>
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
                     </label>
                 </div>
 
@@ -120,7 +122,9 @@ use App\Models\SystemSettingsModel;
                             value="1" 
                             <?= $system_settings->getLoginEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
-                        <span class="slider"></span>
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
                     </label>
                 </div>
             </div>
@@ -139,7 +143,9 @@ use App\Models\SystemSettingsModel;
                             value="1"
                             <?= $system_settings->getGameCreationEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
-                        <span class="slider"></span>
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
                     </label>
                 </div>
 
@@ -153,7 +159,9 @@ use App\Models\SystemSettingsModel;
                             value="1" 
                             <?= $system_settings->getGamePlayEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
-                        <span class="slider"></span>
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
                     </label>
                 </div>
             </div>
@@ -172,7 +180,9 @@ use App\Models\SystemSettingsModel;
                             value="1" 
                             <?= $system_settings->getSystemEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
-                        <span class="slider"></span>
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
                     </label>
                 </div>
 
@@ -189,7 +199,9 @@ use App\Models\SystemSettingsModel;
                                 <?= $system_settings->getMaintenanceModeEnabled() ? 'checked' : '' ?>
                                 data-auto-save="change" 
                                 data-toggle-switch>
-                            <span class="slider"></span>
+                            <span class="slider">
+                                <span class="slider-indicator"></span>
+                            </span>
                         </label>
                     </div>
 
@@ -248,7 +260,9 @@ use App\Models\SystemSettingsModel;
                                 <?= $system_settings->getSystemNoticeEnabled() ? 'checked' : '' ?>
                                 data-auto-save="change" 
                                 data-toggle-switch>
-                            <span class="slider"></span>
+                            <span class="slider">
+                                <span class="slider-indicator"></span>
+                            </span>
                         </label>
                     </div>
 
