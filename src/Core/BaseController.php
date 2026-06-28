@@ -6,7 +6,7 @@ use App\Core\Auth;
 
 abstract class BaseController {
     // Renderer
-    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = []): void {
+    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void {
         if (!$view) {
             return;
         }

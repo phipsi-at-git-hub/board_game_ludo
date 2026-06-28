@@ -24,10 +24,7 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <form 
-        method="POST" 
-        action="/game/store"
-        data-ruleset-presets="<?= htmlspecialchars(json_encode($rule_set_presets), ENT_QUOTES, 'UTF-8') ?>">
+    <form method="POST" action="/game/store" form-game-rules>
 
         <input
             type="hidden"
@@ -54,7 +51,7 @@ use App\Core\Localization;
                 <div class="form-row">
                     <span><?= Localization::get('game.create.card.game.ruleset') ?></span>
 
-                    <select name="<?= Application::LEAVE_HOME_ATTEMPTS_MAX ?>" data-ui="switch">
+                    <select name="<?= Application::DTO_RULESET ?>" data-ui="switch">
                         <option value="classic" data-state="active" selected>
                             <?= Localization::get('game.ruleset.classic') ?>
                         </option>
@@ -282,3 +279,7 @@ use App\Core\Localization;
     </form>
 
 </div>
+
+<script type="application/json" id="ruleset-presets">
+    <?= json_encode($rule_set_presets, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+</script>

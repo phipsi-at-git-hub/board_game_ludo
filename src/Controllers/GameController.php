@@ -31,7 +31,10 @@ class GameController extends BaseController {
             [
                 'rule_set' => $rule_set, 
                 'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
-            ]
+            ], 
+            '', 
+            [], 
+            ['forms/game_ruleset'], 
         );
     }
 

@@ -31,7 +31,6 @@ function initToggleGroups() {
 ------------------------------ */
 function submitForm(form) {
     const form_data = new FormData(form);
-
     const target_selector = form.dataset.ajaxTarget;
     const target = target_selector ? document.querySelector(target_selector) : null;
 
@@ -115,7 +114,6 @@ function initAutoSave() {
    SWITCH SELECTS (≤3 options only)
 ------------------------------ */
 function initSwitchSelects() {
-
     document.querySelectorAll('select[data-ui="switch"]').forEach(select => {
         const options = [...select.options];
 
@@ -147,8 +145,25 @@ function initSwitchSelects() {
             indicator.style.transform = `translateX(${index * 100}%)`;
         };
 
-        options.forEach((option, index) => {
+        const syncFromSelect = () => {
+            const current_index = options.findIndex(
+                option => option.value === select.value
+            ); 
+            if (current_index < 0) {
+                return; 
+            }
 
+            switch_group.querySelectorAll('.switch-option').forEach(btn => btn.classList.remove('active')); 
+            const active_button = switch_group.querySelectorAll('.switch-option')[current_index]; 
+            if (active_button) {
+                active_button.classList.add('active'); 
+            }
+
+            moveIndicator(current_index); 
+            updateStateClass(options[current_index].dataset.state); 
+        }; 
+
+        options.forEach((option, index) => {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'switch-option';
@@ -157,31 +172,24 @@ function initSwitchSelects() {
             if (option.selected) {
                 btn.classList.add('active');
                 moveIndicator(index);
-
                 updateStateClass(option.dataset.state);
             }
 
             btn.addEventListener('click', () => {
-
                 select.value = option.value;
-
-                switch_group.querySelectorAll('.switch-option')
-                    .forEach(b => b.classList.remove('active'));
-
+                switch_group.querySelectorAll('.switch-option').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 moveIndicator(index);
-
                 updateStateClass(option.dataset.state);
-
                 select.dispatchEvent(new Event('change', { bubbles: true }));
             });
 
             switch_group.appendChild(btn);
         });
 
+        select.addEventListener('change', syncFromSelect); 
         select.classList.add('switch-enhanced');
-
         select.insertAdjacentElement('afterend', switch_group);
     });
 }
@@ -233,7 +241,6 @@ function initBadgeSelects() {
            OPTIONS BUILD
         ------------------------------ */
         options.forEach(option => {
-
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'badge-option';
@@ -312,6 +319,5 @@ function getCssVariables(var_name, fallback = 0) {
 
     // remove px at the end of line and convert to number
     const value = parseFloat(raw); 
-
     return isNaN(value) ? fallback : value; 
 }

@@ -4,6 +4,7 @@ use App\Core\Asset;
 /** 
  * @var String $page_title
  * @var array $css_array
+ * @var array $js_array 
  * @var String $content 
  * @var String $content_css_class 
  */
@@ -35,6 +36,9 @@ use App\Core\Asset;
 
         <script src="<?= Asset::asset('js/forms.js') ?>"></script>
         <script src="<?= Asset::asset('js/main.js') ?>"></script>
+        <?php foreach ($js_array as $js): ?>
+                <script src="<?= Asset::asset("js/$js.js") ?>"></script>
+        <?php endforeach; ?>
 
     </body>
 </html>

@@ -2,6 +2,11 @@
 use App\Core\Asset;
 use App\Core\Csrf;
 use App\Core\Localization;
+
+/**
+ * @var \App\Models\GameModel $game
+ * @var \App\Models\UserModel $user 
+ */
 ?>
 
 <!-- 🎮 THREE.js Canvas -->
