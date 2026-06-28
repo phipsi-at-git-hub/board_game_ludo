@@ -4,6 +4,9 @@ function initForms() {
     initAutoSave();
     initSwitchSelects();
     initBadgeSelects(); 
+
+    // Init only if available
+    initGameRulesetIfAvailable(); 
 }
 
 /* ------------------------------
@@ -320,4 +323,11 @@ function getCssVariables(var_name, fallback = 0) {
     // remove px at the end of line and convert to number
     const value = parseFloat(raw); 
     return isNaN(value) ? fallback : value; 
+}
+
+function initGameRulesetIfAvailable() {
+    if (typeof initGameRuleset !== 'function') {
+        return; 
+    }
+    initGameRuleset(); 
 }

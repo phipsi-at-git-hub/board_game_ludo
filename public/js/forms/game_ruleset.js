@@ -155,5 +155,3 @@ function initGameRuleset() {
     });
     updateRulesetSelection();
 }
-
-initGameRuleset();
