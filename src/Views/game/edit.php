@@ -83,18 +83,10 @@ use App\Core\Localization;
                 <div class="form-row">
                     <span><?= Localization::get('game.rules.all_figures_start_at_home') ?></span>
 
-                    <?php if ($game->editAllowedRuleAllFiguresStartAtHome()): ?>
-                    <select name="<?= Application::ALL_FIGURES_START_AT_HOME ?>" data-ui="switch">
+                    <select name="<?= Application::ALL_FIGURES_START_AT_HOME ?>" data-ui="switch" <?= (!$game->editAllowedRuleAllFiguresStartAtHome()) ? 'disabled' : '' ?> >
                         <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
                         <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
                     </select>
-                    <?php else: ?>
-                    <select name="<?= Application::ALL_FIGURES_START_AT_HOME ?>" data-ui="switch" disabled>
-                        <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
-                        <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
-                    </select>
-                    <input type="hidden" name="<?= Application::ALL_FIGURES_START_AT_HOME; ?>" value="<?= ($game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 1 : 0 ?>">
-                    <?php endif; ?>
                 </div>
 
                 <div class="form-row">

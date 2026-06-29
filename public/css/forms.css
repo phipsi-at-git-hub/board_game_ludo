@@ -192,6 +192,10 @@ textarea:focus {
     background: var(--status-active-background);
 }
 
+.switch-group.disabled {
+    filter: brightness(1.05); 
+}
+
 /* Moving slider */
 .switch-indicator {
     position: absolute;
@@ -219,11 +223,11 @@ textarea:focus {
         filter 0.5s ease; 
 }
 
-.switch-group:has(.switch-option:not(.active):hover) {
+.switch-group:not(.disabled):has(.switch-option:not(.active):hover) {
     filter: brightness(0.95); 
 }
 
-.switch-group:has(.switch-option:not(.active):hover) .switch-indicator-inner {
+.switch-group:not(.disabled):has(.switch-option:not(.active):hover) .switch-indicator-inner {
     scale: 1.03; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.30); 
 }
@@ -244,6 +248,11 @@ textarea:focus {
     transition:
         color 0.2s ease,
         transform 0.15s ease;
+}
+
+/* disabled */
+.switch-group.disabled .switch-option {
+    cursor: default; 
 }
 
 /* default */
