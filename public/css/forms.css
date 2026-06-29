@@ -252,7 +252,7 @@ textarea:focus {
 
 /* disabled */
 .switch-group.disabled .switch-option {
-    cursor: default; 
+    pointer-events: none; 
 }
 
 /* default */

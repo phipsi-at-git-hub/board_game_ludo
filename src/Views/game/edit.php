@@ -13,7 +13,7 @@ use App\Core\Localization;
 
 <div class="panel">
 
-    <h1><?= Localization::get('game.create.title') ?></h1>
+    <h1><?= Localization::get('game.edit.title') ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
@@ -22,7 +22,7 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <form method="POST" action="/game/store" form-game-rules>
+    <form method="POST" action="/game/update" form-game-rules>
 
         <input
             type="hidden"
@@ -228,7 +228,7 @@ use App\Core\Localization;
             <button
                 type="submit"
                 class="btn btn-save">
-                <?= Localization::get('game.create.button_create') ?>
+                <?= Localization::get('game.edit.button_update') ?>
             </button>
         </div>
 
