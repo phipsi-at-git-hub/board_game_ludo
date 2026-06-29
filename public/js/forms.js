@@ -148,6 +148,11 @@ function initSwitchSelects() {
             indicator.style.transform = `translateX(${index * 100}%)`;
         };
 
+        // Check if Select is disabled
+        if (select.disabled) {
+            switch_group.classList.add('disabled');
+        }
+
         const syncFromSelect = () => {
             const current_index = options.findIndex(
                 option => option.value === select.value
@@ -179,6 +184,9 @@ function initSwitchSelects() {
             }
 
             btn.addEventListener('click', () => {
+                if (select.disabled) {
+                    return; 
+                }
                 select.value = option.value;
                 switch_group.querySelectorAll('.switch-option').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');

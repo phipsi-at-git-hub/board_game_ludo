@@ -88,8 +88,12 @@ class GameController extends BaseController {
                 'game/edit', 
                 [
                     'game' => $game, 
-                    'user' => $user
-                ]
+                    'user' => $user, 
+                    'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
+                ], 
+                '', 
+                [], 
+                ['forms/game_ruleset'], 
             );
             exit;
         }
