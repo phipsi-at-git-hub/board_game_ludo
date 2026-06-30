@@ -8,6 +8,7 @@ use App\Core\Localization;
  * @var \App\Models\GameModel $game
  * @var \App\Models\UserModel $user
  * @var array $rule_set_presets 
+ * @var array $rule_set_original 
  */
 ?>
 
@@ -243,4 +244,7 @@ use App\Core\Localization;
 
 <script type="application/json" id="ruleset-presets">
     <?= json_encode($rule_set_presets, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+</script>
+<script type="application/json" id="ruleset-original">
+    <?= json_encode($rule_set_original, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
 </script>

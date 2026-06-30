@@ -120,6 +120,7 @@ class Application {
 
     public const GAME_RULESET_CLASSIC = 'classic'; 
     public const GAME_RULESET_ADVANCED = 'advanced'; 
+    public const GAME_RULESET_ORIGINAL = 'original'; 
     public const GAME_RULESET_CUSTOM = 'custom'; 
 
     // Game general

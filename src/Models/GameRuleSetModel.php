@@ -251,9 +251,12 @@ final class GameRuleSetModel extends BaseModel {
     }
 
     // Helper - Get all Rules
-    public function getAllRules(): array {
-        // ToDo: implement for easier access 
-        return [];
+    public function getAllRulesAsArray(): array {
+        return [
+            Application::GAME_RULESET_ORIGINAL => [
+                Application::DTO_RULESET => $this->toArray(), 
+            ]
+        ];
     }
 
     // Helper - Get ruleset presets as array

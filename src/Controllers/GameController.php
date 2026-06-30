@@ -90,6 +90,7 @@ class GameController extends BaseController {
                     'game' => $game, 
                     'user' => $user, 
                     'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
+                    'rule_set_original' => $game->getRuleSetModel()->getAllRulesAsArray(), 
                 ], 
                 '', 
                 [], 
