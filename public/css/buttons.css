@@ -2,10 +2,9 @@
    Buttons
 */
 
-/* ==========================================
-   Button Container
-   ========================================== */
-
+/* ------------------------------
+   BUTTON CONTAINER
+------------------------------ */
 .btn-actions {
     display: flex;
     flex-direction: row;
@@ -23,10 +22,9 @@
     font-size: 0.9em;
 }
 
-/* ==========================================
-   Base Button
-   ========================================== */
-
+/* ------------------------------
+   BASE BUTTON
+------------------------------ */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -48,10 +46,9 @@
     box-shadow: 0 2px 0 rgba(0,0,0,0.2);
 }
 
-/* ==========================================
-   Button Variants
-   ========================================== */
-
+/* ------------------------------
+   BUTTON VARIANTS
+------------------------------ */
 .btn-primary {
     background-color: var(--primary-color);
     color: #000000;
@@ -103,10 +100,9 @@
     transform: scale(1.05);
 }
 
-/* ==========================================
-   Specialized Buttons
-   ========================================== */
-
+/* ------------------------------
+   SPECIALIZED BUTTONS
+------------------------------ */
 .panel .nav-actions .nav-list li a.btn-back {
     background-color: var(--default-color);
     color: var(--text-color);
@@ -124,10 +120,9 @@
     transform: scale(1.05);
 }
 
-/* ==========================================
-   Message Selection Buttons
-   ========================================== */
-
+/* ------------------------------
+   MESSAGE SELECTION BUTTONS
+------------------------------ */
 .message-item {
     background: var(--white-color);
     border: 1px solid var(--border-light-color);
@@ -146,4 +141,52 @@
 .message-item.active {
     border-color: var(--secondary-color);
     font-weight: bold;
+}
+
+/* ------------------------------
+   BADGE BUTTON
+------------------------------ */
+.btn-badge-group {
+    display: inline-flex; 
+    align-items: center; 
+    padding: 4px; 
+    border-radius: 999px; 
+    transition: 
+        filter 0.25s ease; 
+}
+
+.btn-badge-group:not(.disabled):has(btn-badge:hover) {
+    filter: brightness(0.95); 
+}
+
+.btn-badge-group.default {
+    background: var(--default-color-dark); 
+}
+
+.btn-badge {
+    display: inline-flex; 
+    align-items: center; 
+    padding: 8px 14px; 
+    border: none; 
+    border-radius: 999px; 
+    background: var(--default-color); 
+    color: var(--text-color); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: 
+        box-shadow 0.15s ease, 
+        filter 0.2s ease, 
+        transform 0.15s ease; 
+}
+
+.btn-badge:hover {
+    filter: brightness(0.95); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);  
+    transform: scale(1.01); 
+}
+
+.btn-badge:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  
+    transform: scale(0.98); 
 }
