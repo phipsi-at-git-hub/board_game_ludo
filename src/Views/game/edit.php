@@ -76,8 +76,8 @@ use App\Core\Localization;
             <div class="card-header">
                 <h2><?= Localization::get('game.create.card.rules.title') ?></h2>
 
-                <div class="btn-badge-group default">
-                    <button type="button" class="btn-badge">Restore Rules</button>
+                <div id="restore-ruleset-group" class="btn-badge-group default invisible">
+                    <button id="restore-ruleset" type="button" class="btn-badge">Restore Rules</button>
                 </div>
             </div>
 

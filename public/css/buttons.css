@@ -147,12 +147,14 @@
    BADGE BUTTON
 ------------------------------ */
 .btn-badge-group {
+    opacity: 1;
     display: inline-flex; 
     align-items: center; 
     padding: 4px; 
     border-radius: 999px; 
     transition: 
-        filter 0.25s ease; 
+        filter 0.25s ease, 
+        opacity 0.25s ease; 
 }
 
 .btn-badge-group:not(.disabled):has(btn-badge:hover) {
@@ -161,6 +163,14 @@
 
 .btn-badge-group.default {
     background: var(--default-color-dark); 
+}
+
+.btn-badge-group.invisible {
+    opacity: 0;
+}
+
+.btn-badge-group.invisible .btn-badge {
+    pointer-events: none; 
 }
 
 .btn-badge {

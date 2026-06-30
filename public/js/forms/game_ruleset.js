@@ -1,4 +1,5 @@
 function initGameRuleset() {
+    // read out ruleset presets
     const presetElement = document.getElementById('ruleset-presets');
     if (!presetElement) {
         return;
@@ -10,6 +11,23 @@ function initGameRuleset() {
     }
     const ruleFields = Object.keys(classicPreset); 
 
+    // read out original ruleset of current game if there
+    const originalElement = document.getElementById('ruleset-original'); 
+    let originalRuleset = null; 
+    if (originalElement) {
+        try {
+            const parsed = JSON.parse(originalElement.textContent); 
+            originalRuleset = parsed?.original?.ruleset ?? null; 
+        } catch (e) {
+            console.warn('Invalid original ruleset JSON', e); 
+        }
+    }
+
+    // get restore button if in edit view
+    const restoreButtonGroup = document.getElementById('restore-ruleset-group'); 
+    const restoreButton = document.getElementById('restore-ruleset'); 
+
+    // check for and define selector
     const rulesetSelect = document.querySelector('select[name="ruleset"]');
     if (!rulesetSelect) {
         return;
@@ -17,10 +35,12 @@ function initGameRuleset() {
 
     let isApplyingPreset = false;
 
+    // return DOM select element with given name
     function getField(name) {
         return document.querySelector(`select[name="${name}"]`);
     }
 
+    // normalize given value
     function normalizeValue(value) {
         if (value === true) {
             return '1';
@@ -31,6 +51,7 @@ function initGameRuleset() {
         return String(value);
     }
 
+    // set given value to select
     function setSelectValue(select, value) {
         const normalizedValue = normalizeValue(value);
         if (select.value === normalizedValue) {
@@ -45,6 +66,7 @@ function initGameRuleset() {
         );
     }
 
+    // apply presets
     function applyPreset(presetName) {
         const preset = presets?.[presetName]?.ruleset;
         if (!preset) {
@@ -62,11 +84,12 @@ function initGameRuleset() {
                 if (!(fieldName in preset)) {
                     return;
                 }
-                setSelectValue(select, preset[fieldName]);
+                setSelectValue(select, preset[fieldName]); 
             });
         } finally {
             isApplyingPreset = false;
             updateRulesetSelection();
+            updateRestoreButton(); 
         }
     }
 
@@ -88,6 +111,7 @@ function initGameRuleset() {
         });
     }
 
+    // update all rules according to the chosen ruleset preset 
     function updateRulesetSelection() {
         if (matchesPreset('classic')) {
             if (rulesetSelect.value !== 'classic') {
@@ -123,6 +147,69 @@ function initGameRuleset() {
         }
     }
 
+    // get the current ruleset in the view
+    function getCurrentRuleset() {
+        const result = {}; 
+        ruleFields.forEach(fieldName => {
+            const select = getField(fieldName); 
+            if (!select) {
+                return; 
+            } 
+            result[fieldName] = normalizeValue(select.value); 
+        }); 
+        return result; 
+    }
+
+    // check if current ruleset equal the games original ruleset
+    function isRulesetDirty() {
+        if (!originalRuleset) {
+            return false; 
+        } 
+        return ruleFields.some(fieldName => {
+            const select = getField(fieldName); 
+            if (!select) {
+                false; 
+            }
+            return normalizeValue(select.value) !== normalizeValue(originalRuleset[fieldName]); 
+        }); 
+    }
+
+    // update ui - fade in or out restore button
+    function updateRestoreButton() {
+        if (!restoreButtonGroup) {
+            return; 
+        } 
+
+        if (!isRulesetDirty()) {
+            restoreButtonGroup.classList.add('invisible'); 
+            return; 
+        }
+        restoreButtonGroup.classList.remove('invisible'); 
+    }
+
+    // restore original ruleset of loaded game 
+    function restoreOriginalRuleset() {
+        if (!originalRuleset) {
+            return; 
+        } 
+
+        ruleFields.forEach(fieldName => {
+            const select = getField(fieldName); 
+            if (!select) {
+                return; 
+            } 
+
+            const value = originalRuleset[fieldName]; 
+            if (value === undefined) {
+                return; 
+            } 
+            setSelectValue(select, value); 
+        }); 
+        updateRulesetSelection(); 
+        updateRestoreButton(); 
+    }
+
+    // add eventlistener to ruleset select / switch
     rulesetSelect.addEventListener('change', () => {
         if (isApplyingPreset) {
             return;
@@ -138,8 +225,10 @@ function initGameRuleset() {
             case 'custom':
                 break;
         }
+        updateRestoreButton(); 
     });
 
+    // add eventlistener to rule select / switch 
     ruleFields.forEach(fieldName => {
         const select = getField(fieldName);
         if (!select) {
@@ -151,7 +240,16 @@ function initGameRuleset() {
                 return;
             }
             updateRulesetSelection();
+            updateRestoreButton(); 
         });
     });
+
+    // add eventlistener to restore button if it exists 
+    if (restoreButton) {
+        restoreButton.addEventListener('click', () => {
+            restoreOriginalRuleset(); 
+        }); 
+    }
     updateRulesetSelection();
+    updateRestoreButton(); 
 }
