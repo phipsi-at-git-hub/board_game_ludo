@@ -32,7 +32,14 @@
     margin-bottom: 16px;
 }
 
-.game-card .card-header {
+.card-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 16px; 
+}
+
+.game-card .game-card-header {
     display: flex;
     flex-direction: column;
     gap: 8px;

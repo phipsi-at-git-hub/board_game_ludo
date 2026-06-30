@@ -23,7 +23,7 @@ use App\Core\SystemSettings;
     <!-- Status & Actions -->
     <div class="card game-card">
         <!--<h2><?= Localization::get('game.show.info') ?></h2>-->
-        <div class="card-header">
+        <div class="game-card-header">
             <h2 class="game-tile">🎮 <?= htmlspecialchars($game->getName()) ?></h2>
             <div class="status-badges">
                 <span class="status-badge status-<?= strtolower($game->getStatus()) ?>">

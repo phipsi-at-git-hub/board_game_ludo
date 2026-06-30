@@ -79,7 +79,7 @@ class GameController extends BaseController {
     }
 
     // Game edit form
-    public function edit($game_id) {
+    public function edit(string $game_id) {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
 
@@ -352,7 +352,7 @@ class GameController extends BaseController {
     }
 
     // Play game
-    public function play($game_id) {
+    public function play(string $game_id) {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
         $moves = [];
@@ -432,7 +432,7 @@ class GameController extends BaseController {
     }
 
     // Game State for Frontend
-    public function state($game_id) {
+    public function state(string $game_id) {
         if (!$game_id) {
             return $this->json([
                 'success' => false, 

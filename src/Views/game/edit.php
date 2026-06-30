@@ -72,8 +72,13 @@ use App\Core\Localization;
 
         <!-- Game Rules -->
         <div class="card">
+            <div class="card-header">
+                <h2><?= Localization::get('game.create.card.rules.title') ?></h2>
 
-            <h2><?= Localization::get('game.create.card.rules.title') ?></h2>
+                <div class="btn-badge-group default">
+                    <button type="button" class="btn-badge">Restore Rules</button>
+                </div>
+            </div>
 
             <!-- Starting Rules -->
             <div class="nested-card">
