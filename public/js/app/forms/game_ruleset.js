@@ -74,7 +74,6 @@ function initGameRuleset() {
         }
 
         isApplyingPreset = true;
-
         try {
             ruleFields.forEach(fieldName => {
                 const select = getField(fieldName);

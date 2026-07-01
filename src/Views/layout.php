@@ -34,8 +34,8 @@ use App\Core\Asset;
             <?= $content ?>
         </div>
 
-        <script src="<?= Asset::asset('js/forms.js') ?>"></script>
-        <script src="<?= Asset::asset('js/main.js') ?>"></script>
+        <script src="<?= Asset::asset('js/app/forms.js') ?>"></script>
+        <script src="<?= Asset::asset('js/app/main.js') ?>"></script>
         <?php foreach ($js_array as $js): ?>
                 <script src="<?= Asset::asset("js/$js.js") ?>"></script>
         <?php endforeach; ?>

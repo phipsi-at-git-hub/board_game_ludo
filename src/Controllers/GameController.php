@@ -34,7 +34,7 @@ class GameController extends BaseController {
             ], 
             '', 
             [], 
-            ['forms/game_ruleset'], 
+            ['app/forms/game_ruleset'], 
         );
     }
 
@@ -94,7 +94,7 @@ class GameController extends BaseController {
                 ], 
                 '', 
                 [], 
-                ['forms/game_ruleset'], 
+                ['app/forms/game_ruleset'], 
             );
             exit;
         }
