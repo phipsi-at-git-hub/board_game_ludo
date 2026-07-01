@@ -388,7 +388,7 @@ class GameController extends BaseController {
                 'user' => $user
             ], 
             $game->getName(), 
-            ['game']
+            ['game'] 
         );
     }
 

@@ -92,4 +92,4 @@ use App\Core\Localization;
  </script>
 
 <!-- 🎮 Game entry point -->
-<script type="module" src="<?= Asset::asset('/js/game.js') ?>"></script>
+<script type="module" src="<?= Asset::asset('/js/viewer/game.js') ?>"></script>
