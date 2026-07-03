@@ -141,7 +141,8 @@
     color: var(--role-admin-text);
 }
 
-.role-user {
+.role-user, 
+.status-default {
     background-color: var(--role-user-background);
     color: var(--role-user-text); 
 }
@@ -203,4 +204,93 @@
 
 [data-toggle-target][data-size="large"].active {
     max-height: 600px;
+}
+
+
+
+
+
+/* NEW NEW NEW */
+/* ==========================================
+   Game List
+   ========================================== */
+
+.game-list-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.game-row {
+    margin-bottom: 0;
+    padding: 8px 14px;
+    cursor: pointer;
+    background: var(--white-color); 
+    transition:
+        background 0.2s ease, 
+        box-shadow 0.2s ease, 
+        transform 0.15s ease;
+}
+
+.game-row:hover {
+    background: var(--default-color); 
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12); 
+}
+
+.game-row:hover .status-badge, 
+.game-row:hover .role-badge, 
+.game-row:hover .btn {
+    filter: brightness(0.96); 
+}
+
+.game-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.game-row-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.game-row-footer {
+    margin-top: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.game-row-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.game-row .btn-actions {
+    flex-shrink: 0;
+}
+
+.game-row .btn {
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+
+    .game-row-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .game-row .btn-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
 }

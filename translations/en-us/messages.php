@@ -47,6 +47,17 @@ return [
     'application.general.icon.private' => '⛔', 
     'application.general.icon.locked' => '🔒', 
     'application.general.icon.menu' => '☰', 
+    'application.general.label.details' => 'details',
+    'application.general.label.create' => 'create',
+    'application.general.label.join' => 'join',
+    'application.general.label.edit' => 'edit', 
+    'application.general.label.delete' => 'delete', 
+    'application.general.label.public' => 'public', 
+    'application.general.label.private' => 'private', 
+    'application.general.label.open' => 'open', 
+    'application.general.label.locked' => 'locked', 
+    'application.general.label.owner' => 'owner', 
+    'application.general.label.menu' => 'menu', 
 
     // Application navbar
     'application.navbar.btn_admin' => '🛡 Admin', 

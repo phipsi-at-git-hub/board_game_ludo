@@ -1,85 +1,214 @@
 <?php
+
 use App\Core\Csrf;
 use App\Core\Localization;
 
 /**
  * @var array $games
- * @var Object $current_user 
+ * @var Object $current_user
  */
 ?>
 
 <div class="panel">
+
     <h1><?= Localization::get('game.list.title') ?></h1>
 
     <div class="nav-actions left">
-        <ul class="nav-list">
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
+        <ul class="nav-list horizontal">
+            <li>
+                <a href="/lobby" class="btn-back">
+                    <?= Localization::get('application.general.btn.back_to_lobby') ?>
+                </a>
+            </li>
         </ul>
     </div>
 
-    <table class="game-list">
-        <thead>
-            <tr>
-                <th class="name"><?= Localization::get('game.list.name') ?></th>
-                <th class="players"><?= Localization::get('game.list.players') ?></th>
-                <th class="type"><?= Localization::get('game.list.type') ?></th>
-                <th class="options"><?= Localization::get('game.list.options') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($games as $game): ?>
-                <?php 
-                    $is_owner = $game->getCreatedByUserId() === $current_user->getId();
-                    $is_admin = $current_user->isAdmin();
+    <div class="game-list-cards">
 
-                    $can_edit = ($is_owner && $game->isWaiting()) || ($is_admin && $game->isWaiting());
-                    $can_delete = ($is_owner && $game->isWaiting()) || $is_admin;
+        <?php foreach ($games as $game): ?>
 
-                    $can_join = $game->isWaiting() && !$game->isLocked() && !$game->isPrivate();
-                ?>
-                <?php if (!$game->isPrivate() || $game->getCreatedByUserId() === $current_user->getId() || $game->isRunning()): ?>
-                <tr>
-                    <td class="name"><?= htmlspecialchars($game->getName()) ?></td>
-                    <td class="players"><?= (int) $game->getPlayerCount() ?> / <?= (int) $game->getPlayerMax() ?></td>
-                    <td class="type">
-                        <?= ($game->getRuleSetModel()->isGameClassic()) ? Localization::get('application.general.icon.game_classic') : Localization::get('application.general.icon.game_differ') ?>
-                        <?= ($game->isPrivate() ? Localization::get('application.general.icon.private') : "") ?>
-                        <?= ($game->isLocked() ? Localization::get('application.general.icon.locked') : "") ?>
-                    </td>
-                    <td>
-                        <div class="btn-actions">
-                            <a href="/game/detail/<?= $game->getId() ?>" title="Details" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.details') ?></a>
+            <?php
 
-                            <?php if ($can_join): ?>
-                                <form method="POST" action="/game/join/<?= $game->getId() ?>">
-                                    <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                                    <button type="submit" class="btn action-btn btn-primary">
-                                        <?= Localization::get('application.general.icon.join') ?>
-                                    </button>
-                                </form>
-                            <?php endif; ?>
+            $is_owner = $game->getCreatedByUserId() === $current_user->getId();
+            $is_admin = $current_user->isAdmin();
 
-                            <?php if ($can_edit || $can_delete): ?>
-                                <?php if ($can_edit): ?>
-                                    <a href="/game/edit/<?= $game->getId() ?>" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.edit') ?></a>
-                                <?php endif; ?>
+            $can_edit =
+                ($is_owner && $game->isWaiting()) ||
+                ($is_admin && $game->isWaiting());
 
-                                <?php if ($can_delete): ?>
-                                    <form method="post" action="/game/delete" onsubmit="return confirm('<?= Localization::get('game.list.delete_confirm') ?>');">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                                        <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                                        <button type="submit" class="btn action-btn btn-danger">
-                                            <?= Localization::get('application.general.icon.delete') ?>
-                                        </button>
-                                    </form>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </div>
-                    </td>
-                </tr>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            $can_delete =
+                ($is_owner && $game->isWaiting()) ||
+                $is_admin;
+
+            $can_join =
+                $game->isWaiting() &&
+                !$game->isLocked() &&
+                !$game->isPrivate();
+
+            if (
+                $game->isPrivate() &&
+                !$is_owner &&
+                !$game->isRunning()
+            ) {
+                continue;
+            }
+
+            $player_count = (int)$game->getPlayerCount();
+            $player_max = (int)$game->getPlayerMax();
+
+            if ($game->isWaiting()) {
+                $status_class = 'status-waiting';
+                $status_text = Localization::get('game.status.waiting');
+            } elseif ($game->isRunning()) {
+                $status_class = 'status-running';
+                $status_text = Localization::get('game.status.running');
+            } else {
+                $status_class = 'status-finished';
+                $status_text = Localization::get('game.status.finished');
+            }
+
+            if ($player_count === 0) {
+                $players_class = 'status-fail';
+            } elseif ($player_count === 1) {
+                $players_class = 'status-warning';
+            } else {
+                $players_class = 'status-ok';
+            }
+
+            $ruleset_text =
+                $game->getRuleSetModel()->isGameClassic()
+                    ? Localization::get('game.ruleset.classic')
+                    : Localization::get('game.ruleset.custom');
+
+            ?>
+
+            <div
+                class="card game-row"
+                onclick="window.location='/game/detail/<?= $game->getId() ?>'">
+
+                <div class="game-row-header">
+
+                    <div class="game-row-title">
+                        <?= htmlspecialchars($game->getName()) ?>
+                    </div>
+
+                    <span class="status-badge <?= $status_class ?>">
+                        <?= strtoupper($status_text) ?>
+                    </span>
+
+                </div>
+
+                <div class="game-row-footer">
+
+                    <div class="game-row-badges">
+
+                        <span class="status-badge <?= $players_class ?>">
+                            <?= $player_count ?>/<?= $player_max ?>
+                        </span>
+
+                        <span class="status-badge status-active">
+                            <?= strtoupper($ruleset_text) ?>
+                        </span>
+
+                        <span class="status-badge <?= $game->isPrivate() ? 'status-warning' : 'status-ok' ?>">
+                            <?= strtoupper(
+                                $game->isPrivate()
+                                    ? Localization::get('application.general.label.private')
+                                    : Localization::get('application.general.label.public')
+                            ) ?>
+                        </span>
+
+                        <span class="status-badge <?= $game->isLocked() ? 'status-fail' : 'status-ok' ?>">
+                            <?= strtoupper(
+                                $game->isLocked()
+                                    ? Localization::get('application.general.label.locked')
+                                    : Localization::get('application.general.label.open')
+                            ) ?>
+                        </span>
+
+                        <?php if ($is_owner): ?>
+                            <span class="role-badge role-admin">
+                                <?= strtoupper(Localization::get('application.general.label.owner')) ?>
+                            </span>
+                        <?php endif; ?>
+
+                    </div>
+
+                    <div
+                        class="btn-actions"
+                        onclick="event.stopPropagation();">
+
+                        <?php if ($can_join): ?>
+                            <form
+                                method="POST"
+                                action="/game/join/<?= $game->getId() ?>">
+
+                                <input
+                                    type="hidden"
+                                    name="_csrf_token"
+                                    value="<?= Csrf::generate() ?>">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-save">
+
+                                    <?= Localization::get('application.general.label.join') ?>
+
+                                </button>
+
+                            </form>
+                        <?php endif; ?>
+
+                        <?php if ($can_edit): ?>
+                            <a
+                                href="/game/edit/<?= $game->getId() ?>"
+                                class="btn btn-secondary">
+
+                                <?= Localization::get('application.general.label.edit') ?>
+
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if ($can_delete): ?>
+                            <form
+                                method="POST"
+                                action="/game/delete"
+                                onsubmit="return confirm('<?= Localization::get('game.list.delete_confirm') ?>');">
+
+                                <input
+                                    type="hidden"
+                                    name="_method"
+                                    value="DELETE">
+
+                                <input
+                                    type="hidden"
+                                    name="_csrf_token"
+                                    value="<?= Csrf::generate() ?>">
+
+                                <input
+                                    type="hidden"
+                                    name="game_id"
+                                    value="<?= $game->getId() ?>">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger">
+
+                                    <?= Localization::get('application.general.label.delete') ?>
+
+                                </button>
+
+                            </form>
+                        <?php endif; ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    </div>
+
 </div>
