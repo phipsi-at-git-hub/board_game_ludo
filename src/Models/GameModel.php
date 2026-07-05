@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\Application;
+use App\Core\Dto\GameEngineMove;
 use Exception;
 use DomainException;
 use LogicException;
@@ -167,7 +168,7 @@ final class GameModel extends BaseModel {
     public function getAvailableMoves(string $user_id, int $dice_value): array {
         $player = $this->getPlayerById($user_id);
         //$moves = [];
-        $move = MoveDTO::create();
+        $move = GameEngineMove::create();
 
         foreach ($player->getAllFigures() as $figure) {
             if (!$this->canMoveFigure($player, $figure, $dice_value)) {

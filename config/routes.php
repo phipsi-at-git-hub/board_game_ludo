@@ -4,7 +4,7 @@
 
 use App\Controllers\AccountController;
 use App\Controllers\AdminController;
-use App\Controllers\ApiGameController;
+use App\Controllers\ApiGameEngineController;
 use App\Controllers\AuthController;
 use App\Controllers\GameController;
 use App\Core\Middleware;
@@ -69,13 +69,13 @@ $router->group('/game', function($group) {
 // --- API routes
 $router->group('/api/game', function($group) {
     //$group->get('/state/{id}', [ApiGameController::class, 'state']);
-    $group->post('/state', [ApiGameController::class, 'state'], [fn() => Middleware::csrf()]);
-    $group->post('/roll_dice', [ApiGameController::class, 'rollDice'], [fn() => Middleware::csrf()]);
-    $group->post('/get_available_moves', [ApiGameController::class, 'getAvailableMoves'], [fn() => Middleware::csrf()]);
-    $group->post('/apply_move', [ApiGameController::class, 'applyMove'], [fn() => Middleware::csrf()]);
-    $group->post('/pass_turn', [ApiGameController::class, 'passTurn'], [fn() => Middleware::csrf()]);
+    $group->post('/state', [ApiGameEngineController::class, 'state'], [fn() => Middleware::csrf()]);
+    $group->post('/roll_dice', [ApiGameEngineController::class, 'rollDice'], [fn() => Middleware::csrf()]);
+    $group->post('/get_available_moves', [ApiGameEngineController::class, 'getAvailableMoves'], [fn() => Middleware::csrf()]);
+    $group->post('/apply_move', [ApiGameEngineController::class, 'applyMove'], [fn() => Middleware::csrf()]);
+    $group->post('/pass_turn', [ApiGameEngineController::class, 'passTurn'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
-$router->get('/api/game/health', [ApiGameController::class, 'health']);
+$router->get('/api/game/health', [ApiGameEngineController::class, 'health']);
 
 // --- Admin routes ---
 $router->group('/admin', function($group) {

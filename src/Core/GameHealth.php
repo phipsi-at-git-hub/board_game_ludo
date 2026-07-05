@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Constants\Application;
 use App\Controllers\ApiGameController;
+use App\Core\Http\Http;
 use App\Models\GameModel;
 use Throwable;
 

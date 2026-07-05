@@ -1,10 +1,10 @@
 <?php
-// src/Models/MoveDTO.php
-namespace App\Models;
+// src/Core/Dto/GameEngineMove.php
+namespace App\Core\Dto;
 
 use App\Constants\Application;
 
-final class MoveDTO {
+final class GameEngineMove {
     public static function create(): array {
         return [
             Application::DTO_GAME_TURN => null, 

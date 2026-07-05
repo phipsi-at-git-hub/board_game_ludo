@@ -39,6 +39,7 @@ abstract class BaseController {
     }
 
     // JSON
+    // ToDo: Clean this up and only use jsonClean in the future
     protected function json(array $data): void {
         header('Content-Type: application/json');
         echo json_encode($data);

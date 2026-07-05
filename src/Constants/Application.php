@@ -20,6 +20,12 @@ class Application {
     public const GENERAL_CRITICAL = 'critical'; 
     public const GENERAL_WARNING = 'warning'; 
 
+    // Application Responses
+    public const RESPONSE_TYPE_SUCCESS = 'success'; 
+    public const RESPONSE_TYPE_ERROR = 'error'; 
+    public const RESPONSE_TYPE_WARNING = 'warning'; 
+    public const RESPONSE_TYPE_INFO = 'info'; 
+
     // Database tables
     public const TABLE_USERS = 'users'; 
     public const TABLE_GAMES = 'games';
