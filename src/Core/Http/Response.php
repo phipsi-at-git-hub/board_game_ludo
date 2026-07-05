@@ -5,7 +5,7 @@ namespace App\Core\Http;
 use App\Constants\Application;
 
 final class Response {
-    /* PRIVATE CORE BUILDER (Single Source of Truth) */
+    /* Core Builder */
     private static function build(
         bool $success,
         string $type,
@@ -22,7 +22,7 @@ final class Response {
         ];
     }
 
-    /* SUCCESS */
+    /* Success */
     public static function success(array $data = [], ?string $message = null): array {
         return self::build(
             true,
@@ -32,7 +32,7 @@ final class Response {
         );
     }
 
-    /* ERROR */
+    /* Error */
     public static function error(?string $message = null, array $errors = []): array {
         return self::build(
             false,
@@ -43,7 +43,7 @@ final class Response {
         );
     }
 
-    /* WARNING */
+    /* Warning */
     public static function warning(?string $message = null, array $data = []): array {
         return self::build(
             true,
@@ -53,7 +53,7 @@ final class Response {
         );
     }
 
-    /* INFO */
+    /* Info */
     public static function info(?string $message = null, array $data = []): array {
         return self::build(
             true,

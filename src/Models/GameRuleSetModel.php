@@ -271,6 +271,18 @@ final class GameRuleSetModel extends BaseModel {
         ]; 
     }
 
+    // Helper - Get preset of currently active ruleset
+    public function getPreset(): string {
+        $current = $this->toArray(); 
+        if ($current === self::createClassic()->toArray()) { 
+            return Application::GAME_RULESET_CLASSIC; 
+        } 
+        if ($current === self::createAdvanced()->toArray()) { 
+            return Application::GAME_RULESET_ADVANCED; 
+        } 
+        return Application::GAME_RULESET_CUSTOM; 
+    }
+
     /**
      * Getter
      */
