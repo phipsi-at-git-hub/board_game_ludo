@@ -133,6 +133,18 @@ class Asset {
         }
     }
 
+    // Delete old busted version of assets
+    private static function cleanupOldBustedVersions(string $relative_path): void {
+        $full_path = PUBLIC_PATH . '/' . $relative_path;
+        $info = pathinfo($full_path);
+        $pattern = $info['dirname'] . '/' . $info['filename'] . '.[0-9]*.' . $info['extension'];
+        $files = glob($pattern);
+
+        foreach ($files as $file) {
+            unlink($file);
+        }
+    }
+
     // Asset - Get asset-url
     public static function asset(string $path, bool $use_manifest = false): string {
         $path = ltrim($path, '/'); 
@@ -165,15 +177,18 @@ class Asset {
         return '/' . $path;
     }
 
-    // Delete old busted version of assets
-    private static function cleanupOldBustedVersions(string $relative_path): void {
-        $full_path = PUBLIC_PATH . '/' . $relative_path;
-        $info = pathinfo($full_path);
-        $pattern = $info['dirname'] . '/' . $info['filename'] . '.[0-9]*.' . $info['extension'];
-        $files = glob($pattern);
+    // Asset - Get asset-url in css
+    public static function css(string $path, bool $use_manifest = false): string {
+        return self::asset(CSS_PATH . '/' . $path, $use_manifest); 
+    }
 
-        foreach ($files as $file) {
-            unlink($file);
-        }
+    // Asset - Get asset-url in img
+    public static function img(string $path, bool $use_manifest = false): string {
+        return self::asset(IMG_PATH . '/' . $path, $use_manifest); 
+    }
+
+    // Asset - Get asset-url in js
+    public static function js(string $path, bool $use_manifest = false): string {
+        return self::asset(JS_PATH . '/' . $path, $use_manifest); 
     }
 }

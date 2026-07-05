@@ -15,13 +15,13 @@ use App\Core\Asset;
     <head>
         <meta charset="UTF-8">
         <title><?= $page_title ?></title>
-        <link rel="stylesheet" href="<?= Asset::asset('css/variables.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::asset('css/general.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::asset('css/components.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::asset('css/forms.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::asset('css/buttons.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('variables.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('general.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('components.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('forms.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('buttons.css') ?>">
         <?php foreach ($css_array as $css): ?>
-            <link rel="stylesheet" href="<?= Asset::asset("css/$css.css") ?>">
+            <link rel="stylesheet" href="<?= Asset::css("$css.css") ?>">
         <?php endforeach; ?>
     </head>
     <body>
@@ -34,10 +34,10 @@ use App\Core\Asset;
             <?= $content ?>
         </div>
 
-        <script src="<?= Asset::asset('js/app/forms.js') ?>"></script>
-        <script src="<?= Asset::asset('js/app/main.js') ?>"></script>
+        <script src="<?= Asset::js('app/forms.js') ?>"></script>
+        <script src="<?= Asset::js('app/main.js') ?>"></script>
         <?php foreach ($js_array as $js): ?>
-                <script src="<?= Asset::asset("js/$js.js") ?>"></script>
+                <script src="<?= Asset::js("$js.js") ?>"></script>
         <?php endforeach; ?>
 
     </body>
