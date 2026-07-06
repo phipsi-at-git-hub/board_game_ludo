@@ -1517,7 +1517,7 @@ final class GameModel extends BaseModel {
             return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
-            throw $e;
+            //throw $e;
             return false;
         }
     }
@@ -1580,7 +1580,7 @@ final class GameModel extends BaseModel {
             return true;
         } catch (Exception $e) {
             $this->db->rollBack();
-            throw $e;
+            //throw $e;
             return false;
         }
     }
@@ -1613,7 +1613,7 @@ final class GameModel extends BaseModel {
     }
 
     // Game - Reset Game State, Figures and Game Status helper
-    public function resetGame(): void {
+    public function resetGame(): bool {
         try {
             $this->db->beginTransaction();
             // Reset game state
@@ -1629,9 +1629,11 @@ final class GameModel extends BaseModel {
             $this->setStatus(Application::STATUS_WAITING);
             $this->save();
             $this->db->commit();
+            return true; 
         } catch (Throwable $e) {
             $this->db->rollBack();
-            throw$e;
+            //throw$e;
+            return false; 
         }
     }
 

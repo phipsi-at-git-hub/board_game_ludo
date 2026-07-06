@@ -152,7 +152,7 @@ function renderMoves(moves) {
     if (!moves || moves.length === 0) return;
     if (!isMyTurn()) return;
 
-    moves.forEach(move => {
+    moves.forEach(move => { 
         if (move.is_pass === true) {} else {}
         const btn = document.createElement('button');
         btn.classList.add('move-item');

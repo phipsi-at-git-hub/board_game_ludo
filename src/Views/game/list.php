@@ -141,7 +141,7 @@ use App\Core\Localization;
                         <?php if ($can_join): ?>
                             <form
                                 method="POST"
-                                action="/game/join/<?= $game->getId() ?>">
+                                action="/api/game/join/<?= $game->getId() ?>">
 
                                 <input
                                     type="hidden"

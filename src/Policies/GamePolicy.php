@@ -1,65 +1,101 @@
 <?php
 // src/Policies/GamePolicy.php
+
 namespace App\Policies;
 
-use App\Constants\Application;
 use App\Models\GameModel;
 use App\Models\UserModel;
 
-class GamePolicy {
-    public static function canAccess(UserModel $user, GameModel $game): bool {
-        // ToDo: implement
+final class GamePolicy {
+    public static function canAccess(GameModel $game, UserModel $user): bool {
+        // TODO:
         return true;
     }
 
-    public static function canEdit(UserModel $user, GameModel $game): bool {
-        return $user->getId() === $game->getCreatedByUserId();
-    }
+    public static function canJoin(GameModel $game, UserModel $user): bool {
+        if (!$game->isWaiting()) {
+            return false;
+        }
 
-    public static function canDelete(UserModel $user, GameModel $game): bool {
-        return $user->getId() === $game->getCreatedByUserId();
-    }
-
-    public static function canJoin(UserModel $user, GameModel $game, $check_participant = true): bool {
-        // Game is private
         if ($game->isPrivate()) {
             return false;
         }
-        // Game is locked
+
         if ($game->isLocked()) {
             return false;
         }
 
-        // Game is already full
         if ($game->isFull()) {
             return false;
         }
 
-        // User is already player of the game
-        if ($check_participant && $game->isParticipant($user)) {
+        if ($game->hasPlayer($user->getId())) {
             return false;
         }
-
-        // If game is private check for invites for given user
-
         return true;
     }
 
-    public static function permissions(?UserModel $user, GameModel $game): array {
-        if (!$user) {
-            return [
-                Application::GENERAL_ACCESS => false, 
-                Application::GENERAL_JOIN => false, 
-                Application::GENERAL_EDIT => false, 
-                Application::GENERAL_DELETE => false, 
-            ];
-        }
+    public static function canLeave(GameModel $game, UserModel $user): bool {
+        return $game->hasPlayer($user->getId());
+    }
 
-        return [
-            Application::GENERAL_ACCESS => self::canAccess($user, $game), 
-            Application::GENERAL_JOIN => self::canJoin($user, $game), 
-            Application::GENERAL_EDIT => self::canEdit($user, $game), 
-            Application::GENERAL_DELETE => self::canDelete($user, $game), 
-        ];
+    public static function canEdit(GameModel $game, UserModel $user): bool {
+        return (
+            $game->isWaiting()
+            && (
+                $user->isAdmin()
+                || $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    public static function canDelete(GameModel $game, UserModel $user): bool {
+        return (
+            $user->isAdmin()
+            || (
+                $game->isWaiting()
+                && $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    public static function canStart(GameModel $game, UserModel $user): bool {
+        return (
+            $game->isWaiting()
+            && (
+                $user->isAdmin()
+                || $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    public static function canPause(GameModel $game, UserModel $user): bool {
+        return (
+            $game->isRunning()
+            && (
+                $user->isAdmin()
+                || $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    public static function canReset(GameModel $game, UserModel $user): bool {
+        return (
+            $user->isAdmin()
+            || (
+                $game->isWaiting()
+                && $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    public static function canCancel(GameModel $game, UserModel $user): bool {
+        return (
+            $user->isAdmin()
+            || (
+                $game->isWaiting()
+                && $user->getId() === $game->getCreatedByUserId()
+            )
+        );
     }
 }

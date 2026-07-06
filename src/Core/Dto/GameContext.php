@@ -5,6 +5,7 @@ namespace App\Core\Dto;
 
 use App\Models\GameModel;
 use App\Models\UserModel;
+use App\Policies\GamePolicy;
 
 final class GameContext {
     private static function create(): array {
@@ -25,25 +26,12 @@ final class GameContext {
             'is_owner' => false,
             'is_admin' => false,
 
-            'permissions' => [
-                'join' => false,
-                'leave' => false,
-                'edit' => false,
-                'delete' => false,
-                'lock' => false,
-                'unlock' => false,
-                'start' => false,
-                'reset' => false,
-            ],
+            'permissions' => [],
         ];
     }
 
     public static function fromGame(GameModel $game, UserModel $user): array {
         $dto = self::create();
-
-        $is_owner = ($game->getCreatedByUserId() === $user->getId()); 
-        $is_admin = $user->isAdmin(); 
-        $is_joined = $game->hasPlayer($user->getId()); 
 
         $dto['game_id'] = $game->getId();
         $dto['game_name'] = $game->getName();
@@ -58,49 +46,25 @@ final class GameContext {
         $dto['is_private'] = $game->isPrivate();
         $dto['is_locked'] = $game->isLocked();
 
-        $dto['is_joined'] = $is_joined;
-        $dto['is_owner'] = $is_owner;
-        $dto['is_admin'] = $is_admin;
+        $dto['is_joined'] = $game->hasPlayer($user->getId());
+
+        $dto['is_owner'] = $game->getCreatedByUserId() === $user->getId();
+
+        $dto['is_admin'] = $user->isAdmin();
 
         $dto['permissions'] = [
-            'join' => (
-                $game->isWaiting()
-                && !$game->isLocked()
-                && !$game->isPrivate()
-                && !$is_joined
-            ),
+            'join' => GamePolicy::canJoin($game, $user), 
+            'leave' => GamePolicy::canLeave($game, $user), 
 
-            'leave' => $is_joined,
+            'edit' => GamePolicy::canEdit($game, $user), 
+            'delete' => GamePolicy::canDelete($game, $user), 
 
-            'edit' => (
-                ($is_owner || $is_admin)
-                && $game->isWaiting()
-            ),
+            'start' => GamePolicy::canStart($game, $user), 
+            'pause' => GamePolicy::canPause($game, $user), 
 
-            'delete' => (
-                ($is_owner && $game->isWaiting())
-                || $is_admin
-            ),
-
-            'lock' => (
-                ($is_owner || $is_admin)
-                && !$game->isLocked()
-            ),
-
-            'unlock' => (
-                ($is_owner || $is_admin)
-                && $game->isLocked()
-            ),
-
-            'start' => (
-                ($is_owner || $is_admin)
-                && $game->isWaiting()
-            ),
-
-            'reset' => (
-                $is_owner || $is_admin
-            ),
-        ];
+            'reset' => GamePolicy::canReset($game, $user), 
+            'cancel' => GamePolicy::canCancel($game, $user), 
+        ]; 
         return $dto;
     }
 }

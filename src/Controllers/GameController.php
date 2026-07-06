@@ -144,23 +144,6 @@ class GameController extends BaseController {
         }
     }
 
-    // Delete game
-    public function delete(): void {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
-            $game = GameModel::findById($_POST[Application::GAME_ID]);
-
-            $game->delete();
-        }
-
-        header('Location: /game/list');
-        exit;
-    }
-
     // Game - Games list overview - open games
     public function list(): void {
         $user = Auth::user();
@@ -213,7 +196,7 @@ class GameController extends BaseController {
         );
     }
 
-    // Game join 
+    // Join game  
     public function join(string $game_id) {
         // Player joins existing game
 
@@ -234,6 +217,7 @@ class GameController extends BaseController {
         exit;
     }
 
+    // Leave game
     public function leave(string $game_id) {
         $game = GameModel::findById($game_id);
 
@@ -251,47 +235,6 @@ class GameController extends BaseController {
 
         header("Location: /game/detail/$game_id");
         exit;
-    }
-
-    // Start a Solo TEST game
-    public function createSoloTest() {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
-        $game = null;
-
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
-            $game = GameModel::findById($_POST[Application::GAME_ID]);
-            $game_id = $game->cloneGameWithOnePlayer();
-            $game = GameModel::findById($game_id);
-            $user = Auth::user();
-
-            $game->join($user->getId());
-
-            header("Location: /game/detail/$game_id");
-            exit;
-        }
-
-        header('Location: /game/list');
-        exit;
-    }
-
-    // Start a given solo test game
-    public function startSoloTest() {
-        $game_id = $_POST[Application::GAME_ID];
-        $game = GameModel::findById($game_id);
-        $user = Auth::user();
-        $moves = [];
-
-        $game->startGame();
-
-        if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
-            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
-        }
-
-        $this->redirect("/game/detail/$game_id");
     }
 
     // Start game
@@ -316,6 +259,24 @@ class GameController extends BaseController {
         echo 'destroy';
     }
 
+    // Reset game
+    public function reset(): void {
+        $game_id = $_POST['game_id'];
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        $is_owner = $game->getCreatedByUserId() === $user->getId();
+        $is_admin = $user->isAdmin();
+
+        if (!$is_admin && !($is_owner && $game->isWaiting())) {
+            http_response_code(403);
+            exit ('Unauthorized');
+        }
+
+        $game->resetGame();
+        $this->redirect("/game/detail/$game_id");
+    }
+
     // Cancel game
     public function cancel(): void {
         $game_id = $_POST['game_id'];
@@ -334,22 +295,21 @@ class GameController extends BaseController {
         $this->redirect("/game/detail/$game_id");
     }
 
-    // Reset game
-    public function reset(): void {
-        $game_id = $_POST['game_id'];
-        $game = GameModel::findById($game_id);
-        $user = Auth::user();
-
-        $is_owner = $game->getCreatedByUserId() === $user->getId();
-        $is_admin = $user->isAdmin();
-
-        if (!$is_admin && !($is_owner && $game->isWaiting())) {
+    // Delete game
+    public function delete(): void {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
             http_response_code(403);
-            exit ('Unauthorized');
+            die('Invalid CSRF token');
         }
 
-        $game->resetGame();
-        $this->redirect("/game/detail/$game_id");
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[Application::GAME_ID]);
+
+            $game->delete();
+        }
+
+        header('Location: /game/list');
+        exit;
     }
 
     // Play game
@@ -390,6 +350,50 @@ class GameController extends BaseController {
             $game->getName(), 
             ['game'] 
         );
+    }
+
+    /**
+     * The following is for testing purpose in static view
+     */
+    // Start a Solo TEST game
+    public function createSoloTest() {
+        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
+            http_response_code(403);
+            die('Invalid CSRF token');
+        }
+
+        $game = null;
+
+        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[Application::GAME_ID]);
+            $game_id = $game->cloneGameWithOnePlayer();
+            $game = GameModel::findById($game_id);
+            $user = Auth::user();
+
+            $game->join($user->getId());
+
+            header("Location: /game/detail/$game_id");
+            exit;
+        }
+
+        header('Location: /game/list');
+        exit;
+    }
+
+    // Start a given solo test game
+    public function startSoloTest() {
+        $game_id = $_POST[Application::GAME_ID];
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+        $moves = [];
+
+        $game->startGame();
+
+        if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
+            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
+        }
+
+        $this->redirect("/game/detail/$game_id");
     }
 
     // Roll dice

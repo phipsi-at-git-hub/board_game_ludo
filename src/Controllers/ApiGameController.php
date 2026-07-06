@@ -8,12 +8,18 @@ use App\Core\BaseController;
 use App\Core\Http\Response;
 use App\Core\Dto\GameContext;
 use App\Models\GameModel;
-use DomainException;
-use Throwable;
+use App\Services\GameService;
 
-class ApiGameController extends BaseController {
-    private function gameOr404(string $game_id): GameModel {
-        $game = GameModel::findById($game_id);
+final class ApiGameController extends BaseController {
+    private GameService $gameService; 
+
+    public function __construct() { 
+        $this->gameService = new GameService(); 
+    } 
+
+    // Helper - Return game or send error json 
+    private function gameOr404(string $game_id): GameModel { 
+        $game = GameModel::findById($game_id); 
         if (!$game) {
             $this->jsonClean(
                 Response::error('Game not found'),
@@ -23,103 +29,137 @@ class ApiGameController extends BaseController {
         return $game;
     }
 
-    private function context(GameModel $game): array {
+    // Context of the game - DTO of game
+    private function context(GameModel $game): array { 
         return GameContext::fromGame(
             $game,
             Auth::user()
         );
     }
 
+    /**
+     * Generic game action handler
+     */
+    private function executeApiGameActions(string $game_id, callable $action, string $success_message): void {
+        $game = $this->gameOr404($game_id);
+        $success = $action($game);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error('Action not allowed'),
+                400
+            );
+        }
+
+        $this->jsonClean(
+            Response::success(
+                $this->context($game),
+                $success_message
+            )
+        );
+    }
+
+    // Join game
     public function join(string $game_id): void {
-        try {
-            $game = $this->gameOr404($game_id);
-            $game->join(Auth::user()->getId());
-            $this->jsonClean(
-                Response::success(
-                    $this->context($game),
-                    'Joined game'
-                )
-            );
-        } catch (DomainException $e) {
-            $this->jsonClean(
-                Response::error($e->getMessage()),
-                400
-            );
-        }
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->join(
+                    $game,
+                    Auth::user()
+                ),
+            'Joined game'
+        );
     }
 
+    // Leave game
     public function leave(string $game_id): void {
-        try {
-            $game = $this->gameOr404($game_id);
-            $game->leave(Auth::user()->getId());
-            $this->jsonClean(
-                Response::success(
-                    $this->context($game),
-                    'Left game'
-                )
-            );
-        } catch (DomainException $e) {
-            $this->jsonClean(
-                Response::error($e->getMessage()),
-                400
-            );
-        }
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->leave(
+                    $game,
+                    Auth::user()
+                ),
+            'Left game'
+        );
     }
 
+    // Start game
     public function start(string $game_id): void {
-        try {
-            $game = $this->gameOr404($game_id);
-            $game->startGame();
-            $this->jsonClean(
-                Response::success(
-                    $this->context($game),
-                    'Game started'
-                )
-            );
-        } catch (Throwable $e) {
-            $this->jsonClean(
-                Response::error($e->getMessage()),
-                400
-            );
-        }
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->start(
+                    $game,
+                    Auth::user()
+                ),
+            'Game started'
+        );
     }
 
+    // Pause game
+    public function pause(string $game_id): void {
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->pause(
+                    $game,
+                    Auth::user()
+                ),
+            'Game paused'
+        );
+    }
+
+    // Reset game
     public function reset(string $game_id): void {
-        try {
-            $game = $this->gameOr404($game_id);
-            $game->resetGame();
-            $this->jsonClean(
-                Response::success(
-                    $this->context($game),
-                    'Game reset'
-                )
-            );
-        } catch (Throwable $e) {
-            $this->jsonClean(
-                Response::error($e->getMessage()),
-                400
-            );
-        }
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->reset(
+                    $game,
+                    Auth::user()
+                ),
+            'Game reset'
+        );
     }
 
+    // Cancel game
+    public function cancel(string $game_id): void {
+        $this->executeApiGameActions(
+            $game_id,
+            fn(GameModel $game) =>
+                $this->gameService->cancel(
+                    $game,
+                    Auth::user()
+                ),
+            'Game cancelled'
+        );
+    }
+
+    // Delete game
     public function delete(string $game_id): void {
-        try {
-            $game = $this->gameOr404($game_id);
-            $game->delete();
+        $game = $this->gameOr404($game_id);
+        $success = $this->gameService->delete(
+            $game,
+            Auth::user()
+        );
+
+        if (!$success) {
             $this->jsonClean(
-                Response::success(
-                    [],
-                    'Game deleted'
-                )
-            );
-        } catch (Throwable $e) {
-            $this->jsonClean(
-                Response::error($e->getMessage()),
+                Response::error('Unable to delete game'),
                 400
             );
         }
+
+        $this->jsonClean(
+            Response::success(
+                [],
+                'Game deleted'
+            )
+        );
     }
 
+    // Show game
     public function show(string $game_id): void {
         $game = $this->gameOr404($game_id);
         $this->jsonClean(

@@ -4,6 +4,7 @@
 
 use App\Controllers\AccountController;
 use App\Controllers\AdminController;
+use App\Controllers\ApiGameController;
 use App\Controllers\ApiGameEngineController;
 use App\Controllers\AuthController;
 use App\Controllers\GameController;
@@ -66,8 +67,19 @@ $router->group('/game', function($group) {
     $group->post('/start_solo_test', [GameController::class, 'startSoloTest'], [fn() => Middleware::csrf(), fn() => Middleware::admin()]);
 }, [fn() => Middleware::auth()]);
 
-// --- API routes
+// --- Game Api routes
 $router->group('/api/game', function($group) {
+    $group->post('/join/{id}', [ApiGameController::class, 'join'], [fn() => Middleware::csrf()]); 
+    $group->post('/leave/{id}', [ApiGameController::class, 'leave'], [fn() => Middleware::csrf()]); 
+    $group->post('/start', [ApiGameController::class, 'start'], [fn() => Middleware::csrf()]); 
+    $group->post('/pause', [ApiGameController::class, 'pause'], [fn() => Middleware::csrf()]); 
+    $group->post('/cancel', [ApiGameController::class, 'cancel'], [fn() => Middleware::csrf()]); 
+    $group->post('/reset', [ApiGameController::class, 'reset'], [fn() => Middleware::csrf()]); 
+    $group->post('/delete', [ApiGameController::class, 'delete'], [fn() => Middleware::csrf()]); 
+}, [fn() => Middleware::auth()]); 
+
+// --- Game Engine API routes
+$router->group('/api/game-engine', function($group) {
     //$group->get('/state/{id}', [ApiGameController::class, 'state']);
     $group->post('/state', [ApiGameEngineController::class, 'state'], [fn() => Middleware::csrf()]);
     $group->post('/roll_dice', [ApiGameEngineController::class, 'rollDice'], [fn() => Middleware::csrf()]);

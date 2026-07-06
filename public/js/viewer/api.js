@@ -36,26 +36,26 @@ function encodeFormData(data) {
 }
 
 export async function fetchState(game_id) {
-    return await requestPost('/api/game/state', { game_id });
+    return await requestPost('/api/game-engine/state', { game_id });
 }
 
 export async function rollDice(game_id) {
-    return await requestPost('/api/game/roll_dice', { game_id });
+    return await requestPost('/api/game-engine/roll_dice', { game_id });
 }
 
 export async function getAvailableMoves(game_id) {
-    return await requestPost('/api/game/get_available_moves', { game_id });
+    return await requestPost('/api/game-engine/get_available_moves', { game_id });
 }
 
 export async function applyMove(game_id, move) {
-    return await requestPost('/api/game/apply_move', {
+    return await requestPost('/api/game-engine/apply_move', {
         game_id, 
         move: asJSON(move)
     });
 }
 
 export async function passTurn(game_id) {
-    return await requestPost('/api/game/pass_turn', { game_id });
+    return await requestPost('/api/game-engine/pass_turn', { game_id });
 }
 
 // Helper 
