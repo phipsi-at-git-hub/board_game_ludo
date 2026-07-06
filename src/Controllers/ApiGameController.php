@@ -18,7 +18,7 @@ final class ApiGameController extends BaseController {
     } 
 
     // Helper - Return game or send error json 
-    private function gameOr404(string $game_id): GameModel { 
+    private function requireGame(string $game_id): GameModel { 
         $game = GameModel::findById($game_id); 
         if (!$game) {
             $this->jsonClean(
@@ -41,7 +41,7 @@ final class ApiGameController extends BaseController {
      * Generic game action handler
      */
     private function executeApiGameActions(string $game_id, callable $action, string $success_message): void {
-        $game = $this->gameOr404($game_id);
+        $game = $this->requireGame($game_id);
         $success = $action($game);
         if (!$success) {
             $this->jsonClean(
@@ -138,7 +138,7 @@ final class ApiGameController extends BaseController {
 
     // Delete game
     public function delete(string $game_id): void {
-        $game = $this->gameOr404($game_id);
+        $game = $this->requireGame($game_id);
         $success = $this->gameService->delete(
             $game,
             Auth::user()
@@ -161,7 +161,7 @@ final class ApiGameController extends BaseController {
 
     // Show game
     public function show(string $game_id): void {
-        $game = $this->gameOr404($game_id);
+        $game = $this->requireGame($game_id);
         $this->jsonClean(
             Response::success(
                 $this->context($game)

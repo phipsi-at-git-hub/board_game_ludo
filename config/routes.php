@@ -75,7 +75,7 @@ $router->group('/api/game', function($group) {
     $group->post('/pause', [ApiGameController::class, 'pause'], [fn() => Middleware::csrf()]); 
     $group->post('/cancel', [ApiGameController::class, 'cancel'], [fn() => Middleware::csrf()]); 
     $group->post('/reset', [ApiGameController::class, 'reset'], [fn() => Middleware::csrf()]); 
-    $group->post('/delete', [ApiGameController::class, 'delete'], [fn() => Middleware::csrf()]); 
+    $group->delete('/delete', [ApiGameController::class, 'delete'], [fn() => Middleware::csrf()]); 
 }, [fn() => Middleware::auth()]); 
 
 // --- Game Engine API routes

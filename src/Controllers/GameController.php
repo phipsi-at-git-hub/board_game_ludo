@@ -8,10 +8,38 @@ use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Models\GameModel;
 use App\Models\GameRuleSetModel;
-use DomainException;
+use App\Services\GameService;
 use LogicException;
 
 class GameController extends BaseController {
+    private GameService $gameService; 
+
+    public function __construct() { 
+        $this->gameService = new GameService(); 
+    } 
+
+    /**
+     * Generic game action handler
+     */
+    private function executeGameActions(string $game_id, callable $action, string $redirect) {
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        $success = $action($game, $user);
+        if (!$success) {
+            $this->render(
+                'game/error', 
+                [
+                    'message' => 'Action not allowed.' 
+                ]
+            ); 
+        }
+        $this->redirect($redirect);
+    }
+    
+    /**
+     * Controller via Models to Views
+     */
     // Lobby leads to game creation, games list and back
     public function lobby() {
         // Only for logged in users (secured through middleware)
@@ -197,119 +225,96 @@ class GameController extends BaseController {
     }
 
     // Join game  
-    public function join(string $game_id) {
-        // Player joins existing game
-
-        $game = GameModel::findById($game_id);
-
-        if (!$game) {
-            http_response_code(404);
-            die('Game not found');
-        }
-
-        try {
-            $game->join(Auth::user()->getId());
-        } catch (DomainException $e) {
-            // ToDo: some exception handling
-        }
-
-        header("Location: /game/detail/$game_id");
-        exit;
+    public function join(string $game_id): void {
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->join($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Leave game
     public function leave(string $game_id) {
-        $game = GameModel::findById($game_id);
-
-        if (!$game) {
-            http_response_code(404);
-            die('Game not found');
-        }
-
-        try {
-            // ToDo: implement leaving game 
-            $game->leave(Auth::user()->getId());
-        } catch (DomainException $e) {
-            // ToDo: some exception handling
-        }
-
-        header("Location: /game/detail/$game_id");
-        exit;
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->leave($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Start game
     public function start() {
-        $game_id = $_POST[Application::GAME_ID];
-        $game = GameModel::findById($game_id);
-        $game->startGame();
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        if (!$game_id) {
+            $this->redirect('/game/list'); 
+            return; 
+        }
 
-        $this->redirect("/game/detail/$game_id");
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->start($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Pause game
     public function pause() {
-        $game_id = $_POST[Application::GAME_ID];
-        $game = GameModel::findById($game_id);
-        $game->pauseGame();
-
-        $this->redirect("/game/detail/$game_id");
-    }
-
-    public function destroy(string $game_id) {
-        echo 'destroy';
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        if (!$game_id) {
+            $this->redirect('/game/list'); 
+            return; 
+        }
+        
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->pause($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Reset game
     public function reset(): void {
-        $game_id = $_POST['game_id'];
-        $game = GameModel::findById($game_id);
-        $user = Auth::user();
-
-        $is_owner = $game->getCreatedByUserId() === $user->getId();
-        $is_admin = $user->isAdmin();
-
-        if (!$is_admin && !($is_owner && $game->isWaiting())) {
-            http_response_code(403);
-            exit ('Unauthorized');
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        if (!$game_id) {
+            $this->redirect('/game/list'); 
+            return; 
         }
 
-        $game->resetGame();
-        $this->redirect("/game/detail/$game_id");
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->reset($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Cancel game
     public function cancel(): void {
-        $game_id = $_POST['game_id'];
-        $game = GameModel::findById($game_id);
-        $user = Auth::user();
-
-        $is_owner = $game->getCreatedByUserId() === $user->getId();
-        $is_admin = $user->isAdmin();
-
-        if (!$is_admin && !($is_owner && $game->isWaiting())) {
-            http_response_code(403);
-            exit ('Unauthorized');
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        if (!$game_id) {
+            $this->redirect('/game/list'); 
+            return; 
         }
 
-        $game->cancelGame();
-        $this->redirect("/game/detail/$game_id");
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->cancel($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Delete game
     public function delete(): void {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        if (!$game_id) {
+            $this->redirect('/game/list'); 
+            return; 
         }
 
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
-            $game = GameModel::findById($_POST[Application::GAME_ID]);
-
-            $game->delete();
-        }
-
-        header('Location: /game/list');
-        exit;
+        $this->executeGameActions(
+            $game_id, 
+            fn($game, $user) => $this->gameService->delete($game, $user), 
+            "/game/detail/$game_id"
+        ); 
     }
 
     // Play game
