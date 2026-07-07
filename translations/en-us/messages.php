@@ -50,6 +50,7 @@ return [
     'application.general.label.details' => 'details',
     'application.general.label.create' => 'create',
     'application.general.label.join' => 'join',
+    'application.general.label.leave' => 'leave',
     'application.general.label.edit' => 'edit', 
     'application.general.label.delete' => 'delete', 
     'application.general.label.public' => 'public', 

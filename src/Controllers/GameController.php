@@ -176,9 +176,9 @@ class GameController extends BaseController {
     public function list(): void {
         $user = Auth::user();
         if ($user->isAdmin()) {
-            $games = GameModel::getAllGames();
+            $games = GameModel::getAllGamesNew();
         } else {
-            $games = GameModel::getAllOpenGames();
+            $games = GameModel::getAllOpenGamesNew();
         }
         
         $this->render(
@@ -192,7 +192,7 @@ class GameController extends BaseController {
     // Game - Show list with user involved
     public function usersGames(): void {
         $user = Auth::user();
-        $games = GameModel::getAllGamesWithUserInvolved($user->getId());
+        $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
 
         //var_dump($games);
         

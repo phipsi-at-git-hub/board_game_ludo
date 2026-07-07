@@ -2,6 +2,7 @@
 
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Policies\GamePolicy;
 
 /**
  * @var array $games
@@ -29,21 +30,14 @@ use App\Core\Localization;
 
             <?php
 
-            $is_owner = $game->getCreatedByUserId() === $current_user->getId();
+            $is_owner = GamePolicy::isOwner($game, $current_user); 
             $is_admin = $current_user->isAdmin();
 
-            $can_edit =
-                ($is_owner && $game->isWaiting()) ||
-                ($is_admin && $game->isWaiting());
+            $can_edit = GamePolicy::canEdit($game, $current_user); 
+            $can_delete = GamePolicy::canDelete($game, $current_user); 
 
-            $can_delete =
-                ($is_owner && $game->isWaiting()) ||
-                $is_admin;
-
-            $can_join =
-                $game->isWaiting() &&
-                !$game->isLocked() &&
-                !$game->isPrivate();
+            $can_join = GamePolicy::canJoin($game, $current_user); 
+            $can_leave = GamePolicy::canLeave($game, $current_user); 
 
             if (
                 $game->isPrivate() &&
@@ -53,8 +47,8 @@ use App\Core\Localization;
                 continue;
             }
 
-            $player_count = (int)$game->getPlayerCount();
-            $player_max = (int)$game->getPlayerMax();
+            $player_count = $game->getPlayerCount();
+            $player_max = $game->getPlayerMax();
 
             if ($game->isWaiting()) {
                 $status_class = 'status-waiting';
@@ -83,7 +77,8 @@ use App\Core\Localization;
             ?>
 
             <div
-                class="card game-row"
+                class="card game-row" 
+                data-game-id="<?= $game->getId() ?>" 
                 onclick="window.location='/game/detail/<?= $game->getId() ?>'">
 
                 <div class="game-row-header">
@@ -102,7 +97,7 @@ use App\Core\Localization;
 
                     <div class="game-row-badges">
 
-                        <span class="status-badge <?= $players_class ?>">
+                        <span class="status-badge <?= $players_class ?>" data-player-count="<?= $game->getId() ?>">
                             <?= $player_count ?>/<?= $player_max ?>
                         </span>
 
@@ -150,9 +145,32 @@ use App\Core\Localization;
 
                                 <button
                                     type="submit"
-                                    class="btn btn-save">
+                                    class="btn btn-save" 
+                                    data-game-action="join" 
+                                    data-game-id="<?= $game->getId() ?>" >
 
                                     <?= Localization::get('application.general.label.join') ?>
+
+                                </button>
+
+                            </form>
+                        <?php endif; ?>
+
+                        <?php if ($can_leave): ?>
+                            <form
+                                method="POST"
+                                action="/api/game/leave/<?= $game->getId() ?>">
+
+                                <input
+                                    type="hidden"
+                                    name="_csrf_token"
+                                    value="<?= Csrf::generate() ?>">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-save">
+
+                                    <?= Localization::get('application.general.label.leave') ?>
 
                                 </button>
 

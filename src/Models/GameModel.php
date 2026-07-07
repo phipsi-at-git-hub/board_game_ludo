@@ -793,6 +793,280 @@ final class GameModel extends BaseModel {
     /**
      * Database
      */
+    // Generic find games 
+    public static function findGames(
+        bool $player = false,
+        bool $figures = false,
+        array $joins = [],
+        array $conditions = [],
+        array $params = []
+    ): array {
+        // Base Query 
+        $sql = sprintf(
+            "
+            SELECT
+                g.*,
+                u.%s AS username,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s,
+                r.%s
+
+            FROM %s g
+
+            JOIN %s u
+                ON g.%s = u.%s
+
+            LEFT JOIN %s r
+                ON g.%s = r.%s
+            ",
+            
+            Application::USERNAME,
+
+            Application::ALLOW_BOTS,
+            Application::ALL_FIGURES_START_AT_HOME,
+            Application::LEAVE_HOME_ATTEMPT,
+            Application::LEAVE_HOME_ATTEMPTS_MAX,
+            Application::EXTRA_ROLL_ON_SIX_LIMIT,
+            Application::FORCE_LEAVING_HOME_ON_SIX,
+            Application::FORCE_CAPTURE_ENEMY_FIGURES,
+            Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+            Application::ALLOW_STACK_OWN_FIGURES,
+            Application::STRICT_GOAL_ORDER,
+            Application::START_FIELD_MUST_BE_CLEARED,
+
+
+            Application::TABLE_GAMES,
+
+            Application::TABLE_USERS,
+            Application::CREATED_BY_USER_ID,
+            Application::ID,
+
+            Application::TABLE_RULES,
+            Application::ID,
+            Application::GAME_ID
+        );
+
+        // Additional Joins
+        if (!empty($joins)) {
+            $sql .= implode(
+                " ",
+                $joins
+            );
+        }
+
+        // Conditions
+        if (!empty($conditions)) {
+
+            $sql .= " WHERE ";
+
+            $sql .= implode(
+                " AND ",
+                $conditions
+            );
+        }
+
+        $sql .= sprintf(
+            "
+            ORDER BY g.%s DESC
+            ",
+            Application::CREATED_AT
+        );
+
+        // Load Games
+        $rows = static::fetchAll(
+            $sql,
+            $params
+        );
+
+        $games = [];
+        foreach ($rows as $row) {
+            // Game + RuleSet
+            $game = self::fromArray($row);
+            // State 
+            $state = static::fetchOne(
+                sprintf(
+                    "
+                    SELECT *
+                    FROM %s
+                    WHERE %s = :game_id
+                    LIMIT 1
+                    ",
+                    Application::TABLE_STATE,
+                    Application::GAME_ID
+                ),
+                [
+                    'game_id'=>$game->getId()
+                ]
+            );
+
+            if ($state) {
+                $game->state_model = GameStateModel::fromArray($state);
+            }
+
+            // Players
+            if ($player || $figures) {
+                $players = static::fetchAll(
+                    sprintf(
+                        "
+                        SELECT
+                            p.*,
+                            u.%s
+
+                        FROM %s p
+
+                        JOIN %s u
+                            ON p.%s = u.%s
+
+                        WHERE p.%s = :game_id
+
+                        ORDER BY p.%s ASC
+                        ",
+                        
+                        Application::USERNAME,
+
+                        Application::TABLE_PLAYERS,
+
+                        Application::TABLE_USERS,
+
+                        Application::USER_ID,
+                        Application::ID,
+
+                        Application::GAME_ID,
+
+                        Application::PLAYER_INDEX
+                    ),
+                    [
+                        'game_id'=>$game->getId()
+                    ]
+                );
+
+                $game->player_array = array_map(fn($row) => GameStatePlayerModel::fromArray($row),$players);
+            }
+
+            // Figures 
+            if ($figures) {
+                $figures = static::fetchAll(
+                    sprintf(
+                        "
+                        SELECT *
+                        FROM %s
+                        WHERE %s = :game_id
+                        ",
+                        Application::TABLE_FIGURES,
+                        Application::GAME_ID
+                    ),
+                    [
+                        'game_id'=>$game->getId()
+                    ]
+                );
+
+                $playersByUser = [];
+                foreach ($game->player_array as $playerModel) {
+                    $playersByUser[
+                        $playerModel->getUserId()
+                    ] = $playerModel;
+                }
+
+                foreach ($figures as $figureRow) {
+                    $figure = GameStateFigureModel::fromArray($figureRow);
+                    $uid = $figure->getUserId();
+
+                    if (isset($playersByUser[$uid])) {
+                        $playersByUser[$uid]->addFigure($figure);
+                    }
+                }
+            }
+            $games[] = $game;
+        }
+
+
+        return $games;
+    }
+
+    // Get all games new
+    public static function getAllGamesNew(): array {
+        return self::findGames(true, false); 
+    }
+
+    // Get all open games new
+    public static function getAllOpenGamesNew(): array {
+        return self::findGames(true, false, [], ["g.status = :status"], ["status" => Application::STATUS_WAITING]); 
+    }
+    // Database - Get all games created by the given user
+    public static function getAllGamesCreatedByUserNew(string $user_id): array {
+        return self::findGames(true, false, [], ["g.created_by_user_id = :user_id"], ["user_id" => $user_id]); 
+    }
+
+    // Database - Get all games with the given user as an participant
+    public static function getAllGamesWithUserParticipatingNew(string $user_id): array {
+        return self::findGames(
+            true,
+            false,
+            [],
+            [
+                sprintf(
+                    "
+                    EXISTS (
+                        SELECT 1
+                        FROM %s p
+                        WHERE p.%s = g.%s
+                        AND p.%s = :user_id
+                    )
+                    ",
+                    Application::TABLE_PLAYERS,
+                    Application::GAME_ID,
+                    Application::ID,
+                    Application::USER_ID
+                )
+            ],
+            [
+                "user_id" => $user_id
+            ]
+        );
+    }
+
+    // Database - Get all games with given user involved
+    public static function getAllGamesWithUserInvolvedNew(string $user_id): array {
+        return self::findGames(
+            true,
+            false,
+            [],
+            [
+                sprintf(
+                    "
+                    (
+                        g.%s = :user_id
+                        OR EXISTS (
+                            SELECT 1
+                            FROM %s p
+                            WHERE p.%s = g.%s
+                            AND p.%s = :user_id
+                        )
+                    )
+                    ",
+                    Application::CREATED_BY_USER_ID,
+
+                    Application::TABLE_PLAYERS,
+
+                    Application::GAME_ID,
+                    Application::ID,
+
+                    Application::USER_ID
+                )
+            ],
+            [
+                "user_id" => $user_id
+            ]
+        );
+    }
 
     // Get all games
     public static function getAllGames(): array {
