@@ -1,5 +1,4 @@
 <?php
-
 use App\Core\Csrf;
 use App\Core\Localization;
 use App\Policies\GamePolicy;
@@ -25,24 +24,21 @@ use App\Policies\GamePolicy;
     </div>
 
     <div class="game-list-cards">
-
         <?php foreach ($games as $game): ?>
-
             <?php
-
-            $is_owner = GamePolicy::isOwner($game, $current_user); 
+            $is_owner = GamePolicy::isOwner($game, $current_user);
             $is_admin = $current_user->isAdmin();
 
-            $can_edit = GamePolicy::canEdit($game, $current_user); 
-            $can_delete = GamePolicy::canDelete($game, $current_user); 
+            $can_edit = GamePolicy::canEdit($game, $current_user);
+            $can_delete = GamePolicy::canDelete($game, $current_user);
 
-            $can_join = GamePolicy::canJoin($game, $current_user); 
-            $can_leave = GamePolicy::canLeave($game, $current_user); 
+            $can_join = GamePolicy::canJoin($game, $current_user);
+            $can_leave = GamePolicy::canLeave($game, $current_user);
 
             if (
-                $game->isPrivate() &&
-                !$is_owner &&
-                !$game->isRunning()
+                $game->isPrivate()
+                && !$is_owner
+                && !$game->isRunning()
             ) {
                 continue;
             }
@@ -69,16 +65,12 @@ use App\Policies\GamePolicy;
                 $players_class = 'status-ok';
             }
 
-            $ruleset_text =
-                $game->getRuleSetModel()->isGameClassic()
-                    ? Localization::get('game.ruleset.classic')
-                    : Localization::get('game.ruleset.custom');
-
+            $ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');
             ?>
 
             <div
-                class="card game-row" 
-                data-game-id="<?= $game->getId() ?>" 
+                class="card game-row"
+                data-game-id="<?= $game->getId() ?>"
                 onclick="window.location='/game/detail/<?= $game->getId() ?>'">
 
                 <div class="game-row-header">
@@ -87,7 +79,9 @@ use App\Policies\GamePolicy;
                         <?= htmlspecialchars($game->getName()) ?>
                     </div>
 
-                    <span class="status-badge <?= $status_class ?>">
+                    <span
+                        class="status-badge <?= $status_class ?>"
+                        data-field="status">
                         <?= strtoupper($status_text) ?>
                     </span>
 
@@ -97,32 +91,34 @@ use App\Policies\GamePolicy;
 
                     <div class="game-row-badges">
 
-                        <span class="status-badge <?= $players_class ?>" data-player-count="<?= $game->getId() ?>">
+                        <span
+                            class="status-badge <?= $players_class ?>"
+                            data-field="player-count">
                             <?= $player_count ?>/<?= $player_max ?>
                         </span>
 
-                        <span class="status-badge status-active">
+                        <span
+                            class="status-badge status-active"
+                            data-field="ruleset">
                             <?= strtoupper($ruleset_text) ?>
                         </span>
 
-                        <span class="status-badge <?= $game->isPrivate() ? 'status-warning' : 'status-ok' ?>">
-                            <?= strtoupper(
-                                $game->isPrivate()
-                                    ? Localization::get('application.general.label.private')
-                                    : Localization::get('application.general.label.public')
-                            ) ?>
+                        <span
+                            class="status-badge <?= $game->isPrivate() ? 'status-warning' : 'status-ok' ?>"
+                            data-field="visibility">
+                            <?= strtoupper($game->isPrivate() ? Localization::get('application.general.label.private') : Localization::get('application.general.label.public')) ?>
                         </span>
 
-                        <span class="status-badge <?= $game->isLocked() ? 'status-fail' : 'status-ok' ?>">
-                            <?= strtoupper(
-                                $game->isLocked()
-                                    ? Localization::get('application.general.label.locked')
-                                    : Localization::get('application.general.label.open')
-                            ) ?>
+                        <span
+                            class="status-badge <?= $game->isLocked() ? 'status-fail' : 'status-ok' ?>"
+                            data-field="lock-state">
+                            <?= strtoupper($game->isLocked() ? Localization::get('application.general.label.locked') : Localization::get('application.general.label.open')) ?>
                         </span>
 
                         <?php if ($is_owner): ?>
-                            <span class="role-badge role-admin">
+                            <span
+                                class="role-badge role-admin"
+                                data-field="owner">
                                 <?= strtoupper(Localization::get('application.general.label.owner')) ?>
                             </span>
                         <?php endif; ?>
@@ -133,57 +129,52 @@ use App\Policies\GamePolicy;
                         class="btn-actions"
                         onclick="event.stopPropagation();">
 
-                        <?php if ($can_join): ?>
-                            <form
-                                method="POST"
-                                action="/api/game/join/<?= $game->getId() ?>">
+                        <form
+                            method="POST"
+                            action="/api/game/join/<?= $game->getId() ?>"
+                            data-action-container="join"
+                            <?= $can_join ? '' : 'hidden' ?> >
 
-                                <input
-                                    type="hidden"
-                                    name="_csrf_token"
-                                    value="<?= Csrf::generate() ?>">
+                            <input
+                                type="hidden"
+                                name="_csrf_token"
+                                value="<?= Csrf::generate() ?>">
 
-                                <button
-                                    type="submit"
-                                    class="btn btn-save" 
-                                    data-game-action="join" 
-                                    data-game-id="<?= $game->getId() ?>" >
+                            <button
+                                type="submit"
+                                class="btn btn-save"
+                                data-action="join">
+                                <?= Localization::get('application.general.label.join') ?>
+                            </button>
 
-                                    <?= Localization::get('application.general.label.join') ?>
+                        </form>
 
-                                </button>
+                        <form
+                            method="POST"
+                            action="/api/game/leave/<?= $game->getId() ?>"
+                            data-action-container="leave"
+                            <?= $can_leave ? '' : 'hidden' ?> >
 
-                            </form>
-                        <?php endif; ?>
+                            <input
+                                type="hidden"
+                                name="_csrf_token"
+                                value="<?= Csrf::generate() ?>">
 
-                        <?php if ($can_leave): ?>
-                            <form
-                                method="POST"
-                                action="/api/game/leave/<?= $game->getId() ?>">
+                            <button
+                                type="submit"
+                                class="btn btn-save"
+                                data-action="leave">
+                                <?= Localization::get('application.general.label.leave') ?>
+                            </button>
 
-                                <input
-                                    type="hidden"
-                                    name="_csrf_token"
-                                    value="<?= Csrf::generate() ?>">
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-save">
-
-                                    <?= Localization::get('application.general.label.leave') ?>
-
-                                </button>
-
-                            </form>
-                        <?php endif; ?>
+                        </form>
 
                         <?php if ($can_edit): ?>
                             <a
                                 href="/game/edit/<?= $game->getId() ?>"
-                                class="btn btn-secondary">
-
+                                class="btn btn-secondary"
+                                data-action="edit">
                                 <?= Localization::get('application.general.label.edit') ?>
-
                             </a>
                         <?php endif; ?>
 
@@ -191,6 +182,7 @@ use App\Policies\GamePolicy;
                             <form
                                 method="POST"
                                 action="/game/delete"
+                                data-action="delete"
                                 onsubmit="return confirm('<?= Localization::get('game.list.delete_confirm') ?>');">
 
                                 <input
@@ -211,9 +203,7 @@ use App\Policies\GamePolicy;
                                 <button
                                     type="submit"
                                     class="btn btn-danger">
-
                                     <?= Localization::get('application.general.label.delete') ?>
-
                                 </button>
 
                             </form>
