@@ -3,10 +3,11 @@
 
 namespace App\Controllers;
 
+use App\Constants\Application;
 use App\Core\Auth;
 use App\Core\BaseController;
-use App\Core\Http\Response;
 use App\Core\Dto\GameContext;
+use App\Core\Http\Response;
 use App\Models\GameModel;
 use App\Services\GameService;
 
@@ -138,7 +139,8 @@ final class ApiGameController extends BaseController {
     }
 
     // Delete game
-    public function delete(string $game_id): void {
+    public function delete(): void {
+        $game_id = $_POST[Application::GAME_ID] ?? null; 
         $game = $this->requireGame($game_id);
         $success = $this->gameService->delete(
             $game,

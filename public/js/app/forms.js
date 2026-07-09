@@ -5,12 +5,15 @@ function initForms() {
     initSwitchSelects();
     initBadgeSelects(); 
 
+    // Init Form Submits
+    initFormSubmits(); 
+
     // Init only if available
     initGameRulesetIfAvailable(); 
 }
 
 /* ------------------------------
-   TOGGLE GROUPS
+   INIT TOGGLE GROUPS
 ------------------------------ */
 function initToggleGroups() {
     document.querySelectorAll('[data-toggle-group]').forEach(group => {
@@ -27,6 +30,48 @@ function initToggleGroups() {
         switch_element.addEventListener('change', update);
         update();
     });
+}
+
+/* ------------------------------
+   INIT FORM SUBMIT
+------------------------------ */
+function initFormSubmits() {
+    document.addEventListener(
+        'submit',
+        handleFormSubmit
+    );
+}
+
+/* ------------------------------
+   HANDLE FORM SUBMIT
+------------------------------ */
+function handleFormSubmit(event) {
+    const form = event.target; 
+    if (!(form instanceof HTMLFormElement)) {
+        return;
+    }
+
+    const confirmProcessed = form.dataset.confirmProcessed === '1'; 
+    if (confirmProcessed)  {
+        delete form.dataset.confirmProcessed; 
+    }
+    if (form.dataset.confirm !== undefined && !confirmProcessed) {
+        event.preventDefault(); 
+        handleConfirmSubmit(form); 
+        return; 
+    }
+
+    if (form.dataset.response === 'json') {
+        event.preventDefault(); 
+        handleActionSubmit(form); 
+        return; 
+    }
+
+    if (form.dataset.ajax !== undefined) {
+        event.preventDefault();
+        submitForm(form);
+        return;
+    }
 }
 
 /* ------------------------------
@@ -72,6 +117,32 @@ function submitForm(form) {
         }
         console.error(err);
     });
+}
+
+/* ------------------------------
+   HANDLE CONFIRM SUBMIT 
+------------------------------ */
+function handleConfirmSubmit(form) {
+    openModal(
+        form.dataset.confirmTitle || 'Confirm',
+        form.dataset.confirmMessage || '',
+        [
+            {
+                label: 'Cancel',
+                className: 'btn btn-secondary',
+                onClick: closeModal
+            },
+            {
+                label: 'OK',
+                className: 'btn btn-danger',
+                onClick: () => {
+                    closeModal();
+                    form.dataset.confirmProcessed = '1';
+                    form.requestSubmit();
+                }
+            }
+        ]
+    );
 }
 
 /* ------------------------------

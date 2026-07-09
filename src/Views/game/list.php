@@ -139,7 +139,8 @@ use App\Policies\GamePolicy;
                         <form
                             method="POST"
                             action="/api/game/join/<?= $game->getId() ?>"
-                            data-action-container="join"
+                            data-action-container="join" 
+                                data-response="json" 
                             <?= $can_join ? '' : 'hidden' ?> >
 
                             <input
@@ -159,7 +160,8 @@ use App\Policies\GamePolicy;
                         <form
                             method="POST"
                             action="/api/game/leave/<?= $game->getId() ?>"
-                            data-action-container="leave"
+                            data-action-container="leave" 
+                                data-response="json" 
                             <?= $can_leave ? '' : 'hidden' ?> >
 
                             <input
@@ -190,9 +192,13 @@ use App\Policies\GamePolicy;
 
                             <form
                                 method="POST"
-                                action="/game/delete"
-                                data-action-container="delete"
-                                onsubmit="return confirm('<?= Localization::get('game.list.delete_confirm') ?>');">
+                                action="/api/game/delete"
+                                data-action-container="delete" 
+                                data-response="json" 
+                                data-confirm 
+                                data-confirm-title="<?= Localization::get('application.modal.messages.game.delete.title') ?>" 
+                                data-confirm-message="<?= Localization::get('application.modal.messages.game.delete.confirm') ?>" 
+                                >
 
                                 <input
                                     type="hidden"

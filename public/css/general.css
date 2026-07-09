@@ -338,3 +338,55 @@ a:hover {
     color: var(--ajax-error-text); 
     border: 1px solid var(--ajax-error-border); 
 }
+
+/* Ajax Response in modal window / view */ 
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+
+    z-index: 9999;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-window {
+    width: 100%;
+    max-width: 500px;
+
+    background: white;
+    border-radius: 12px;
+
+    padding: 24px;
+
+    transform: translateY(-10px);
+
+    transition: transform .2s ease;
+}
+
+.modal-overlay.active .modal-window {
+    transform: translateY(0);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 20px;
+}

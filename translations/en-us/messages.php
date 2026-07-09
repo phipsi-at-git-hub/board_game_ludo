@@ -70,6 +70,10 @@ return [
     'application.response.messages.save.success' => 'Successfully saved', 
     'application.response.messages.save.failed' => 'Failed to save', 
 
+    // Application modal labels
+    'application.modal.messages.game.delete.title' => 'Delete Game', 
+    'application.modal.messages.game.delete.confirm' => 'This will delete the game!', 
+
     // Application - Menu
     'application.menu.title' => 'Main Menu', 
     'application.menu.lobby' => '🎮 Game Lobby', 

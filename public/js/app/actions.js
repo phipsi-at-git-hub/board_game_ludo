@@ -1,20 +1,6 @@
-function initActions() {
-    document.addEventListener(
-        'submit',
-        handleActionSubmit
-    );
-}
 
 
-
-async function handleActionSubmit(event) {
-    const form = event.target;
-    const button = form.querySelector('[data-action="submit"]');
-    if (!button) {
-        return;
-    }
-
-    event.preventDefault();
+async function handleActionSubmit(form) { 
     const response =
         await fetch(
             form.action,
@@ -24,8 +10,7 @@ async function handleActionSubmit(event) {
             }
         );
 
-    const data =
-        await response.json();
+    const data = await response.json();
 
     if (!data.success) {
         console.error(data.errors);
