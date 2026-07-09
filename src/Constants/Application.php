@@ -167,6 +167,11 @@ class Application {
     public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll'; 
     public const DTO_RULESET = 'ruleset'; 
 
+    // Player DTO key
+    public const DTO_PLAYER_COUNT_EMPTY = 'empty'; 
+    public const DTO_PLAYER_COUNT_LOW = 'low'; 
+    public const DTO_PLAYER_COUNT_READY = 'ready'; 
+
     // Figure Areas
     public const AREA_HOME  = 'home';
     public const AREA_FIELD = 'field';

@@ -50,6 +50,7 @@ final class ApiGameController extends BaseController {
             );
         }
 
+        $game = GameModel::findById($game->getId()); 
         $this->jsonClean(
             Response::success(
                 $this->context($game),

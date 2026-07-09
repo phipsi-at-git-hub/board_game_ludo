@@ -1914,14 +1914,17 @@ final class GameModel extends BaseModel {
     // Game - Join game - player 
     public function join(string $user_id): bool {
         if ($this->status !== Application::STATUS_WAITING) {
+            return false; 
             throw new DomainException('Game cannot be joined');
         }
 
         if ($this->hasPlayer($user_id)) {
+            return false; 
             throw new DomainException('User already joined');
         }
 
         if ($this->getPlayerCount() >= $this->getPlayerMax()) {
+            return false; 
             throw new DomainException('Game is full');
         }
 
@@ -1932,6 +1935,7 @@ final class GameModel extends BaseModel {
             GameStatePlayerModel::addPlayer($this->getId(), $user_id, $this->getPlayerCount(), $this->rule_set_model->getAllFiguresStartAtHome());
 
             $this->db->commit();
+            
             return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
@@ -2334,6 +2338,19 @@ final class GameModel extends BaseModel {
             return $this->player_count;
         }
         return count($this->player_array);
+    }
+
+    // Get player count category by number of player of the game
+    public function getPlayerCountCategory(): string {
+        $count = (isset($this->player_count)) ? $this->player_count : count($this->player_array); 
+
+        if ($count === 0) {
+            return Application::DTO_PLAYER_COUNT_EMPTY; 
+        } 
+        if ($count === 1) {
+            return Application::DTO_PLAYER_COUNT_LOW; 
+        } 
+        return Application::DTO_PLAYER_COUNT_READY; 
     }
 
     //Get the value of status

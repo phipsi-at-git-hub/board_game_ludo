@@ -133,7 +133,8 @@
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: bold;
-    display: inline-block;
+    display: inline-block; 
+    text-transform: uppercase; 
 }
 
 .role-admin {
@@ -156,6 +157,7 @@
 .status-waiting,
 .status-warning,
 .status-mid, 
+.player-count-category-low, 
 .status-blocked {
     background: var(--status-mid-background);
     color: var(--status-mid-text);
@@ -165,6 +167,7 @@
 .status-active,
 .status-ok,
 .status-healthy,
+.player-count-category-ready, 
 .is-not-private-locked {
     background: var(--status-active-background);
     color: var(--status-active-text);
@@ -173,6 +176,7 @@
 .status-finished,
 .status-banned,
 .status-fail,
+.player-count-category-empty, 
 .is-private-locked {
     background: var(--status-inactive-background);
     color: var(--status-inactive-text);

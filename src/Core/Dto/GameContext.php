@@ -3,6 +3,7 @@
 
 namespace App\Core\Dto;
 
+use App\Core\Localization;
 use App\Models\GameModel;
 use App\Models\UserModel;
 use App\Policies\GamePolicy;
@@ -41,14 +42,19 @@ final class GameContext {
         $dto['ruleset'] = $game->getRuleSetModel()->getPreset();
 
         $dto['player_count'] = $game->getPlayerCount();
+        $dto['player_count_category'] = $game->getPlayerCountCategory();
         $dto['player_max'] = $game->getPlayerMax();
 
         $dto['is_private'] = $game->isPrivate();
+        $dto['is_private_label'] = strtoupper($game->isPrivate() ? Localization::get('application.general.label.private') : Localization::get('application.general.label.public')); // $game->isPrivate();
+        
         $dto['is_locked'] = $game->isLocked();
+        $dto['is_locked_label'] = strtoupper($game->isLocked() ? Localization::get('application.general.label.locked') : Localization::get('application.general.label.open')); // $game->isLocked();
 
         $dto['is_joined'] = $game->hasPlayer($user->getId());
 
-        $dto['is_owner'] = $game->getCreatedByUserId() === $user->getId();
+        $dto['is_owner'] = $game->getCreatedByUserId() === $user->getId(); 
+        $dto['is_owner_label'] = ($game->getCreatedByUserId() === $user->getId()) ? strtoupper(Localization::get('application.general.label.owner')) : ''; // $game->getCreatedByUserId() === $user->getId()
 
         $dto['is_admin'] = $user->isAdmin();
 

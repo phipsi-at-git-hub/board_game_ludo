@@ -44,7 +44,13 @@ final class GamePolicy {
 
     // Can user leave the game
     public static function canLeave(GameModel $game, UserModel $user): bool {
-        return $game->hasPlayer($user->getId());
+        if (!$game->hasPlayer($user->getId())) {
+            return false; 
+        } 
+        if ($game->isRunning()) {
+            return false; 
+        }
+        return true; 
     }
 
     // Can user edit the game

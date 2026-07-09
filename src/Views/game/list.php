@@ -1,4 +1,6 @@
 <?php
+
+use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
 use App\Policies\GamePolicy;
@@ -24,8 +26,11 @@ use App\Policies\GamePolicy;
     </div>
 
     <div class="game-list-cards">
+
         <?php foreach ($games as $game): ?>
+
             <?php
+
             $is_owner = GamePolicy::isOwner($game, $current_user);
             $is_admin = $current_user->isAdmin();
 
@@ -58,15 +63,14 @@ use App\Policies\GamePolicy;
             }
 
             if ($player_count === 0) {
-                $players_class = 'status-fail';
+                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_EMPTY;
             } elseif ($player_count === 1) {
-                $players_class = 'status-warning';
+                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_LOW;
             } else {
-                $players_class = 'status-ok';
+                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
             }
 
-            $ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');
-            ?>
+            $ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');?>
 
             <div
                 class="card game-row"
@@ -81,7 +85,7 @@ use App\Policies\GamePolicy;
 
                     <span
                         class="status-badge <?= $status_class ?>"
-                        data-field="status">
+                        data-bind="status">
                         <?= strtoupper($status_text) ?>
                     </span>
 
@@ -93,34 +97,37 @@ use App\Policies\GamePolicy;
 
                         <span
                             class="status-badge <?= $players_class ?>"
-                            data-field="player-count">
+                            data-bind="player_count" 
+                            data-class-bind="player_count_category" >
                             <?= $player_count ?>/<?= $player_max ?>
                         </span>
 
                         <span
                             class="status-badge status-active"
-                            data-field="ruleset">
+                            data-bind="ruleset" >
                             <?= strtoupper($ruleset_text) ?>
                         </span>
 
                         <span
                             class="status-badge <?= $game->isPrivate() ? 'status-warning' : 'status-ok' ?>"
-                            data-field="visibility">
+                            data-bind="is_private_label" >
                             <?= strtoupper($game->isPrivate() ? Localization::get('application.general.label.private') : Localization::get('application.general.label.public')) ?>
                         </span>
 
                         <span
                             class="status-badge <?= $game->isLocked() ? 'status-fail' : 'status-ok' ?>"
-                            data-field="lock-state">
+                            data-bind="is_locked_label" >
                             <?= strtoupper($game->isLocked() ? Localization::get('application.general.label.locked') : Localization::get('application.general.label.open')) ?>
                         </span>
 
                         <?php if ($is_owner): ?>
+
                             <span
                                 class="role-badge role-admin"
-                                data-field="owner">
+                                data-bind="is_owner_label">
                                 <?= strtoupper(Localization::get('application.general.label.owner')) ?>
                             </span>
+
                         <?php endif; ?>
 
                     </div>
@@ -138,12 +145,12 @@ use App\Policies\GamePolicy;
                             <input
                                 type="hidden"
                                 name="_csrf_token"
-                                value="<?= Csrf::generate() ?>">
+                                value="<?= Csrf::generate() ?>" >
 
                             <button
                                 type="submit"
                                 class="btn btn-save"
-                                data-action="join">
+                                data-action="submit" >
                                 <?= Localization::get('application.general.label.join') ?>
                             </button>
 
@@ -158,55 +165,60 @@ use App\Policies\GamePolicy;
                             <input
                                 type="hidden"
                                 name="_csrf_token"
-                                value="<?= Csrf::generate() ?>">
+                                value="<?= Csrf::generate() ?>" >
 
                             <button
                                 type="submit"
                                 class="btn btn-save"
-                                data-action="leave">
+                                data-action="submit" >
                                 <?= Localization::get('application.general.label.leave') ?>
                             </button>
 
                         </form>
 
                         <?php if ($can_edit): ?>
+
                             <a
                                 href="/game/edit/<?= $game->getId() ?>"
-                                class="btn btn-secondary"
-                                data-action="edit">
+                                class="btn btn-secondary" >
                                 <?= Localization::get('application.general.label.edit') ?>
                             </a>
+
                         <?php endif; ?>
 
                         <?php if ($can_delete): ?>
+
                             <form
                                 method="POST"
                                 action="/game/delete"
-                                data-action="delete"
+                                data-action-container="delete"
                                 onsubmit="return confirm('<?= Localization::get('game.list.delete_confirm') ?>');">
 
                                 <input
                                     type="hidden"
                                     name="_method"
-                                    value="DELETE">
+                                    value="DELETE" >
 
                                 <input
                                     type="hidden"
                                     name="_csrf_token"
-                                    value="<?= Csrf::generate() ?>">
+                                    value="<?= Csrf::generate() ?>" >
 
                                 <input
                                     type="hidden"
                                     name="game_id"
-                                    value="<?= $game->getId() ?>">
+                                    value="<?= $game->getId() ?>" >
 
                                 <button
                                     type="submit"
-                                    class="btn btn-danger">
+                                    class="btn btn-danger"
+                                    data-action="submit" >
                                     <?= Localization::get('application.general.label.delete') ?>
                                 </button>
 
+
                             </form>
+
                         <?php endif; ?>
 
                     </div>
