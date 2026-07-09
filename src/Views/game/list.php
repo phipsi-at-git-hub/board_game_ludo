@@ -74,7 +74,8 @@ use App\Policies\GamePolicy;
 
             <div
                 class="card game-row"
-                data-game-id="<?= $game->getId() ?>"
+                data-id="<?= $game->getId() ?>" 
+                data-action-behavior="remove" 
                 onclick="window.location='/game/detail/<?= $game->getId() ?>'">
 
                 <div class="game-row-header">
@@ -192,7 +193,9 @@ use App\Policies\GamePolicy;
 
                             <form
                                 method="POST"
-                                action="/api/game/delete"
+                                action="/api/game/delete" 
+                                data-action="delete" 
+                                data-action-target-id="<?= $game->getId() ?>" 
                                 data-action-container="delete" 
                                 data-response="json" 
                                 data-confirm 
@@ -221,7 +224,6 @@ use App\Policies\GamePolicy;
                                     data-action="submit" >
                                     <?= Localization::get('application.general.label.delete') ?>
                                 </button>
-
 
                             </form>
 

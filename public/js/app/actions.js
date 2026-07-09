@@ -1,5 +1,3 @@
-
-
 async function handleActionSubmit(form) { 
     const response =
         await fetch(
@@ -21,10 +19,12 @@ async function handleActionSubmit(form) {
         form,
         data.data
     );
+
+    executeActionBehaviors(form); 
 }
 
 function updateGameRow(form, data) {
-    const card = form.closest('[data-game-id]');
+    const card = form.closest('[data-id]');
     if (!card) {
         return;
     }
@@ -99,6 +99,21 @@ function updateActions(card,permissions) {
             container.hidden =
                 !allowed;
         });
+}
+
+function executeActionBehaviors(form) {
+    const target_id = form.dataset.actionTargetId;
+
+    document.querySelectorAll(`[data-id="${target_id}"]`).forEach(element => {
+        switch (element.dataset.actionBehavior) {
+            case 'remove': 
+                element.remove(); 
+                break; 
+            case 'hide': 
+                element.hidden = true; 
+                break; 
+        }
+    }); 
 }
 
 // Helper - Normalize dto and css cases
