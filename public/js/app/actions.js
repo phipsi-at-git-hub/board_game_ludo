@@ -81,18 +81,18 @@ function updateClassBinding(card, key, value) {
     const elements = card.querySelectorAll(`[data-class-bind="${key}"]`); 
 
     elements.forEach(element => {
-        const prefix = element.dataset.classBind; 
-        const prefix_normalized = prefix.replaceAll('_', '-'); 
+        const dto_key = element.dataset.classBind; 
+        const css_prefix = dto_key.replaceAll('_', '-'); 
 
         // remove old dynamic classes
         [...element.classList].filter(
-            cls => cls.startsWith(prefix_normalized + '-')
+            cls => cls.startsWith(css_prefix + '-')
         ).forEach(
             cls => element.classList.remove(cls)
         );
 
         // add new class
-        element.classList.add(`${prefix_normalized}-${value}`); 
+        element.classList.add(`${css_prefix}-${value}`); 
     }); 
 }
 
