@@ -1,163 +1,298 @@
 <?php
+
 use App\Constants\Application;
-use App\Core\Csrf;
 use App\Core\Localization;
 use App\Core\SystemSettings;
+use App\Policies\GamePolicy;
 
 /**
- * @var Object $game 
- * @var Object $user
+ * @var Object $game
+ * @var Object $current_user 
  */
+
+
+$is_owner = GamePolicy::isOwner($game, $current_user);
+$is_admin = $current_user->isAdmin();
+
+$can_edit = GamePolicy::canEdit($game, $current_user);
+$can_delete = GamePolicy::canDelete($game, $current_user);
+
+$can_join = GamePolicy::canJoin($game, $current_user);
+$can_leave = GamePolicy::canLeave($game, $current_user);
+
+$player_count = $game->getPlayerCount();
+$player_max = $game->getPlayerMax();
+
+if ($game->isWaiting()) {
+    $status_class = 'status-waiting';
+    $status_text = Localization::get('game.status.waiting');
+} elseif ($game->isRunning()) {
+    $status_class = 'status-running';
+    $status_text = Localization::get('game.status.running');
+} else {
+    $status_class = 'status-finished';
+    $status_text = Localization::get('game.status.finished');
+}
+
+if ($player_count === 0) {
+    $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_EMPTY;
+} elseif ($player_count === 1) {
+    $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_LOW;
+} else {
+    $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
+}
+
+$ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');
+
+$can_start = $game->isWaiting() && $game->isCreator($current_user);
+$can_pause = $game->isRunning() && ($game->isCreator($current_user) || $is_admin);
+$can_play = $game->isRunning() && (SystemSettings::isGamePlayEnabled() || $is_admin);
+$can_reset = $is_admin;
+
+$can_edit_rules = false;
+$can_edit_options = false;
+
 ?>
 
 <div class="panel">
-    <h1><?= Localization::get('game.show.title') ?> 🎮 <?= htmlspecialchars($game->getName()) ?></h1>
+
+    <h1><?= Localization::get('game.show.title') ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
-            <li><a href="/lobby" class="btn-back"><?= Localization::get('application.general.btn.back_to_lobby') ?></a></li>
-            <li><a href="/game/list" class="btn-back"><?= Localization::get('application.general.btn.back_to_list') ?></a></li>
+            <li>
+                <a href="/lobby" class="btn-back">
+                    <?= Localization::get('application.general.btn.back_to_lobby') ?>
+                </a>
+            </li>
+
+            <li>
+                <a href="/game/list" class="btn-back">
+                    <?= Localization::get('application.general.btn.back_to_list') ?>
+                </a>
+            </li>
         </ul>
     </div>
 
-    <!-- Status & Actions -->
-    <div class="card game-card">
-        <!--<h2><?= Localization::get('game.show.info') ?></h2>-->
-        <div class="game-card-header">
-            <h2 class="game-tile">🎮 <?= htmlspecialchars($game->getName()) ?></h2>
-            <div class="status-badges">
-                <span class="status-badge status-<?= strtolower($game->getStatus()) ?>">
-                    <?= htmlspecialchars($game->getStatus()) ?>
-                </span>
-                <span class="status-badge <?= ($game->isPrivate()) ? 'is' : 'is-not' ?>-private-locked">
-                    <?= htmlspecialchars(($game->isPrivate()) ? 'Private' : 'Open') ?>
-                </span>
-                <span class="status-badge <?= ($game->isLocked()) ? 'is' : 'is-not' ?>-private-locked">
-                    <?= htmlspecialchars(($game->isLocked()) ? 'Locked' : 'Unlocked') ?>
-                </span>
+    <!-- Game Header -->
+    <div
+        class="card game-row"
+        data-id="<?= $game->getId() ?>">
+
+        <?php include __DIR__ . '/partials/header.php'; ?>
+
+    </div>
+
+    <!-- Game Information -->
+    <div class="card">
+
+        <h2>
+            <?= Localization::get('game.show.info') ?>
+        </h2>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.show.created_by') ?></span>
+            <span><?= htmlspecialchars($game->getCreatedByUserName()) ?></span>
+        </div>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.show.created_at') ?></span>
+            <span><?= htmlspecialchars($game->getCreatedAt()) ?></span>
+        </div>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.show.players') ?></span>
+            <span><?= $player_count ?>/<?= $player_max ?></span>
+        </div>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.show.join') ?></span>
+            <span>
+                <?= $game->isParticipant($current_user)
+                    ? Localization::get('application.general.yes')
+                    : Localization::get('application.general.no') ?>
+            </span>
+        </div>
+
+        <?php if ($game->isFinished() && $game->getWinner()): ?>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.show.winner') ?></span>
+                <span><?= htmlspecialchars($game->getWinner()->getUsername()) ?></span>
             </div>
 
-            <div class="card-actions">
-                    <?php if (!$game->isFinished()): ?>
-                        <form method="POST" action="/game/<?= ($game->isParticipant($user)) ? 'leave' : 'join' ?>/<?= $game->getId() ?>">
-                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                            <button class="btn btn-<?= ($game->isParticipant($user)) ? 'danger' : 'save' ?>">
-                                <?= htmlspecialchars(($game->isParticipant($user)) ? Localization::get('game.show.leave') : Localization::get('game.show.join')) ?>
-                            </button>
-                        </form>
-                    <?php endif; ?>
+        <?php endif; ?>
 
-                    <?php if ($user->isAdmin() && !$game->IsTestGame()): ?>
-                        <form method="POST" action="/game/create_solo_test" onsubmit="return confirm('<?= Localization::get('game.show.solo_test_creation_confirm') ?>');">
-                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                            <button type="submit" class="btn btn-secondary create"><?= Localization::get('game.show.test_solo_create') ?></button>
-                        </form>
-                    <?php endif; ?>
+    </div>
 
-                    <?php if ($game->isCreator($user) && $game->isWaiting()): ?>
-                        <form method="POST" action="/game/start">
-                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                            <button type="submit" class="btn btn-save play"><?= Localization::get('game.show.start') ?></button>
-                        </form>
-                    <?php endif; ?>
+    <!-- Players -->
+    <div class="card">
 
-                    <?php if ($game->isRunning() && ($game->isCreator($user) || $user->isAdmin())): ?>
-                        <form method="POST" action="/game/pause">
-                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                            <button type="submit" class="btn btn-secondary"><?= Localization::get('game.show.pause') ?></button>
-                        </form>
-                    <?php endif; ?>
+        <h2>
+            <?= Localization::get('game.show.players') ?>
+        </h2>
 
-                    <?php if ($user->isAdmin()): ?>
-                        <form method="POST" action="/game/reset">
-                            <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
-                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                            <button type="submit" class="btn btn-secondary"><?= Localization::get('game.show.reset') ?></button>
-                        </form>
-                    <?php endif; ?>
+        <?php include VIEWS_PATH . '/game/partials/players.php' ?>
 
-                    <?php if ($game->isRunning() && (SystemSettings::isGamePlayEnabled() || $user->isAdmin())): ?>
-                        <a href="/game/play/<?= $game->getId() ?>" class="btn btn-save play"><?= Localization::get('game.show.play') ?></a>
-                    <?php endif; ?>
+    </div>
+
+    <!-- Game Rules -->
+    <div class="card">
+        <div class="card-header">
+            <h2><?= Localization::get('game.create.card.rules.title') ?></h2>
+
+            <div id="restore-ruleset-group" class="btn-badge-group default invisible">
+                <button id="restore-ruleset" type="button" class="btn-badge"><?= Localization::get('game.create.card.rules.restore') ?></button>
             </div>
         </div>
 
-        <!-- Meta-Infos -->
-        <div class="card-body meta-grid">
-            <div><?= Localization::get('game.show.created_by') ?></div>
-            <div><?= htmlspecialchars($game->getCreatedByUserName()) ?></div>
+        <!-- Starting Rules -->
+        <div class="nested-card">
 
-            <div><?= Localization::get('game.show.created_at') ?></div>
-            <div><?= htmlspecialchars($game->getCreatedAt()) ?></div>
+            <h3><?= Localization::get('game.create.card.rules.group.starting.title') ?></h3>
 
-            <div><?= Localization::get('game.show.players') ?></div>
-            <div><?= count($game->getAllPlayers()) ?></div>
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.all_figures_start_at_home') ?></span>
 
-            <?php if ($game->isFinished()): ?>
-                <div><?= Localization::get('game.show.winner') ?></div>
-                <div><?= $game->getWinner()->getUsername() ?></div>
-            <?php endif; ?>
+                <select name="<?= Application::ALL_FIGURES_START_AT_HOME ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getAllFiguresStartAtHome()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
 
-            <div><?= Localization::get('game.show.join') ?></div>
-            <div><?= ($game->isParticipant($user)) ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></div>
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.start_field_must_be_cleared') ?></span>
+
+                <select name="<?= Application::START_FIELD_MUST_BE_CLEARED ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getStartFieldMustBeCleared()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.leave_home_attempt') ?></span>
+
+                <select name="<?= Application::LEAVE_HOME_ATTEMPT ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="<?= Application::ENUM_FIRST_FIGURE ?>" data-state="default" <?= ($game->getRuleSetModel()->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_first_figure') ?></option>
+                    <option value="<?= Application::ENUM_ALL_FIGURES ?>" data-state="active" <?= ($game->getRuleSetModel()->getLeaveHomeAttemptVariant() === Application::ENUM_ALL_FIGURES) ? 'selected' : '' ?> ><?= Localization::get('game.rules.leave_home_attempt_enum_all_figures') ?></option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.leave_home_attempts_max') ?></span>
+
+                <select name="<?= Application::LEAVE_HOME_ATTEMPTS_MAX ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="1" data-state="default" <?= ($game->getRuleSetModel()->getLeaveHomeAttemptsMax() === 1) ? 'selected' : '' ?> >1</option>
+                    <option value="3" data-state="mid" <?= ($game->getRuleSetModel()->getLeaveHomeAttemptsMax() === 3) ? 'selected' : '' ?> >3</option>
+                    <option value="5" data-state="active" <?= ($game->getRuleSetModel()->getLeaveHomeAttemptsMax() === 5) ? 'selected' : '' ?> >5</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.force_leaving_home_on_six') ?></span>
+
+                <select name="<?= Application::FORCE_LEAVING_HOME_ON_SIX ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getForceLeavingHomeOnSix()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getForceLeavingHomeOnSix()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
         </div>
-    </div>
 
-    <!-- List of Players -->
-    <div class="card">
-        <h2><?= Localization::get('game.show.players') ?></h2>
+        <!-- Movement & Turn Rules -->
+        <div class="nested-card">
 
-        <div class="card players-container">
-            <?php if (!empty($game->getAllPlayers())): ?>
-                <?php foreach ($game->getAllPlayers() as $player): ?>
-                    <div class="player-card">
-                        <h3>
-                            <?php if ($player->getUserId() === $user->getId()) echo '➡️'; ?>
-                            🧑 <?= htmlspecialchars($player->getUsername()) ?>
-                            <?php if ($player->getUserId() === $game->getStateModel()->getWinnerUserId()) echo '👑'; ?>
-                        </h3>
-                        <div class="figure-row">
-                            <?php foreach ($player->getAllFigures() as $figure): ?>
-                                <div class="figure-badge">
-                                    ♟ <?= $figure->getFigureIndex() ?>
-                                    <small><?= htmlspecialchars($figure->getArea()) ?> (<?= $figure->getPosition() ?>)</small>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p><?= Localization::get('game.show.label_no_players_found') ?></p>
-            <?php endif; ?>
+            <h3><?= Localization::get('game.create.card.rules.group.movement.title') ?></h3>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.roll_on_six_limit') ?></span>
+
+                <select name="<?= Application::EXTRA_ROLL_ON_SIX_LIMIT ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 0) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="3" data-state="mid" <?= ($game->getRuleSetModel()->getExtraRollOnSixLimit() > 0 && $game->getRuleSetModel()->getAllowStackOwnFigures() < 255) ? 'selected' : '' ?> ><?= Localization::get('game.create.three') ?></option>
+                    <option value="255" data-state="active" <?= ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 255) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.force_extra_lap_on_overflow') ?></span>
+
+                <select name="<?= Application::FORCE_EXTRA_LAP_ON_OVERFLOW ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getForceExtraLapOnOverflow()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
         </div>
+
+        <!-- Interaction & Goal Rules -->
+        <div class="nested-card">
+
+            <h3><?= Localization::get('game.create.card.rules.group.interactions.title') ?></h3>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.allow_stack_own_figures') ?></span>
+
+                <select name="<?= Application::ALLOW_STACK_OWN_FIGURES ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getAllowStackOwnFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.force_capture_enemy_figures') ?></span>
+
+                <select name="<?= Application::FORCE_CAPTURE_ENEMY_FIGURES ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getForceCaptureEnemyFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getForceCaptureEnemyFigures()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span><?= Localization::get('game.rules.strict_goal_order') ?></span>
+
+                <select name="<?= Application::STRICT_GOAL_ORDER ?>" data-ui="switch" <?= $can_edit_rules ? '' : 'disabled' ?> >
+                    <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getStrictGoalOrder()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                    <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getStrictGoalOrder()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+                </select>
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Game Rule Set -->
+    <!-- Game Options -->
     <div class="card">
-        <h2><?= Localization::get('game.show.rules') ?></h2>
-        <ul class="rules-list">
-            <li><?= Localization::get('game.show.label_rules_bots_allows') ?>: <?= $game->getRuleSetModel()->getAllowBots() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_all_figures_start_at_home') ?>: <?= $game->getRuleSetModel()->getAllFiguresStartAtHome() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_start_field_must_be_cleared') ?>: <?= $game->getRuleSetModel()->getStartFieldMustBeCleared() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_leave_home_attempt') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptVariant() === Application::ENUM_FIRST_FIGURE ? Localization::get('game.show.label_rules_leave_home_attempt_enum_first_figure') : Localization::get('game.show.label_rules_leave_home_attempt_enum_all_figures') ?></li>
-            <li><?= Localization::get('game.show.label_rules_leave_home_attempts_max') ?>: <?= $game->getRuleSetModel()->getLeaveHomeAttemptsMax() ?></li>
-            <li><?= Localization::get('game.show.label_rules_roll_on_six_limit') ?>: <?php 
-                if ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 0) { 
-                    echo Localization::get('game.show.label_rules_roll_on_six_limit_no'); 
-                } elseif ($game->getRuleSetModel()->getExtraRollOnSixLimit() === 255) { 
-                    echo Localization::get('game.show.label_rules_roll_on_six_limit_unlimited'); 
-                } else { 
-                    echo Localization::get('game.show.label_rules_roll_on_six_limit_limited') . $game->getRuleSetModel()->getExtraRollOnSixLimit();
-                } 
-            ?></li>
-            <li><?= Localization::get('game.show.label_rules_force_leaving_home_on_six') ?>: <?= $game->getRuleSetModel()->getForceLeavingHomeOnSix() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_force_capture_enemy_figures') ?>: <?= $game->getRuleSetModel()->getForceCaptureEnemyFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_force_extra_lap_on_overflow') ?>: <?= $game->getRuleSetModel()->getForceExtraLapOnOverflow() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_stack_own_figures') ?>: <?= $game->getRuleSetModel()->getAllowStackOwnFigures() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-            <li><?= Localization::get('game.show.label_rules_strict_goal_order') ?>: <?= $game->getRuleSetModel()->getStrictGoalOrder() ? Localization::get('application.general.yes') : Localization::get('application.general.no') ?></li>
-        </ul>
+
+        <h2><?= Localization::get('game.create.card.options.title') ?></h2>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.options.is_private') ?></span>
+
+            <select name="<?= Application::IS_PRIVATE ?>" data-ui="switch" <?= $can_edit_options ? '' : 'disabled' ?> >
+                <option value="0" data-state="active" <?= (!$game->isPrivate()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" data-state="inactive" <?= ($game->isPrivate()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.options.is_locked') ?></span>
+
+            <select name="<?= Application::IS_LOCKED ?>" data-ui="switch" <?= $can_edit_options ? '' : 'disabled' ?> >
+                <option value="0" data-state="active" <?= (!$game->isLocked()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" data-state="inactive" <?= ($game->isLocked()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <span><?= Localization::get('game.rules.allow_bots') ?></span>
+
+            <select name="<?= Application::ALLOW_BOTS ?>" data-ui="switch" <?= $can_edit_options ? '' : 'disabled' ?> >
+                <option value="0" data-state="default" <?= (!$game->getRuleSetModel()->getAllowBots()) ? 'selected' : '' ?> ><?= Localization::get('application.general.no') ?></option>
+                <option value="1" data-state="active" <?= ($game->getRuleSetModel()->getAllowBots()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
+            </select>
+        </div>
+
     </div>
+
 </div>

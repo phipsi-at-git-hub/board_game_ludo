@@ -59,12 +59,25 @@
     align-items: center;
 }
 
+/* ToDo: remove with cleanup */ 
 .card.players-container {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
 }
 
+.player-grid {
+    display: grid; 
+    grid-template-columns: repeat(
+        auto-fit, 
+        minmax(320px, 1fr) 
+    ); 
+    gap: 1rem; 
+}.player-grid.placeholder {
+    visibility: hidden; 
+} 
+
+/* ToDo: remove with cleanup */ 
 .player-card {
     flex: 1 1 150px;
     padding: 12px;
@@ -142,7 +155,14 @@
     color: var(--role-admin-text);
 }
 
+.role-moderator, 
+.role-winner {
+    background-color: var(--role-moderator-background);
+    color: var(--role-moderator-text);
+}
+
 .role-user, 
+.role-me, 
 .status-default {
     background-color: var(--role-user-background);
     color: var(--role-user-text); 

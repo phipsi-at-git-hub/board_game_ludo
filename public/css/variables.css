@@ -45,6 +45,8 @@
     /* Badge Role Colors */
     --role-admin-background: #ff9800; 
     --role-admin-text: var(--black-color); 
+    --role-moderator-background: var(--status-active-background); 
+    --role-moderator-text: var(--status-active-text); 
     --role-user-background: #e0e0e0; 
     --role-user-text: var(--text-color); 
 

@@ -58,6 +58,8 @@ return [
     'application.general.label.open' => 'open', 
     'application.general.label.locked' => 'locked', 
     'application.general.label.owner' => 'owner', 
+    'application.general.label.you' => 'you', 
+    'application.general.label.me' => 'me', 
     'application.general.label.menu' => 'menu', 
 
     // Application navbar
@@ -183,6 +185,7 @@ return [
     'game.create.card.rules.group.starting.title' => 'Starting', 
     'game.create.card.rules.group.movement.title' => 'Movement', 
     'game.create.card.rules.group.interactions.title' => 'Interactions', 
+    'game.create.card.rules.restore' => 'Restore Rules', 
     'game.create.card.options.title' => 'Game Options', 
 
     // Game - Edit
