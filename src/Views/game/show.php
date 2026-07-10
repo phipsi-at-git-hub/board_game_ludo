@@ -76,7 +76,7 @@ $can_edit_options = false;
 
     <!-- Game Header -->
     <div
-        class="card game-row"
+        class="card game-detail"
         data-id="<?= $game->getId() ?>">
 
         <?php include __DIR__ . '/partials/header.php'; ?>

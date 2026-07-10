@@ -9,9 +9,8 @@ use App\Core\Localization;
  */
 
 $players = $game->getAllPlayers();
-
 $display_order = match (count($players)) {
-    1 => [0],
+    1 => [0, null],
     2 => [0, 1],
     3 => [0, 1, null, 2],
     default => [0, 1, 3, 2]
@@ -33,9 +32,11 @@ $display_order = match (count($players)) {
 
             <?php endif; ?>
 
-            <?php if (!isset($players[$index])): ?>
-                <?php continue; ?>
-            <?php endif; ?>
+            <?php 
+            if (!isset($players[$index])) { 
+                continue;
+            }
+            ?>
 
             <?php $player = $players[$index]; ?>
 

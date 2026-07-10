@@ -26,7 +26,8 @@
 
 .card {
     background: rgba(255,255,255,0.95);
-    padding: 16px;
+    /* ToDo: cleanup: padding: 16px; */
+    padding: 8px 14px; 
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 16px;
@@ -230,10 +231,6 @@
     max-height: 600px;
 }
 
-
-
-
-
 /* NEW NEW NEW */
 /* ------------------------------
    Game List
@@ -242,7 +239,7 @@
 .game-list-cards {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .game-row {
@@ -300,7 +297,8 @@
     flex-shrink: 0;
 }
 
-.game-row .btn {
+.game-row .btn, 
+.game-detail .btn {
     padding: 8px 14px;
     font-size: 14px;
 }
