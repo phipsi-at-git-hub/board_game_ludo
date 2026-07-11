@@ -60,30 +60,67 @@ final class ApiGameController extends BaseController {
         );
     }
 
+    /**
+     * Generic game action with view in response
+     */
+    private function executeApiGameActionWithViews(string $game_id, callable $action, string $success_message, callable $view_builder): void {
+        $game = $this->requireGame($game_id); 
+        $success = $action($game); 
+        if (!$success) {
+            $this->jsonClean(
+                Response::error('Action not allowed'), 400 
+            ); 
+        } 
+
+        $game = GameModel::findById($game->getId()); 
+        $this->jsonClean(
+            Response::success(
+                $this->context($game), 
+                $success_message, 
+                $view_builder($game) 
+            )
+        ); 
+    }
+
+    /**
+     * Specific players partials for response
+     */
+    private function buildPlayersView(GameModel $game): array {
+        return [
+            'players' => $this->renderView(
+                'game/partials/players', 
+                [
+                    'game' => $game, 
+                    'current_user' => Auth::user() 
+                ] 
+            ) 
+        ]; 
+    }
+
     // Join game
     public function join(string $game_id): void {
-        $this->executeApiGameActions(
-            $game_id,
-            fn(GameModel $game) =>
-                $this->gameService->join(
-                    $game,
-                    Auth::user()
-                ),
-            'Joined game'
-        );
+        $this->executeApiGameActionWithViews(
+            $game_id, 
+            fn(GameModel $game) => $this->gameService->join(
+                $game, 
+                Auth::user() 
+            ), 
+            'Joined game', 
+            fn(GameModel $game) => $this->buildPlayersView($game) 
+        ); 
     }
 
     // Leave game
     public function leave(string $game_id): void {
-        $this->executeApiGameActions(
-            $game_id,
-            fn(GameModel $game) =>
-                $this->gameService->leave(
-                    $game,
-                    Auth::user()
-                ),
-            'Left game'
-        );
+        $this->executeApiGameActionWithViews(
+            $game_id, 
+            fn(GameModel $game) => $this->gameService->leave(
+                $game, 
+                Auth::user() 
+            ), 
+            'Left game', 
+            fn(GameModel $game) => $this->buildPlayersView($game) 
+        ); 
     }
 
     // Start game

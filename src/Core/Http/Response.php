@@ -11,24 +11,28 @@ final class Response {
         string $type,
         ?string $message = null,
         array $data = [],
-        array $errors = []
+        array $errors = [], 
+        array $views = [] 
     ): array {
         return [
             'success' => $success,
             'type' => $type,
             'message' => $message,
             'data' => $data,
-            'errors' => $errors,
+            'errors' => $errors, 
+            'views' => $views, 
         ];
     }
 
     /* Success */
-    public static function success(array $data = [], ?string $message = null): array {
+    public static function success(array $data = [], ?string $message = null, array $views = []): array {
         return self::build(
             true,
             Application::RESPONSE_TYPE_SUCCESS,
             $message,
-            $data
+            $data, 
+            [], // no errors 
+            $views 
         );
     }
 
@@ -38,7 +42,7 @@ final class Response {
             false,
             Application::RESPONSE_TYPE_ERROR,
             $message,
-            [],
+            [], // no data
             $errors
         );
     }

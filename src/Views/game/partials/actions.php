@@ -44,10 +44,11 @@ $can_create_test ??= false;
 
     <form
         method="POST"
-        action="/api/game/join/<?= $game->getId() ?>"
-        data-action-container="join"
-        data-response="json"
-        <?= $can_join ? '' : 'hidden' ?> >
+        action="/api/game/join/<?= $game->getId() ?>" 
+        data-action-container="join" 
+        data-response="json" 
+        data-view-target-id="players" 
+        <?= $can_join ? '' : 'hidden' ?> > 
 
         <input
             type="hidden"
@@ -69,10 +70,11 @@ $can_create_test ??= false;
 
     <form
         method="POST"
-        action="/api/game/leave/<?= $game->getId() ?>"
-        data-action-container="leave"
-        data-response="json"
-        <?= $can_leave ? '' : 'hidden' ?> >
+        action="/api/game/leave/<?= $game->getId() ?>" 
+        data-action-container="leave" 
+        data-response="json" 
+        data-view-target-id="players" 
+        <?= $can_leave ? '' : 'hidden' ?> > 
 
         <input
             type="hidden"

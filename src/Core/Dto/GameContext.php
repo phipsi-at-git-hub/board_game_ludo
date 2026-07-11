@@ -39,7 +39,7 @@ final class GameContext {
 
         $dto['status'] = $game->getStatus();
 
-        $dto['ruleset'] = $game->getRuleSetModel()->getPreset();
+        $dto['ruleset'] = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 
         $dto['player_count'] = $game->getPlayerCount();
         $dto['player_count_category'] = $game->getPlayerCountCategory();

@@ -19,7 +19,7 @@ async function handleActionSubmit(form) {
         form,
         data.data
     );
-
+    updateViews(data.views); 
     executeActionBehaviors(form); 
 }
 
@@ -43,7 +43,6 @@ function updateGameRow(form, data) {
                 value 
             ); 
         });
-
     updateActions(card, data.permissions);
 }
 
@@ -81,24 +80,37 @@ function updateClassBinding(card, key, value) {
     }); 
 }
 
+function updateViews(views) {
+    if (!views) {
+        return;
+    }
+
+    Object.entries(views).forEach(([target, html]) => {
+        const element = document.querySelector(
+            `[data-view-bind="${target}"]`
+        );
+        if (!element) {
+            return;
+        }
+        element.innerHTML = html;
+    });
+}
+
 function updateActions(card,permissions) {
     if (!permissions) {
         return;
     }
 
-    Object.entries(permissions)
-        .forEach(([action,allowed]) => {
-            const container =
-                card.querySelector(
-                    `[data-action-container="${action}"]`
-                );
-            if (!container) {
-                return;
-            }
-
-            container.hidden =
-                !allowed;
-        });
+    Object.entries(permissions).forEach(([action,allowed]) => {
+        const container =
+            card.querySelector(
+                `[data-action-container="${action}"]`
+            );
+        if (!container) {
+            return;
+        }
+        container.hidden = !allowed;
+    });
 }
 
 function executeActionBehaviors(form) {

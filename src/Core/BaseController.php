@@ -32,6 +32,24 @@ abstract class BaseController {
         require VIEWS_PATH . '/layout.php';
     }
 
+    // Renderer for view fragment
+    protected function renderView(string $view, array $data = []): string {
+        if (!$view) {
+            return ''; 
+        }
+
+        $data['current_user'] = null; 
+
+        if (Auth::user()) {
+            $data['current_user'] = Auth::user(); 
+        }
+
+        extract($data); 
+        ob_start(); 
+        require VIEWS_PATH . '/' . $view . '.php'; 
+        return ob_get_clean(); 
+    }
+
     // Redirect
     protected function redirect(string $url): void {
         header("Location: $url");

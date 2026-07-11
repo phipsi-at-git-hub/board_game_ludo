@@ -69,7 +69,9 @@ use App\Policies\GamePolicy;
                 $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
             }
 
-            $ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');?>
+            $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
+            
+            ?>
 
             <div
                 class="card game-row"

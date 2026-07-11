@@ -51,7 +51,7 @@ if ($player_count === 0) {
     $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
 }
 
-$ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');
+$ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset());
 
 $can_edit_rules = false;
 $can_edit_options = false;
@@ -136,7 +136,11 @@ $can_edit_options = false;
             <?= Localization::get('game.show.players') ?>
         </h2>
 
-        <?php include VIEWS_PATH . '/game/partials/players.php' ?>
+        <div data-view-bind="players">
+        
+            <?php include VIEWS_PATH . '/game/partials/players.php' ?>
+
+        </div>
 
     </div>
 
