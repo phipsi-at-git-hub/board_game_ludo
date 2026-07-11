@@ -3,6 +3,7 @@
 
 namespace App\Policies;
 
+use App\Core\SystemSettings;
 use App\Models\GameModel;
 use App\Models\UserModel;
 
@@ -68,9 +69,9 @@ final class GamePolicy {
     public static function canDelete(GameModel $game, UserModel $user): bool {
         return (
             $user->isAdmin()
-            || (
-                $game->isWaiting()
-                && $user->getId() === $game->getCreatedByUserId()
+            && (
+                $game->isFinished()
+                || $game->isCancelled() 
             )
         );
     }
@@ -79,6 +80,27 @@ final class GamePolicy {
     public static function canStart(GameModel $game, UserModel $user): bool {
         return (
             $game->isWaiting()
+            && (
+                $user->isAdmin()
+                || $user->getId() === $game->getCreatedByUserId()
+            )
+        );
+    }
+
+    // Can user play the game 
+    public static function canPlay(GameModel $game, UserModel $user): bool {
+        return (
+            $game->isRunning() 
+            && (
+                (
+                    SystemSettings::isGamePlayEnabled() 
+                    && $user->getId() === $game->getCreatedByUserId()
+                ) 
+                || $user->isAdmin()  
+            )
+        );
+        return (
+            $game->isRunning()
             && (
                 $user->isAdmin()
                 || $user->getId() === $game->getCreatedByUserId()
@@ -111,10 +133,13 @@ final class GamePolicy {
     // Can user cancel the game 
     public static function canCancel(GameModel $game, UserModel $user): bool {
         return (
-            $user->isAdmin()
+            (
+                $user->isAdmin()
+                && (!$game->isCancelled() && !$game->isFinished()) 
+            )
             || (
-                $game->isWaiting()
-                && $user->getId() === $game->getCreatedByUserId()
+                ($game->isWaiting() || $game->isRunning()) 
+                && self::isOwner($game, $user)
             )
         );
     }

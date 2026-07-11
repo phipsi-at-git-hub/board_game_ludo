@@ -1,8 +1,7 @@
 <?php
 
 use App\Constants\Application;
-use App\Core\Localization;
-use App\Core\SystemSettings;
+use App\Core\Localization; 
 use App\Policies\GamePolicy;
 
 /**
@@ -13,8 +12,15 @@ use App\Policies\GamePolicy;
 
 $is_owner = GamePolicy::isOwner($game, $current_user);
 $is_admin = $current_user->isAdmin();
+$can_create_test = $is_admin; 
+
+$can_start = GamePolicy::canStart($game, $current_user); 
+$can_play = GamePolicy::canPlay($game, $current_user); 
+$can_pause = GamePolicy::canPause($game, $current_user); 
 
 $can_edit = GamePolicy::canEdit($game, $current_user);
+$can_reset = GamePolicy::canReset($game, $current_user); 
+$can_cancel = GamePolicy::canCancel($game, $current_user); 
 $can_delete = GamePolicy::canDelete($game, $current_user);
 
 $can_join = GamePolicy::canJoin($game, $current_user);
@@ -29,9 +35,12 @@ if ($game->isWaiting()) {
 } elseif ($game->isRunning()) {
     $status_class = 'status-running';
     $status_text = Localization::get('game.status.running');
-} else {
+} elseif ($game->isFinished()) {
     $status_class = 'status-finished';
     $status_text = Localization::get('game.status.finished');
+} elseif ($game->isCancelled()) {
+    $status_class = 'status-cancelled';
+    $status_text = Localization::get('game.status.cancelled');
 }
 
 if ($player_count === 0) {
@@ -43,11 +52,6 @@ if ($player_count === 0) {
 }
 
 $ruleset_text = $game->getRuleSetModel()->isGameClassic() ? Localization::get('game.ruleset.classic') : Localization::get('game.ruleset.custom');
-
-$can_start = $game->isWaiting() && $game->isCreator($current_user);
-$can_pause = $game->isRunning() && ($game->isCreator($current_user) || $is_admin);
-$can_play = $game->isRunning() && (SystemSettings::isGamePlayEnabled() || $is_admin);
-$can_reset = $is_admin;
 
 $can_edit_rules = false;
 $can_edit_options = false;

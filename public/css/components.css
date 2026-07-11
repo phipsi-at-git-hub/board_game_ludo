@@ -165,8 +165,14 @@
 .role-user, 
 .role-me, 
 .status-default {
-    background-color: var(--role-user-background);
+    background: var(--role-user-background);
     color: var(--role-user-text); 
+}
+
+.role-winner, 
+.status-finished {
+    background: var(--status-finished-background); 
+    color: var(--status-finished-text); 
 }
 
 .status-inactive,
@@ -194,7 +200,7 @@
     color: var(--status-active-text);
 }
 
-.status-finished,
+.status-cancelled,
 .status-banned,
 .status-fail,
 .player-count-category-empty, 

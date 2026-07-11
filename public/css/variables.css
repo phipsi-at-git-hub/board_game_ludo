@@ -41,6 +41,8 @@
     --status-mid-text: #856404; 
     --status-inactive-background: #f8d7da; 
     --status-inactive-text: #721c24; 
+    --status-finished-background: #f4c542 ; 
+    --status-finished-text: #1f1f1f; 
 
     /* Badge Role Colors */
     --role-admin-background: #ff9800; 

@@ -18,7 +18,7 @@ use App\Core\Localization;
  * @var bool $can_play
  * @var bool $can_reset
  * @var bool $can_cancel
- * @var bool $can_create_solo
+ * @var bool $can_create_test
  */
 
 $can_join ??= false;
@@ -33,7 +33,7 @@ $can_play ??= false;
 
 $can_reset ??= false;
 $can_cancel ??= false;
-$can_create_solo ??= false;
+$can_create_test ??= false;
 ?>
 
 <div
@@ -59,7 +59,7 @@ $can_create_solo ??= false;
             class="btn btn-save"
             data-action="submit">
 
-            <?= Localization::get('application.general.label.join') ?>
+            <?= Localization::get('application.general.btn.join') ?>
 
         </button>
 
@@ -84,11 +84,25 @@ $can_create_solo ??= false;
             class="btn btn-save"
             data-action="submit">
 
-            <?= Localization::get('application.general.label.leave') ?>
+            <?= Localization::get('application.general.btn.leave') ?>
 
         </button>
 
     </form>
+
+    <!-- PLAY -->
+
+    <?php if ($can_play): ?>
+
+        <a
+            href="/game/play/<?= $game->getId() ?>"
+            class="btn btn-save">
+
+            <?= Localization::get('application.general.btn.play') ?>
+
+        </a>
+
+    <?php endif; ?>
 
     <!-- START -->
 
@@ -112,7 +126,7 @@ $can_create_solo ??= false;
                 type="submit"
                 class="btn btn-save">
 
-                <?= Localization::get('game.show.start') ?>
+                <?= Localization::get('application.general.btn.start') ?>
 
             </button>
 
@@ -142,7 +156,7 @@ $can_create_solo ??= false;
                 type="submit"
                 class="btn btn-secondary">
 
-                <?= Localization::get('game.show.pause') ?>
+                <?= Localization::get('application.general.btn.pause') ?>
 
             </button>
 
@@ -150,30 +164,16 @@ $can_create_solo ??= false;
 
     <?php endif; ?>
 
-    <!-- PLAY -->
-
-    <?php if ($can_play): ?>
-
-        <a
-            href="/game/play/<?= $game->getId() ?>"
-            class="btn btn-save">
-
-            <?= Localization::get('game.show.play') ?>
-
-        </a>
-
-    <?php endif; ?>
-
     <!-- SOLO TEST -->
 
-    <?php if ($can_create_solo): ?>
+    <?php if ($can_create_test): ?>
 
         <form
             method="POST"
             action="/game/create_solo_test"
             data-confirm
-            data-confirm-title="<?= Localization::get('game.show.test_solo_create') ?>"
-            data-confirm-message="<?= Localization::get('game.show.solo_test_creation_confirm') ?>">
+            data-confirm-title="<?= Localization::get('application.modal.messages.game.create.test.title') ?>"
+            data-confirm-message="<?= Localization::get('application.modal.messages.game.create.test.confirm') ?>">
 
             <input
                 type="hidden"
@@ -189,7 +189,7 @@ $can_create_solo ??= false;
                 type="submit"
                 class="btn btn-secondary">
 
-                <?= Localization::get('game.show.test_solo_create') ?>
+                <?= Localization::get('application.general.btn.create.test') ?>
 
             </button>
 
@@ -205,7 +205,7 @@ $can_create_solo ??= false;
             method="POST"
             action="/game/reset"
             data-confirm
-            data-confirm-title="<?= Localization::get('game.show.reset') ?>"
+            data-confirm-title="<?= Localization::get('application.modal.messages.game.reset.title') ?>"
             data-confirm-message="<?= Localization::get('application.modal.messages.game.reset.confirm') ?>">
 
             <input
@@ -222,11 +222,25 @@ $can_create_solo ??= false;
                 type="submit"
                 class="btn btn-secondary">
 
-                <?= Localization::get('game.show.reset') ?>
+                <?= Localization::get('application.general.btn.reset') ?>
 
             </button>
 
         </form>
+
+    <?php endif; ?>
+
+    <!-- EDIT -->
+
+    <?php if ($can_edit): ?>
+
+        <a
+            href="/game/edit/<?= $game->getId() ?>"
+            class="btn btn-secondary">
+
+            <?= Localization::get('application.general.btn.edit') ?>
+
+        </a>
 
     <?php endif; ?>
 
@@ -238,7 +252,7 @@ $can_create_solo ??= false;
             method="POST"
             action="/game/cancel"
             data-confirm
-            data-confirm-title="<?= Localization::get('game.show.cancel') ?>"
+            data-confirm-title="<?= Localization::get('application.modal.messages.game.cancel.title') ?>"
             data-confirm-message="<?= Localization::get('application.modal.messages.game.cancel.confirm') ?>">
 
             <input
@@ -255,25 +269,11 @@ $can_create_solo ??= false;
                 type="submit"
                 class="btn btn-danger">
 
-                <?= Localization::get('game.show.cancel') ?>
+                <?= Localization::get('application.general.btn.cancel') ?>
 
             </button>
 
         </form>
-
-    <?php endif; ?>
-
-    <!-- EDIT -->
-
-    <?php if ($can_edit): ?>
-
-        <a
-            href="/game/edit/<?= $game->getId() ?>"
-            class="btn btn-secondary">
-
-            <?= Localization::get('application.general.label.edit') ?>
-
-        </a>
 
     <?php endif; ?>
 
@@ -312,7 +312,7 @@ $can_create_solo ??= false;
                 class="btn btn-danger"
                 data-action="submit">
 
-                <?= Localization::get('application.general.label.delete') ?>
+                <?= Localization::get('application.general.btn.delete') ?>
 
             </button>
 

@@ -34,6 +34,7 @@ use App\Policies\GamePolicy;
             $is_admin = $current_user->isAdmin();
 
             $can_edit = GamePolicy::canEdit($game, $current_user);
+            $can_cancel = GamePolicy::canCancel($game, $current_user); 
             $can_delete = GamePolicy::canDelete($game, $current_user);
 
             $can_join = GamePolicy::canJoin($game, $current_user);
@@ -52,9 +53,12 @@ use App\Policies\GamePolicy;
             } elseif ($game->isRunning()) {
                 $status_class = 'status-running';
                 $status_text = Localization::get('game.status.running');
-            } else {
+            } elseif ($game->isFinished()) {
                 $status_class = 'status-finished';
                 $status_text = Localization::get('game.status.finished');
+            } elseif ($game->isCancelled()) {
+                $status_class = 'status-cancelled';
+                $status_text = Localization::get('game.status.cancelled');
             }
 
             if ($player_count === 0) {
