@@ -71,7 +71,7 @@ use App\Core\SystemSettings;
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/games/list" class="btn btn-primary"><?= Localization::get('admin.dashboard.games_manage') ?></a>
+                <a href="/admin/games" class="btn btn-primary"><?= Localization::get('admin.dashboard.games_manage') ?></a>
             </div>
         </div>
 

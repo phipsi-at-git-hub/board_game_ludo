@@ -46,7 +46,7 @@ use App\Core\Localization;
                         </td>
                         <td class="options">
                             <div class="btn-actions">
-                                <a href="/admin/users/edit/<?= $user->getId() ?>" class="btn action-btn btn-primary" title="Edit"><?= Localization::get('application.general.icon.edit') ?></a>
+                                <a href="/admin/user/edit/<?= $user->getId() ?>" class="btn action-btn btn-primary" title="Edit"><?= Localization::get('application.general.icon.edit') ?></a>
 
                                 <form action="/admin/users/<?= $user->getId() ?>" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">

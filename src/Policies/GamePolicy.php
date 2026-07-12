@@ -143,4 +143,12 @@ final class GamePolicy {
             )
         );
     }
+
+    // Can create test game
+    public static function canCreateTestGame(GameModel $game, UserModel $user): bool {
+        return (
+            $user->isAdmin() 
+            && !$game->isTestGame() 
+        );
+    }
 }

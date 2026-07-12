@@ -62,7 +62,7 @@ use App\Core\Localization;
                     </td>
                     <td class="options admin">
                         <div class="btn-actions">
-                            <a href="/game/detail/<?= $game->getId() ?>" title="Details" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.details') ?></a>
+                            <a href="/admin/game/show/<?= $game->getId() ?>" title="Details" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.details') ?></a>
 
                                 <?php if ($can_edit): ?>
                                     <a href="/game/edit/<?= $game->getId() ?>" class="btn action-btn btn-primary"><?= Localization::get('application.general.icon.edit') ?></a>

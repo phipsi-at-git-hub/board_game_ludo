@@ -314,6 +314,18 @@ return [
     'admin.games.list.header.type' => 'Type', 
     'admin.games.list.header.options' => 'Options',  
 
+    // Admin - Game - Partials Metadata
+    'admin.game.partials.metadata.title' => 'Metadata', 
+    'admin.game.partials.metadata.card.game.title' => 'Game', 
+    'admin.game.partials.metadata.card.game.name' => 'Name', 
+    'admin.game.partials.metadata.card.game.id' => 'ID', 
+    'admin.game.partials.metadata.card.game.created_at' => 'Created at', 
+    'admin.game.partials.metadata.card.owner.title' => 'Owner', 
+    'admin.game.partials.metadata.card.owner.name' => 'Name', 
+    'admin.game.partials.metadata.card.owner.id' => 'ID', 
+    'admin.game.partials.metadata.card.status.title' => 'Status', 
+    'admin.game.partials.metadata.card.status.state' => 'Status', 
+
     // Admin - Users List
     'admin.users.list.title' => '👤 Admin - Users', 
     'admin.users.list.header.username' => 'Username', 

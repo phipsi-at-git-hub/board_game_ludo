@@ -9,10 +9,16 @@ use App\Policies\GamePolicy;
  * @var Object $current_user 
  */
 
+$can_edit_rules = false;
+$can_edit_options = false;
+
+$is_admin_view ??= false; 
+$show_metadata ??= false; 
+$show_statistics ??= false; 
 
 $is_owner = GamePolicy::isOwner($game, $current_user);
 $is_admin = $current_user->isAdmin();
-$can_create_test = $is_admin; 
+$can_create_test = GamePolicy::canCreateTestGame($game, $current_user); 
 
 $can_start = GamePolicy::canStart($game, $current_user); 
 $can_play = GamePolicy::canPlay($game, $current_user); 
@@ -53,9 +59,6 @@ if ($player_count === 0) {
 
 $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset());
 
-$can_edit_rules = false;
-$can_edit_options = false;
-
 ?>
 
 <div class="panel">
@@ -87,47 +90,12 @@ $can_edit_options = false;
 
     </div>
 
-    <!-- Game Information -->
-    <div class="card">
-
-        <h2>
-            <?= Localization::get('game.show.info') ?>
-        </h2>
-
-        <div class="form-row">
-            <span><?= Localization::get('game.show.created_by') ?></span>
-            <span><?= htmlspecialchars($game->getCreatedByUserName()) ?></span>
-        </div>
-
-        <div class="form-row">
-            <span><?= Localization::get('game.show.created_at') ?></span>
-            <span><?= htmlspecialchars($game->getCreatedAt()) ?></span>
-        </div>
-
-        <div class="form-row">
-            <span><?= Localization::get('game.show.players') ?></span>
-            <span><?= $player_count ?>/<?= $player_max ?></span>
-        </div>
-
-        <div class="form-row">
-            <span><?= Localization::get('game.show.join') ?></span>
-            <span>
-                <?= $game->isParticipant($current_user)
-                    ? Localization::get('application.general.yes')
-                    : Localization::get('application.general.no') ?>
-            </span>
-        </div>
-
-        <?php if ($game->isFinished() && $game->getWinner()): ?>
-
-            <div class="form-row">
-                <span><?= Localization::get('game.show.winner') ?></span>
-                <span><?= htmlspecialchars($game->getWinner()->getUsername()) ?></span>
-            </div>
-
-        <?php endif; ?>
-
-    </div>
+    <!-- Admin Partials -->
+    <?php 
+    if ($is_admin_view && $show_metadata) { 
+        include VIEWS_PATH . '/admin/game/partials/metadata.php';   
+    } 
+    ?>
 
     <!-- Players -->
     <div class="card">

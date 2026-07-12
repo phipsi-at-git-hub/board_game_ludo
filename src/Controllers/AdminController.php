@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Core\Localization;
@@ -43,7 +44,7 @@ class AdminController extends BaseController {
     public function listUsers(): void {
         $users = UserModel::all();
         $this->render(
-            'admin/users/list', 
+            'admin/user/list', 
             [
                 'users' => $users
             ]
@@ -75,7 +76,7 @@ class AdminController extends BaseController {
         }
 
         $this->render(
-            'admin/users/edit', 
+            'admin/user/edit', 
             [
                 'user' => $user
             ]
@@ -109,15 +110,34 @@ class AdminController extends BaseController {
     public function listGames(): void {
         $games = GameModel::getAllGames();
         $this->render(
-            'admin/games/list', 
+            'admin/game/list', 
             [
                 'games' => $games
             ]
         );
     }
 
+    // Games - Game detail view 
+    public function show(string $game_id) {
+        // View an existing game
+        $game = GameModel::findById($game_id);
+        $user = Auth::user();
+
+        if (!$game) {
+            http_response_code(404);
+            die('Game not found');
+        }
+
+        $this->render(
+            'admin/game/show', 
+            [
+                'game' => $game, 
+            ]
+        );
+    }
+
     // Games - Update game
-    public function updateGame($game_id): void {
+    public function updateGame(string $game_id): void {
         if (!Csrf::validate($_POST['_csrf_token'])) {
             http_response_code(403);
             die('Invalid CSRF token');
@@ -140,7 +160,7 @@ class AdminController extends BaseController {
     }
 
     // Games - Delete game
-    public function deleteGame($game_id): void {
+    public function deleteGame(string $game_id): void {
         if (!Csrf::validate($_POST['_csrf_token'])) {
             http_response_code(403);
             die('Invalid CSRF token');

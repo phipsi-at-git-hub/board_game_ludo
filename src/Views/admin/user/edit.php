@@ -35,7 +35,7 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <form action="/admin/users/edit/<?= $user->getId() ?>" method="POST">
+    <form action="/admin/user/edit/<?= $user->getId() ?>" method="POST">
 
         <input
             type="hidden"
@@ -182,7 +182,7 @@ use App\Core\Localization;
 
                 <div class="nav-actions">
                     <a
-                        href="/admin/users/send-reset/<?= $user->getId() ?>"
+                        href="/admin/user/send-reset/<?= $user->getId() ?>"
                         class="btn btn-warning">
 
                         <?= Localization::get('admin.users.edit.card.security.send_reset_mail') ?>
