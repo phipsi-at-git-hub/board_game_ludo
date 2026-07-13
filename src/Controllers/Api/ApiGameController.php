@@ -1,12 +1,12 @@
 <?php
-// src/Controllers/ApiGameController.php
+// src/Controllers/Api/ApiGameController.php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Constants\Application;
 use App\Core\Auth;
 use App\Core\BaseController;
-use App\Core\Dto\GameContext;
+use App\Core\Dto\Game\GameContext;
 use App\Core\Http\Response;
 use App\Models\GameModel;
 use App\Services\GameService;

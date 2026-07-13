@@ -69,7 +69,7 @@ use App\Models\SystemSettingsModel;
             <div>
                 <span class="stat-value">
                     <span class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>">
-                        <?= !$system_settings->getMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
+                        <?= !$system_settings->getMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_OFF) : strtoupper(Application::GENERAL_ON) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>
@@ -80,7 +80,7 @@ use App\Models\SystemSettingsModel;
     <form 
         id="system-settings-form" 
         method="post" 
-        action="/admin/system/settings/update" 
+        action="/api/admin/system/settings/update" 
         data-ajax-event="change" 
         data-ajax-target="#form-response">
 

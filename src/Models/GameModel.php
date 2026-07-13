@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Constants\Application;
-use App\Core\Dto\GameEngineMove;
+use App\Core\Dto\Game\GameEngineMove;
 use Exception;
 use DomainException;
 use LogicException;

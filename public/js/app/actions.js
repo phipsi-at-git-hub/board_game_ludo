@@ -15,7 +15,7 @@ async function handleActionSubmit(form) {
         return;
     }
 
-    updateGameRow(
+    updateBindings(
         form,
         data.data
     );
@@ -23,27 +23,27 @@ async function handleActionSubmit(form) {
     executeActionBehaviors(form); 
 }
 
-function updateGameRow(form, data) {
-    const card = form.closest('[data-id]');
-    if (!card) {
+function updateBindings(form, data) {
+    const container = form.closest('[data-id]');
+    if (!container) {
         return;
     }
 
     Object.entries(data)
         .forEach(([key,value]) => {
             updateBinding(
-                card,
+                container,
                 key,
                 value, 
                 data
             );
             updateClassBinding(
-                card, 
+                container, 
                 key, 
                 value 
             ); 
         });
-    updateActions(card, data.permissions);
+    updateActions(container, data.permissions);
 }
 
 function updateBinding(card, key, value, data) {

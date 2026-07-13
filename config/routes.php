@@ -4,8 +4,9 @@
 
 use App\Controllers\AccountController;
 use App\Controllers\AdminController;
-use App\Controllers\ApiGameController;
-use App\Controllers\ApiGameEngineController;
+use App\Controllers\Api\ApiAdminController; 
+use App\Controllers\Api\ApiGameController;
+use App\Controllers\Api\ApiGameEngineController;
 use App\Controllers\AuthController;
 use App\Controllers\GameController;
 use App\Core\Middleware;
@@ -101,5 +102,10 @@ $router->group('/admin', function($group) {
     $group->get('/system/settings', [AdminController::class, 'systemSettings']);
     $group->post('/system/settings/update', [AdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]);
     $group->get('/system/health', [AdminController::class, 'systemHealth']);
+}, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
+
+// --- Admin Api routes ---
+$router->group('/api/admin', function($group) {
+    $group->post('/system/settings/update', [ApiAdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 return $router;

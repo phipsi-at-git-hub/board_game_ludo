@@ -1,6 +1,7 @@
 <?php
-// src/Core/Dto/GameEngineMove.php
-namespace App\Core\Dto;
+// src/Core/Dto/Game/GameEngineMove.php
+
+namespace App\Core\Dto\Game;
 
 use App\Constants\Application;
 

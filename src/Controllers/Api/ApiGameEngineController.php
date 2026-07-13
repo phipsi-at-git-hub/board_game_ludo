@@ -1,6 +1,6 @@
 <?php
-// src/Controller/ApiGameEngineController.php
-namespace App\Controllers;
+// src/Controller/Api/ApiGameEngineController.php
+namespace App\Controllers\Api;
 
 use App\Constants\Application;
 use App\Core\BaseController;

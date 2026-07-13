@@ -1,7 +1,7 @@
 <?php
-// src/Core/Dto/GameContext.php
+// src/Core/Dto/Game/GameContext.php
 
-namespace App\Core\Dto;
+namespace App\Core\Dto\Game;
 
 use App\Core\Localization;
 use App\Models\GameModel;
