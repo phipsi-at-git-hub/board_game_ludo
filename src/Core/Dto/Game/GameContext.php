@@ -42,6 +42,7 @@ final class GameContext {
         $dto['ruleset'] = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 
         $dto['player_count'] = $game->getPlayerCount();
+        $dto['player_count_label'] = $game->getPlayerCount() . '/' . $game->getPlayerMax();
         $dto['player_count_category'] = $game->getPlayerCountCategory();
         $dto['player_max'] = $game->getPlayerMax();
 

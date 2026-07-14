@@ -34,6 +34,8 @@ $can_play ??= false;
 $can_reset ??= false;
 $can_cancel ??= false;
 $can_create_test ??= false;
+
+$show_players_card ??= false; 
 ?>
 
 <div
@@ -42,13 +44,16 @@ $can_create_test ??= false;
 
     <!-- JOIN -->
 
-    <form
-        method="POST"
+    <form 
+        data-id="game-<?= $game->getId() ?>-join" 
+        method="POST" 
         action="/api/game/join/<?= $game->getId() ?>" 
-        data-action-container="join" 
         data-response="json" 
-        data-view-target-id="players" 
-        <?= $can_join ? '' : 'hidden' ?> > 
+        data-bind-targets="game-<?= $game->getId() ?>-player-count<?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-1-dto-key="permissions.leave" 
+        data-bind-1-type="hidden" 
+        <?= $can_join ? '' : 'hidden' ?> >
 
         <input
             type="hidden"
@@ -68,13 +73,16 @@ $can_create_test ??= false;
 
     <!-- LEAVE -->
 
-    <form
-        method="POST"
+    <form 
+        data-id="game-<?= $game->getId() ?>-leave" 
+        method="POST" 
         action="/api/game/leave/<?= $game->getId() ?>" 
-        data-action-container="leave" 
         data-response="json" 
-        data-view-target-id="players" 
-        <?= $can_leave ? '' : 'hidden' ?> > 
+        data-bind-targets="game-<?= $game->getId() ?>-player-count<?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-1-dto-key="permissions.join" 
+        data-bind-1-type="hidden" 
+        <?= $can_leave ? '' : 'hidden' ?> >
 
         <input
             type="hidden"

@@ -18,10 +18,19 @@ use App\Core\Localization;
 
 <div class="game-row-badges">
 
-    <span
+    <!--<span
         class="status-badge <?= $players_class ?>"
         data-bind="player_count"
-        data-class-bind="player_count_category">
+        data-class-bind="player_count_category"> -->
+    <span 
+        class="status-badge <?= $players_class ?>" 
+        data-id="game-<?= $game->getId() ?>-player-count" 
+        data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-1-dto-key="player_count_label" 
+        data-bind-1-type="text" 
+        data-bind-2-dto-key="player_count_category" 
+        data-bind-2-type="class" 
+        data-bind-2-class-prefix="player-count-category" >
         <?= $player_count ?>/<?= $player_max ?>
     </span>
 

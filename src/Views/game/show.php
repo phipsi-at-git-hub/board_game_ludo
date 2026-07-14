@@ -16,6 +16,8 @@ $is_admin_view ??= false;
 $show_metadata ??= false; 
 $show_statistics ??= false; 
 
+$show_players_card = true; 
+
 $is_owner = GamePolicy::isOwner($game, $current_user);
 $is_admin = $current_user->isAdmin();
 $can_create_test = GamePolicy::canCreateTestGame($game, $current_user); 
@@ -104,7 +106,12 @@ $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->ge
             <?= Localization::get('game.show.players') ?>
         </h2>
 
-        <div data-view-bind="players">
+        <!--<div data-view-bind="players">-->
+        <div 
+            data-id="game-<?= $game->getId() ?>-players" 
+            data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+            data-bind-1-view-key="players" 
+            data-bind-1-type="view" >
         
             <?php include VIEWS_PATH . '/game/partials/players.php' ?>
 

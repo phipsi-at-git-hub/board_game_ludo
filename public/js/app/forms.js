@@ -61,12 +61,6 @@ function handleFormSubmit(event) {
         return; 
     }
 
-    if (form.dataset.response === 'json') {
-        event.preventDefault(); 
-        handleActionSubmit(form); 
-        return; 
-    }
-
     if (form.dataset.ajax !== undefined) {
         event.preventDefault();
         submitForm(form);
