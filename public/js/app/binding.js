@@ -26,14 +26,6 @@ function initializeJsonActions() {
 async function handleJsonAction(event) {
     event.preventDefault();
     const source = event.currentTarget;
-
-    /*
-        Optional confirmation support
-    */
-    if (!confirmAction(source)) {
-        return;
-    }
-
     const formData = new FormData(source);
     let response;
     try {
@@ -233,20 +225,6 @@ function parseList(value) {
         .filter(
             item => item.length > 0
         );
-}
-
-function confirmAction(element) {
-    if (!element.hasAttribute("data-confirm")) {
-        return true;
-    }
-
-    const title = element.dataset.confirmTitle ?? "Confirm";
-    const message = element.dataset.confirmMessage ?? "";
-
-    return window.confirm(
-        title + "\n\n" + message
-    );
-
 }
 
 // Helper 
