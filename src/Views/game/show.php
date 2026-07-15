@@ -60,6 +60,7 @@ if ($player_count === 0) {
 }
 
 $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset());
+$api_delete = false; 
 
 ?>
 

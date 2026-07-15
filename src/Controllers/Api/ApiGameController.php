@@ -193,9 +193,9 @@ final class ApiGameController extends BaseController {
 
         $this->jsonClean(
             Response::success(
-                [],
+                ['deleted' => true],
                 'Game deleted'
-            )
+            ), 201
         );
     }
 

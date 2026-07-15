@@ -11,10 +11,13 @@
  * No business logic allowed.
  */
 
+/*
 document.addEventListener("DOMContentLoaded", () => {
     initializeJsonActions();
 });
+*/
 
+/*
 function initializeJsonActions() {
     document.querySelectorAll('[data-response="json"]').forEach(source => {
         if (source.tagName === "FORM") {
@@ -22,10 +25,16 @@ function initializeJsonActions() {
         }
     });
 }
+*/
 
+/*
 async function handleJsonAction(event) {
-    event.preventDefault();
+    //event.preventDefault();
     const source = event.currentTarget;
+    if (source.dataset.confirm !== undefined && source.dataset.confirmProcessed !== '1') {
+        return; 
+    }
+    event.preventDefault(); 
     const formData = new FormData(source);
     let response;
     try {
@@ -41,10 +50,7 @@ async function handleJsonAction(event) {
         );
 
     } catch (error) {
-        console.error(
-            "JSON Binding request failed",
-            error
-        );
+        console.error("JSON Binding request failed", error);
         return;
     }
 
@@ -63,6 +69,45 @@ async function handleJsonAction(event) {
     processBindings(
         source,
         json 
+    );
+}
+*/
+async function submitJsonBindingForm(form) {
+    const formData = new FormData(form);
+    let response;
+    try {
+        response = await fetch(
+            form.action,
+            {
+                method: form.method || "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("JSON Binding request failed", error);
+        return;
+    }
+
+    let json;
+    try {
+        json = await response.json();
+
+    } catch (error) {
+        console.error("Invalid JSON response", error);
+        return;
+    }
+
+    if (!json.success) {
+        return;
+    }
+
+    processBindings(
+        form,
+        json
     );
 }
 
@@ -185,6 +230,12 @@ function updateElement(
         case "hidden":
             element.hidden = Boolean(value);
             break;
+
+        case "remove": 
+            if (Boolean(value)) {
+                element.remove(); 
+            }
+            break; 
 
         case "class":
             const prefix = target.getAttribute(`data-bind-${index}-class-prefix`);

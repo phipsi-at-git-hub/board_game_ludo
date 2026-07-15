@@ -36,6 +36,7 @@ $can_cancel ??= false;
 $can_create_test ??= false;
 
 $show_players_card ??= false; 
+$api_delete ??= true; 
 ?>
 
 <div
@@ -293,11 +294,11 @@ $show_players_card ??= false;
 
         <form
             method="POST"
-            action="/api/game/delete"
-            data-action="delete"
-            data-action-target-id="<?= $game->getId() ?>"
-            data-action-container="delete"
-            data-response="json"
+            action="<?= $api_delete ? '/api' : '' ?>/game/delete"
+            data-id="game-<?= $game->getId() ?>-delete" 
+            data-bind-targets="game-<?= $game->getId() ?>-row" 
+            
+            <?php if ($api_delete): ?>data-response="json"<?php endif; ?>
             data-confirm
             data-confirm-title="<?= Localization::get('application.modal.messages.game.delete.title') ?>"
             data-confirm-message="<?= Localization::get('application.modal.messages.game.delete.confirm') ?>">

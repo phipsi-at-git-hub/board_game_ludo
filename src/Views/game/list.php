@@ -70,13 +70,22 @@ use App\Policies\GamePolicy;
             }
 
             $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
-            
+
             ?>
 
+            <!--
             <div
                 class="card game-row"
                 data-id="<?= $game->getId() ?>" 
                 data-action-behavior="remove" 
+                onclick="window.location='/game/detail/<?= $game->getId() ?>'"> -->
+
+            <div
+                class="card game-row"
+                data-id="game-<?= $game->getId() ?>-row" 
+                data-bind-sources="game-<?= $game->getId() ?>-delete" 
+                data-bind-1-dto-key="deleted" 
+                data-bind-1-type="remove" 
                 onclick="window.location='/game/detail/<?= $game->getId() ?>'">
                 
                 <?php include VIEWS_PATH . '/game/partials/header.php' ?>

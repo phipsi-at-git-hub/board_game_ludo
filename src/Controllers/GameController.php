@@ -313,7 +313,7 @@ class GameController extends BaseController {
         $this->executeGameActions(
             $game_id, 
             fn($game, $user) => $this->gameService->delete($game, $user), 
-            "/game/detail/$game_id"
+            "/game/list"
         ); 
     }
 
