@@ -338,18 +338,6 @@ instead of:
 
 ---
 
-# Contribution
-
-Before implementing new features:
-
-1. Understand the existing architecture
-2. Check whether an existing system can be extended
-3. Avoid duplicate implementations
-4. Update documentation if architecture changes
-
-
----
-
 # License
 
 TODO
