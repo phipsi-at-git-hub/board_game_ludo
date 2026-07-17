@@ -37,6 +37,7 @@ use App\Core\Asset;
         <!-- Modal Window --> 
         <?php include VIEWS_PATH . '/partials/modal.php' ?>
 
+        <script src="<?= Asset::js('shared/navigation.js') ?>"></script> 
         <script src="<?= Asset::js('app/forms.js') ?>"></script>
         <script src="<?= Asset::js('app/modal.js') ?>"></script>
         <script src="<?= Asset::js('app/binding.js') ?>"></script>

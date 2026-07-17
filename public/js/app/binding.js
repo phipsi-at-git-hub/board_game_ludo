@@ -11,67 +11,7 @@
  * No business logic allowed.
  */
 
-/*
-document.addEventListener("DOMContentLoaded", () => {
-    initializeJsonActions();
-});
-*/
-
-/*
-function initializeJsonActions() {
-    document.querySelectorAll('[data-response="json"]').forEach(source => {
-        if (source.tagName === "FORM") {
-            source.addEventListener("submit", handleJsonAction);
-        }
-    });
-}
-*/
-
-/*
-async function handleJsonAction(event) {
-    //event.preventDefault();
-    const source = event.currentTarget;
-    if (source.dataset.confirm !== undefined && source.dataset.confirmProcessed !== '1') {
-        return; 
-    }
-    event.preventDefault(); 
-    const formData = new FormData(source);
-    let response;
-    try {
-        response = await fetch(
-            source.action,
-            {
-                method: source.method || "POST",
-                body: formData,
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            }
-        );
-
-    } catch (error) {
-        console.error("JSON Binding request failed", error);
-        return;
-    }
-
-    let json;
-    try {
-        json = await response.json();
-    } catch (error) {
-        console.error("Invalid JSON response", error);
-        return;
-    }
-
-    if (!json.success) {
-        return;
-    }
-
-    processBindings(
-        source,
-        json 
-    );
-}
-*/
+// Process and handle bindings and json responses
 async function submitJsonBindingForm(form) {
     const formData = new FormData(form);
     let response;
@@ -105,12 +45,11 @@ async function submitJsonBindingForm(form) {
         return;
     }
 
-    processBindings(
-        form,
-        json
-    );
+    processBindings(form, json); 
+    processSuccessNavigational(form); 
 }
 
+// Process the bindings
 function processBindings(source, response) {
     const sourceId = source.dataset.id;
     if (!sourceId) {
@@ -139,11 +78,13 @@ function processBindings(source, response) {
     );
 }
 
+// Check if targets and sources are correctly set - otherwise they will not bind
 function targetAcceptsSource(target, sourceId) {
     const allowedSources = parseList(target.dataset.bindSources);
     return allowedSources.includes(sourceId);
 }
 
+// Apply the target bindings
 function applyTargetBindings(target, response) {
     let index = 1;
 
@@ -199,6 +140,7 @@ function applyTargetBindings(target, response) {
     }
 }
 
+// Update the target element
 function updateElement(
     element,
     type,
@@ -253,6 +195,7 @@ function updateElement(
     }
 }
 
+// Correct the css class name
 function removePrefixedClasses(element, prefix) {
     [...element.classList].forEach(
         className => {
@@ -263,6 +206,39 @@ function removePrefixedClasses(element, prefix) {
     );
 }
 
+// Process navigational actions bind to success
+function processSuccessNavigational(form) {
+    console.log("navigation"); 
+    const navigation = form.getAttribute('data-after-success-navigation'); 
+    if (!navigation) { 
+        return; 
+    } 
+    console.log("still in navigation"); ; 
+
+    switch (navigation) {
+        case "back": 
+            backOrFallback(form.getAttribute('data-after-success-navigation-fallback') || '/'); 
+            break; 
+        
+        case "redirect": 
+            const url = form.getAttribute('data-after-success-navigation-url'); 
+            if (!url) {
+                console.warn('Redirect navigation requires data-after-success-navigation-url'); 
+                return; 
+            }
+            redirect(url); 
+            break; 
+        
+        case "reload": 
+            reload(); 
+            break; 
+        
+        default: 
+            console.warn("Unknown navigation action: ", navigation); 
+    }
+} 
+
+// Parse list
 function parseList(value) {
     if (!value) {
         return [];
@@ -278,7 +254,7 @@ function parseList(value) {
         );
 }
 
-// Helper 
+// Helper - Resolve the DTO value
 function resolveDtoValue(object, path) {
     return path.split(".").reduce(
         (value, key) => value?.[key], object
