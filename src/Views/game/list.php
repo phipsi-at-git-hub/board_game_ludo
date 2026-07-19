@@ -73,13 +73,6 @@ use App\Policies\GamePolicy;
 
             ?>
 
-            <!--
-            <div
-                class="card game-row"
-                data-id="<?= $game->getId() ?>" 
-                data-action-behavior="remove" 
-                onclick="window.location='/game/detail/<?= $game->getId() ?>'"> -->
-
             <div
                 class="card game-row"
                 data-id="game-<?= $game->getId() ?>-row" 

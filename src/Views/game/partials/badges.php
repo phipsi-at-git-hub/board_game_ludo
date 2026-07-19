@@ -30,7 +30,7 @@ use App\Core\Localization;
         data-bind-1-type="text" 
         data-bind-2-dto-key="player_count_category" 
         data-bind-2-type="class" 
-        data-bind-2-class-prefix="player-count-category" >
+        data-bind-2-classes-fixed="status-badge" >
         <?= $player_count ?>/<?= $player_max ?>
     </span>
 

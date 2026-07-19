@@ -39,7 +39,11 @@ use App\Models\SystemSettingsModel;
         <h2><?= Localization::get('admin.system.settings.card.overview.title') ?></h2>
 
         <div class="stats-main">
-            <div class="stat-big">
+            <div class="stat-big" 
+                data-id="settings-system-state" 
+                data-bind-sources="system-settings-form" 
+                data-bind-1-type="text" 
+                data-bind-1-dto-key="system_state_label" >
                 <?= SystemSettings::isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?>
             </div>
             <div class="stat-label">
@@ -50,16 +54,35 @@ use App\Models\SystemSettingsModel;
         <div class="stats-sub">
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                    <span 
+                        class="status-badge status-<?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        data-id="settings-authentication-badge" 
+                        data-bind-sources="system-settings-form" 
+                        data-bind-1-type="class" 
+                        data-bind-1-dto-key="authentication_status_classes" 
+                        data-bind-1-classes-fixed="status-badge" 
+                        data-bind-2-type="text" 
+                        data-bind-2-dto-key="authentication_status_label" >
                         <?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
-                <span class="stat-text"><?= Localization::get('admin.system_settings.card.authentication') ?></span>
+                <span 
+                    class="stat-text"  >
+                    <?= Localization::get('admin.system_settings.card.authentication') ?>
+                </span>
             </div>
 
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>">
+                    <span 
+                        class="status-badge status-<?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        data-id="settings-games-badge" 
+                        data-bind-sources="system-settings-form" 
+                        data-bind-1-type="class" 
+                        data-bind-1-dto-key="games_status_classes" 
+                        data-bind-1-classes-fixed="status-badge" 
+                        data-bind-2-type="text" 
+                        data-bind-2-dto-key="games_status_label" >
                         <?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
@@ -68,7 +91,15 @@ use App\Models\SystemSettingsModel;
 
             <div>
                 <span class="stat-value">
-                    <span class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>">
+                    <span 
+                        class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>" 
+                        data-id="settings-maintenance-badge" 
+                        data-bind-sources="system-settings-form" 
+                        data-bind-1-type="class" 
+                        data-bind-1-dto-key="maintenance_status_classes" 
+                        data-bind-1-classes-fixed="status-badge" 
+                        data-bind-2-type="text" 
+                        data-bind-2-dto-key="maintenance_status_label" >
                         <?= !$system_settings->getMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_OFF) : strtoupper(Application::GENERAL_ON) ?>
                     </span>
                 </span>
@@ -81,8 +112,18 @@ use App\Models\SystemSettingsModel;
         id="system-settings-form" 
         method="post" 
         action="/api/admin/system/settings/update" 
+
         data-ajax-event="change" 
-        data-ajax-target="#form-response">
+        data-ajax-target="#form-response" 
+
+        data-id="system-settings-form" 
+        data-response="json" 
+        data-bind-targets="
+            settings-system-state, 
+            settings-authentication-badge, 
+            settings-games-badge, 
+            settings-maintenance-badge, 
+        " >
 
         <input
             type="hidden" 

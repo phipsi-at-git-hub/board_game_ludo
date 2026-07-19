@@ -131,7 +131,6 @@ function applyTargetBindings(target, response) {
         updateElement(
             target,
             type,
-            //response.data[key],
             resolveDtoValue(response.data, key), 
             target,
             index
@@ -178,42 +177,36 @@ function updateElement(
                 element.remove(); 
             }
             break; 
-
-        case "class":
-            const prefix = target.getAttribute(`data-bind-${index}-class-prefix`);
-
-            if (!prefix) {
-                console.warn("Class binding requires prefix", element);
-                return;
-            }
-
-            removePrefixedClasses(element, prefix);
-            element.classList.add(`${prefix}-${value}`);
-            break;
+        case "class": 
+            updateClasses(element, value, target, index); 
+            break; 
         default:
             console.warn("Unknown binding type:", type);
     }
 }
 
-// Correct the css class name
-function removePrefixedClasses(element, prefix) {
-    [...element.classList].forEach(
-        className => {
-            if (className.startsWith(prefix + "-")) {
-                element.classList.remove(className);
-            }
+// Update css classes
+function updateClasses(element, value, target, index) {
+    const classesFixed = parseList(target.getAttribute(`data-bind-${index}-classes-fixed`)); 
+    const classesNew = Array.isArray(value) ? value : parseList(value); 
+
+    [...element.classList].forEach(className => {
+        if (!classesFixed.includes(className)) {
+            element.classList.remove(className); 
         }
-    );
-}
+    }); 
+
+    classesNew.forEach(className => {
+        element.classList.add(className); 
+    }); 
+} 
 
 // Process navigational actions bind to success
-function processSuccessNavigational(form) {
-    console.log("navigation"); 
+function processSuccessNavigational(form) { 
     const navigation = form.getAttribute('data-after-success-navigation'); 
     if (!navigation) { 
         return; 
     } 
-    console.log("still in navigation"); ; 
 
     switch (navigation) {
         case "back": 

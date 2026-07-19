@@ -43,7 +43,7 @@ final class GameContext {
 
         $dto['player_count'] = $game->getPlayerCount();
         $dto['player_count_label'] = $game->getPlayerCount() . '/' . $game->getPlayerMax();
-        $dto['player_count_category'] = $game->getPlayerCountCategory();
+        $dto['player_count_category'] = 'player-count-category-' . $game->getPlayerCountCategory();     // player-count-category is css class prefix
         $dto['player_max'] = $game->getPlayerMax();
 
         $dto['is_private'] = $game->isPrivate();

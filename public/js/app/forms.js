@@ -173,15 +173,17 @@ function initMessageButtons() {
    AUTO SAVE
 ------------------------------ */
 function initAutoSave() {
-    document.addEventListener('change', event => {
-        const el = event.target;
-        if (!el.matches('[data-auto-save="change"]')) return;
-
-        const form = el.closest('form');
-        if (!form) return;
-
-        submitForm(form);
-    });
+   document.addEventListener('change', event => {
+    const element = event.target; 
+    if (!element.matches('[data-auto-save="change"]')) {
+        return; 
+    }
+    const form = element.closest('form'); 
+    if (!form) {
+        return; 
+    }
+    form.requestSubmit(); 
+   }); 
 }
 
 /* ------------------------------
