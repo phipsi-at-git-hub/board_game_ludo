@@ -551,56 +551,157 @@ Typical usage:
 
 ## class
 
-Updates CSS state classes.
+Update CSS classes of an element. 
 
-Required additional attribute:
+Unlike earlier versions, the binding system does not use class prefixes. 
+
+Instead, the backend returns the complete CSS classes that should be applied. 
+
+Fixed classes can be declared on the target element and will never be removed. 
+
+Required additional attribute: 
 
 ```html
-data-bind-X-class-prefix
+data-bind-X-classes-fixed
 ```
 
-Example:
+Example: 
 
 ```html
-<span
-    class="player-count-empty"
-
-    data-bind-1-dto-key="player_count_category"
-    data-bind-1-type="class"
-    data-bind-1-class-prefix="player-count">
-
+<span 
+    class="status-badge status-ok" 
+    
+    data-bind-1-dto-key="authentication_status_classes" 
+    data-bind-1-type="class" 
+    data-bind-1-classes-fixed="status-badge" >
 </span>
-```
+````
 
-Response:
+Response: 
 
 ```json
 {
-    "player_count_category": "high"
+    "authentication_status_classes": "status-fail" 
 }
-```
+````
 
-Result:
+Result: 
 
 Before:
 
 ```html
-class="player-count-empty"
-```
+class="status-badge status-ok" 
+````
 
-After:
+After: 
 
 ```html
-class="player-count-high"
+class="status-badge status-fail" 
+````
+
+### Fixed Classes
+
+Classes defined in: 
+
+```html
+data-bind-X-classes-fixed
 ```
 
-The binding system removes previous matching classes:
+are preserved during updates. 
 
-```
-player-count-*
+Example:
+
+```html
+data-bind-1-classes-fixed="
+    status-badge, 
+    rounded, 
+    shadow
+"
 ```
 
-before adding the new state.
+The binding system will never remove these classes. 
+
+### Dynamic Classes
+
+The DTO value defines the complete dynamic class set. 
+
+Single class: 
+
+```json
+{
+    "status_classes": "status-ok" 
+}
+````
+
+Multiple classes: 
+
+```json
+{
+    "status_classes": "status-ok highlighted animated" 
+}
+```
+
+Both formats are supported.
+
+Result: 
+
+```html
+class="
+    status-badge 
+    status-ok 
+    highlighted 
+    animated 
+"
+```
+
+### Update Algorithm
+
+When a class binding is executed: 
+1. Read fixed classes from: 
+
+```html
+data-bind-X-classes-fixed
+````
+
+2. Read the new classes from the DTO value. 
+3. Remove every current class that is not fixed. 
+4. Add all DTO classes. 
+
+Pseudo flow: 
+```
+Current classes:
+status-badge 
+status-ok 
+highlighted 
+
+Fixed: 
+status-badge 
+
+DTO: 
+status-warning 
+animated 
+
+ v
+
+Remove: 
+status-ok 
+highlighted 
+
+ v 
+
+Add: 
+status-warning 
+animated 
+
+ v 
+
+Result: 
+status-badge 
+status-warning 
+animated
+```
+
+This allows complete backend-controlled CSS state management while preserving structural classes defined by the view. 
 
 ---
 
@@ -611,17 +712,33 @@ One element can have multiple bindings.
 Example:
 
 ```html
-<div
+<span
+    data-bind-1-dto-key="authentication_status_classes" 
+    data-bind-1-type="class" 
+    data-bind-1-classes="status-badge" 
 
-    data-bind-1-dto-key="player_count"
-    data-bind-1-type="text"
-
-    data-bind-2-dto-key="player_count_category"
-    data-bind-2-type="class"
-    data-bind-2-class-prefix="player-count"
-
+    data-bind-2-dto-key="authentication_status_label" 
+    data-bind-2-type="text" 
 >
-</div>
+</span>
+```
+
+Response: 
+
+```json
+{
+    "authentication_status_classes": "status-fail", 
+    "authentication_status_label": "OFF" 
+}
+````
+
+Result: 
+
+```html
+<span
+    class="status-badge status-fail" >
+    OFF
+</span>
 ```
 
 The bindings are processed sequentially.
