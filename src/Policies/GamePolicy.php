@@ -99,13 +99,6 @@ final class GamePolicy {
                 || $user->isAdmin()  
             )
         );
-        return (
-            $game->isRunning()
-            && (
-                $user->isAdmin()
-                || $user->getId() === $game->getCreatedByUserId()
-            )
-        );
     }
 
     // Can user pause the game 

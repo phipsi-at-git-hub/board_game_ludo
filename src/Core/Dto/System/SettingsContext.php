@@ -7,6 +7,7 @@ use App\Constants\Application;
 use App\Core\Localization;
 use App\Core\SystemSettings;
 use App\Models\SystemSettingsModel;
+use App\Policies\SystemPolicy;
 
 final class SettingsContext {
     private static function create(): array {
@@ -59,19 +60,19 @@ final class SettingsContext {
         $dto['system_state_status'] = SystemSettings::isSystemEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL; 
 
         // Authentication Badge
-        $authentication_enabled = $settings->getRegistrationEnabled() && $settings->getLoginEnabled();
+        $authentication_enabled = SystemPolicy::isAuthenticationEnabled($settings); 
         $dto['authentication_status'] = $authentication_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL; 
         $dto['authentication_status_classes'] = 'status-' . $dto['authentication_status'];  // status is css class prefix
         $dto['authentication_status_label'] = strtoupper($authentication_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
 
         // Games Badge
-        $games_enabled = $settings->getGameCreationEnabled() && $settings->getGamePlayEnabled();
+        $games_enabled = SystemPolicy::isGameEnabled($settings); 
         $dto['games_status'] = $games_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL;
         $dto['games_status_classes'] = 'status-' . $dto['games_status'];  // status is css class prefix
         $dto['games_status_label'] = strtoupper($games_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
 
         // Maintenance Badge
-        $maintenance_enabled = $settings->getMaintenanceModeEnabled() || $settings->getSystemNoticeEnabled();
+        $maintenance_enabled = SystemPolicy::isMaintenanceActive($settings); 
         $dto['maintenance_status'] = !$maintenance_enabled ? Application::GENERAL_OK : Application::GENERAL_WARNING;
         $dto['maintenance_status_classes'] = 'status-' . $dto['maintenance_status'];  // status is css class prefix
         $dto['maintenance_status_label'] = strtoupper(!$maintenance_enabled ? Application::GENERAL_OFF : Application::GENERAL_ON);
