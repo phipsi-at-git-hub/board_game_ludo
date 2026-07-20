@@ -2,6 +2,10 @@
 // config/routes.php
 // Routes Config
 
+/**
+ * @var App\Core\Application\App $app 
+ */
+
 use App\Controllers\AccountController;
 use App\Controllers\AdminController;
 use App\Controllers\Api\ApiAdminController; 
@@ -11,12 +15,14 @@ use App\Controllers\AuthController;
 use App\Controllers\GameController;
 use App\Core\Middleware;
 use App\Core\Router;
-use App\Core\SystemSettings;
+use App\Services\SystemService;
+use App\Core\Application\App; 
 
-$router = new Router();
+$router = new Router($app);
+$systemService = $app->resolve(SystemService::class); 
 
 // If system settings system_enabled is false set up specific routes
-if (SystemSettings::isOffline()) {
+if ($systemService->isSystemDisabled()) {
     // ToDo: add more routes for emergency / offline system
     $router->get('/emergency_login', [AuthController::class, 'showLogin'], [fn() => Middleware::guest()]);
     return $router; 

@@ -2,10 +2,17 @@
 // Router.php
 namespace App\Core;
 
+use App\Core\Application\App;
 use \App\Core\Debug;
 
 class Router {
     private array $routes = [];
+    private App $app; 
+
+    // Constructor 
+    public function __construct(App $app) {
+        $this->app = $app; 
+    }
 
     // Standard HTTP
     public function get(string $path, callable|array $action, array $middleware = []): void {
@@ -67,7 +74,8 @@ class Router {
     }
 
     // Dispatch – Execute route
-    public function dispatch(): void {
+    public function dispatch(App $app): void {
+        $this->app = $app; 
         $method = $_SERVER['REQUEST_METHOD'];
 
         if ($method === 'POST' && isset($_POST['_method'])) {
@@ -106,7 +114,8 @@ class Router {
                 $action = $route['action'];
                 if (is_array($action)) {
                     [$controllerClass, $methodName] = $action;
-                    $controller = new $controllerClass();
+                    $controller = new $controllerClass($this->app); 
+                    //$controller = $this->container->get($controllerClass); 
                     $controller->$methodName(...$matches); 
 
                     // Debug in DEV

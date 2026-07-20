@@ -1,47 +1,18 @@
 <?php
-// app.php
+// bootstrap/app.php
 
-// 1. Paths
-require __DIR__ . '/paths.php';
+/**
+ * Create and bootstrap Application
+ * 
+ * The Application class creates the request container, 
+ * registers core bindings and application services, 
+ * and boots the application lifecycle withing the 
+ * boot() method. 
+ */
 
-// 1.1
+use App\Core\Application\App; 
 
-use App\Core\Asset;
-use App\Core\Debug;
-use App\Core\Env;
-Env::get();
+$app = new App(); 
+$app->boot(); 
 
-// 2. Composer Autoload
-require BASE_PATH . '/vendor/autoload.php';
-
-use App\Core\Localization;
-use Dotenv\Dotenv;
-
-// 3. Load environment variables
-$dotenv = Dotenv::createImmutable(BASE_PATH);
-$dotenv->load();
-
-// 4. Set error reporting based on environment
-//if ($_ENV['APP_ENV'] === 'development') {
-if (Env::isDev()) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-
-    // Cache busting
-    Asset::buildAssets();
-
-    // Add Debug in DEV
-    Debug::start();
-} else {
-    ini_set('display_errors', 0);
-    error_reporting(0);
-}
-
-// 4.1 Load helpers
-require BASE_PATH . '/src/Core/helpers.php';
-
-// 5. Load Localization
-Localization::load(TRANSLATIONS_PATH, 'en-us');
-
-// 6. Optional: global error handling, Logger, etc.
+return $app; 

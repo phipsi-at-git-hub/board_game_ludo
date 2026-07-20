@@ -7,18 +7,12 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Core\Localization;
-use App\Core\Middleware;
-use App\Core\SystemHealth;
+use App\Health\SystemHealth;
 use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 
-class AdminController extends BaseController {
-    public function __construct() {
-        // Make sure that only Admins have access
-        Middleware::admin();
-    }
-
+class AdminController extends BaseController { 
     // Dashboard
     public function dashboard(): void {
         $stats = [
@@ -100,7 +94,7 @@ class AdminController extends BaseController {
         $email = $_POST['email'] ?? $user->getEmail();
         $role = $_POST['role'] ?? $user->getRole();
 
-        $user->updateProfile($username, $email, $role);
+        $user->updateProfile($username, $email);
 
         header('Location /admin/users');
         exit;

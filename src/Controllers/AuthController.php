@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\BaseController;
-use App\Core\SystemSettings;
 use App\Models\UserModel;
+use App\Services\SystemService;
 
 class AuthController extends BaseController {
     public function showLogin() {
@@ -26,11 +26,12 @@ class AuthController extends BaseController {
         $password = $_POST['password'] ?? '';
 
         $user = UserModel::verify($email, $password);
+        $systemService = $this->app->resolve(SystemService::class); 
 
         if (
             $user 
             && $user->isActive() 
-            && (SystemSettings::isLoginEnabled() || $user->isAdmin())
+            && ($systemService->isLoginEnabled() || $user->isAdmin())
         ) {
             $user->updateLastLogin();
             Auth::login($user);
@@ -38,7 +39,7 @@ class AuthController extends BaseController {
             exit;
         }
 
-        $error = (!SystemSettings::isLoginEnabled() && $user) ? 'Login not allowed.' : 'Invalid login credentials.';
+        $error = (!$systemService->isLoginEnabled() && $user) ? 'Login not allowed.' : 'Invalid login credentials.';
         $this->render(
             'auth/login', 
             [
@@ -48,7 +49,8 @@ class AuthController extends BaseController {
     }
 
     public function register() {
-        if (!SystemSettings::isRegistrationEnabled()) {
+        $systemService = $this->app->resolve(SystemService::class); 
+        if (!$systemService->isRegistrationEnabled()) {
             $error = 'User Registration not allowed.';
             $this->render(
                 'auth/register', 

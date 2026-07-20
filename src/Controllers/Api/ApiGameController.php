@@ -4,6 +4,7 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
+use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Dto\Game\GameContext;
@@ -14,8 +15,9 @@ use App\Services\GameService;
 final class ApiGameController extends BaseController {
     private GameService $gameService; 
 
-    public function __construct() { 
-        $this->gameService = new GameService(); 
+    public function __construct(App $app) { 
+        parent::__construct($app); 
+        $this->gameService = $app->resolve(GameService::class); 
     } 
 
     // Helper - Return game or send error json 

@@ -1,8 +1,12 @@
 <?php 
 use App\Core\Localization;
 use App\Core\SystemSettings;
+use App\Services\SystemService;
 
-/** @var Object $current_user */
+/** 
+ * @var Object $current_user 
+ * @var SystemService $system_settings
+*/
 ?>
 
 <div class="panel">
@@ -14,7 +18,7 @@ use App\Core\SystemSettings;
 
     <div class="nav-actions">
         <ul class="nav-list">
-            <?php if (SystemSettings::isGameCreationEnabled() || $current_user->isAdmin()): ?>
+            <?php if ($system_settings->isGameCreationEnabled() || $current_user->isAdmin()): ?>
             <li><a href="/game/create" class="btn-back"><?= Localization::get('application.general.btn.create_new_game') ?></a></li>
             <?php endif; ?>
             <li><a href="/game/list" class="btn-back"><?= Localization::get('game.lobby.open_games') ?></a></li>

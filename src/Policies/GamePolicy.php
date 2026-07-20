@@ -3,9 +3,11 @@
 
 namespace App\Policies;
 
+use App\Core\Application\App;
 use App\Core\SystemSettings;
 use App\Models\GameModel;
 use App\Models\UserModel;
+use App\Services\SystemService;
 
 final class GamePolicy {
     // Is user owner of the game
@@ -89,11 +91,12 @@ final class GamePolicy {
 
     // Can user play the game 
     public static function canPlay(GameModel $game, UserModel $user): bool {
+        $systemService = App::instance()->resolve(SystemService::class); 
         return (
             $game->isRunning() 
             && (
                 (
-                    SystemSettings::isGamePlayEnabled() 
+                    $systemService->isGamePlayEnabled() 
                     && $user->getId() === $game->getCreatedByUserId()
                 ) 
                 || $user->isAdmin()  

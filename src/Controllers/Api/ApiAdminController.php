@@ -11,10 +11,11 @@ use App\Core\Localization;
 use App\Models\SystemSettingsModel;
 
 final class ApiAdminController extends BaseController {
-
+    /*
     public function __construct() {
         // ToDo: add SystemService in Models to provide main methods if needed
     }
+    */
 
     /**
      * Helper - Current system settings

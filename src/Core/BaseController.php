@@ -2,9 +2,18 @@
 // src/Core/BaseController.php
 namespace App\Core;
 
+use App\Core\Application\App;
 use App\Core\Auth;
+use App\Services\SystemService;
 
 abstract class BaseController {
+    protected App $app; 
+
+    // Constructor 
+    public function __construct(App $app) {
+        $this->app = $app; 
+    }
+
     // Renderer
     protected function render(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void {
         if (!$view) {
@@ -16,11 +25,15 @@ abstract class BaseController {
             $page_title = htmlspecialchars(Localization::get('application.general.title'));
         }
 
+        // current_user should always be available in views
         $data['current_user'] = null;
         
         if (Auth::user()) {
             $data['current_user'] = Auth::user();
         }
+
+        // system_settings should always be available in views
+        $data['system_settings'] = $this->app->resolve(SystemService::class); 
 
         extract($data);
 

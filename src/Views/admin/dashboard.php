@@ -1,9 +1,13 @@
 <?php 
 use App\Core\Localization;
-use App\Core\SystemHealth;
 use App\Core\SystemSettings; 
+use App\Health\SystemHealth;
+use App\Services\SystemService;
 
-/** @var array $stats */
+/** 
+ * @var array $stats 
+ * @var SystemService $system_settings
+ */
 ?>
 
 <div class="panel">
@@ -80,21 +84,21 @@ use App\Core\SystemSettings;
             <h2><?= Localization::get('admin.dashboard.system_settings_card.system_status.title') ?></h2>
 
             <div class="stats-main">
-                <div class="stat-big"><?= SystemSettings::isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?></div>
+                <div class="stat-big"><?= $system_settings->isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?></div>
                 <div class="stat-label"><?= Localization::get('admin.dashboard.system_settings_card.current_state') ?></div>
             </div>
 
             <div class="stats-sub">
                 <div>
-                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . SystemSettings::getAuthenticationStatus())) ?></span>
+                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . $system_settings->getAuthenticationStatus())) ?></span>
                     <span class="stat-text"><?= Localization::get('admin.dashboard.system_settings_card.authentication') ?></span>
                 </div>
                 <div>
-                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . SystemSettings::getGamesStatus())) ?></span>
+                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . $system_settings->getGamesStatus())) ?></span>
                     <span class="stat-text"><?= Localization::get('admin.dashboard.system_settings_card.games') ?></span>
                 </div>
                 <div>
-                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . SystemSettings::getMaintenanceStatus())) ?></span>
+                    <span class="stat-value"><?= strtoupper(Localization::get('application.general.' . $system_settings->getMaintenanceStatus())) ?></span>
                     <span class="stat-text"><?= Localization::get('admin.dashboard.system_settings_card.maintenance') ?></span>
                 </div>
             </div>

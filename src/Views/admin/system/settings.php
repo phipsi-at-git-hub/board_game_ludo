@@ -4,10 +4,10 @@ use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
 use App\Core\SystemSettings;
-use App\Models\SystemSettingsModel;
+use App\Services\SystemService;
 
 /**
- * @var SystemSettingsModel $system_settings
+ * @var SystemService $system_settings
  * @var array $maintenance_messages 
  * @var array $notice_messages 
  */
@@ -44,7 +44,7 @@ use App\Models\SystemSettingsModel;
                 data-bind-sources="system-settings-form" 
                 data-bind-1-type="text" 
                 data-bind-1-dto-key="system_state_label" >
-                <?= SystemSettings::isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?>
+                <?= $system_settings->isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline')) ?>
             </div>
             <div class="stat-label">
                 <?= Localization::get('admin.system_settings.card.current_state') ?>
@@ -55,7 +55,7 @@ use App\Models\SystemSettingsModel;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        class="status-badge status-<?= $system_settings->isAuthenticationEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
                         data-id="settings-authentication-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -63,7 +63,7 @@ use App\Models\SystemSettingsModel;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="authentication_status_label" >
-                        <?= $system_settings->getRegistrationEnabled() && $system_settings->getLoginEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
+                        <?= $system_settings->isAuthenticationEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
                 <span 
@@ -75,7 +75,7 @@ use App\Models\SystemSettingsModel;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        class="status-badge status-<?= $system_settings->isGameEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
                         data-id="settings-games-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -83,7 +83,7 @@ use App\Models\SystemSettingsModel;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="games_status_label" >
-                        <?= $system_settings->getGameCreationEnabled() && $system_settings->getGamePlayEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
+                        <?= $system_settings->isGameEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.games') ?></span>
@@ -92,7 +92,7 @@ use App\Models\SystemSettingsModel;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= !$system_settings->getMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>" 
+                        class="status-badge status-<?= !$system_settings->isMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>" 
                         data-id="settings-maintenance-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -100,7 +100,7 @@ use App\Models\SystemSettingsModel;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="maintenance_status_label" >
-                        <?= !$system_settings->getMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_OFF) : strtoupper(Application::GENERAL_ON) ?>
+                        <?= !$system_settings->isMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_OFF) : strtoupper(Application::GENERAL_ON) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>
@@ -145,7 +145,7 @@ use App\Models\SystemSettingsModel;
                             type="checkbox" 
                             name="registration_enabled" 
                             value="1" 
-                            <?= $system_settings->getRegistrationEnabled() ? 'checked' : '' ?>
+                            <?= $system_settings->isRegistrationEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
                         <span class="slider">
                             <span class="slider-indicator"></span>
@@ -161,7 +161,7 @@ use App\Models\SystemSettingsModel;
                             type="checkbox" 
                             name="login_enabled" 
                             value="1" 
-                            <?= $system_settings->getLoginEnabled() ? 'checked' : '' ?>
+                            <?= $system_settings->isLoginEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
                         <span class="slider">
                             <span class="slider-indicator"></span>
@@ -182,7 +182,7 @@ use App\Models\SystemSettingsModel;
                             type="checkbox" 
                             name="game_creation_enabled" 
                             value="1"
-                            <?= $system_settings->getGameCreationEnabled() ? 'checked' : '' ?>
+                            <?= $system_settings->isGameCreationEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
                         <span class="slider">
                             <span class="slider-indicator"></span>
@@ -198,7 +198,7 @@ use App\Models\SystemSettingsModel;
                             type="checkbox" 
                             name="game_play_enabled" 
                             value="1" 
-                            <?= $system_settings->getGamePlayEnabled() ? 'checked' : '' ?>
+                            <?= $system_settings->isGamePlayEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
                         <span class="slider">
                             <span class="slider-indicator"></span>
@@ -219,7 +219,7 @@ use App\Models\SystemSettingsModel;
                             type="checkbox" 
                             name="system_enabled" 
                             value="1" 
-                            <?= $system_settings->getSystemEnabled() ? 'checked' : '' ?>
+                            <?= $system_settings->isSystemEnabled() ? 'checked' : '' ?>
                             data-auto-save="change">
                         <span class="slider">
                             <span class="slider-indicator"></span>
@@ -237,7 +237,7 @@ use App\Models\SystemSettingsModel;
                                 type="checkbox"
                                 name="maintenance_mode_enabled" 
                                 value="1" 
-                                <?= $system_settings->getMaintenanceModeEnabled() ? 'checked' : '' ?>
+                                <?= $system_settings->isMaintenanceModeEnabled() ? 'checked' : '' ?>
                                 data-auto-save="change" 
                                 data-toggle-switch>
                             <span class="slider">
@@ -246,7 +246,7 @@ use App\Models\SystemSettingsModel;
                         </label>
                     </div>
 
-                    <div class="collapse <?= $system_settings->getMaintenanceModeEnabled() ? 'active' : '' ?>" data-toggle-target>
+                    <div class="collapse <?= $system_settings->isMaintenanceModeEnabled() ? 'active' : '' ?>" data-toggle-target>
                         <!-- Maintenance Messages -->
                         <div class="nested-card">
                             <h3><?= Localization::get('admin.system_settings.card.maintenance.maintenance_mode.message') ?></h3>
@@ -298,7 +298,7 @@ use App\Models\SystemSettingsModel;
                                 type="checkbox" 
                                 name="system_notice_enabled" 
                                 value="1" 
-                                <?= $system_settings->getSystemNoticeEnabled() ? 'checked' : '' ?>
+                                <?= $system_settings->isSystemNoticeEnabled() ? 'checked' : '' ?>
                                 data-auto-save="change" 
                                 data-toggle-switch>
                             <span class="slider">
@@ -307,7 +307,7 @@ use App\Models\SystemSettingsModel;
                         </label>
                     </div>
 
-                    <div class="collapse <?= $system_settings->getSystemNoticeEnabled() ? 'active' : '' ?>" data-toggle-target>
+                    <div class="collapse <?= $system_settings->isSystemNoticeEnabled() ? 'active' : '' ?>" data-toggle-target>
 
                         <!-- Notice Messages -->
                         <div class="nested-card">

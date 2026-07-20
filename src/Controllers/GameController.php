@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
@@ -14,8 +15,9 @@ use LogicException;
 class GameController extends BaseController {
     private GameService $gameService; 
 
-    public function __construct() { 
-        $this->gameService = new GameService(); 
+    public function __construct(App $app) { 
+        parent::__construct($app); 
+        $this->gameService = $app->resolve(GameService::class); 
     } 
 
     /**

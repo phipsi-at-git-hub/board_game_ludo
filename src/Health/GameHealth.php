@@ -1,10 +1,10 @@
 <?php
-// Core/GameHealth.php
-namespace App\Core;
+// Health/GameHealth.php
+namespace App\Health;
 
 use App\Constants\Application;
-use App\Controllers\ApiGameController;
-use App\Controllers\ApiGameEngineController;
+use App\Controllers\Api\ApiGameController;
+use App\Controllers\Api\ApiGameEngineController;
 use App\Core\Http\Http;
 use App\Models\GameModel;
 use Throwable;

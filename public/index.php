@@ -11,13 +11,12 @@ require __DIR__ . '/../bootstrap/paths.php';
 // 3. Composer Autoload
 require BASE_PATH . '/vendor/autoload.php';
 
-// 4. Load app bootstrap
-require BASE_PATH . '/bootstrap/app.php';
-
+// 4. Create application
+$app = require BASE_PATH . '/bootstrap/app.php'; 
 
 // 5. Router
 $router = require BASE_PATH . '/bootstrap/routes.php';
-$router->dispatch();
+$router->dispatch($app); 
 
 // 6. Debug in DEV
 use App\Core\Debug;

@@ -1,8 +1,12 @@
 <?php 
-// Core/SystemHealth.php
-namespace App\Core; 
+// Health/SystemHealth.php
+namespace App\Health; 
 
 use App\Constants\Application;
+use App\Core\Application\App;
+use App\Core\Database;
+use App\Core\Env;
+use App\Services\SystemService;
 use Throwable;
 
 final class SystemHealth {
@@ -175,8 +179,8 @@ final class SystemHealth {
     // Helper - Are System Settings okay
     public static function checkSystemSettings(): bool {
         try {
-            $system_settings = SystemSettings::get(); 
-            return method_exists($system_settings, 'isValid') ? $system_settings->isValid() : true; 
+            $systemService = App::instance()->resolve(SystemService::class); 
+            return method_exists($systemService, 'isValid') ? $systemService->isValid() : true; 
         } catch (Throwable $e) {
             return false; 
         }
