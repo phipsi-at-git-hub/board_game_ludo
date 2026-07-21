@@ -1,208 +1,120 @@
 # Development Setup
 
-This document describes how to prepare a local development environment.
+## Introduction
 
-The goal is that every developer can run the complete application locally using Docker.
+This document describes how to set up the project for local development.
+
+The project is designed to run in a containerized environment using Docker and Docker Compose.
+
+The goal is to provide a reproducible development environment with minimal host system dependencies.
 
 ---
 
 # Requirements
 
-Install the following software:
+The following software must be installed:
 
 ## Required
 
-- Git
 - Docker
 - Docker Compose
 
+Verify installation:
 
-## Recommended
-
-- Visual Studio Code
-- Docker Extension
-- PHP Extension
-- JavaScript Extension
-
+```bash
+docker --version
+docker compose version
+```
 
 ---
 
-# Clone Repository
+## Recommended
 
-Clone the repository:
+Development tools:
 
-```bash
-git clone TODO_REPOSITORY_URL
-```
-
-Enter the project directory:
-
-```bash
-cd TODO_PROJECT_NAME
-```
+- Visual Studio Code
+- PhpStorm
+- Git
+- Postman or Bruno
+- DBeaver
 
 ---
 
 # Project Structure
 
-After cloning:
+Expected structure:
 
-```
+```text
 project/
 
-├── docker-compose.yml
-
-├── src/
-
-├── public/
-
-├── js/
-
-├── css/
-
+├── bootstrap/
+├── config/
 ├── database/
-
-└── docs/
+├── docker/
+├── docs/
+├── public/
+├── src/
+├── vendor/
+├── .env
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
 
 # Environment Configuration
 
-The application uses environment variables.
+## Create Environment File
 
-Create the local environment file:
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Configure:
+If no example file exists:
 
+```bash
+touch .env
 ```
-APP_ENV=development
-
-DATABASE_HOST=
-DATABASE_NAME=
-DATABASE_USER=
-DATABASE_PASSWORD=
-```
-
-TODO:
-Document project specific variables here.
 
 ---
 
-# Docker Architecture
-
-The development environment consists of multiple containers.
+## Example Environment Variables
 
 Example:
 
+```env
+APP_ENV=development
+
+DB_HOST=db
+DB_PORT=3306
+DB_NAME=ludo
+DB_USER=ludo
+DB_PASSWORD=secret
+
+TZ=Europe/Berlin
 ```
-                  Browser
 
-                     |
-                     |
-
-                Web Server
-
-                     |
-                     |
-
-             PHP Application
-
-                     |
-                     |
-
-                 Database
-
-
-                     |
-
-               phpMyAdmin
-```
+Adjust values according to your environment.
 
 ---
 
-# Containers
+# Starting the Application
 
-## Application Container
+## Build Containers
 
-Responsible for:
-
-- PHP runtime
-- backend execution
-- application dependencies
-
-
-Container name:
-
-```
-TODO
-```
-
----
-
-## Web Container
-
-Responsible for:
-
-- HTTP requests
-- routing
-- serving static files
-
-
-Container name:
-
-```
-TODO
-```
-
----
-
-## Database Container
-
-Responsible for:
-
-- persistent data storage
-
-
-Technology:
-
-```
-TODO
-```
-
----
-
-## phpMyAdmin Container
-
-Provides database administration.
-
-Access:
-
-```
-http://localhost:TODO_PORT
-```
-
----
-
-# Start Development Environment
-
-Build containers:
+Build all containers:
 
 ```bash
 docker compose build
 ```
 
-Start containers:
+---
 
-```bash
-docker compose up
-```
+## Start Containers
 
-Run in background:
+Start the application:
 
 ```bash
 docker compose up -d
@@ -210,9 +122,324 @@ docker compose up -d
 
 ---
 
-# Stop Environment
+## Verify Running Containers
 
-Stop containers:
+Check container status:
+
+```bash
+docker compose ps
+```
+
+Example:
+
+```text
+NAME            STATUS
+app             running
+db              running
+phpmyadmin      running
+```
+
+---
+
+# Accessing the Application
+
+After startup:
+
+Application:
+
+```text
+http://localhost
+```
+
+phpMyAdmin:
+
+```text
+http://localhost:8080
+```
+
+Adjust ports according to your Docker configuration.
+
+---
+
+# Installing Dependencies
+
+PHP dependencies are managed through Composer.
+
+Install dependencies:
+
+```bash
+composer install
+```
+
+Update dependencies:
+
+```bash
+composer update
+```
+
+---
+
+# Autoload Regeneration
+
+After creating new classes:
+
+```bash
+composer dump-autoload
+```
+
+This regenerates Composer's autoload mappings.
+
+---
+
+# Database Setup
+
+## Initial Database Creation
+
+Create database manually or through container initialization scripts.
+
+Example:
+
+```sql
+CREATE DATABASE ludo;
+```
+
+---
+
+## Import Schema
+
+Import project schema:
+
+```bash
+mysql -u root -p ludo < database/schema.sql
+```
+
+---
+
+## Import Seed Data
+
+Optional:
+
+```bash
+mysql -u root -p ludo < database/seeds.sql
+```
+
+---
+
+# Database Access
+
+## phpMyAdmin
+
+Open:
+
+```text
+http://localhost:8080
+```
+
+Use credentials from `.env`.
+
+---
+
+## CLI Access
+
+Enter database container:
+
+```bash
+docker exec -it db bash
+```
+
+Connect:
+
+```bash
+mysql -u root -p
+```
+
+---
+
+# Application Lifecycle During Development
+
+Request flow:
+
+```text
+Browser
+
+    |
+
+    v
+
+public/index.php
+
+    |
+
+    v
+
+bootstrap/app.php
+
+    |
+
+    v
+
+Application Boot
+
+    |
+
+    v
+
+Router
+
+    |
+
+    v
+
+Controller
+
+    |
+
+    v
+
+Service
+
+    |
+
+    v
+
+Model
+
+    |
+
+    v
+
+Database
+```
+
+---
+
+# Development Environment
+
+## Development Mode
+
+Enable development mode:
+
+```env
+APP_ENV=development
+```
+
+Effects:
+
+- detailed PHP errors
+- debug information
+- asset rebuilding
+- development diagnostics
+
+---
+
+## Production Mode
+
+```env
+APP_ENV=production
+```
+
+Effects:
+
+- errors hidden
+- debugging disabled
+- optimized runtime behavior
+
+---
+
+# Asset Handling
+
+Assets are generated automatically during development.
+
+Examples:
+
+```text
+CSS
+JavaScript
+Generated bundles
+```
+
+Depending on project configuration, assets may be rebuilt automatically during bootstrap.
+
+---
+
+# Localization
+
+Localization files are loaded during application boot.
+
+Location:
+
+```text
+resources/translations/
+```
+
+Example:
+
+```text
+resources/translations/en-us.php
+resources/translations/de-de.php
+```
+
+---
+
+# Debugging
+
+## Application Debug
+
+Development mode enables:
+
+```php
+Debug::start();
+```
+
+and
+
+```php
+Debug::render();
+```
+
+at the end of the request.
+
+---
+
+## PHP Error Reporting
+
+Development mode enables:
+
+```php
+error_reporting(E_ALL);
+```
+
+and
+
+```php
+ini_set('display_errors', 1);
+```
+
+---
+
+# Logging
+
+Future logging should be centralized.
+
+Recommended location:
+
+```text
+storage/logs/
+```
+
+Examples:
+
+```text
+application.log
+error.log
+game.log
+```
+
+---
+
+# Working With Docker
+
+## Stop Containers
 
 ```bash
 docker compose down
@@ -220,204 +447,121 @@ docker compose down
 
 ---
 
-# Database Setup
-
-After the first start:
-
-Run migrations:
+## Restart Containers
 
 ```bash
-TODO
-```
-
-Import initial data:
-
-```bash
-TODO
+docker compose restart
 ```
 
 ---
 
-# Access Application
+## Rebuild Containers
 
-Application:
+```bash
+docker compose down
+docker compose build
+docker compose up -d
+```
 
-```
-http://localhost:TODO_PORT
+---
+
+## View Logs
+
+All containers:
+
+```bash
+docker compose logs
 ```
 
-phpMyAdmin:
+Specific container:
 
+```bash
+docker compose logs app
 ```
-http://localhost:TODO_PORT
+
+Live logs:
+
+```bash
+docker compose logs -f
 ```
+
+---
+
+# Running Commands Inside Containers
+
+Example:
+
+```bash
+docker exec -it app bash
+```
+
+Inside container:
+
+```bash
+composer install
+php artisan
+php script.php
+```
+
+Adjust commands to project needs.
 
 ---
 
 # Development Workflow
 
-## Backend Changes
+Typical workflow:
 
-Backend code:
+```text
+Pull Changes
 
-```
-src/
-```
-
-Depending on configuration, restart the application container:
-
-```bash
-docker compose restart app
-```
-
----
-
-## Frontend Changes
-
-Frontend files:
-
-```
-public/js/
-public/css/
-```
-
-Usually browser refresh is sufficient.
-
----
-
-# Logs
-
-Application logs:
-
-```bash
-docker compose logs -f app
-```
-
-Web server logs:
-
-```bash
-docker compose logs -f web
-```
-
-Database logs:
-
-```bash
-docker compose logs -f db
-```
-
----
-
-# IDE Configuration
-
-Recommended settings:
-
-## PHP
-
-Enable:
-
-- PHP language support
-- code formatting
-- static analysis
-
-
-## JavaScript
-
-Enable:
-
-- ES support
-- formatting
-- debugging
-
-
-## Docker
-
-Install:
-
-- Docker extension
-
-Useful for:
-
-- container status
-- logs
-- shell access
-
----
-
-# Debugging
-
-## Backend
-
-Check:
-
-```
-docker compose logs
-```
-
----
-
-## Database
-
-Access through:
-
-phpMyAdmin
-
-or:
-
-```bash
-docker compose exec db bash
-```
-
----
-
-# Adding New Features
-
-Before implementing new functionality:
-
-1. Identify the correct architectural layer
-
-Example:
-
-```
-Controller
     |
-    Service
+
+    v
+
+Update Dependencies
+
     |
-    Model
+
+    v
+
+Start Containers
+
+    |
+
+    v
+
+Develop Feature
+
+    |
+
+    v
+
+Test Feature
+
+    |
+
+    v
+
+Commit Changes
 ```
-
-2. Check reusable frontend systems
-
-Examples:
-
-- Binding System
-- Shared JavaScript utilities
-- Viewer components
-
-3. Update documentation if a new architectural concept is introduced.
-
----
-
-# Documentation Guidelines
-
-Documentation belongs into:
-
-```
-docs/
-```
-
-Important changes should include updates to:
-
-- architecture documentation
-- feature documentation
-- setup documentation
 
 ---
 
 # Troubleshooting
 
-## Containers do not start
+## Composer Autoload Issues
 
-Check:
+Regenerate:
+
+```bash
+composer dump-autoload
+```
+
+---
+
+## Container Not Starting
+
+Inspect:
 
 ```bash
 docker compose logs
@@ -425,35 +569,101 @@ docker compose logs
 
 ---
 
-## Database connection failed
+## Database Connection Failure
 
 Verify:
 
-- container is running
-- environment variables
-- database credentials
+```env
+DB_HOST
+DB_PORT
+DB_NAME
+DB_USER
+DB_PASSWORD
+```
+
+Check whether database container is running.
 
 ---
 
-## Frontend changes not visible
+## Missing Environment Variables
 
-Try:
+Verify:
 
-- browser hard reload
-- clear cache
-- verify served files
+```bash
+cat .env
+```
+
+and ensure:
+
+```env
+APP_ENV
+DB_HOST
+DB_NAME
+DB_USER
+DB_PASSWORD
+```
+
+exist.
 
 ---
 
-# Final Notes
+# Coding Standards
 
-A working local environment should allow every developer to:
+General principles:
 
-- start all containers
-- access the application
-- access the database
-- modify backend and frontend code
-- test new features locally
+- Controllers stay thin
+- Business logic belongs to services
+- Models handle persistence
+- Policies handle permissions
+- Views remain presentation-only
+
+---
+
+# Related Documentation
+
+Architecture overview:
+
+```text
+docs/architecture/overview.md
+```
+
+Application lifecycle:
+
+```text
+docs/architecture/application-lifecycle.md
+```
+
+Dependency container:
+
+```text
+docs/architecture/dependency-container.md
+```
+
+Backend layers:
+
+```text
+docs/architecture/backend-layer.md
+```
+
+---
+
+# Summary
+
+A local development environment consists of:
+
+- Docker containers
+- Composer dependencies
+- configured environment variables
+- initialized database
+- development mode enabled
+
+Once configured, development should only require:
+
+```bash
+docker compose up -d
+```
+
+to start working on the application.
 
 --- 
 

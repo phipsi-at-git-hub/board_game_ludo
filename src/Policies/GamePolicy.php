@@ -4,7 +4,6 @@
 namespace App\Policies;
 
 use App\Core\Application\App;
-use App\Core\SystemSettings;
 use App\Models\GameModel;
 use App\Models\UserModel;
 use App\Services\SystemService;
@@ -86,6 +85,7 @@ final class GamePolicy {
                 $user->isAdmin()
                 || $user->getId() === $game->getCreatedByUserId()
             )
+            && $game->hasParticipants()
         );
     }
 
