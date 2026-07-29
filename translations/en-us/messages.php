@@ -325,6 +325,7 @@ return [
     'admin.game.partials.metadata.card.owner.id' => 'ID', 
     'admin.game.partials.metadata.card.status.title' => 'Status', 
     'admin.game.partials.metadata.card.status.state' => 'Status', 
+    'admin.game.partials.metadata.card.status.winner' => 'Winner', 
 
     // Admin - Users List
     'admin.users.list.title' => '👤 Admin - Users', 

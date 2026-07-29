@@ -122,7 +122,7 @@ use App\Models\GameModel;
             <div class="form-row">
 
                 <span>
-                    <?= Localization::get('admin.game.metadata.status.winner') ?>
+                    <?= Localization::get('admin.game.partials.metadata.card.status.winner') ?>
                 </span>
 
                 <span>
