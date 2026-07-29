@@ -35,6 +35,8 @@ $can_reset ??= false;
 $can_cancel ??= false;
 $can_create_test ??= false;
 
+$show_start_pause ??= false; 
+
 $show_players_card ??= false; 
 $api_delete ??= true; 
 ?>
@@ -50,7 +52,13 @@ $api_delete ??= true;
         method="POST" 
         action="/api/game/join/<?= $game->getId() ?>" 
         data-response="json" 
-        data-bind-targets="game-<?= $game->getId() ?>-player-count<?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-targets="
+            game-<?= $game->getId() ?>-player-count
+            <?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, 
+            game-<?= $game->getId() ?>-join, 
+            game-<?= $game->getId() ?>-leave
+            <?php if ($show_start_pause): ?>, game-<?= $game->getId() ?>-start<?php endif; ?>
+        " 
         data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
         data-bind-1-dto-key="permissions.leave" 
         data-bind-1-type="hidden" 
@@ -79,7 +87,13 @@ $api_delete ??= true;
         method="POST" 
         action="/api/game/leave/<?= $game->getId() ?>" 
         data-response="json" 
-        data-bind-targets="game-<?= $game->getId() ?>-player-count<?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+        data-bind-targets="
+            game-<?= $game->getId() ?>-player-count
+            <?php if ($show_players_card): ?>, game-<?= $game->getId() ?>-players<?php endif; ?>, 
+            game-<?= $game->getId() ?>-join, 
+            game-<?= $game->getId() ?>-leave
+            <?php if ($show_start_pause): ?>, game-<?= $game->getId() ?>-start<?php endif; ?>
+        " 
         data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
         data-bind-1-dto-key="permissions.join" 
         data-bind-1-type="hidden" 
@@ -117,11 +131,17 @@ $api_delete ??= true;
 
     <!-- START -->
 
-    <?php if ($can_start): ?>
+    <?php if ($show_start_pause): ?>
 
         <form
             method="POST"
-            action="/game/start">
+            action="/game/start" 
+            data-id="game-<?= $game->getId() ?>-start" 
+            data-bind-sources="game-<?= $game->getId() ?>-join, game-<?= $game->getId() ?>-leave" 
+            data-bind-1-dto-key="permissions.start"
+            data-bind-1-type="hidden"
+            data-bind-1-invert="true" 
+            <?= $can_start ? '' : 'hidden' ?> >
 
             <input
                 type="hidden"
@@ -147,7 +167,7 @@ $api_delete ??= true;
 
     <!-- PAUSE -->
 
-    <?php if ($can_pause): ?>
+    <?php if ($show_start_pause && $can_pause): ?>
 
         <form
             method="POST"

@@ -121,17 +121,21 @@ function applyTargetBindings(target, response) {
             continue;
         }
 
-        const value = resolveDtoValue(response.data, key); 
+        let value = resolveDtoValue(response.data, key); 
         if (value === undefined) {
             console.warn("DTO key missing:", key); 
             index++; 
             continue; 
         }
 
+        if (target.getAttribute(`data-bind-${index}-invert`) === "true" && supportInvert(type)) { 
+            value = !Boolean(value); 
+        }
+
         updateElement(
             target,
-            type,
-            resolveDtoValue(response.data, key), 
+            type, 
+            value, 
             target,
             index
         );
@@ -253,3 +257,11 @@ function resolveDtoValue(object, path) {
         (value, key) => value?.[key], object
     ); 
 }
+
+// Helper - Defines invertible binding types (usable boolean values) and return if invertible 
+function supportInvert(type) {
+    return [
+        "hidden", 
+        "checked",
+    ]. includes(type); 
+} 

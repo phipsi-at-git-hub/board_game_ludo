@@ -15,6 +15,7 @@ $can_edit_options = false;
 $is_admin_view ??= false; 
 $show_metadata ??= false; 
 $show_statistics ??= false; 
+$show_start_pause = true; 
 
 $show_players_card = true; 
 
