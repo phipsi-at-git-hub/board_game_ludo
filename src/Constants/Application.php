@@ -33,6 +33,7 @@ class Application {
     public const TABLE_STATE = 'game_state';
     public const TABLE_PLAYERS = 'game_state_players';
     public const TABLE_FIGURES = 'game_state_figures';
+    public const TABLE_HISTORY = 'game_history'; 
     public const TABLE_SYSTEM_SETTINGS = 'system_settings'; 
 
     // Database field names - common
@@ -81,6 +82,10 @@ class Application {
 
     // Database field names - game_state_figures
     public const PLAYER_INDEX = 'player_index';
+
+    // Database field names - game_history 
+    public const STATE_INDEX = 'state_index'; 
+    public const STATE = 'state'; 
 
     // Database field names - users
     public const USERNAME = 'username';

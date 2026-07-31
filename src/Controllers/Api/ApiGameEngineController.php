@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Constants\Application;
 use App\Core\BaseController;
 use App\Core\Auth;
+use App\Core\History\Game\GameStateHistory;
 use App\Models\GameModel;
 use DomainException;
 
@@ -112,6 +113,12 @@ class ApiGameEngineController extends BaseController {
                 } else {
                     $game->applyMove($user->getId(), $move);
                 }
+                
+                // Add state index to history
+                GameStateHistory::create(
+                    $game->getId(), 
+                    $game->getGameStateSnapshot(), 
+                ); 
 
                 return $this->jsonClean([
                     'success' => true,
@@ -152,6 +159,12 @@ class ApiGameEngineController extends BaseController {
         }
 
         $game->passTurn($user->getId());
+                
+        // Add state index to history
+        GameStateHistory::create(
+            $game->getId(), 
+            $game->getGameStateSnapshot(), 
+        ); 
 
         return $this->jsonClean([
             'success' => true,
