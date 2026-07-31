@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\BaseController;
+use App\Core\Logging\Logger;
 use App\Models\UserModel;
 use App\Services\SystemService;
 
@@ -35,6 +36,10 @@ class AuthController extends BaseController {
         ) {
             $user->updateLastLogin();
             Auth::login($user);
+
+            // Logging
+            Logger::app()->info('User login successful', ['user_id' => $user->getId()]);
+
             header('Location: /lobby');
             exit;
         }
@@ -73,7 +78,12 @@ class AuthController extends BaseController {
     }
 
     public function logout() {
+        $user = Auth::user(); 
         Auth::logout();
+
+        // Logging
+        Logger::app()->info('User logout successful', ['user_id' => $user->getId()]);
+
         header('Location: /login');
         exit;
     }

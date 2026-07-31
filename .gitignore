@@ -12,8 +12,15 @@ db_data/
 .idea/
 .vscode/
 
+# Storage
+/storage/*
+
+# Cache
+/storage/cache/*
+
 # Logs
 *.log
+/storage/logs/*.log
 
 # Cache / Temp
 *.cache

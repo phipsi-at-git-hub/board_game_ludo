@@ -1,6 +1,6 @@
 <?php
-// Database.php
-namespace App\Core;
+// src/Core/Persistence/Database.php
+namespace App\Core\Persistence;
 
 use PDO;
 use PDOStatement;

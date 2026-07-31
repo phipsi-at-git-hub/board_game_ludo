@@ -4,7 +4,7 @@ namespace App\Health;
 
 use App\Constants\Application;
 use App\Core\Application\App;
-use App\Core\Database;
+use App\Core\Persistence\Database;
 use App\Core\Env;
 use App\Services\SystemService;
 use Throwable;

@@ -2,7 +2,7 @@
 // BaseModel.php
 namespace App\Models;
 
-use App\Core\Database;
+use App\Core\Persistence\Database;
 use PDO;
 
 abstract class BaseModel {
