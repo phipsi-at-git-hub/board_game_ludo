@@ -3,6 +3,8 @@
 
 namespace App\Core\Logging;
 
+use App\Constants\Application;
+
 final class LogEntry {
     private string $level;
     private string $message;
@@ -45,7 +47,7 @@ final class LogEntry {
         $entry->context = $context;
         $entry->channel = $channel;
 
-        $entry->timestamp = date('Y-m-d H:i:s');
+        $entry->timestamp = date(Application::FILE_DATE_TIME_FORMAT);
 
         $entry->request_id = $_SERVER['HTTP_X_REQUEST_ID'] ?? null;
         $entry->request_method = $_SERVER['REQUEST_METHOD'] ?? null;
