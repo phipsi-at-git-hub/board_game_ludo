@@ -188,4 +188,12 @@ class Application {
     public const REQUEST_METHOD_POST = 'POST';
     public const REQUEST_METHOD_PUT = 'PUT';
     public const REQUEST_METHOD_DELETE = 'DELETE';
+
+    // Date and Time formats
+    public const FILE_DATE_FORMAT = 'Y-m-d'; 
+    public const FILE_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; 
+
+    // Storage type
+    public const STORAGE_FILE = 'file'; 
+    public const STORAGE_DATABASE = 'database'; 
 }
