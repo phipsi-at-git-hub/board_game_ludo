@@ -3,33 +3,70 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Core\Logging\LoggingConfiguration;
 use App\Health\SystemHealth;
 use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
+use App\Services\LogService;
 
 class AdminController extends BaseController { 
     // Dashboard
     public function dashboard(): void {
-        $stats = [
+        // Users statistics 
+        $users_card = [
             'users_total' => UserModel::countAll(), 
             'users_active' => UserModel::countByStatus('active'), 
             'users_inactive' => UserModel::countByStatus('inactive'), 
             'admins_total' => UserModel::countByRole('admin'), 
+        ];
+
+        // Games statistics
+        $games_card = [
             'games_total' => GameModel::countAll(), 
             'games_waiting' => GameModel::countByStatus('waiting'), 
             'games_active' => GameModel::countByStatus('running'), 
             'games_finished' => GameModel::countByStatus('finished'), 
         ];
 
+        // System logs statistics
+        $logService = new LogService([
+            LoggingConfiguration::CHANNEL_APPLICATION, 
+            LoggingConfiguration::CHANNEL_SYSTEM
+        ], [
+            date(Application::FILE_DATE_FORMAT)
+        ]); 
+        $log_statistics = $logService->getStatistics(); 
+        $logs_card = [
+            'total' => $log_statistics['total'], 
+            'highest_level' => $log_statistics['highest_level'], 
+            'emergency' => $log_statistics['emergency'], 
+            'alert' => $log_statistics['alert'], 
+            'critical' => $log_statistics['critical'], 
+            'error' => $log_statistics['error'], 
+            'warning' => $log_statistics['warning'], 
+            'notice' => $log_statistics['notice'], 
+            'info' => $log_statistics['info'], 
+            'debug' => $log_statistics['debug'], 
+        ];
+
+        // System statistics
+        $stats_card = [
+            'main' => 'Main', 
+        ]; 
+
         $this->render(
             'admin/dashboard', 
             [
-                'stats' => $stats
+                'users_card' => $users_card,
+                'games_card' => $games_card,  
+                'logs_card' => $logs_card, 
+                'stats_card' => $stats_card, 
             ]
         );
     }
