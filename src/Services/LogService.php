@@ -89,7 +89,7 @@ final class LogService {
         }
 
         $statistics['total'] = $this->getCount();
-        $statistics['highest_level'] = $this->getHighestLevel($statistics);
+        $statistics['highest_level'] = $this->getHighestLevel($statistics) ?? 'none';
 
         return $statistics;
     }
