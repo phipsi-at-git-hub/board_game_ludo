@@ -3,7 +3,9 @@
 
 namespace App\Core\Logging;
 
+use App\Core\Application\App;
 use App\Models\LoggingModel;
+use App\Services\SystemService;
 use Throwable;
 
 final class Logger {
@@ -74,6 +76,10 @@ final class Logger {
         string $message,
         array $context = []
     ): void {
+        if ($level === LoggingConfiguration::LEVEL_DEBUG && !App::instance()->resolve(SystemService::class)->isLoggingDebugEnabled()) {
+            return; 
+        }
+
         $entry = LogEntry::create(
             $level,
             $message,

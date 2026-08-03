@@ -7,6 +7,7 @@ use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
+use App\Core\Logging\Logger;
 use App\Models\GameModel;
 use App\Models\GameRuleSetModel;
 use App\Services\GameService;
@@ -216,6 +217,9 @@ class GameController extends BaseController {
             http_response_code(404);
             die('Game not found');
         }
+        
+        // Logging
+        Logger::app()->debug('Show game ' . $game->getId(), ['user_id' => $user->getId(), 'game_id' => $game->getId()]);
 
         $this->render(
             'game/show', 
