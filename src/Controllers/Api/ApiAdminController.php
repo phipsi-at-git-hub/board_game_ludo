@@ -4,10 +4,12 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
+use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Dto\System\SettingsContext;
 use App\Core\Http\Response;
 use App\Core\Localization;
+use App\Core\Logging\Logger;
 use App\Models\SystemSettingsModel;
 
 final class ApiAdminController extends BaseController {
@@ -46,6 +48,9 @@ final class ApiAdminController extends BaseController {
 
         $settings = $this->settings();
         $success = $callback($settings);
+        
+        // Logging
+        Logger::app()->info('Admin settings updated', ['user_id' => Auth::user()->getId()]);
 
         if (!$success) {
             $this->jsonClean(
@@ -72,6 +77,9 @@ final class ApiAdminController extends BaseController {
      * Update all system settings
      */
     public function updateSystemSettings(): void {
+        // Logging
+        Logger::app()->info('Admin system settings updated', ['user_id' => Auth::user()->getId()]);
+
         $this->updateSettings(
             function (SystemSettingsModel $settings): bool {
                 $settings->updateBooleansToFalse();

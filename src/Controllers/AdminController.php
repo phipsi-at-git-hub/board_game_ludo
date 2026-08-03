@@ -8,6 +8,7 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
 use App\Health\SystemHealth;
 use App\Models\GameModel;
@@ -59,6 +60,9 @@ class AdminController extends BaseController {
         $stats_card = [
             'main' => 'Main', 
         ]; 
+        
+        // Logging
+        Logger::app()->debug('Admin Dashboard', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
             'admin/dashboard', 
@@ -74,6 +78,10 @@ class AdminController extends BaseController {
     // Users - List all users
     public function listUsers(): void {
         $users = UserModel::all();
+        
+        // Logging
+        Logger::app()->debug('Admin users list', ['user_id' => Auth::user()->getId()]);
+
         $this->render(
             'admin/user/list', 
             [
@@ -105,6 +113,9 @@ class AdminController extends BaseController {
             http_response_code(404);
             die('User not found');
         }
+        
+        // Logging
+        Logger::app()->debug('Admin edit user: ' . $user_id, ['user_id' => Auth::user()->getId()]);
 
         $this->render(
             'admin/user/edit', 
@@ -140,6 +151,9 @@ class AdminController extends BaseController {
     // Games - List all games
     public function listGames(): void {
         $games = GameModel::getAllGames();
+        
+        // Logging
+        Logger::app()->debug('Admin list games', ['user_id' => Auth::user()->getId()]);
         $this->render(
             'admin/game/list', 
             [
@@ -158,6 +172,9 @@ class AdminController extends BaseController {
             http_response_code(404);
             die('Game not found');
         }
+        
+        // Logging
+        Logger::app()->debug('Admin show game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
         $this->render(
             'admin/game/show', 
@@ -221,6 +238,10 @@ class AdminController extends BaseController {
             'system.settings.system.notice.002.title', 
             'system.settings.system.notice.003.title', 
         ]; 
+        
+        // Logging
+        Logger::app()->debug('Admin system settings', ['user_id' => Auth::user()->getId()]);
+
         $this->render(
             'admin/system/settings', 
             [
@@ -246,6 +267,10 @@ class AdminController extends BaseController {
                 ], 200
             );
         }
+        
+        // Logging
+        Logger::app()->info('Admin system settings updated', ['user_id' => Auth::user()->getId()]);
+
         return $this->jsonClean(
             [
                 'success' => false, 
@@ -262,6 +287,10 @@ class AdminController extends BaseController {
         $database = SystemHealth::getDatabaseDetails(); 
         $environment = SystemHealth::getEnvironmentDetails(); 
         $game = SystemHealth::getGameDetails(); 
+        
+        // Logging
+        Logger::app()->debug('Admin system health', ['user_id' => Auth::user()->getId()]);
+
         $this->render(
             'admin/system/health', 
             [

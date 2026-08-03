@@ -47,6 +47,10 @@ class GameController extends BaseController {
     public function lobby() {
         // Only for logged in users (secured through middleware)
         $user = Auth::user();
+        
+        // Logging
+        Logger::app()->debug('Lobby', ['user_id' => $user->getId()]);
+
         $this->render(
             'game/lobby', 
             ['user' => $user]
@@ -184,6 +188,9 @@ class GameController extends BaseController {
             $games = GameModel::getAllOpenGamesNew();
         }
         
+        // Logging
+        Logger::app()->debug('List all games', ['user_id' => $user->getId()]);
+        
         $this->render(
             'game/list', 
             [
@@ -197,7 +204,8 @@ class GameController extends BaseController {
         $user = Auth::user();
         $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
 
-        //var_dump($games);
+        // Logging
+        Logger::app()->debug('List user games', ['user_id' => $user->getId()]);
         
         $this->render(
             'game/list', 
@@ -237,6 +245,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->join($game, $user), 
             "/game/detail/$game_id"
         ); 
+        
+        // Logging
+        Logger::app()->info('Join game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Leave game
@@ -246,6 +257,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->leave($game, $user), 
             "/game/detail/$game_id"
         ); 
+        
+        // Logging
+        Logger::app()->info('Leave game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Start game
@@ -261,6 +275,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->start($game, $user), 
             "/game/detail/$game_id"
         ); 
+        
+        // Logging
+        Logger::app()->info('Start game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Pause game
@@ -276,6 +293,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->pause($game, $user), 
             "/game/detail/$game_id"
         ); 
+        
+        // Logging
+        Logger::app()->info('Pause game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Reset game
@@ -291,6 +311,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->reset($game, $user), 
             "/game/detail/$game_id"
         ); 
+        
+        // Logging
+        Logger::app()->info('Reset game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Cancel game
@@ -321,6 +344,9 @@ class GameController extends BaseController {
             fn($game, $user) => $this->gameService->delete($game, $user), 
             "/game/list"
         ); 
+        
+        // Logging
+        Logger::app()->info('Delete game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
 
     // Play game
@@ -350,6 +376,9 @@ class GameController extends BaseController {
                 ];
             }
         }
+        
+        // Logging
+        Logger::app()->info('Play game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
 
         $this->render(
             'game/play', 

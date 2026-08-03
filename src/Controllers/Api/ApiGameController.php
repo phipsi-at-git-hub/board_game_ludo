@@ -9,6 +9,7 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Dto\Game\GameContext;
 use App\Core\Http\Response;
+use App\Core\Logging\Logger;
 use App\Models\GameModel;
 use App\Services\GameService;
 
@@ -101,6 +102,9 @@ final class ApiGameController extends BaseController {
 
     // Join game
     public function join(string $game_id): void {
+        // Logging
+        Logger::app()->info('Join game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
+
         $this->executeApiGameActionWithViews(
             $game_id, 
             fn(GameModel $game) => $this->gameService->join(
@@ -113,7 +117,10 @@ final class ApiGameController extends BaseController {
     }
 
     // Leave game
-    public function leave(string $game_id): void {
+    public function leave(string $game_id): void { 
+        // Logging
+        Logger::app()->info('Leave game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
+        
         $this->executeApiGameActionWithViews(
             $game_id, 
             fn(GameModel $game) => $this->gameService->leave(
@@ -122,7 +129,7 @@ final class ApiGameController extends BaseController {
             ), 
             'Left game', 
             fn(GameModel $game) => $this->buildPlayersView($game) 
-        ); 
+        );
     }
 
     // Start game
