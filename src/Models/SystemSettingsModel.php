@@ -9,6 +9,7 @@ final class SystemSettingsModel extends BaseModel {
     private bool $registration_enabled; 
     private bool $login_enabled; 
     private bool $system_enabled; 
+    private bool $logging_debug_enabled; 
     private bool $game_creation_enabled; 
     private bool $game_play_enabled; 
     private bool $maintenance_mode_enabled; 
@@ -22,6 +23,7 @@ final class SystemSettingsModel extends BaseModel {
     private const DEFAULT_REGISTRATION_ENABLED = false; 
     private const DEFAULT_LOGIN_ENABLED = false; 
     private const DEFAULT_SYSTEM_ENABLED = false; 
+    private const DEFAULT_LOGGING_DEBUG_ENABLED = false; 
     private const DEFAULT_GAME_CREATION_ENABLED = false; 
     private const DEFAULT_GAME_PLAY_ENABLED = false; 
     private const DEFAULT_MAINTENANCE_MODE_ENABLED = true; 
@@ -35,6 +37,7 @@ final class SystemSettingsModel extends BaseModel {
         $system_settings->registration_enabled = self::DEFAULT_REGISTRATION_ENABLED; 
         $system_settings->login_enabled = self::DEFAULT_LOGIN_ENABLED; 
         $system_settings->system_enabled = self::DEFAULT_SYSTEM_ENABLED; 
+        $system_settings->logging_debug_enabled = self::DEFAULT_LOGGING_DEBUG_ENABLED; 
         $system_settings->game_creation_enabled = self::DEFAULT_GAME_CREATION_ENABLED; 
         $system_settings->game_play_enabled = self::DEFAULT_GAME_PLAY_ENABLED; 
         $system_settings->maintenance_mode_enabled = self::DEFAULT_MAINTENANCE_MODE_ENABLED; 
@@ -88,6 +91,7 @@ final class SystemSettingsModel extends BaseModel {
                     %s = :maintenance_message, 
                     %s = :system_notice_enabled, 
                     %s = :system_notice_message, 
+                    %s = :logging_debug_enabled, 
                     %s = :system_enabled 
                 WHERE 
                     %s = :id", 
@@ -102,6 +106,7 @@ final class SystemSettingsModel extends BaseModel {
                 Application::MAINTENANCE_MESSAGE, 
                 Application::SYSTEM_NOTICE_ENABLED, 
                 Application::SYSTEM_NOTICE_MESSAGE, 
+                Application::LOGGING_DEBUG_ENABLED, 
                 Application::SYSTEM_ENABLED, 
 
                 Application::ID
@@ -114,6 +119,7 @@ final class SystemSettingsModel extends BaseModel {
                 Application::MAINTENANCE_MESSAGE => (string)$this->maintenance_message, 
                 Application::SYSTEM_NOTICE_ENABLED => (int)$this->system_notice_enabled, 
                 Application::SYSTEM_NOTICE_MESSAGE => (string)$this->system_notice_message, 
+                Application::LOGGING_DEBUG_ENABLED => (int)$this->logging_debug_enabled, 
                 Application::SYSTEM_ENABLED => (int)$this->system_enabled, 
                 Application::ID => (string)$this->id
             ]
@@ -136,6 +142,9 @@ final class SystemSettingsModel extends BaseModel {
         if (array_key_exists(Application::SYSTEM_ENABLED, $data)) {
             $this->system_enabled = self::hydrateBoolean($data, Application::SYSTEM_ENABLED); 
         }
+        if (array_key_exists(Application::LOGGING_DEBUG_ENABLED, $data)) {
+            $this->logging_debug_enabled = self::hydrateBoolean($data, Application::LOGGING_DEBUG_ENABLED); 
+        }
         if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) {
             $this->maintenance_mode_enabled = self::hydrateBoolean($data, Application::MAINTENANCE_MODE_ENABLED); 
         }
@@ -155,6 +164,7 @@ final class SystemSettingsModel extends BaseModel {
         $this->registration_enabled = false; 
         $this->login_enabled = false; 
         $this->system_enabled = false; 
+        $this->logging_debug_enabled = false; 
         $this->game_creation_enabled = false; 
         $this->game_play_enabled = false; 
         $this->maintenance_mode_enabled = false;  
@@ -185,6 +195,7 @@ final class SystemSettingsModel extends BaseModel {
         if (array_key_exists(Application::REGISTRATION_ENABLED, $data)) $system_settings->registration_enabled = (bool)$data[Application::REGISTRATION_ENABLED];
         if (array_key_exists(Application::LOGIN_ENABLED, $data)) $system_settings->login_enabled = (bool)$data[Application::LOGIN_ENABLED];
         if (array_key_exists(Application::SYSTEM_ENABLED, $data)) $system_settings->system_enabled = (bool)$data[Application::SYSTEM_ENABLED];
+        if (array_key_exists(Application::LOGGING_DEBUG_ENABLED, $data)) $system_settings->logging_debug_enabled = (bool)$data[Application::LOGGING_DEBUG_ENABLED]; 
         if (array_key_exists(Application::GAME_CREATION_ENABLED, $data)) $system_settings->game_creation_enabled = (bool)$data[Application::GAME_CREATION_ENABLED];
         if (array_key_exists(Application::GAME_PLAY_ENABLED, $data)) $system_settings->game_play_enabled = (bool)$data[Application::GAME_PLAY_ENABLED];
         if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) $system_settings->maintenance_mode_enabled = (bool)$data[Application::MAINTENANCE_MODE_ENABLED];
@@ -217,6 +228,7 @@ final class SystemSettingsModel extends BaseModel {
         $system_settings_array[Application::REGISTRATION_ENABLED] = $this->registration_enabled;
         $system_settings_array[Application::LOGIN_ENABLED] = $this->login_enabled;
         $system_settings_array[Application::SYSTEM_ENABLED] = $this->system_enabled;
+        $system_settings_array[Application::LOGGING_DEBUG_ENABLED] = $this->logging_debug_enabled; 
         $system_settings_array[Application::GAME_CREATION_ENABLED] = $this->game_creation_enabled;
         $system_settings_array[Application::GAME_PLAY_ENABLED] = $this->game_play_enabled;
         $system_settings_array[Application::MAINTENANCE_MODE_ENABLED] = $this->maintenance_mode_enabled;
@@ -256,6 +268,10 @@ final class SystemSettingsModel extends BaseModel {
     // Getter - get system enabled
     public function getSystemEnabled() {
         return $this->system_enabled;
+    } 
+    // Getter - get logging debug enabled
+    public function getLoggingDebugEnabled() {
+        return $this->logging_debug_enabled; 
     }
     // Getter - get game creation enabled
     public function getGameCreationEnabled() {
@@ -307,6 +323,11 @@ final class SystemSettingsModel extends BaseModel {
     public function setSystemEnabled(bool $system_enabled) {
         $this->system_enabled = $system_enabled;
         return $this;
+    } 
+    // Setter - set logging debug enabled
+    public function setLoggingDebugEnabled(bool $logging_debug_enabled) {
+        $this->logging_debug_enabled = $logging_debug_enabled; 
+        return $this; 
     }
     // Setter - set game creation enabled
     public function setGameCreationEnabled(bool $game_creation_enabled) {

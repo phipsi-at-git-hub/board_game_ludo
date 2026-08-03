@@ -379,6 +379,7 @@ return [
     'admin.system_settings.card.game.play_enabled' => 'Playing games', 
     'admin.system_settings.card.maintenance.title' => '🛠 Maintenance', 
     'admin.system_settings.card.maintenance.system_enabled' => 'System enabled', 
+    'admin.system_settings.card.maintenance.logging_debug_enabled' => 'Debug Logging enabled', 
     'admin.system_settings.card.maintenance.maintenance_mode_enabled' => 'Maintenance mode', 
     'admin.system_settings.card.maintenance.system_notice_enabled' => 'System notice', 
     'admin.system_settings.card.maintenance.maintenance_mode.message' => '🛠 Maintenance Messages', 

@@ -44,6 +44,11 @@ final class SystemService {
         return !$this->isSystemEnabled();
     }
 
+    // Helper - Is loggings debugs enabled
+    public function isLoggingDebugEnabled(): bool {
+        return $this->settings->getLoggingDebugEnabled(); 
+    }
+
     // Helper - Is user registration enabled enabled
     public function isRegistrationEnabled(): bool {
         return $this->settings->getRegistrationEnabled();
@@ -125,7 +130,7 @@ final class SystemService {
 
     // Is any maintenance related state active
     public function isMaintenanceActive(): bool {
-        return ($this->isMaintenanceModeEnabled() || $this->isSystemNoticeEnabled());
+        return ($this->isMaintenanceModeEnabled() || $this->isSystemNoticeEnabled()) || $this->isLoggingDebugEnabled();
     }
 
     // Is the system fully operational

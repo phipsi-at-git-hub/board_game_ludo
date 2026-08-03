@@ -227,6 +227,22 @@ use App\Services\SystemService;
                     </label>
                 </div>
 
+                <div class="form-row">
+                    <span><?= Localization::get('admin.system_settings.card.maintenance.logging_debug_enabled') ?></span>
+
+                    <label class="switch">
+                        <input 
+                            type="checkbox" 
+                            name="logging_debug_enabled" 
+                            value="1" 
+                            <?= $system_settings->isLoggingDebugEnabled() ? 'checked' : '' ?>
+                            data-auto-save="change">
+                        <span class="slider">
+                            <span class="slider-indicator"></span>
+                        </span>
+                    </label>
+                </div>
+
                 <div class="setting-group" data-toggle-group>
 
                     <div class="form-row">

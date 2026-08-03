@@ -102,6 +102,7 @@ class Application {
     public const REGISTRATION_ENABLED = 'registration_enabled'; 
     public const LOGIN_ENABLED = 'login_enabled'; 
     public const SYSTEM_ENABLED = 'system_enabled'; 
+    public const LOGGING_DEBUG_ENABLED = 'logging_debug_enabled'; 
     public const GAME_CREATION_ENABLED = 'game_creation_enabled'; 
     public const GAME_PLAY_ENABLED = 'game_play_enabled'; 
     public const MAINTENANCE_MODE_ENABLED = 'maintenance_mode_enabled'; 
