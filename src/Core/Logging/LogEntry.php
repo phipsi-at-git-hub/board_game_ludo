@@ -126,13 +126,14 @@ final class LogEntry {
 
             // Leave logger stack 
             if ($class === Logger::class && $function === 'log') {
+                $caller_class = $trace[$index + 2] ?? null;
                 $caller = $trace[$index + 1] ?? null;
                 if ($caller === null) {
                     return;
                 }
                 
-                $this->class = $caller['class'] ?? null;
-                $this->method = $caller['function'] ?? null;
+                $this->class = $caller_class['class'] ?? null;
+                $this->method = $caller_class['function'] ?? null;
 
                 $file = $caller['file'] ?? null;
                 if ($file !== null && defined('BASE_PATH')) {
