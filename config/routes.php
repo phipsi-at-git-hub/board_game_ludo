@@ -108,6 +108,7 @@ $router->group('/admin', function($group) {
     $group->get('/system/settings', [AdminController::class, 'systemSettings']);
     $group->post('/system/settings/update', [AdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]);
     $group->get('/system/health', [AdminController::class, 'systemHealth']);
+    $group->get('/logging/list', [AdminController::class, 'loggingList']); 
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 
 // --- Admin Api routes ---

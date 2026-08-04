@@ -166,7 +166,7 @@ use App\Services\SystemService;
             </div>
 
             <div class="nav-actions">
-                <a href="/admin/system/logs" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_logs_manage') ?></a>
+                <a href="/admin/logging/list" class="btn btn-primary"><?= Localization::get('admin.dashboard.system_logs_manage') ?></a>
             </div>
         </div>
 

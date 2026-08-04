@@ -52,6 +52,32 @@
     --role-user-background: #e0e0e0; 
     --role-user-text: var(--text-color); 
 
+    /* Log Levels */ 
+    /* Log Level Colors */
+    --log-debug-background: #ececec;
+    --log-debug-text: var(--text-muted-color);
+
+    --log-info-background: var(--status-active-background);
+    --log-info-text: var(--status-active-text);
+
+    --log-notice-background: #dff6dd;
+    --log-notice-text: #2d6a2d;
+
+    --log-warning-background: var(--status-mid-background);
+    --log-warning-text: var(--status-mid-text);
+
+    --log-error-background: var(--status-inactive-background);
+    --log-error-text: var(--status-inactive-text);
+
+    --log-critical-background: #f5c6cb;
+    --log-critical-text: #5f1118;
+
+    --log-alert-background: #e78b93;
+    --log-alert-text: var(--white-color);
+
+    --log-emergency-background: #7a0012;
+    --log-emergency-text: var(--white-color);
+
     /* Navbar AJAX Colors */
     --ajax-success-background: #d1f5d3; 
     --ajax-success-border: #a7e3ad; 

@@ -301,4 +301,32 @@ class AdminController extends BaseController {
             ]
         ); 
     }
+
+    // Logging - List all logs
+    public function loggingList(): void { 
+        // System logs statistics
+        $logService = new LogService([
+            LoggingConfiguration::CHANNEL_APPLICATION, 
+            LoggingConfiguration::CHANNEL_SYSTEM
+        ], [
+            date(Application::FILE_DATE_FORMAT, strtotime('-30 days')), 
+            date(Application::FILE_DATE_FORMAT) 
+        ]); 
+
+        $log_entries = $logService->getEntries(); 
+        $log_statistics = $logService->getStatistics(); 
+        
+        // Logging
+        //Logger::app()->debug('Admin logging list', ['user_id' => Auth::user()->getId()]);
+
+        $this->render(
+            'admin/logging/list', 
+            [
+                'channel' => 'Application', 
+                'date' => date(Application::FILE_DATE_FORMAT), 
+                'entries' => $log_entries, 
+                'statistics' => $log_statistics
+            ]
+        ); 
+    }
 }

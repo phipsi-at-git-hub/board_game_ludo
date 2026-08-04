@@ -151,6 +151,10 @@
     text-transform: uppercase; 
 }
 
+.case-sensitive {
+    text-transform: none;
+}
+
 .role-admin {
     background-color: var(--role-admin-background);
     color: var(--role-admin-text);
@@ -207,6 +211,49 @@
 .is-private-locked {
     background: var(--status-inactive-background);
     color: var(--status-inactive-text);
+}
+
+/* ------------------------------
+   Log Level Badges
+------------------------------ */
+.level-debug {
+    background: var(--log-debug-background);
+    color: var(--log-debug-text);
+}
+
+.level-info {
+    background: var(--log-info-background);
+    color: var(--log-info-text);
+}
+
+.level-notice {
+    background: var(--log-notice-background);
+    color: var(--log-notice-text);
+}
+
+.level-warning {
+    background: var(--log-warning-background);
+    color: var(--log-warning-text);
+}
+
+.level-error {
+    background: var(--log-error-background);
+    color: var(--log-error-text);
+}
+
+.level-critical {
+    background: var(--log-critical-background);
+    color: var(--log-critical-text);
+}
+
+.level-alert {
+    background: var(--log-alert-background);
+    color: var(--log-alert-text);
+}
+
+.level-emergency {
+    background: var(--log-emergency-background);
+    color: var(--log-emergency-text);
 }
 
 /* ------------------------------
@@ -321,4 +368,47 @@
         justify-content: flex-start;
         flex-wrap: wrap;
     }
+}
+
+/* ------------------------------
+   Entry List
+------------------------------ */
+.entry-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.entry-row {
+    margin-bottom: 0;
+}
+
+.entry-row:hover {
+    transform: translateY(-1px);
+}
+
+.entry-row-header-badges {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.entry-row .game-row-footer {
+    margin-top: 10px;
+}
+
+.entry-row .game-row-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+@media (max-width: 700px) {
+
+    .entry-row-header-badges {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
 }

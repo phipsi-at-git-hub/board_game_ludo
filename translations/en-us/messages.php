@@ -424,4 +424,14 @@ return [
     'admin.system.health.card.game.api_reachable.label' => 'API Reachable', 
     'admin.system.health.card.game.latency.label' => 'Latency', 
     'admin.system.health.card.game.version.label' => 'Version', 
+
+    // Logging List
+    'admin.logging.list.title' => '📝 System Logs', 
+    'admin.logging.list.card.overview.title' => '📝 Logging Overview', 
+    'admin.logging.list.card.overview.channel' => 'Channel', 
+    'admin.logging.list.card.overview.date' => 'Date', 
+    'admin.logging.list.card.overview.entries' => 'Entries', 
+    'admin.logging.list.card.overview.highest_level' => 'Highest Level', 
+    'admin.logging.list.card.statistics.title' => '🚥 Levels', 
+    'admin.logging.list.card.entries.title' => '🗃 Log Entries', 
 ];
