@@ -317,7 +317,7 @@ class AdminController extends BaseController {
         $log_statistics = $logService->getStatistics(); 
         
         // Logging
-        //Logger::app()->debug('Admin logging list', ['user_id' => Auth::user()->getId()]);
+        Logger::app()->debug('Admin logging list', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
             'admin/logging/list', 
