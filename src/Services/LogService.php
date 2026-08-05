@@ -3,17 +3,19 @@
 
 namespace App\Services;
 
+use App\Constants\Application;
+use App\Core\Date\DateRange;
 use App\Core\Logging\LoggingConfiguration;
 use App\Models\LoggingModel;
 
 final class LogService {
     private array $channels;
-    private array $dates;
+    private DateRange $dateRange; 
     private array $entries = [];
 
     public function __construct(array $channels, array $dates) {
         $this->channels = $channels;
-        $this->dates = $dates;
+        $this->dateRange = new DateRange($dates); 
 
         $this->load();
     }
@@ -22,13 +24,16 @@ final class LogService {
      * Load logs from configured channels and dates
      */
     private function load(): void {
+        if ($this->dateRange->isEmpty()) {
+            return; 
+        } 
         foreach ($this->channels as $channel) {
-            foreach ($this->dates as $date) {
+            foreach ($this->dateRange->getDays() as $date) {
                 $this->entries = array_merge(
                     $this->entries,
                     LoggingModel::find(
                         $channel,
-                        $date
+                        $date->format(Application::FILE_DATE_FORMAT)
                     )
                 );
             }

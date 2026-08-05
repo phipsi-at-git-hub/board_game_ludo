@@ -434,4 +434,5 @@ return [
     'admin.logging.list.card.overview.highest_level' => 'Highest Level', 
     'admin.logging.list.card.statistics.title' => '🚥 Levels', 
     'admin.logging.list.card.entries.title' => '🗃 Log Entries', 
+    'admin.logging.list.card.no_entries' => 'No Entries', 
 ];

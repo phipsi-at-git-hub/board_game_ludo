@@ -19,7 +19,7 @@ use App\Core\Localization;
     <?php if (empty($entries)): ?>
 
         <p>
-            <?= Localization::get('admin.logging.list.no_entries') ?>
+            <?= Localization::get('admin.logging.list.card.no_entries') ?>
         </p>
 
     <?php else: ?>

@@ -15,6 +15,8 @@ use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 use App\Services\LogService;
+use DateInterval;
+use DateTimeImmutable;
 
 class AdminController extends BaseController { 
     // Dashboard
@@ -309,7 +311,8 @@ class AdminController extends BaseController {
             LoggingConfiguration::CHANNEL_APPLICATION, 
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            date(Application::FILE_DATE_FORMAT) 
+            new DateTimeImmutable(), 
+            (new DateTimeImmutable())->sub(new DateInterval('P3D')) 
         ]); 
 
         $log_entries = $logService->getEntries(); 
