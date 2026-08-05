@@ -309,7 +309,6 @@ class AdminController extends BaseController {
             LoggingConfiguration::CHANNEL_APPLICATION, 
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            date(Application::FILE_DATE_FORMAT, strtotime('-30 days')), 
             date(Application::FILE_DATE_FORMAT) 
         ]); 
 

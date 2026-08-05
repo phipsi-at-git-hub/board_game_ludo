@@ -192,6 +192,7 @@ class Application {
 
     // Date and Time formats
     public const FILE_DATE_FORMAT = 'Y-m-d'; 
+    public const FILE_TIME_FORMAT = 'H:i:s'; 
     public const FILE_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; 
 
     // Storage type

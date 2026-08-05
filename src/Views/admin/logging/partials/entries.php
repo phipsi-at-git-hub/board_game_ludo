@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Application;
 use App\Core\Localization;
 
 /**
@@ -62,7 +63,16 @@ use App\Core\Localization;
                             <span class="status-badge status-active">
                                 <?= htmlspecialchars(
                                     date(
-                                        'H:i:s',
+                                        Application::FILE_DATE_FORMAT,
+                                        strtotime($entry->getTimestamp())
+                                    )
+                                ) ?>
+                            </span>
+
+                            <span class="status-badge status-active">
+                                <?= htmlspecialchars(
+                                    date(
+                                        Application::FILE_TIME_FORMAT,
                                         strtotime($entry->getTimestamp())
                                     )
                                 ) ?>
