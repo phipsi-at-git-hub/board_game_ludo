@@ -7,6 +7,7 @@ use App\Constants\Application;
 use App\Core\Date\DateRange;
 use App\Core\Logging\LoggingConfiguration;
 use App\Models\LoggingModel;
+use DateTimeImmutable;
 
 final class LogService {
     private array $channels;
@@ -29,13 +30,12 @@ final class LogService {
         } 
         foreach ($this->channels as $channel) {
             foreach ($this->dateRange->getDays() as $date) {
-                $this->entries = array_merge(
-                    $this->entries,
-                    LoggingModel::find(
-                        $channel,
-                        $date->format(Application::FILE_DATE_FORMAT)
-                    )
-                );
+                $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT)); 
+                foreach ($entries as $entry) {
+                    if ($this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
+                        $this->entries[] = $entry; 
+                    }
+                }
             }
         }
     }
@@ -79,7 +79,6 @@ final class LogService {
                 $count++;
             }
         }
-
         return $count;
     }
 

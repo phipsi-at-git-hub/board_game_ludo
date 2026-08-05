@@ -312,7 +312,7 @@ class AdminController extends BaseController {
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
             new DateTimeImmutable(), 
-            (new DateTimeImmutable())->sub(new DateInterval('P3D')) 
+            (new DateTimeImmutable())->sub(new DateInterval('P30D')) 
         ]); 
 
         $log_entries = $logService->getEntries(); 

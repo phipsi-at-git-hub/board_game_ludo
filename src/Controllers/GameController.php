@@ -101,6 +101,9 @@ class GameController extends BaseController {
             ];
             
             $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
+        
+            // Logging
+            Logger::app()->info('Game created: ' . $game_id, ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
 
             header("Location: /game/detail/$game_id");
             exit;
@@ -160,7 +163,7 @@ class GameController extends BaseController {
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]), 
+                Application::ALL_FIGURES_START_AT_HOME => (isset($_POST[Application::ALL_FIGURES_START_AT_HOME])) ? ($_POST[Application::ALL_FIGURES_START_AT_HOME]) : (int)$game->getRuleSetModel()->getAllFiguresStartAtHome(), 
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
                 Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
                 Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
@@ -173,6 +176,9 @@ class GameController extends BaseController {
             ];
 
             $game->update($game_name, $game_options, $rule_set);
+        
+            // Logging
+            Logger::app()->info('Game updated: ' . $game->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $game->getId()]);
 
             header('Location: /game/edit/' . $game->getId());
             exit;

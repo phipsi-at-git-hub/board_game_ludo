@@ -69,9 +69,13 @@ final class DateRange {
     /**
      * Returns true if the given timestamp lies inside the range (inclusive).
      */
-    public function contains(DateTimeInterface $date): bool {
+    public function contains(DateTimeInterface|string $date): bool {
         if ($this->isEmpty()) {
             return false;
+        }
+
+        if (is_string($date)) {
+            $date = new DateTimeImmutable($date); 
         }
 
         $timestamp = $date->getTimestamp();
