@@ -309,6 +309,10 @@ class AdminController extends BaseController {
 
     // Logging - List all logs
     public function loggingList(): void { 
+        // Get all available logging channels
+        $availableChannels = LoggingConfiguration::getChannelsWithFileStorage(); 
+        $channels = $availableChannels; 
+
         // System logs statistics
         $todayStart = ((new DateTimeImmutable())->setTime(0, 0, 0))->sub(new DateInterval('P30D')); 
         $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
@@ -322,9 +326,6 @@ class AdminController extends BaseController {
 
         $log_entries = $logService->getEntries(); 
         $log_statistics = $logService->getStatistics(); 
-
-        // Get all available logging channels
-        $available_channels = ['application', 'system', 'Test1', 'Test2', 'Test3']; 
         
         // Logging
         Logger::app()->debug('Admin logging list', ['user_id' => Auth::user()->getId()]);
@@ -332,9 +333,10 @@ class AdminController extends BaseController {
         $this->render(
             'admin/logging/list', 
             [
-                'available_channels' => $available_channels, 
-                'channels' => ['application', 'system'], 
-                'date' => date(Application::FILE_DATE_FORMAT), 
+                'available_channels' => $availableChannels, 
+                'channels' => $channels, 
+                'date_start' => $todayStart, 
+                'date_end' => $todayEnd, 
                 'entries' => $log_entries, 
                 'statistics' => $log_statistics
             ]

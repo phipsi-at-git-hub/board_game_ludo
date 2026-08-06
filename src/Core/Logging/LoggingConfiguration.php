@@ -64,6 +64,32 @@ final class LoggingConfiguration {
     }
 
     /**
+     * Returns all configures channels by given storage type
+     */
+    private static function getChannelsByStorageType(string $storage_type): array {
+        return array_keys(
+            array_filter(
+                self::CHANNELS, 
+                static fn(array $config) => ($config['storage'] ?? null) === $storage_type
+            )
+        ); 
+    }
+
+    /**
+     * Returns all configured channels which uses files as storage
+     */
+    public static function getChannelsWithFileStorage(): array {
+        return self::getChannelsByStorageType(Application::STORAGE_FILE); 
+    }
+
+    /**
+     * Returns all configured channels which uses database as storage
+     */
+    public static function getChannelsWithDatabaseStorage(): array {
+        return self::getChannelsByStorageType(Application::STORAGE_DATABASE); 
+    }
+
+    /**
      * Checks whether a channel exists
      */
     public static function isValidChannel(string $channel): bool {

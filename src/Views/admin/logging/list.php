@@ -1,11 +1,14 @@
 <?php
 
+use App\Constants\Application;
 use App\Core\Localization;
 use App\Core\Logging\LogEntry;
 
 /**
  * @var array $available_channels
  * @var array $channels 
+ * @var DateTimeImmutable $date_start
+ * @var DateTimeImmutable $date_end
  * @var LogEntry[] $entries
  * @var array $statistics
  */
@@ -137,16 +140,22 @@ use App\Core\Logging\LogEntry;
 
                     </select>
 
-                    <!-- Multi Select Dropdown will be inserted here -->
-
                 </div>
 
                 <!-- Date range selection -->
                 <div class="entry-filter-group">
 
-                    <label>
+                    <span>
                         <?= Localization::get('admin.logging.list.card.filter.date_range') ?>
-                    </label>
+                    </span>
+
+                    <input 
+                        type="text" 
+                        name="date_rang" 
+                        data-ui="date-range" 
+                        date-with-time="true" 
+                        data-presets="today, last-7-days, last-30-days" 
+                        value="<?= htmlspecialchars($date_start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $date_end->format(Application::FILE_DATE_TIME_FORMAT) ) ?>" >
 
                     <!-- Date Range Picker will be inserted here -->
 
