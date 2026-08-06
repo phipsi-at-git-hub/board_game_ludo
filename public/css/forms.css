@@ -314,6 +314,18 @@ textarea:focus {
     max-width: 300px;
 }
 
+.badge-select.shake {
+    animation: badge-select-shake 0.15s ease;
+}
+
+@keyframes badge-select-shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
 /* ------------------------------
    TRIGGER
 ------------------------------ */
@@ -436,4 +448,8 @@ select[data-ui="switch"].switch-enhanced {
 
 select[data-ui="badge-select"].badge-select-enhanced {
     display: none; 
+}
+
+select[data-ui="badge-multiselect"].badge-multiselect-enhanced {
+    display:none;
 }

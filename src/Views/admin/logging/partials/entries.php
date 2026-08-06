@@ -10,114 +10,106 @@ use App\Core\Localization;
 
 ?>
 
-<div class="card">
+<?php if (empty($entries)): ?>
 
-    <h2>
-        <?= Localization::get('admin.logging.list.card.entries.title') ?>
-    </h2>
+    <p>
+        <?= Localization::get('admin.logging.list.card.no_entries') ?>
+    </p>
 
-    <?php if (empty($entries)): ?>
+<?php else: ?>
 
-        <p>
-            <?= Localization::get('admin.logging.list.card.no_entries') ?>
-        </p>
+    <div class="entry-list-cards">
 
-    <?php else: ?>
+        <?php foreach ($entries as $entry): ?>
 
-        <div class="game-list-cards">
+            <div
+                class="card entry-row"
+                onclick="window.location='#'">
 
-            <?php foreach ($entries as $entry): ?>
+                <div class="entry-row-header">
 
-                <div
-                    class="card game-row entry-row"
-                    onclick="window.location='#'">
+                    <div class="entry-row-title">
 
-                    <div class="game-row-header">
-
-                        <div class="game-row-title">
-
-                            <?= htmlspecialchars($entry->getMessage()) ?>
-
-                        </div>
-
-
-                        <div class="entry-row-header-badges">
-
-                            <span class="status-badge status-default">
-                                <?= strtoupper(htmlspecialchars($entry->getChannel())) ?>
-                            </span>
-
-                            <span class="status-badge level-<?= htmlspecialchars($entry->getLevel()) ?>">
-                                <?= strtoupper(htmlspecialchars($entry->getLevel())) ?>
-                            </span>
-
-                        </div>
+                        <?= htmlspecialchars($entry->getMessage()) ?>
 
                     </div>
 
 
-                    <div class="game-row-footer">
+                    <div class="entry-row-header-badges">
 
-                        <div class="game-row-badges">
+                        <span class="status-badge status-default">
+                            <?= strtoupper(htmlspecialchars($entry->getChannel())) ?>
+                        </span>
 
-                            <span class="status-badge status-active">
-                                <?= htmlspecialchars(
-                                    date(
-                                        Application::FILE_DATE_FORMAT,
-                                        strtotime($entry->getTimestamp())
-                                    )
-                                ) ?>
-                            </span>
-
-                            <span class="status-badge status-active">
-                                <?= htmlspecialchars(
-                                    date(
-                                        Application::FILE_TIME_FORMAT,
-                                        strtotime($entry->getTimestamp())
-                                    )
-                                ) ?>
-                            </span>
-
-
-                            <?php if ($entry->getClass()): ?>
-
-                                <span class="status-badge status-default case-sensitive">
-
-                                    <?= htmlspecialchars(
-                                        $entry->getClass()
-                                        .
-                                        '::'
-                                        .
-                                        ($entry->getMethod() ?? '-')
-                                    ) ?>
-
-                                </span>
-
-                            <?php endif; ?>
-
-                        </div>
-
-
-                        <?php if ($entry->getClientIp()): ?>
-
-                            <div class="game-row-badges">
-
-                                <span class="status-badge status-default">
-                                    <?= htmlspecialchars($entry->getClientIp()) ?>
-                                </span>
-
-                            </div>
-
-                        <?php endif; ?>
+                        <span class="status-badge level-<?= htmlspecialchars($entry->getLevel()) ?>">
+                            <?= strtoupper(htmlspecialchars($entry->getLevel())) ?>
+                        </span>
 
                     </div>
 
                 </div>
 
-            <?php endforeach; ?>
 
-        </div>
+                <div class="entry-row-footer">
 
-    <?php endif; ?>
+                    <div class="entry-row-badges">
 
-</div>
+                        <span class="status-badge status-active">
+                            <?= htmlspecialchars(
+                                date(
+                                    Application::FILE_DATE_FORMAT,
+                                    strtotime($entry->getTimestamp())
+                                )
+                            ) ?>
+                        </span>
+
+                        <span class="status-badge status-active">
+                            <?= htmlspecialchars(
+                                date(
+                                    Application::FILE_TIME_FORMAT,
+                                    strtotime($entry->getTimestamp())
+                                )
+                            ) ?>
+                        </span>
+
+
+                        <?php if ($entry->getClass()): ?>
+
+                            <span class="status-badge status-default case-sensitive">
+
+                                <?= htmlspecialchars(
+                                    $entry->getClass()
+                                    .
+                                    '::'
+                                    .
+                                    ($entry->getMethod() ?? '-')
+                                ) ?>
+
+                            </span>
+
+                        <?php endif; ?>
+
+                    </div>
+
+
+                    <?php if ($entry->getClientIp()): ?>
+
+                        <div class="entry-row-badges">
+
+                            <span class="status-badge status-default">
+                                <?= htmlspecialchars($entry->getClientIp()) ?>
+                            </span>
+
+                        </div>
+
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    </div>
+
+<?php endif; ?>

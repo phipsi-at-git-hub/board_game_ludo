@@ -4,9 +4,9 @@ use App\Core\Localization;
 use App\Core\Logging\LogEntry;
 
 /**
+ * @var array $available_channels
+ * @var array $channels 
  * @var LogEntry[] $entries
- * @var string $channel
- * @var string $date
  * @var array $statistics
  */
 
@@ -14,9 +14,12 @@ use App\Core\Logging\LogEntry;
 
 <div class="panel">
 
-    <h1><?= Localization::get('admin.logging.list.title') ?></h1>
+    <h1>
+        <?= Localization::get('admin.logging.list.title') ?>
+    </h1>
 
     <div class="nav-actions left">
+
         <ul class="nav-list horizontal">
 
             <li>
@@ -32,78 +35,46 @@ use App\Core\Logging\LogEntry;
             </li>
 
         </ul>
-    </div>
-
-    <!-- Overview -->
-    <div class="card dashboard-card">
-
-        <h2><?= Localization::get('admin.logging.list.card.overview.title') ?></h2>
-
-        <div class="stats-sub">
-
-            <div>
-                <span class="stat-value">
-                    <?= htmlspecialchars($channel) ?>
-                </span>
-                <span class="stat-text">
-                    <?= Localization::get('admin.logging.list.card.overview.channel') ?>
-                </span>
-            </div>
-
-            <div>
-                <span class="stat-value">
-                    <?= htmlspecialchars($date) ?>
-                </span>
-                <span class="stat-text">
-                    <?= Localization::get('admin.logging.list.card.overview.date') ?>
-                </span>
-            </div>
-
-            <div>
-                <span class="stat-value">
-                    <?= $statistics['total'] ?>
-                </span>
-                <span class="stat-text">
-                    <?= Localization::get('admin.logging.list.card.overview.entries') ?>
-                </span>
-            </div>
-
-            <div>
-                <span class="stat-value">
-                    <?= strtoupper($statistics['highest_level'] ?? '-') ?>
-                </span>
-                <span class="stat-text">
-                    <?= Localization::get('admin.logging.list.card.overview.highest_level') ?>
-                </span>
-            </div>
-
-        </div>
 
     </div>
 
-    <!-- Statistics -->
+    <!-- Log Levels -->
     <div class="card">
 
-        <h2><?= Localization::get('admin.logging.list.card.statistics.title') ?></h2>
+        <h2>
+            <?= Localization::get('admin.logging.list.card.levels.title') ?>
+        </h2>
 
         <div class="stats-sub">
 
             <?php foreach ($statistics as $level => $count): ?>
 
-                <?php
-                if (in_array($level, ['total', 'highest_level'], true)) {
-                    continue;
-                }
-                ?>
+                <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
+                    <?php continue; ?>
+                <?php endif; ?>
 
                 <div>
 
                     <span class="stat-value">
-                        <?= $count ?>
+
+                        <?php if ($count > 0): ?>
+
+                            <span class="status-badge level-<?= htmlspecialchars($level) ?>">
+                                <?= $count ?>
+                            </span>
+
+                        <?php else: ?>
+
+                            <span class="status-badge status-default">
+                                <?= $count ?>
+                            </span>
+
+                        <?php endif; ?>
+
                     </span>
 
                     <span class="stat-text">
-                        <?= strtoupper($level) ?>
+                        <?= strtoupper(htmlspecialchars($level)) ?>
                     </span>
 
                 </div>
@@ -115,8 +86,78 @@ use App\Core\Logging\LogEntry;
     </div>
 
     <!-- Entries -->
-    <?php 
-    include VIEWS_PATH . '/admin/logging/partials/entries.php';   
-    ?>
+    <div class="card">
+
+        <h2>
+            <?= Localization::get('admin.logging.list.card.entries.title') ?>
+        </h2>
+
+        <!-- Entry Filter -->
+        <div class="nested-card entry-filter">
+
+            <div class="entry-filter-header">
+
+                <h3>
+                    <?= Localization::get('admin.logging.list.card.filter.title') ?>
+                </h3>
+
+                <span class="status-badge status-default">
+                    <?= count($entries) ?>
+                    <?= Localization::get('admin.logging.list.card.entries.count') ?>
+                </span>
+
+            </div>
+
+            <div class="entry-filter-content">
+
+                <!-- Channel selection -->
+                <div class="entry-filter-group">
+
+                    <span>
+                        <?= Localization::get('admin.logging.list.card.filter.channel') ?>
+                    </span>
+
+                    <select
+                        name="channels[]" 
+                        multiple 
+                        data-ui="badge-multiselect" 
+                        data-min-selection="1" 
+                        data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
+
+                        <?php foreach ($available_channels as $channel): ?>
+
+                            <option 
+                                value="<?= htmlspecialchars($channel) ?>" 
+                                <?= in_array($channel, $channels, true) ? 'selected' : '' ?> >
+
+                                <?= strtoupper(htmlspecialchars($channel)) ?>
+
+                            </option>
+                        <?php endforeach; ?>
+
+                    </select>
+
+                    <!-- Multi Select Dropdown will be inserted here -->
+
+                </div>
+
+                <!-- Date range selection -->
+                <div class="entry-filter-group">
+
+                    <label>
+                        <?= Localization::get('admin.logging.list.card.filter.date_range') ?>
+                    </label>
+
+                    <!-- Date Range Picker will be inserted here -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <?php include VIEWS_PATH . '/admin/logging/partials/entries.php'; ?>
+
+    </div>
 
 </div>

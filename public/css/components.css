@@ -1,7 +1,6 @@
 /* ------------------------------
    Selection Components
 ------------------------------ */
-
 .selection-layout {
     display: flex;
     gap: 20px;
@@ -23,7 +22,6 @@
 /* ------------------------------
    Cards
 ------------------------------ */
-
 .card {
     background: rgba(255,255,255,0.95);
     /* ToDo: cleanup: padding: 16px; */
@@ -97,7 +95,6 @@
 /* ------------------------------
    Overview Cards
 ------------------------------ */
-
 .overview-grid {
     display: flex;
     gap: 16px;
@@ -122,7 +119,6 @@
 /* ------------------------------
    Nested Cards
 ------------------------------ */
-
 .nested-card {
     margin: 12px 0 20px 0;
     padding: 12px;
@@ -140,7 +136,6 @@
 /* ------------------------------
    Status & Role Badges
 ------------------------------ */
-
 .role-badge,
 .status-badge {
     padding: 6px 12px;
@@ -259,7 +254,6 @@
 /* ------------------------------
    Toggle Containers
 ------------------------------ */
-
 [data-toggle-target] {
     max-height: 0;
     opacity: 0;
@@ -288,7 +282,6 @@
 /* ------------------------------
    Game List
 ------------------------------ */
-
 .game-list-cards {
     display: flex;
     flex-direction: column;
@@ -357,7 +350,6 @@
 }
 
 @media (max-width: 700px) {
-
     .game-row-footer {
         flex-direction: column;
         align-items: flex-start;
@@ -373,7 +365,7 @@
 /* ------------------------------
    Entry List
 ------------------------------ */
-.entry-list {
+.entry-list-cards {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -381,10 +373,63 @@
 
 .entry-row {
     margin-bottom: 0;
+    padding: 8px 14px;
+    cursor: pointer;
+    background: var(--white-color); 
+    transition:
+        background 0.2s ease, 
+        box-shadow 0.2s ease, 
+        transform 0.15s ease;
 }
 
 .entry-row:hover {
-    transform: translateY(-1px);
+    background: var(--default-color); 
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12); 
+}
+
+.entry-row:hover .status-badge, 
+.entry-row:hover .role-badge, 
+.entry-row:hover .btn {
+    filter: brightness(0.96); 
+}
+
+.entry-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.entry-row-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.entry-row-footer {
+    margin-top: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.entry-row-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.entry-row .btn-actions {
+    flex-shrink: 0;
+}
+
+.entry-row .btn, 
+.entry-detail .btn {
+    padding: 8px 14px;
+    font-size: 14px;
 }
 
 .entry-row-header-badges {
@@ -394,21 +439,19 @@
     gap: 8px;
 }
 
-.entry-row .game-row-footer {
+.entry-row .entry-row-footer {
     margin-top: 10px;
 }
 
-.entry-row .game-row-badges {
+.entry-row .entry-row-badges {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
 @media (max-width: 700px) {
-
     .entry-row-header-badges {
         justify-content: flex-start;
         flex-wrap: wrap;
     }
-
 }
