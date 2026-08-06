@@ -3,8 +3,7 @@
 
 namespace App\Core\Date;
 
-use DateInterval;
-use DatePeriod;
+use App\Constants\Application;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -26,10 +25,9 @@ final class DateRange {
         $normalized = [];
 
         foreach ($dates as $date) {
-            if (!$date instanceof DateTimeInterface) {
-                continue;
+            if ($date instanceof DateTimeInterface) {
+                $normalized[] = DateTimeImmutable::createFromInterface($date);
             }
-            $normalized[] = DateTimeImmutable::createFromInterface($date);
         }
 
         if (empty($normalized)) {
@@ -47,13 +45,21 @@ final class DateRange {
 
     /**
      * Returns whether the range contains any valid dates.
+     * 
+     * isEmpty
+     *
+     * @return bool
      */
     public function isEmpty(): bool {
-        return $this->start === null || $this->end === null;
+        return $this->start === null;
     }
 
     /**
      * Returns the start of the range.
+     * 
+     * getStart
+     *
+     * @return DateTimeImmutable
      */
     public function getStart(): ?DateTimeImmutable {
         return $this->start;
@@ -61,6 +67,10 @@ final class DateRange {
 
     /**
      * Returns the end of the range.
+     * 
+     * getEnd
+     *
+     * @return DateTimeImmutable
      */
     public function getEnd(): ?DateTimeImmutable {
         return $this->end;
@@ -68,6 +78,11 @@ final class DateRange {
 
     /**
      * Returns true if the given timestamp lies inside the range (inclusive).
+     * 
+     * contains
+     *
+     * @param  mixed $date
+     * @return bool
      */
     public function contains(DateTimeInterface|string $date): bool {
         if ($this->isEmpty()) {
@@ -87,6 +102,10 @@ final class DateRange {
 
     /**
      * Returns true if the range spans exactly one calendar day.
+     * 
+     * isSingleDay
+     *
+     * @return bool
      */
     public function isSingleDay(): bool {
         if ($this->isEmpty()) {
@@ -94,35 +113,31 @@ final class DateRange {
         }
 
         return
-            $this->start->format('Y-m-d')
+            $this->start->format(Application::FILE_DATE_FORMAT)
             ===
-            $this->end->format('Y-m-d');
+            $this->end->format(Application::FILE_DATE_FORMAT);
     }
 
     /**
      * Returns all calendar days touched by this range.
      *
      * The time component is ignored.
+     * 
+     * getDays
+     *
+     * @return iterable
      */
-    public function getDays(): DatePeriod {
+    public function getDays(): iterable {
         if ($this->isEmpty()) {
-            return new DatePeriod(
-                new DateTimeImmutable('1970-01-01'),
-                new DateInterval('P1D'),
-                new DateTimeImmutable('1970-01-01')
-            );
+            return; 
         }
+        
+        $current = $this->start->setTime(0, 0, 0); 
+        $last = $this->end->setTime(0, 0, 0,); 
 
-        $start = $this->start->setTime(0, 0, 0);
-
-        $end = $this->end
-            ->setTime(0, 0, 0)
-            ->modify('+1 day');
-
-        return new DatePeriod(
-            $start,
-            new DateInterval('P1D'),
-            $end
-        );
+        while ($current <= $last) {
+            yield $current; 
+            $current = $current->modify('+1 day'); 
+        }
     }
 }

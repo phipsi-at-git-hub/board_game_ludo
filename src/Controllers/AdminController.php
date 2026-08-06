@@ -15,7 +15,6 @@ use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 use App\Services\LogService;
-use DateInterval;
 use DateTimeImmutable;
 
 class AdminController extends BaseController { 
@@ -38,11 +37,14 @@ class AdminController extends BaseController {
         ];
 
         // System logs statistics
+        $todayStart = (new DateTimeImmutable())->setTime(0, 0, 0); 
+        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
         $logService = new LogService([
             LoggingConfiguration::CHANNEL_APPLICATION, 
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            date(Application::FILE_DATE_FORMAT)
+            $todayStart, 
+            $todayEnd
         ]); 
         $log_statistics = $logService->getStatistics(); 
         $logs_card = [
@@ -307,12 +309,14 @@ class AdminController extends BaseController {
     // Logging - List all logs
     public function loggingList(): void { 
         // System logs statistics
+        $todayStart = (new DateTimeImmutable())->setTime(0, 0, 0); 
+        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
         $logService = new LogService([
             LoggingConfiguration::CHANNEL_APPLICATION, 
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            new DateTimeImmutable(), 
-            (new DateTimeImmutable())->sub(new DateInterval('P30D')) 
+            $todayStart, 
+            $todayEnd 
         ]); 
 
         $log_entries = $logService->getEntries(); 
