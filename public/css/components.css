@@ -133,6 +133,14 @@
     font-size: 1rem;
 }
 
+.nested-card-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 16px; 
+    padding-bottom: 12px; 
+} 
+
 /* ------------------------------
    Status & Role Badges
 ------------------------------ */

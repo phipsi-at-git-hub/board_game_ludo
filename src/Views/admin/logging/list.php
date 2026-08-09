@@ -96,9 +96,9 @@ use App\Core\Logging\LogEntry;
         </h2>
 
         <!-- Entry Filter -->
-        <div class="nested-card entry-filter">
+        <div class="nested-card">
 
-            <div class="entry-filter-header">
+            <div class="nested-card-header">
 
                 <h3>
                     <?= Localization::get('admin.logging.list.card.filter.title') ?>
@@ -114,7 +114,8 @@ use App\Core\Logging\LogEntry;
             <div class="entry-filter-content">
 
                 <!-- Channel selection -->
-                <div class="entry-filter-group">
+                <!--<div class="entry-filter-group">-->
+                <div class="form-row">
 
                     <span>
                         <?= Localization::get('admin.logging.list.card.filter.channel') ?>
@@ -143,7 +144,8 @@ use App\Core\Logging\LogEntry;
                 </div>
 
                 <!-- Date range selection -->
-                <div class="entry-filter-group">
+                <!--<div class="entry-filter-group">-->
+                <div class="form-row">
 
                     <span>
                         <?= Localization::get('admin.logging.list.card.filter.date_range') ?>

@@ -431,7 +431,7 @@ return [
     'admin.logging.list.card.overview.title' => '📝 Logging Overview', 
     'admin.logging.list.card.filter.title' => 'Filter', 
     'admin.logging.list.card.filter.channel' => 'Channel', 
-    'admin.logging.list.card.filter.date_range' => 'Date', 
+    'admin.logging.list.card.filter.date_range' => 'Date Range', 
     'admin.logging.list.card.entries.count' => 'Entries', 
     'admin.logging.list.card.levels.title' => '🚥 Levels', 
     'admin.logging.list.card.entries.title' => '🗃 Log Entries', 
