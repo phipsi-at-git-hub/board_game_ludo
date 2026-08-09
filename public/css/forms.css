@@ -306,7 +306,8 @@ textarea:focus {
    SELECT SWITCH
    > 3 OPTIONS
 ------------------------------ */
-.badge-select {
+.badge-select, 
+.badge-date-range {
     position: relative;
     display: inline-block;
 
@@ -329,7 +330,8 @@ textarea:focus {
 /* ------------------------------
    TRIGGER
 ------------------------------ */
-.badge-select-trigger {
+.badge-select-trigger, 
+.badge-date-range-trigger {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -350,13 +352,16 @@ textarea:focus {
 
 
 .badge-select-trigger:hover, 
-.badge-select-trigger.active {
+.badge-select-trigger.active, 
+.badge-date-range-trigger:hover, 
+.badge-date-range-trigger.active {
     background: var(--default-color-dark);
     transform: scale(1.03); 
 } 
 
 /* Label */
-.badge-select-label {
+.badge-select-label, 
+.badge-date-range-label {
     flex: 1;
     min-width: 0;
     white-space: nowrap;
@@ -365,14 +370,17 @@ textarea:focus {
 }
 
 /* Arrow */
-.badge-select-arrow {
+.badge-select-arrow, 
+.badge-date-range-arrow {
     flex-shrink: 0;
     opacity: .75;
     display: inline-block;
     transition: transform .2s ease;
 }
 
-.badge-select.open .badge-select-arrow {
+.badge-select.open .badge-select-arrow, 
+.badge-date-range.open .badge-date-range-arrow, 
+.date-range-picker.open .badge-date-range-arrow {
     transform: rotate(180deg);
 }
 

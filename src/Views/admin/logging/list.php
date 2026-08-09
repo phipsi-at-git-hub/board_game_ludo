@@ -149,13 +149,12 @@ use App\Core\Logging\LogEntry;
                         <?= Localization::get('admin.logging.list.card.filter.date_range') ?>
                     </span>
 
-                    <input 
+                    <input
                         type="text" 
-                        name="date_rang" 
+                        name="date_range" 
                         data-ui="date-range" 
-                        date-with-time="true" 
-                        data-presets="today, last-7-days, last-30-days" 
-                        value="<?= htmlspecialchars($date_start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $date_end->format(Application::FILE_DATE_TIME_FORMAT) ) ?>" >
+                        data-ui-localization="en-us" 
+                        value="<?= htmlspecialchars($date_start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $date_end->format(Application::FILE_DATE_TIME_FORMAT) ) ?>" > 
 
                     <!-- Date Range Picker will be inserted here -->
 

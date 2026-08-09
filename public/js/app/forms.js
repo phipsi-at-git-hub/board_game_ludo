@@ -6,6 +6,9 @@ function initForms() {
     initBadgeSelects(); 
     initBadgeMultiselect(); 
 
+    // Init Date Range Picker
+    initDateRangePickers(); 
+
     // Init Form Submits
     initFormSubmits(); 
 

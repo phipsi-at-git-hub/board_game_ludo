@@ -19,6 +19,7 @@ use App\Core\Asset;
         <link rel="stylesheet" href="<?= Asset::css('general.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('components.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('forms.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('forms/date_range_picker.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('buttons.css') ?>">
         <?php foreach ($css_array as $css): ?>
             <link rel="stylesheet" href="<?= Asset::css("$css.css") ?>">
@@ -38,6 +39,7 @@ use App\Core\Asset;
         <?php include VIEWS_PATH . '/partials/modal.php' ?>
 
         <script src="<?= Asset::js('shared/navigation.js') ?>"></script> 
+        <script src="<?= Asset::js('app/forms/date_range_picker.js') ?>"></script> 
         <script src="<?= Asset::js('app/forms.js') ?>"></script>
         <script src="<?= Asset::js('app/modal.js') ?>"></script>
         <script src="<?= Asset::js('app/binding.js') ?>"></script>

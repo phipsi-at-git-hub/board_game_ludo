@@ -1,0 +1,248 @@
+/* ------------------------------
+   DATE RANGE PICKER
+------------------------------ */
+.date-range-picker {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 320px;
+}
+
+/* ------------------------------
+   DROPDOWN
+------------------------------ */
+.date-range-dropdown {
+    position: absolute;
+
+    top: calc(100% + 8px);
+    left: 0;
+
+    width: 320px;
+    max-width: calc(100vw - 32px);
+
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    background: var(--white-color);
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,.20);
+
+    z-index: 200;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+        translateY(-6px)
+        scale(.98);
+
+    pointer-events: none;
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease,
+        visibility .15s ease;
+}
+
+.date-range-picker.open .date-range-dropdown {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    pointer-events: auto;
+}
+
+/* ------------------------------
+   CALENDAR HEADER
+------------------------------ */
+.date-range-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+.date-range-calendar-title {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.date-range-calendar-navigation {
+    display: flex;
+    gap: 4px;
+}
+
+.date-range-calendar-navigation button {
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: var(--default-color);
+
+    color: var(--text-color);
+
+    cursor: pointer;
+
+    transition:
+        background-color .15s ease,
+        transform .15s ease;
+}
+
+.date-range-calendar-navigation button:hover {
+    background: var(--default-color-dark);
+    transform: scale(1.03);
+}
+
+/* ------------------------------
+   WEEKDAYS
+------------------------------ */
+.date-range-calendar-weekdays,
+.date-range-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.date-range-calendar-weekdays {
+    margin-bottom: 4px;
+}
+
+.date-range-calendar-weekday {
+    padding: 4px 0;
+
+    text-align: center;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    opacity: .65;
+}
+
+/* ------------------------------
+   CALENDAR DAYS
+------------------------------ */
+.date-range-calendar-day {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    aspect-ratio: 1;
+
+    min-width: 0;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: var(--text-color);
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background-color .15s ease,
+        color .15s ease,
+        transform .15s ease;
+}
+
+.date-range-calendar-day:hover {
+    background: var(--default-color-dark);
+    transform: scale(1.03);
+}
+
+/* Days belonging to another month */
+.date-range-calendar-day.other-month {
+    opacity: .3;
+}
+
+/* Today */
+.date-range-calendar-day.today {
+    box-shadow:
+        inset 0 0 0 1px var(--tip-color);
+}
+
+/* First selected date */
+.date-range-calendar-day.range-start,
+.date-range-calendar-day.range-end {
+    background: var(--status-active-background);
+    color: var(--status-active-text);
+
+    font-weight: 600;
+}
+
+/* Same day selected as start and end */
+.date-range-calendar-day.range-start.range-end {
+    border-radius: 50%;
+}
+
+/* Range between start and end */
+.date-range-calendar-day.in-range {
+    border-radius: 6px;
+
+    background: color-mix(
+        in srgb,
+        var(--status-active-background) 25%,
+        transparent
+    );
+}
+
+/* ------------------------------
+   RANGE EDGES
+------------------------------ */
+.date-range-calendar-day.range-start:not(.range-end) {
+    border-radius: 50% 6px 6px 50%;
+}
+
+.date-range-calendar-day.range-end:not(.range-start) {
+    border-radius: 6px 50% 50% 6px;
+}
+
+/* ------------------------------
+   EMPTY / STATUS
+------------------------------ */
+.date-range-picker-status {
+    margin-top: 12px;
+
+    min-height: 18px;
+
+    font-size: 12px;
+
+    opacity: .7;
+}
+
+.date-range-picker-status.error {
+    color: var(--status-inactive-text);
+}
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
+@media (max-width: 480px) {
+
+    .date-range-picker {
+        max-width: 100%;
+    }
+
+    .date-range-dropdown {
+        width: 100%;
+    }
+
+}
