@@ -18,9 +18,9 @@ use App\Core\Asset;
         <link rel="stylesheet" href="<?= Asset::css('variables.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('general.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('components.css') ?>">
+        <link rel="stylesheet" href="<?= Asset::css('buttons.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('forms.css') ?>">
         <link rel="stylesheet" href="<?= Asset::css('forms/date_range_picker.css') ?>">
-        <link rel="stylesheet" href="<?= Asset::css('buttons.css') ?>">
         <?php foreach ($css_array as $css): ?>
             <link rel="stylesheet" href="<?= Asset::css("$css.css") ?>">
         <?php endforeach; ?>

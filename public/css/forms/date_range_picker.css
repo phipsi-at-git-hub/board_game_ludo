@@ -165,7 +165,8 @@
 
 .date-range-calendar-day:hover {
     background: var(--default-color-dark);
-    transform: scale(1.03);
+    transform: scale(1.05);
+    filter: brightness(0.95); 
 }
 
 /* Days belonging to another month */
@@ -199,7 +200,7 @@
 
     background: color-mix(
         in srgb,
-        var(--status-active-background) 25%,
+        var(--status-active-background) 50%,
         transparent
     );
 }
@@ -219,12 +220,8 @@
    EMPTY / STATUS
 ------------------------------ */
 .date-range-picker-status {
-    /* margin-top: 12px; */ 
-
     min-height: 18px;
-
     font-size: 12px;
-
     opacity: .7;
 }
 
@@ -428,4 +425,30 @@
 .date-range-time-apply:hover {
     background: var(--default-color-dark);
     transform: translateY(-1px);
+}
+
+/* ------------------------------
+   BUTTONS
+------------------------------ */
+.btn-date-range-apply {
+    /*
+    background-color: var(--default-color); 
+    color: var(--text-color);
+    */
+    background: var(--status-active-background); 
+    color: var(--status-active-text); 
+    font-size: 14px; 
+    padding: 6px 12px; 
+}
+
+.btn-date-range-apply:hover {
+    /*
+    background-color: var(--default-color-dark); 
+    */
+    filter: brightness(0.95); 
+}
+
+.btn-date-range-apply:disabled {
+    opacity: 0.5; 
+    cursor: not-allowed; 
 }

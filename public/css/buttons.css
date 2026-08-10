@@ -41,6 +41,11 @@
     color: var(--white-color);
 }
 
+.btn:hover {
+    text-decoration: none; 
+    transform: scale(1.05); 
+}
+
 .btn:active {
     transform: translateY(2px);
     box-shadow: 0 2px 0 rgba(0,0,0,0.2);
