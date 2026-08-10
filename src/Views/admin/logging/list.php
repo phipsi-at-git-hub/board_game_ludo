@@ -156,6 +156,7 @@ use App\Core\Logging\LogEntry;
                         name="date_range" 
                         data-ui="date-range" 
                         data-ui-localization="en-us" 
+                        data-ui-with-time="true" 
                         value="<?= htmlspecialchars($date_start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $date_end->format(Application::FILE_DATE_TIME_FORMAT) ) ?>" > 
 
                     <!-- Date Range Picker will be inserted here -->

@@ -219,7 +219,7 @@
    EMPTY / STATUS
 ------------------------------ */
 .date-range-picker-status {
-    margin-top: 12px;
+    /* margin-top: 12px; */ 
 
     min-height: 18px;
 
@@ -236,7 +236,6 @@
    RESPONSIVE
 ------------------------------ */
 @media (max-width: 480px) {
-
     .date-range-picker {
         max-width: 100%;
     }
@@ -244,5 +243,189 @@
     .date-range-dropdown {
         width: 100%;
     }
+}
 
+/* ------------------------------
+   TIME SECTION
+------------------------------ */
+.date-range-time-section {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 16px; 
+    margin-top: 12px; 
+} 
+
+.date-range-time {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    margin-top: 14px;
+    padding-top: 14px;
+
+    border-top: 1px solid var(--border-color);
+}
+
+.date-range-time-group {
+    position: relative;
+    min-width: 0;
+}
+
+.date-range-time-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    opacity: .7;
+}
+
+/* ------------------------------
+   TIME INPUT
+------------------------------ */
+.date-range-time-input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 9px 10px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+
+    background: var(--white-color);
+    color: var(--text-color);
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease;
+}
+
+.date-range-time-input:hover,
+.date-range-time-input:focus {
+    border-color: var(--tip-color);
+    box-shadow: 0 0 4px rgba(68,176,68,0.25);
+}
+
+/* ------------------------------
+   TIME DROPDOWN
+------------------------------ */
+.date-range-time-dropdown {
+    position: absolute;
+
+    top: calc(100% - 6px);
+    left: 0;
+
+    width: 100%;
+    max-height: 180px;
+
+    box-sizing: border-box;
+
+    padding: 5px;
+
+    overflow-y: auto;
+
+    background: var(--white-color);
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,.20);
+
+    z-index: 220;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+        translateY(-4px)
+        scale(.98);
+
+    pointer-events: none;
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease,
+        visibility .15s ease;
+}
+
+.date-range-time-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    pointer-events: auto;
+}
+
+/* ------------------------------
+   TIME OPTIONS
+------------------------------ */
+.date-range-time-option {
+    width: 100%;
+
+    display: block;
+
+    padding: 7px 9px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--text-color);
+
+    font-size: 13px;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background-color .15s ease,
+        color .15s ease;
+}
+
+.date-range-time-option:hover,
+.date-range-time-option.active {
+    background: var(--default-color);
+}
+
+/* ------------------------------
+   APPLY
+------------------------------ */
+.date-range-time-apply {
+    grid-column: 1 / -1;
+
+    width: 100%;
+
+    margin-top: 2px;
+    padding: 9px 12px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--status-active-background);
+    color: var(--status-active-text);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color .15s ease,
+        transform .15s ease;
+}
+
+.date-range-time-apply:hover {
+    background: var(--default-color-dark);
+    transform: translateY(-1px);
 }
