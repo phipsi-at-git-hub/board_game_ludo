@@ -314,7 +314,7 @@ class AdminController extends BaseController {
         $channels = $availableChannels; 
 
         // System logs statistics
-        $todayStart = ((new DateTimeImmutable())->setTime(0, 0, 0))->sub(new DateInterval('P30D')); 
+        $todayStart = ((new DateTimeImmutable())->setTime(0, 0, 0))->sub(new DateInterval('P7D')); 
         $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
         $logService = new LogService([
             LoggingConfiguration::CHANNEL_APPLICATION, 
@@ -324,6 +324,7 @@ class AdminController extends BaseController {
             $todayEnd 
         ]); 
 
+        $date_range = $logService->getDateRangeAsString(); 
         $log_entries = $logService->getEntries(); 
         $log_statistics = $logService->getStatistics(); 
         
@@ -335,8 +336,7 @@ class AdminController extends BaseController {
             [
                 'available_channels' => $availableChannels, 
                 'channels' => $channels, 
-                'date_start' => $todayStart, 
-                'date_end' => $todayEnd, 
+                'date_range' => $date_range, 
                 'entries' => $log_entries, 
                 'statistics' => $log_statistics
             ]

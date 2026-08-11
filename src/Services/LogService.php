@@ -48,6 +48,13 @@ final class LogService {
     }
 
     /**
+     * Get date range of the log entries as a formatted string
+     */
+    public function getDateRangeAsString(): String {
+        return $this->dateRange->getDateRangeAsString(); 
+    }
+
+    /**
      * Get all available log channels
      */
     public function getChannels(): array {

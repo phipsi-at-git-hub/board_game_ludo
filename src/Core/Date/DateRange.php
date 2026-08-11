@@ -6,6 +6,7 @@ namespace App\Core\Date;
 use App\Constants\Application;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Exception;
 
 final class DateRange {
     private ?DateTimeImmutable $start;
@@ -74,6 +75,39 @@ final class DateRange {
      */
     public function getEnd(): ?DateTimeImmutable {
         return $this->end;
+    }
+
+    /**
+     * Returns a formatted date range string by start and end date and time
+     * 
+     * getDateRangeAsString
+     *
+     * @return String
+     */
+    public function getDateRangeAsString(): String {
+        return $this->start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $this->end->format(Application::FILE_DATE_TIME_FORMAT); 
+    }
+
+    /**
+     * Created a date range from a formatted date range string. 
+     * 
+     * @param string $formattedString -> format: start date & time - end date & time -> yyyy-mm-dd hh:mm:ss - yyyy-mm-dd hh:mm:ss
+     * @return self
+     */
+    public static function fromString(string $formattedString): self {
+        $parts = explode(' - ', $formattedString, 2); 
+        if (count($parts) !== 2) {
+            return new self(); 
+        }
+
+        try {
+            return new self([
+                new DateTimeImmutable($parts[0]), 
+                new DateTimeImmutable($parts[1]), 
+            ]); 
+        } catch (Exception) {
+            return new self(); 
+        }
     }
 
     /**
