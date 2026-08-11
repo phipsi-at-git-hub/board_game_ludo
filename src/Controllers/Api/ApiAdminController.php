@@ -14,8 +14,7 @@ use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
 use App\Models\SystemSettingsModel;
-use App\Services\LogService;
-use DateTimeImmutable;
+use App\Services\LogService; 
 
 final class ApiAdminController extends BaseController {
     /*
@@ -47,13 +46,15 @@ final class ApiAdminController extends BaseController {
         array $channels, 
         string $date_range, 
         array $available_channels, 
-        int $entries_count 
+        int $entries_count, 
+        array $entry_statistics  
     ): array {
         return EntryFilterContext::fromFilter(
             $channels, 
             $date_range, 
             $available_channels, 
-            $entries_count 
+            $entries_count, 
+            $entry_statistics 
         ); 
     } 
 
@@ -158,10 +159,11 @@ final class ApiAdminController extends BaseController {
 
         // Build logging filter context
         $context = EntryFilterContext::fromFilter(
-            $channels,
-            $date_range_string,
-            $available_channels,
-            $log_service->getCount()
+            $channels, 
+            $date_range_string, 
+            $available_channels, 
+            $log_service->getCount(), 
+            $log_service->getStatistics() 
         );
 
         // Render filtered log entries

@@ -60,17 +60,31 @@ use App\Core\Logging\LogEntry;
 
                 <div>
 
-                    <span class="stat-value">
+                    <span class="stat-value" >
 
                         <?php if ($count > 0): ?>
 
-                            <span class="status-badge level-<?= htmlspecialchars($level) ?>">
+                            <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
+                                data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                data-bind-sources="logging-form" 
+                                data-bind-1-type="text" 
+                                data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                data-bind-2-type="class" 
+                                data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                data-bind-2-classes-fixed="status-badge" >
                                 <?= $count ?>
                             </span>
 
                         <?php else: ?>
 
-                            <span class="status-badge status-default">
+                            <span class="status-badge status-default" 
+                                data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                data-bind-sources="logging-form" 
+                                data-bind-1-type="text" 
+                                data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                data-bind-2-type="class" 
+                                data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                data-bind-2-classes-fixed="status-badge" >
                                 <?= $count ?>
                             </span>
 
@@ -105,7 +119,16 @@ use App\Core\Logging\LogEntry;
                 action="/api/admin/logging/filter" 
                 
                 data-response="json" 
-                data-bind-targets="logging-filter-entries, logging-entry-count" >
+                data-bind-targets="
+                    logging-filter-entries, 
+                    logging-entry-count, 
+                    <?php foreach ($statistics as $level => $count): ?>
+                        <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
+                            <?php continue; ?>
+                        <?php endif; ?>
+                        logging-level-<?= htmlspecialchars($level) ?>, 
+                    <?php endforeach; ?>
+                " >
             
                 <input
                 type="hidden"
