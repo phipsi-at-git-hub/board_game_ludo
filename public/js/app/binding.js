@@ -184,6 +184,9 @@ function updateElement(
         case "class": 
             updateClasses(element, value, target, index); 
             break; 
+        case "attribute": 
+            updateAttribute(element, value, target, index); 
+            break; 
         default:
             console.warn("Unknown binding type:", type);
     }
@@ -204,6 +207,25 @@ function updateClasses(element, value, target, index) {
         element.classList.add(className); 
     }); 
 } 
+
+// Update html attributes
+function updateAttribute(element, value, target, index) {
+    const attribute = target.getAttribute(`data-bind-${index}-attribute`); 
+    if (!attribute) {
+        console.warn(
+            "Attribute binding requires attribute", 
+            target, 
+            index 
+        ); 
+        return; 
+    }
+
+    if (attribute in element) {
+        element[attribute] = value; 
+        return; 
+    } 
+    element.setAttribute(attribute,value); 
+}
 
 // Process navigational actions bind to success
 function processSuccessNavigational(form) { 

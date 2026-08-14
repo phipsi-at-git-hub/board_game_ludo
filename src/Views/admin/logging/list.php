@@ -66,7 +66,7 @@ use App\Core\Logging\LogEntry;
 
                             <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
                                 data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                data-bind-sources="logging-form" 
+                                data-bind-sources="logging-filter-form" 
                                 data-bind-1-type="text" 
                                 data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
                                 data-bind-2-type="class" 
@@ -79,7 +79,7 @@ use App\Core\Logging\LogEntry;
 
                             <span class="status-badge status-default" 
                                 data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                data-bind-sources="logging-form" 
+                                data-bind-sources="logging-filter-form" 
                                 data-bind-1-type="text" 
                                 data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
                                 data-bind-2-type="class" 
@@ -114,7 +114,7 @@ use App\Core\Logging\LogEntry;
         <!-- Entry Filter -->
         <div class="nested-card">
             <form
-                data-id="logging-form" 
+                data-id="logging-filter-form" 
                 method="post" 
                 action="/api/admin/logging/filter" 
                 
@@ -122,6 +122,7 @@ use App\Core\Logging\LogEntry;
                 data-bind-targets="
                     logging-filter-entries, 
                     logging-entry-count, 
+                    logging-applied-filter, 
                     <?php foreach ($statistics as $level => $count): ?>
                         <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
                             <?php continue; ?>
@@ -131,9 +132,9 @@ use App\Core\Logging\LogEntry;
                 " >
             
                 <input
-                type="hidden"
-                name="_csrf_token"
-                value="<?= Csrf::generate() ?>">
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
 
                 <div class="nested-card-header">
 
@@ -144,11 +145,10 @@ use App\Core\Logging\LogEntry;
                     <span 
                         class="status-badge status-default" 
                         data-id="logging-entry-count" 
-                        data-bind-sources="logging-form" 
+                        data-bind-sources="logging-filter-form" 
                         data-bind-1-type="text" 
                         data-bind-1-dto-key="entries_count" >
                         <?= count($entries) ?>
-                        <?= Localization::get('admin.logging.list.card.entries.count') ?>
                     </span>
 
                 </div>
@@ -223,7 +223,7 @@ use App\Core\Logging\LogEntry;
 
         <div 
             data-id="logging-filter-entries" 
-            data-bind-sources="logging-form" 
+            data-bind-sources="logging-filter-form" 
             data-bind-1-view-key="entries" 
             data-bind-1-type="view" >
 
