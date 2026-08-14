@@ -929,6 +929,6 @@ The backend provides the state.
 The binding system synchronizes the interface.
 
 The same principle applies to missing DTO values: 
-> A missing value si an error by default, but can explicitly be declared as a valid empty state using data-bind-X-dto-key-loose="true". 
+> A missing value is an error by default, but can explicitly be declared as a valid empty state using data-bind-X-dto-key-loose="true". 
 
 This keeps the default behavior strict and predictable while allowing dynamic structures such as variable-length arrays to be represented declaratively. 
