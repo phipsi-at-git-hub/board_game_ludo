@@ -703,6 +703,94 @@ animated
 
 This allows complete backend-controlled CSS state management while preserving structural classes defined by the view. 
 
+In loose mode, a missing DTO value is interpreted as an empty dynamic class set. 
+
+Therefore all nn-fixed classes are removed. 
+
+---
+
+# Attributes
+
+Updates an HTML attribute of an element. 
+
+Attribute: 
+
+```html
+data-bind-X-type="attribute" 
+```
+
+This attribute name is specified using: 
+
+```html
+data-bind-X-attribute
+```
+
+The value comes from: 
+
+```html
+data-bind-X-dto-key
+```
+
+Example: 
+
+```html
+<input
+    data-bind-1-type="attribute"
+    data-bind-1-attribute="value"
+    data-bind-1-dto-key="channels.0"
+    data-bind-1-dto-key-loose="true">
+```
+
+Response: 
+
+```html
+{
+    "channels": [
+        "application"
+    ]
+}
+```
+
+The binding sets: 
+
+```html
+value="application"
+````
+
+## Attribute Name
+
+The attribute to modify is defined declaratively: 
+
+```html
+data-bind-X-attribute="value"
+````
+
+Examples: 
+
+```html
+data-bind-1-attribute="value" 
+
+data-bind-1-attribute="disabled" 
+
+data-bind-1-attribute="aria-label" 
+
+data-bind-1-attribute="data-state" 
+```
+
+This Binding System does not contain knowledge about specific application attributes. 
+
+## Loose Attribute Bindings 
+
+In loose mode:
+
+```html
+data-bind-1-dto-key-loose="true" 
+````
+
+a missing DTO value causes the bound to be cleared or removed to the generic attribute update behavior.  
+
+This allows attributes to reflect optional or dynamically changing DTO values. 
+
 ---
 
 # Multiple Bindings
@@ -810,6 +898,8 @@ case "newType":
 - keep business logic in backend services
 - return complete DTO state
 - reuse existing binding types
+- use DTO paths for nested objects and arrays
+- use data-bind-X-dto-key-loose="true" only when a missing DTO value is a valid state 
 - document new generic capabilities
 
 
@@ -819,6 +909,7 @@ case "newType":
 - access endpoints directly from binding.js
 - duplicate form handling logic
 - create custom JavaScript for simple DOM updates
+- introduce special binding syntax for individual application data structures 
 
 ---
 
@@ -836,3 +927,8 @@ the application describes:
 
 The backend provides the state.
 The binding system synchronizes the interface.
+
+The same principle applies to missing DTO values: 
+> A missing value si an error by default, but can explicitly be declared as a valid empty state using data-bind-X-dto-key-loose="true". 
+
+This keeps the default behavior strict and predictable while allowing dynamic structures such as variable-length arrays to be represented declaratively. 
