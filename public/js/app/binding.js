@@ -122,7 +122,8 @@ function applyTargetBindings(target, response) {
         }
 
         let value = resolveDtoValue(response.data, key); 
-        if (value === undefined) {
+        const loose = target.getAttribute(`data-bind-${index}-dto-key-loose`) === "true"; 
+        if (value === undefined && !loose) {
             console.warn("DTO key missing:", key); 
             index++; 
             continue; 
@@ -153,11 +154,11 @@ function updateElement(
 ) {
     switch(type) {
         case "text":
-            element.textContent = value;
+            element.textContent = value ?? "";
             break;
 
         case "html":
-            element.innerHTML = value;
+            element.innerHTML = value ?? "";
             break;
 
         case "view":
@@ -165,7 +166,7 @@ function updateElement(
             break;
 
         case "value":
-            element.value = value;
+            element.value = value ?? "";
             break;
 
         case "checked":
@@ -221,7 +222,7 @@ function updateAttribute(element, value, target, index) {
     }
 
     if (attribute in element) {
-        element[attribute] = value; 
+        element[attribute] = value ?? ""; 
         return; 
     } 
     element.setAttribute(attribute,value); 

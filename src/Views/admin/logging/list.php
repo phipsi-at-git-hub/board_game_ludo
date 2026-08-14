@@ -50,57 +50,108 @@ use App\Core\Logging\LogEntry;
             <?= Localization::get('admin.logging.list.card.levels.title') ?>
         </h2>
 
-        <div class="stats-sub">
+        <form
+            data-id="logging-level-form" 
+            method="post" 
+            action="/api/admin/logging/filter" 
+            
+            data-response="json" 
+            data-bind-targets="
+                logging-filter-entries, 
+                logging-entry-count, 
+                <?php foreach ($statistics as $level => $count): ?>
+                    <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+                    logging-level-<?= htmlspecialchars($level) ?>, 
+                <?php endforeach; ?>
+            " >
 
-            <?php foreach ($statistics as $level => $count): ?>
+            <!-- Hidden filter -->
 
-                <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
-                    <?php continue; ?>
-                <?php endif; ?>
-
-                <div>
-
-                    <span class="stat-value" >
-
-                        <?php if ($count > 0): ?>
-
-                            <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
-                                data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                data-bind-sources="logging-filter-form" 
-                                data-bind-1-type="text" 
-                                data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
-                                data-bind-2-type="class" 
-                                data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                data-bind-2-classes-fixed="status-badge" >
-                                <?= $count ?>
-                            </span>
-
-                        <?php else: ?>
-
-                            <span class="status-badge status-default" 
-                                data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                data-bind-sources="logging-filter-form" 
-                                data-bind-1-type="text" 
-                                data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
-                                data-bind-2-type="class" 
-                                data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                data-bind-2-classes-fixed="status-badge" >
-                                <?= $count ?>
-                            </span>
-
-                        <?php endif; ?>
-
-                    </span>
-
-                    <span class="stat-text">
-                        <?= strtoupper(htmlspecialchars($level)) ?>
-                    </span>
-
-                </div>
+            <!-- Hidden filter channels -->
+            <?php $index = 0; ?>
+            <?php foreach ($available_channels as $channel): ?>
+            
+                <input 
+                    type="hidden" 
+                    name="channels[]" 
+                    data-id="applied-filter-channels-<?= $channel ?>" 
+                    data-bind-1-type="attribute" 
+                    data-bind-1-dto-key="channels.<?= $index ?>" 
+                    data-bind-1-dto-key-loose="true" 
+                    data-bind-1-attribute="value" 
+                    data-bind-sources="logging-filter-form" 
+                    value="" >
+                
+                <?php $index++; ?>
 
             <?php endforeach; ?>
 
-        </div>
+            <!-- Hidden filter date_range -->
+            <input 
+                type="hidden" 
+                name="date_range" 
+                data-id="applied-filter-date_range" 
+                data-bind-1-type="attribute" 
+                data-bind-1-dto-key="date_range" 
+                data-bind-1-attribute="value" 
+                data-bind-sources="logging-filter-form" 
+                value="" >
+
+            <div class="stats-sub">
+
+                <?php foreach ($statistics as $level => $count): ?>
+
+                    <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+
+                    <div>
+
+                        <span class="stat-value" >
+
+                            <?php if ($count > 0): ?>
+
+                                <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
+                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                    data-bind-sources="logging-filter-form" 
+                                    data-bind-1-type="text" 
+                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                    data-bind-2-type="class" 
+                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                    data-bind-2-classes-fixed="status-badge" >
+                                    <?= $count ?>
+                                </span>
+
+                            <?php else: ?>
+
+                                <span class="status-badge status-default" 
+                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                    data-bind-sources="logging-filter-form" 
+                                    data-bind-1-type="text" 
+                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                    data-bind-2-type="class" 
+                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                    data-bind-2-classes-fixed="status-badge" >
+                                    <?= $count ?>
+                                </span>
+
+                            <?php endif; ?>
+
+                        </span>
+
+                        <span class="stat-text">
+                            <?= strtoupper(htmlspecialchars($level)) ?>
+                        </span>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        </form>
 
     </div>
 
@@ -122,13 +173,17 @@ use App\Core\Logging\LogEntry;
                 data-bind-targets="
                     logging-filter-entries, 
                     logging-entry-count, 
-                    logging-applied-filter, 
                     <?php foreach ($statistics as $level => $count): ?>
                         <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
                             <?php continue; ?>
                         <?php endif; ?>
                         logging-level-<?= htmlspecialchars($level) ?>, 
                     <?php endforeach; ?>
+
+                    <?php foreach ($available_channels as $channel): ?>
+                        applied-filter-channels-<?= $channel ?>, 
+                    <?php endforeach; ?>
+                    applied-filter-date_range, 
                 " >
             
                 <input
@@ -156,7 +211,6 @@ use App\Core\Logging\LogEntry;
                 <div class="entry-filter-content">
 
                     <!-- Channel selection -->
-                    <!--<div class="entry-filter-group">-->
                     <div class="form-row">
 
                         <span>
@@ -186,7 +240,6 @@ use App\Core\Logging\LogEntry;
                     </div>
 
                     <!-- Date range selection -->
-                    <!--<div class="entry-filter-group">-->
                     <div class="form-row">
 
                         <span>
