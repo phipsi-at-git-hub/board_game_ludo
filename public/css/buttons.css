@@ -151,7 +151,7 @@
 /* ------------------------------
    BADGE BUTTON
 ------------------------------ */
-.btn-badge-group {
+.btn-control-group {
     opacity: 1;
     display: inline-flex; 
     align-items: center; 
@@ -162,23 +162,23 @@
         opacity 0.25s ease; 
 }
 
-.btn-badge-group:not(.disabled):has(btn-badge:hover) {
+.btn-control-group:not(.disabled):has(btn-control:hover) {
     filter: brightness(0.95); 
 }
 
-.btn-badge-group.default {
+.btn-control-group.default {
     background: var(--default-color-dark); 
 }
 
-.btn-badge-group.invisible {
+.btn-control-group.invisible {
     opacity: 0;
 }
 
-.btn-badge-group.invisible .btn-badge {
+.btn-control-group.invisible .btn-control {
     pointer-events: none; 
-}
+} 
 
-.btn-badge {
+.btn-control {
     display: inline-flex; 
     align-items: center; 
     padding: 8px 14px; 
@@ -195,13 +195,13 @@
         transform 0.15s ease; 
 }
 
-.btn-badge:hover {
+.btn-control:hover {
     filter: brightness(0.95); 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);  
     transform: scale(1.01); 
 }
 
-.btn-badge:active {
+.btn-control:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  
     transform: scale(0.98); 
 }
