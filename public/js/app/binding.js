@@ -225,6 +225,12 @@ function updateAttribute(element, value, target, index) {
         element[attribute] = value ?? ""; 
         return; 
     } 
+
+    if (value === null || value === undefined) {
+        element.removeAttribute(attribute); 
+        return; 
+    }
+    
     element.setAttribute(attribute,value); 
 }
 

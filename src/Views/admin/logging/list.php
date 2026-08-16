@@ -122,21 +122,14 @@ use App\Core\Logging\LogEntry;
                                     data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
                                     data-bind-2-type="class" 
                                     data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                    data-bind-2-classes-fixed="btn, btn-badge" >
+                                    data-bind-2-classes-fixed="btn, btn-badge" 
+                                    data-bind-3-type="attribute" 
+                                    data-bind-3-dto-key="statistics.<?= htmlspecialchars($level) ?>_disabled" 
+                                    data-bind-3-attribute="disabled" 
+                                    <?= ($count > 0) ? '' : 'disabled' ?> >
                                     <?= $count ?>
                             </button>
-<!--
-                                <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
-                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                    data-bind-sources="logging-filter-form" 
-                                    data-bind-1-type="text" 
-                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
-                                    data-bind-2-type="class" 
-                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                    data-bind-2-classes-fixed="status-badge" >
-                                    <?= $count ?>
-                                </span>
--->
+
                             <?php else: ?>
 
                                 <button class="btn btn-badge status-default" 
@@ -149,21 +142,14 @@ use App\Core\Logging\LogEntry;
                                     data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
                                     data-bind-2-type="class" 
                                     data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                    data-bind-2-classes-fixed="btn, btn-badge" >
+                                    data-bind-2-classes-fixed="btn, btn-badge" 
+                                    data-bind-3-type="attribute" 
+                                    data-bind-3-dto-key="statistics.<?= htmlspecialchars($level) ?>_disabled" 
+                                    data-bind-3-attribute="disabled" 
+                                    <?= ($count > 0) ? '' : 'disabled' ?> >
                                     <?= $count ?>
                                 </button>
-<!--
-                                <span class="status-badge status-default" 
-                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
-                                    data-bind-sources="logging-filter-form" 
-                                    data-bind-1-type="text" 
-                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
-                                    data-bind-2-type="class" 
-                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
-                                    data-bind-2-classes-fixed="status-badge" >
-                                    <?= $count ?>
-                                </span>
--->
+                                
                             <?php endif; ?>
 
                         </span>
