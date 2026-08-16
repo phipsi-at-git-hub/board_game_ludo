@@ -59,13 +59,12 @@ use App\Core\Logging\LogEntry;
             data-bind-targets="
                 logging-filter-entries, 
                 logging-entry-count, 
-                <?php foreach ($statistics as $level => $count): ?>
-                    <?php if (!is_int($count) || in_array($level, ['total', 'highest_level'])): ?>
-                        <?php continue; ?>
-                    <?php endif; ?>
-                    logging-level-<?= htmlspecialchars($level) ?>, 
-                <?php endforeach; ?>
             " >
+            
+            <input
+                type="hidden"
+                name="_csrf_token"
+                value="<?= Csrf::generate() ?>">
 
             <!-- Hidden filter -->
 
@@ -76,13 +75,13 @@ use App\Core\Logging\LogEntry;
                 <input 
                     type="hidden" 
                     name="channels[]" 
-                    data-id="applied-filter-channels-<?= $channel ?>" 
+                    data-id="applied-filter-channels-<?= htmlspecialchars($channel) ?>" 
                     data-bind-1-type="attribute" 
-                    data-bind-1-dto-key="channels.<?= $index ?>" 
+                    data-bind-1-dto-key="channels.<?= htmlspecialchars($index) ?>" 
                     data-bind-1-dto-key-loose="true" 
                     data-bind-1-attribute="value" 
                     data-bind-sources="logging-filter-form" 
-                    value="" >
+                    value="<?= htmlspecialchars($channel) ?>" >
                 
                 <?php $index++; ?>
 
@@ -97,7 +96,7 @@ use App\Core\Logging\LogEntry;
                 data-bind-1-dto-key="date_range" 
                 data-bind-1-attribute="value" 
                 data-bind-sources="logging-filter-form" 
-                value="" >
+                value="<?= htmlspecialchars($date_range) ?>" >
 
             <div class="stats-sub">
 
@@ -113,6 +112,20 @@ use App\Core\Logging\LogEntry;
 
                             <?php if ($count > 0): ?>
 
+                                <button class="btn btn-badge level-<?= htmlspecialchars($level) ?>" 
+                                    type="submit" 
+                                    name="log_levels[]" 
+                                    value="<?= htmlspecialchars($level) ?>" 
+                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                    data-bind-sources="logging-filter-form, logging-level-form" 
+                                    data-bind-1-type="text" 
+                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                    data-bind-2-type="class" 
+                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                    data-bind-2-classes-fixed="btn, btn-badge" >
+                                    <?= $count ?>
+                            </button>
+<!--
                                 <span class="status-badge level-<?= htmlspecialchars($level) ?>" 
                                     data-id="logging-level-<?= htmlspecialchars($level) ?>" 
                                     data-bind-sources="logging-filter-form" 
@@ -123,9 +136,23 @@ use App\Core\Logging\LogEntry;
                                     data-bind-2-classes-fixed="status-badge" >
                                     <?= $count ?>
                                 </span>
-
+-->
                             <?php else: ?>
 
+                                <button class="btn btn-badge status-default" 
+                                    type="submit" 
+                                    name="log_levels[]" 
+                                    value="<?= htmlspecialchars($level) ?>" 
+                                    data-id="logging-level-<?= htmlspecialchars($level) ?>" 
+                                    data-bind-sources="logging-filter-form, logging-level-form" 
+                                    data-bind-1-type="text" 
+                                    data-bind-1-dto-key="statistics.<?= htmlspecialchars($level) ?>_label" 
+                                    data-bind-2-type="class" 
+                                    data-bind-2-dto-key="statistics.<?= htmlspecialchars($level) ?>_classes" 
+                                    data-bind-2-classes-fixed="btn, btn-badge" >
+                                    <?= $count ?>
+                                </button>
+<!--
                                 <span class="status-badge status-default" 
                                     data-id="logging-level-<?= htmlspecialchars($level) ?>" 
                                     data-bind-sources="logging-filter-form" 
@@ -136,7 +163,7 @@ use App\Core\Logging\LogEntry;
                                     data-bind-2-classes-fixed="status-badge" >
                                     <?= $count ?>
                                 </span>
-
+-->
                             <?php endif; ?>
 
                         </span>
@@ -200,7 +227,7 @@ use App\Core\Logging\LogEntry;
                     <span 
                         class="status-badge status-default" 
                         data-id="logging-entry-count" 
-                        data-bind-sources="logging-filter-form" 
+                        data-bind-sources="logging-filter-form, logging-level-form" 
                         data-bind-1-type="text" 
                         data-bind-1-dto-key="entries_count" >
                         <?= count($entries) ?>
@@ -276,7 +303,7 @@ use App\Core\Logging\LogEntry;
 
         <div 
             data-id="logging-filter-entries" 
-            data-bind-sources="logging-filter-form" 
+            data-bind-sources="logging-filter-form, logging-level-form" 
             data-bind-1-view-key="entries" 
             data-bind-1-type="view" >
 

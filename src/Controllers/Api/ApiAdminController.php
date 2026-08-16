@@ -142,13 +142,21 @@ final class ApiAdminController extends BaseController {
             );
         }
 
+        // Parse log level if in POST body
+        $log_levels = $_POST['log_levels'] ?? []; 
+
+        if (!is_array($log_levels)) {
+            $log_levels = []; 
+        }
+
         // Load filtered log entries
         $log_service = new LogService(
             $channels,
             [
                 $date_range->getStart(),
                 $date_range->getEnd()
-            ]
+            ], 
+            $log_levels 
         );
 
         // Get filtered log entries

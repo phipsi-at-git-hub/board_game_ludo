@@ -12,11 +12,13 @@ use DateTimeImmutable;
 final class LogService {
     private array $channels;
     private DateRange $dateRange; 
+    private array $logLevels = []; 
     private array $entries = [];
 
-    public function __construct(array $channels, array $dates) {
+    public function __construct(array $channels, array $dates, array $log_levels = []) {
         $this->channels = $channels;
         $this->dateRange = new DateRange($dates); 
+        $this->logLevels = $log_levels; 
 
         $this->load();
     }
@@ -32,9 +34,18 @@ final class LogService {
             foreach ($this->dateRange->getDays() as $date) {
                 $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT)); 
                 foreach ($entries as $entry) {
+                    /*
                     if ($this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
                         $this->entries[] = $entry; 
                     }
+                    */
+                    if (!$this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
+                        continue; 
+                    }
+                    if (!empty($this->logLevels) && !in_array($entry->getLevel(), $this->logLevels, true)) {
+                        continue; 
+                    }
+                    $this->entries[] = $entry; 
                 }
             }
         }
@@ -59,6 +70,13 @@ final class LogService {
      */
     public function getChannels(): array {
         return LoggingConfiguration::getChannels();
+    }
+
+    /**
+     * Get selected log levels
+     */
+    public function getLogLevels(): array {
+        return $this->logLevels; 
     }
 
     /**

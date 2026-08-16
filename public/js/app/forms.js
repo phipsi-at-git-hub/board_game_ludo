@@ -67,7 +67,7 @@ function handleFormSubmit(event) {
 
     if (form.dataset.response === 'json') {
         event.preventDefault(); 
-        submitJsonBindingForm(form); 
+        submitJsonBindingForm(form, event.submitter); 
         return; 
     }
 

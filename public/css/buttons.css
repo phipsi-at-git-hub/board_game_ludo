@@ -149,7 +149,7 @@
 }
 
 /* ------------------------------
-   BADGE BUTTON
+   CONTROL GROUP BUTTONS
 ------------------------------ */
 .btn-control-group {
     opacity: 1;
@@ -204,4 +204,36 @@
 .btn-control:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  
     transform: scale(0.98); 
+}
+
+/* ------------------------------
+   BADGE BUTTONS
+------------------------------ */
+.btn.btn-badge {
+    padding: 6px 12px; 
+    margin: 0; 
+    border: none; 
+    border-radius: 20px; 
+    font-size: 0.8rem; 
+    font-weight: bold; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-transform: uppercase; 
+    cursor: pointer; 
+    text-decoration: none; 
+    transition: 
+        filter 0.2 ease, 
+        transform 0.1s ease;
+}
+
+.btn.btn-badge:hover {
+    text-decoration: none; 
+    transform: none; 
+    filter: brightness(0.95); 
+}
+
+.btn.btn-badge:active {
+    transform: translate(1px); 
+    box-shadow: none; 
 }

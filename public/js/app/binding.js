@@ -12,8 +12,8 @@
  */
 
 // Process and handle bindings and json responses
-async function submitJsonBindingForm(form) {
-    const formData = new FormData(form);
+async function submitJsonBindingForm(form, submitter = null) {
+    const formData = submitter ? new FormData(form, submitter) : new FormData(form); 
     let response;
     try {
         response = await fetch(
