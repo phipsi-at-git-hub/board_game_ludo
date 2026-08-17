@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Persistence\Database;
+use App\Core\Utility\UUID;
 use PDO;
 
 abstract class BaseModel {
@@ -46,14 +47,7 @@ abstract class BaseModel {
 
     // Helper - UUID generator
     protected static function generateUUID(): string {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            random_int(0, 0xffff), random_int(0, 0xffff),
-            random_int(0, 0xffff),
-            random_int(0, 0x0fff) | 0x4000,
-            random_int(0, 0x3fff) | 0x8000,
-            random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
-        );
+        return UUID::generate(); 
     }
 
     // Helper - Helps with hydration - Hydrate Int or NULL

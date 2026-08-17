@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Constants\Application;
 use App\Core\Date\DateRange;
+use App\Core\Logging\LogEntry;
 use App\Core\Logging\LoggingConfiguration;
 use App\Models\LoggingModel;
 use DateTimeImmutable;
@@ -30,7 +31,7 @@ final class LogService {
 
         $this->load();
     }
-
+ 
     /**
      * Load logs from configured channels and dates
      * 
@@ -67,6 +68,23 @@ final class LogService {
      */
     public function getEntries(): array {
         return $this->entries;
+    }
+    
+    /**
+     * Get log entry with UUID
+     * 
+     * getEntryById
+     *
+     * @param  mixed $id
+     * @return LogEntry
+     */
+    public function getEntryById(string $id): ?LogEntry {
+        foreach ($this->entries as $entry) {
+            if ($entry->getId() === $id) {
+                return $entry; 
+            }
+        }
+        return null; 
     }
 
     /**

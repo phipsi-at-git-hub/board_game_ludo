@@ -345,4 +345,7 @@ class AdminController extends BaseController {
             ]
         ); 
     }
+
+    // Logging - Detail view log entry
+    public function loggingShow(): void {}
 }

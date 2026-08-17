@@ -390,7 +390,11 @@
         transform 0.15s ease;
 }
 
-.entry-row:hover {
+.entry-row.disabled {
+    cursor: not-allowed;
+}
+
+.entry-row:not(.disabled):hover {
     background: var(--default-color); 
     transform: translateY(-1px); 
     box-shadow: 0 4px 12px rgba(0,0,0,0.12); 
@@ -400,6 +404,19 @@
 .entry-row:hover .role-badge, 
 .entry-row:hover .btn {
     filter: brightness(0.96); 
+}
+
+/* ToDo: i don't like this special button just to use a form with hidden input */
+.entry-row-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
 }
 
 .entry-row-header {

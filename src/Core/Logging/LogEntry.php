@@ -4,8 +4,11 @@
 namespace App\Core\Logging;
 
 use App\Constants\Application;
+use App\Core\Application\App;
+use App\Core\Utility\UUID;
 
-final class LogEntry {
+final class LogEntry { 
+    private ?string $id; 
     private string $level;
     private string $message;
     private array $context;
@@ -42,6 +45,7 @@ final class LogEntry {
     ): self {
         $entry = new self();
 
+        $entry->id = UUID::generate(); 
         $entry->level = $level;
         $entry->message = $message;
         $entry->context = $context;
@@ -73,6 +77,7 @@ final class LogEntry {
     public static function fromArray(array $data): self {
         $entry = new self();
 
+        $entry->id = $data[Application::ID] ?? null; 
         $entry->level = $data['level'];
         $entry->message = $data['message'];
         $entry->context = $data['context'] ?? [];
@@ -164,6 +169,8 @@ final class LogEntry {
      */
     public function toArray(): array {
         return [
+            Application::ID => $this->id, 
+
             'timestamp' => $this->timestamp,
 
             'level' => $this->level,
@@ -187,6 +194,10 @@ final class LogEntry {
             'file' => $this->file,
             'line' => $this->line
         ];
+    }
+
+    public function getId(): ?string {
+        return $this->id; 
     }
 
     public function getLevel(): string {
