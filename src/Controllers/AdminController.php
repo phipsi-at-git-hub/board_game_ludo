@@ -347,5 +347,41 @@ class AdminController extends BaseController {
     }
 
     // Logging - Detail view log entry
-    public function loggingShow(): void {}
+    public function loggingShow(): void {
+        $id = $_POST[Application::ID] ?? null; 
+        $channel = $_POST['channel'] ?? null; 
+        $timestamp = $_POST['timestamp'] ?? null; 
+
+        if (!is_string($id) || !is_string($channel) || !is_string($timestamp)) {
+            $this->redirect('/admin/logging/list'); 
+            return; 
+        }
+        
+        $dateStart = new DateTimeImmutable($timestamp); 
+
+        // System logs statistics
+        $logService = new LogService(
+            [$channel], 
+            [
+                $dateStart 
+            ]
+        ); 
+
+        $entry = $logService->getEntryById($id); 
+
+        if($entry === null) {
+            $this->redirect('/admin/logging/list'); 
+            return; 
+        }
+        
+        // Logging
+        Logger::app()->debug('Admin logging show', ['user_id' => Auth::user()->getId()]);
+
+        $this->render(
+            'admin/logging/show', 
+            [
+                'entry' => $entry, 
+            ]
+        ); 
+    }
 }

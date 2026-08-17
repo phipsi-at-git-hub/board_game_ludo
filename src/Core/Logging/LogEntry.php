@@ -165,6 +165,19 @@ final class LogEntry {
     }
 
     /**
+     * Pretty JSON representation for log detail view
+     */
+    public function toPrettyString(): string {
+        return json_encode(
+            $this->toArray(), 
+            JSON_PRETTY_PRINT 
+            | JSON_UNESCAPED_UNICODE 
+            | JSON_UNESCAPED_SLASHES 
+            | JSON_THROW_ON_ERROR 
+        ); 
+    }
+
+    /**
      * Array representation
      */
     public function toArray(): array {

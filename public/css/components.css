@@ -480,3 +480,10 @@
         flex-wrap: wrap;
     }
 }
+
+/* ------------------------------
+   Entry List
+------------------------------ */
+.nested-card.entry-raw {
+    overflow-x: auto;
+}
