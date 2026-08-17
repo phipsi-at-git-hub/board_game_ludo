@@ -159,6 +159,9 @@ final class ApiAdminController extends BaseController {
             $log_levels 
         );
 
+        // Sort log entries
+        $log_service->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC); 
+
         // Get filtered log entries
         $entries = $log_service->getEntries();
 

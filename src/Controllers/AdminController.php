@@ -324,6 +324,9 @@ class AdminController extends BaseController {
             $todayEnd 
         ]); 
 
+        // Sort log entries
+        $logService->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC); 
+
         $date_range = $logService->getDateRangeAsString(); 
         $log_entries = $logService->getEntries(); 
         $log_statistics = $logService->getStatistics(); 

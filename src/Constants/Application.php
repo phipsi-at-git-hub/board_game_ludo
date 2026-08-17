@@ -198,4 +198,11 @@ class Application {
     // Storage type
     public const STORAGE_FILE = 'file'; 
     public const STORAGE_DATABASE = 'database'; 
+
+    // Order by options
+    public const ORDER_ASC = 'asc'; 
+    public const ORDER_DESC = 'desc'; 
+    public const ORDER_BY_TIMESTAMP = 'timestamp'; 
+    public const ORDER_BY_CHANNEL = 'channel'; 
+    public const ORDER_BY_LOG_LEVEL = 'log_level'; 
 }

@@ -14,7 +14,15 @@ final class LogService {
     private DateRange $dateRange; 
     private array $logLevels = []; 
     private array $entries = [];
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $channels
+     * @param  mixed $dates
+     * @param  mixed $log_levels
+     * @return void
+     */
     public function __construct(array $channels, array $dates, array $log_levels = []) {
         $this->channels = $channels;
         $this->dateRange = new DateRange($dates); 
@@ -25,6 +33,10 @@ final class LogService {
 
     /**
      * Load logs from configured channels and dates
+     * 
+     * load
+     *
+     * @return void
      */
     private function load(): void {
         if ($this->dateRange->isEmpty()) {
@@ -34,11 +46,6 @@ final class LogService {
             foreach ($this->dateRange->getDays() as $date) {
                 $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT)); 
                 foreach ($entries as $entry) {
-                    /*
-                    if ($this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
-                        $this->entries[] = $entry; 
-                    }
-                    */
                     if (!$this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
                         continue; 
                     }
@@ -53,13 +60,59 @@ final class LogService {
 
     /**
      * Get loaded log entries
+     * 
+     * getEntries
+     *
+     * @return array
      */
     public function getEntries(): array {
         return $this->entries;
     }
 
     /**
+     * Order loaded log entries by field and direction
+     * 
+     * orderBy
+     *
+     * @param  mixed $field
+     * @param  mixed $direction
+     * @return self
+     */
+    public function orderBy(string $field = Application::ORDER_BY_TIMESTAMP, string $direction = Application::ORDER_ASC): self {
+        if (!in_array($field, [Application::ORDER_BY_TIMESTAMP, Application::ORDER_BY_CHANNEL, Application::ORDER_BY_LOG_LEVEL], true)) {
+            $field = Application::ORDER_BY_TIMESTAMP;
+        }
+
+        if (!in_array($direction, [Application::ORDER_ASC, Application::ORDER_DESC], true)) {
+            $direction = Application::ORDER_ASC;
+        }
+
+        usort($this->entries, function ($a, $b) use ($field, $direction) {
+            switch ($field) {
+                case Application::ORDER_BY_CHANNEL:
+                    $comparison = $a->getChannel() <=> $b->getChannel();
+                    break;
+
+                case Application::ORDER_BY_LOG_LEVEL:
+                    $comparison = $a->getLevel() <=> $b->getLevel();
+                    break;
+
+                case Application::ORDER_BY_TIMESTAMP:
+                default:
+                    $comparison = new DateTimeImmutable($a->getTimestamp()) <=> new DateTimeImmutable($b->getTimestamp());
+                    break;
+            }
+            return $direction === Application::ORDER_DESC ? -$comparison : $comparison;
+        });
+        return $this;
+    }
+
+    /**
      * Get date range of the log entries as a formatted string
+     * 
+     * getDateRangeAsString
+     *
+     * @return String
      */
     public function getDateRangeAsString(): String {
         return $this->dateRange->getDateRangeAsString(); 
@@ -74,6 +127,10 @@ final class LogService {
 
     /**
      * Get selected log levels
+     * 
+     * getLogLevels
+     *
+     * @return array
      */
     public function getLogLevels(): array {
         return $this->logLevels; 
@@ -81,6 +138,10 @@ final class LogService {
 
     /**
      * Get all available log levels
+     * 
+     * getLevels
+     *
+     * @return array
      */
     public function getLevels(): array {
         return LoggingConfiguration::getLevels();
@@ -88,6 +149,10 @@ final class LogService {
 
     /**
      * Get total number of loaded logs
+     * 
+     * getCount
+     *
+     * @return int
      */
     public function getCount(): int {
         return count($this->entries);
@@ -95,6 +160,11 @@ final class LogService {
 
     /**
      * Get count by level
+     * 
+     * getCountByLevel
+     *
+     * @param  mixed $level
+     * @return int
      */
     public function getCountByLevel(string $level): int {
         $count = 0;
@@ -109,6 +179,10 @@ final class LogService {
 
     /**
      * Get statistics
+     * 
+     * getStatistics
+     *
+     * @return array
      */
     public function getStatistics(): array {
         $statistics = [];
@@ -125,6 +199,11 @@ final class LogService {
 
     /**
      * Get highest occurring severity
+     * 
+     * getHighestLevel
+     *
+     * @param  mixed $statistics
+     * @return string
      */
     public function getHighestLevel(array $statistics): ?string {
         foreach (
@@ -148,6 +227,10 @@ final class LogService {
 
     /**
      * Check if critical logs exist
+     * 
+     * hasCriticalLogs
+     *
+     * @return bool
      */
     public function hasCriticalLogs(): bool {
         return (
@@ -159,6 +242,10 @@ final class LogService {
 
     /**
      * Check if errors exist
+     * 
+     * hasErrors
+     *
+     * @return bool
      */
     public function hasErrors(): bool {
         return $this->getCountByLevel(
@@ -168,6 +255,11 @@ final class LogService {
 
     /**
      * Get latest entries
+     * 
+     * getLatest
+     *
+     * @param  mixed $limit
+     * @return array
      */
     public function getLatest(int $limit = 100): array {
         return array_slice(
@@ -179,6 +271,10 @@ final class LogService {
 
     /**
      * Get dashboard overview
+     * 
+     * getDashboardStatistics
+     *
+     * @return array
      */
     public function getDashboardStatistics(): array {
         $statistics = $this->getStatistics();
