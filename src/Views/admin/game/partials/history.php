@@ -11,70 +11,136 @@ use App\Core\Localization;
 <div class="card">
 
     <h2>
-        <?= Localization::get('admin.games.history.title') ?>
+        <?= Localization::get('admin.game.card.history.title') ?>
     </h2>
 
-    <div class="game-history">
+    <?php if (empty($history)): ?>
 
-        <?php if (empty($history)): ?>
+        <div class="nested-card history-empty">
+            <?= Localization::get('admin.games.history.empty') ?>
+        </div>
 
-            <div class="nested-card">
-                <?= Localization::get('admin.games.history.empty') ?>
-            </div>
+    <?php else: ?>
 
-        <?php else: ?>
+        <div class="collapsible-list">
 
             <?php foreach ($history as $history_entry): ?>
 
                 <?php
-                    $state = $history_entry->getState();
+                $state = $history_entry->getState();
 
-                    $current_player = $state['current_player'] ?? null;
+                $state_index = $history_entry->getStateIndex();
+                $created_at = $history_entry->getCreatedAt();
+
+                $current_player_username = $state['current_player_username'] ?? null;
+
+                $game_status = $state['game_status'] ?? null;
+
+                $player_count = isset($state['players']) && is_array($state['players']) ? count($state['players']) : 0;
                 ?>
 
-                <details class="nested-card game-history-entry">
+                <div class="nested-card collapsible-item">
 
-                    <summary class="game-history-entry-summary">
+                    <button
+                        type="button"
+                        class="collapsible-header"
+                        aria-expanded="false">
 
-                        <span class="game-history-entry-index">
-                            #<?= $history_entry->getStateIndex() ?>
+                        <span class="collapsible-header-index">
+                            #<?= (int) $state_index ?>
                         </span>
 
-                        <span class="game-history-entry-timestamp">
-                            <?= htmlspecialchars($history_entry->getCreatedAt()) ?>
+                        <span class="collapsible-header-timestamp">
+                            <?= htmlspecialchars($created_at) ?>
                         </span>
 
-                        <?php if ($current_player !== null): ?>
+                        <span class="collapsible-header-player">
+                            <?= htmlspecialchars($current_player_username ?? '—') ?>
+                        </span>
 
-                            <span class="game-history-entry-player">
-                                <?= htmlspecialchars((string) $current_player) ?>
+                        <?php if ($game_status !== null): ?>
+                            <span class="status-badge status-<?= strtolower(htmlspecialchars($game_status)) ?>">
+                                <?= htmlspecialchars($game_status) ?>
                             </span>
-
                         <?php endif; ?>
 
-                    </summary>
+                        <span
+                            class="collapsible-header-icon"
+                            aria-hidden="true">
+                            ›
+                        </span>
 
-                    <div class="game-history-entry-content">
+                    </button>
 
-                        <pre><?=
-                            htmlspecialchars(
-                                json_encode(
-                                    $state,
-                                    JSON_PRETTY_PRINT
-                                    | JSON_UNESCAPED_UNICODE
-                                    | JSON_UNESCAPED_SLASHES
+                    <div class="collapsible-content">
+
+                        <div class="collapsible-content-inner">
+
+                            <div class="history-summary">
+
+                                <div class="form-row">
+                                    <span>
+                                        <?= Localization::get('admin.game.card.history.entry.state') ?>
+                                    </span>
+
+                                    <span>
+                                        #<?= (int) $state_index ?>
+                                    </span>
+                                </div>
+
+                                <div class="form-row">
+                                    <span>
+                                        <?= Localization::get('admin.game.card.history.entry.timestamp') ?>
+                                    </span>
+
+                                    <span>
+                                        <?= htmlspecialchars($created_at) ?>
+                                    </span>
+                                </div>
+
+                                <div class="form-row">
+                                    <span>
+                                        <?= Localization::get('admin.game.card.history.entry.current_player') ?>
+                                    </span>
+
+                                    <span>
+                                        <?= htmlspecialchars($current_player_username ?? '—') ?>
+                                    </span>
+                                </div>
+
+                                <div class="form-row">
+                                    <span>
+                                        <?= Localization::get('admin.game.card.history.entry.players') ?>
+                                    </span>
+
+                                    <span>
+                                        <?= (int) $player_count ?>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <pre class="history-state"><?=
+                                htmlspecialchars(
+                                    json_encode(
+                                        $state,
+                                        JSON_PRETTY_PRINT
+                                        | JSON_UNESCAPED_UNICODE
+                                        | JSON_UNESCAPED_SLASHES
+                                    )
                                 )
-                            )
-                        ?></pre>
+                            ?></pre>
+
+                        </div>
 
                     </div>
 
-                </details>
+                </div>
 
             <?php endforeach; ?>
 
-        <?php endif; ?>
+        </div>
 
-    </div>
+    <?php endif; ?>
 
 </div>

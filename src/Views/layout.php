@@ -39,6 +39,7 @@ use App\Core\Asset;
         <?php include VIEWS_PATH . '/partials/modal.php' ?>
 
         <script src="<?= Asset::js('shared/navigation.js') ?>"></script> 
+        <script src="<?= Asset::js('app/components/collapsible.js') ?>"></script> 
         <script src="<?= Asset::js('app/forms/date_range_picker.js') ?>"></script> 
         <script src="<?= Asset::js('app/forms.js') ?>"></script>
         <script src="<?= Asset::js('app/modal.js') ?>"></script>

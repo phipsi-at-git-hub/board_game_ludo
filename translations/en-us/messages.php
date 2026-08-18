@@ -341,6 +341,13 @@ return [
     'admin.game.partials.metadata.card.status.state' => 'Status', 
     'admin.game.partials.metadata.card.status.winner' => 'Winner', 
 
+    // Admin - Game - History
+    'admin.game.card.history.title' => 'State History', 
+    'admin.game.card.history.entry.state' => 'State', 
+    'admin.game.card.history.entry.timestamp' => 'Timestamp', 
+    'admin.game.card.history.entry.current_player' => 'Current Player', 
+    'admin.game.card.history.entry.players' => 'Players', 
+
     // Admin - Users List
     'admin.users.list.title' => '👤 Admin - Users', 
     'admin.users.list.header.username' => 'Username', 
