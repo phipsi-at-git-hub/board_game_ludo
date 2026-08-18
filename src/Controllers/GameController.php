@@ -188,13 +188,6 @@ class GameController extends BaseController {
     // Game - Games list overview - open games
     public function list(): void {
         $user = Auth::user();
-        /*
-        if ($user->isAdmin()) {
-            $games = GameModel::getAllGamesNew();
-        } else {
-            $games = GameModel::getAllOpenGamesNew();
-        }
-        */
         $games = GameModel::getAllOpenGamesNew();
         
         // Logging

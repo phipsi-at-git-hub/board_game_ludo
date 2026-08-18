@@ -104,7 +104,7 @@ $router->group('/admin', function($group) {
     $group->post('/user/edit/{id}', [AdminController::class, 'updateUser'], [fn() => Middleware::csrf()]);
     $group->delete('/user/{id}', [AdminController::class, 'deleteUser'], [fn() => Middleware::csrf()]);
     $group->get('/games', [AdminController::class, 'listGames']);
-    $group->get('/game/show/{id}', [AdminController::class, 'show']);
+    $group->get('/game/detail/{id}', [AdminController::class, 'show']);
     $group->get('/system/settings', [AdminController::class, 'systemSettings']);
     $group->post('/system/settings/update', [AdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]);
     $group->get('/system/health', [AdminController::class, 'systemHealth']);

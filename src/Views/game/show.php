@@ -101,6 +101,12 @@ $api_delete = false;
     } 
     ?>
 
+    <?php 
+    if ($is_admin_view && $show_history) { 
+        include VIEWS_PATH . '/admin/game/partials/history.php';   
+    } 
+    ?>
+
     <!-- Players -->
     <div class="card">
 

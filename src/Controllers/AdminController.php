@@ -7,6 +7,7 @@ use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
+use App\Core\History\Game\GameStateHistory;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
@@ -177,6 +178,9 @@ class AdminController extends BaseController {
             http_response_code(404);
             die('Game not found');
         }
+
+        // History
+        $history = GameStateHistory::findByGameId($game_id); 
         
         // Logging
         Logger::app()->debug('Admin show game ' . $game_id, ['user_id' => Auth::user()->getId()]);
@@ -185,6 +189,7 @@ class AdminController extends BaseController {
             'admin/game/show', 
             [
                 'game' => $game, 
+                'history' => $history, 
             ]
         );
     }
