@@ -7,7 +7,7 @@
 
 $is_admin_view = true; 
 
-$show_statistics = true; 
+$show_history = true; 
 $show_metadata = true; 
 
 include VIEWS_PATH . '/game/show.php'; 

@@ -8,6 +8,9 @@ use App\Policies\GamePolicy;
  * @var array $games
  * @var Object $current_user
  */
+
+$is_admin_view ??= false; 
+
 ?>
 
 <div class="panel">
@@ -37,8 +40,8 @@ use App\Policies\GamePolicy;
             $can_cancel = GamePolicy::canCancel($game, $current_user); 
             $can_delete = GamePolicy::canDelete($game, $current_user);
 
-            $can_join = GamePolicy::canJoin($game, $current_user);
-            $can_leave = GamePolicy::canLeave($game, $current_user);
+            $can_join = ($is_admin_view) ? false : GamePolicy::canJoin($game, $current_user);
+            $can_leave = ($is_admin_view) ? false : GamePolicy::canLeave($game, $current_user);
 
             if ($game->isPrivate() && !$is_owner && !$game->isRunning()) {
                 continue;
@@ -79,7 +82,7 @@ use App\Policies\GamePolicy;
                 data-bind-sources="game-<?= $game->getId() ?>-delete" 
                 data-bind-1-dto-key="deleted" 
                 data-bind-1-type="remove" 
-                onclick="window.location='/game/detail/<?= $game->getId() ?>'">
+                onclick="window.location='<?= ($is_admin_view) ? '/admin' : '' ?>/game/detail/<?= $game->getId() ?>'">
                 
                 <?php include VIEWS_PATH . '/game/partials/header.php' ?>
 
