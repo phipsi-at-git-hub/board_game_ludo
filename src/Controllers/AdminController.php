@@ -81,6 +81,9 @@ class AdminController extends BaseController {
         );
     }
 
+    /**
+     * User Section
+     */
     // Users - List all users
     public function listUsers(): void {
         $users = UserModel::all();
@@ -94,6 +97,16 @@ class AdminController extends BaseController {
                 'users' => $users
             ]
         );
+    }
+
+    /**
+     * Users - Create User View
+     */
+    public function createUserView(): void {
+        $this->render(
+            'admin/user/create', 
+            []
+        ); 
     }
 
     // Users -Delete user
@@ -160,6 +173,9 @@ class AdminController extends BaseController {
         exit;
     }
 
+    /**
+     * Game Section
+     */
     // Games - List all games
     public function listGames(): void {
         $games = GameModel::getAllGames();
@@ -176,7 +192,7 @@ class AdminController extends BaseController {
     }
 
     // Games - Game detail view 
-    public function show(string $game_id) {
+    public function showGame(string $game_id) {
         // View an existing game
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -246,6 +262,9 @@ class AdminController extends BaseController {
         exit;
     }
 
+    /**
+     * System Settings Section
+     */
     // System Settings - Overview
     public function systemSettings(): void {
         $system_settings = SystemSettingsModel::findSystemSettings();
@@ -304,6 +323,9 @@ class AdminController extends BaseController {
         );
     }
 
+    /**
+     * System Heath Section
+     */
     // System Health - Overview
     public function systemHealth(): void {
         $overall = SystemHealth::getStatus();
@@ -325,6 +347,9 @@ class AdminController extends BaseController {
         ); 
     }
 
+    /**
+     * Logging Section
+     */
     // Logging - List all logs
     public function loggingList(): void { 
         // Get all available logging channels

@@ -38,6 +38,7 @@ return [
     'application.general.btn.pause' => 'Pause', 
     'application.general.btn.start' => 'Start', 
     'application.general.btn.play' => 'Play', 
+    'application.general.btn.create' => 'Create', 
     'application.general.btn.edit' => 'Edit', 
     'application.general.btn.reset' => 'Reset', 
     'application.general.btn.cancel' => 'Cancel', 
@@ -356,6 +357,18 @@ return [
     'admin.users.list.header.status' => 'Status', 
     'admin.users.list.header.options' => 'Options', 
     'admin.users.list.header.no_users' => 'No Users found.', 
+
+    // Admin - User Create
+    'admin.users.create.title' => '👤 Admin - Create User', 
+    'admin.users.create.card.account.title' => 'Account', 
+    'admin.users.create.card.account.username' => 'Username', 
+    'admin.users.create.card.account.email' => 'Email', 
+    'admin.users.create.card.permissions.title' => 'Permissions', 
+    'admin.users.create.card.permissions.role' => 'Role', 
+    'admin.users.create.card.permissions.status' => 'Status', 
+    'admin.users.create.card.password.title' => 'Password', 
+    'admin.users.create.card.password.description' => 'Description', 
+    'admin.users.create.card.password.mail notice' => 'Mail Notice', 
 
     // Admin - User Edit
     'admin.users.edit.title' => '👤 Admin - Edit User', 
