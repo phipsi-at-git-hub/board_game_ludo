@@ -107,6 +107,9 @@ class AdminController extends BaseController {
         if ($user) {
             $user->delete();
         }
+        
+        // Logging
+        Logger::app()->notice('Admin - User ' . $user->getFirst_name() . ' ' . $user->getLast_name() . ' (' . $user_id . ') deleted', ['user_id' => Auth::user()->getId()]);
 
         header('Location: /admin/users');
         exit;
@@ -121,7 +124,7 @@ class AdminController extends BaseController {
         }
         
         // Logging
-        Logger::app()->debug('Admin edit user: ' . $user_id, ['user_id' => Auth::user()->getId()]);
+        Logger::app()->debug('Admin edit user: ' . $user_id . ' view', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
             'admin/user/edit', 
@@ -149,6 +152,9 @@ class AdminController extends BaseController {
         $role = $_POST['role'] ?? $user->getRole();
 
         $user->updateProfile($username, $email);
+        
+        // Logging
+        Logger::app()->notice('Admin - User ' . $user->getFirst_name() . ' ' . $user->getLast_name() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);
 
         header('Location /admin/users');
         exit;
@@ -160,6 +166,7 @@ class AdminController extends BaseController {
         
         // Logging
         Logger::app()->debug('Admin list games', ['user_id' => Auth::user()->getId()]);
+
         $this->render(
             'admin/game/list', 
             [
@@ -212,6 +219,9 @@ class AdminController extends BaseController {
 
         // ToDo: Fix this -> update(3 arguments)
         //$game->update($name, $status);
+        
+        // Logging
+        Logger::app()->notice('Admin updated game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
         header('Location /admin/games');
         exit;
@@ -228,6 +238,9 @@ class AdminController extends BaseController {
         if ($game) {
             $game->delete();
         }
+        
+        // Logging
+        Logger::app()->notice('Admin deleted game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
         header('Location /admin/games');
         exit;
@@ -279,7 +292,7 @@ class AdminController extends BaseController {
         }
         
         // Logging
-        Logger::app()->info('Admin system settings updated', ['user_id' => Auth::user()->getId()]);
+        Logger::app()->notice('Admin system settings updated', ['user_id' => Auth::user()->getId()]);
 
         return $this->jsonClean(
             [
