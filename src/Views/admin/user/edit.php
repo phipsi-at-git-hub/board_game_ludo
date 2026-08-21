@@ -139,39 +139,6 @@ use App\Core\Localization;
                 </div>
             </div>
 
-            <!-- Password -->
-            <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.card.password.title') ?></h2>
-
-                <div class="form-group">
-                    <label for="password">
-                        <?= Localization::get('admin.users.edit.card.password.new') ?>
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        autocomplete="new-password">
-                </div>
-
-                <div class="form-group">
-                    <label for="password_confirm">
-                        <?= Localization::get('admin.users.edit.card.password.confirm') ?>
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password_confirm"
-                        name="password_confirm"
-                        autocomplete="new-password">
-                </div>
-
-                <small>
-                    <?= Localization::get('admin.users.edit.card.password.hint') ?>
-                </small>
-            </div>
-
             <!-- Security -->
             <div class="card dashboard-card">
                 <h2><?= Localization::get('admin.users.edit.card.security.title') ?></h2>
