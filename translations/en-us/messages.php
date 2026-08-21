@@ -368,7 +368,7 @@ return [
     'admin.users.create.card.permissions.status' => 'Status', 
     'admin.users.create.card.password.title' => 'Password', 
     'admin.users.create.card.password.description' => 'Description', 
-    'admin.users.create.card.password.mail notice' => 'Mail Notice', 
+    'admin.users.create.card.password.mail_notice' => 'Mail Notice', 
 
     // Admin - User Edit
     'admin.users.edit.title' => '👤 Admin - Edit User', 
