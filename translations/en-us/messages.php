@@ -455,7 +455,7 @@ return [
     'admin.logging.list.card.entries.count' => 'Entries', 
     'admin.logging.list.card.levels.title' => '🚥 Levels', 
     'admin.logging.list.card.entries.title' => '🗃 Log Entries', 
-    'admin.logging.list.card.no_entries' => 'No Entries', 
+    'admin.logging.list.card.empty' => 'No Entries', 
 
     // Logging Details 
     'admin.logging.show.title' => 'Log Details', 

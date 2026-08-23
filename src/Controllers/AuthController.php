@@ -29,10 +29,7 @@ class AuthController extends BaseController {
         $user = UserModel::verify($email, $password);
         $systemService = $this->app->resolve(SystemService::class); 
 
-        if (
-            $user 
-            && $user->isActive() 
-            && ($systemService->isLoginEnabled() || $user->isAdmin())
+        if ($user && $user->isActive() && ($systemService->isLoginEnabled() || $user->isAdmin())
         ) {
             $user->updateLastLogin();
             Auth::login($user);
@@ -71,7 +68,11 @@ class AuthController extends BaseController {
         $password = $_POST['password'] ?? '';
 
         $user = UserModel::create($username, $email, $password);
+        $user->updateLastLogin(); 
         Auth::login($user);
+
+        // Logging
+        Logger::app()->info('User registration successful', ['user_id' => $user->getId()]);
 
         header('Location: /lobby');
         exit;

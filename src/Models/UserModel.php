@@ -15,7 +15,7 @@ final class UserModel extends BaseModel {
     private string $password_hash;
     private string $role;
     private string $status;
-    private string $last_login;
+    private ?string $last_login = null;
     private string $created_at;
     private string $updated_at;
     private ?string $reset_token = null;
@@ -71,6 +71,7 @@ final class UserModel extends BaseModel {
     }
 
     // User - Create user
+    /*
     public static function create(string $username, string $email, string $password): self {
         $id = self::generateUUID();
         $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -84,6 +85,51 @@ final class UserModel extends BaseModel {
             ]
         );
         return self::findByEmail($email);
+    }
+    */
+    
+    /**
+     * Create new user
+     * 
+     * create
+     *
+     * @param string $username
+     * @param string $email
+     * @param ?string $password
+     * @param string $role
+     * @param string $status
+     * @return self
+     */
+    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::ACTIVE): self {
+        $id = self::generateUUID();
+        $password_hash = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
+
+        static::execute(
+            "INSERT INTO users (
+                id,
+                username,
+                email,
+                password_hash,
+                role,
+                status
+            ) VALUES (
+                :id,
+                :username,
+                :email,
+                :password_hash,
+                :role,
+                :status
+            )",
+            [
+                'id' => $id,
+                'username' => $username,
+                'email' => $email,
+                'password_hash' => $password_hash,
+                'role' => $role,
+                'status' => $status,
+            ]
+        );
+        return self::findById($id);
     }
 
     // Save current User

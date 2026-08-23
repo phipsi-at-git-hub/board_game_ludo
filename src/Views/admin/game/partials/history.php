@@ -17,7 +17,7 @@ use App\Core\Localization;
     <?php if (empty($history)): ?>
 
         <div class="nested-card history-empty">
-            <?= Localization::get('admin.games.history.empty') ?>
+            <?= Localization::get('admin.logging.list.card.empty') ?>
         </div>
 
     <?php else: ?>
