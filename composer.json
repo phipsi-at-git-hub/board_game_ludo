@@ -3,7 +3,8 @@
   "description": "Multiplayer Board Game Ludo with PHP & THREE.js",
   "type": "project",
   "require": {
-    "vlucas/phpdotenv": "^5.6"
+    "vlucas/phpdotenv": "^5.6",
+    "phpmailer/phpmailer": "^7.1"
   },
   "autoload": {
     "psr-4": {
