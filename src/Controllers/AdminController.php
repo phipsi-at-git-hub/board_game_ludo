@@ -183,8 +183,7 @@ class AdminController extends BaseController {
         // Logging
         Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);
 
-        header('Location /admin/users');
-        exit;
+        $this->redirect('/admin/user/detail/' . $user->getId());
     }
 
     /**
@@ -248,8 +247,7 @@ class AdminController extends BaseController {
         // Logging
         Logger::app()->notice('Admin updated game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
-        header('Location /admin/games');
-        exit;
+        $this->redirect('/admin/games');
     }
 
     // Games - Delete game
@@ -262,8 +260,7 @@ class AdminController extends BaseController {
         // Logging
         Logger::app()->notice('Admin deleted game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
-        header('Location /admin/games');
-        exit;
+        $this->redirect('/admin/games'); 
     }
 
     /**
