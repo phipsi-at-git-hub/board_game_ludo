@@ -177,8 +177,13 @@ class AdminController extends BaseController {
         $username = $_POST['username'] ?? $user->getUsername();
         $email = $_POST['email'] ?? $user->getEmail();
         $role = $_POST['role'] ?? $user->getRole();
+        $status = $_POST['status'] ?? $user->getStatus(); 
 
-        $user->updateProfile($username, $email);
+        $user->setUsername($username); 
+        $user->setEmail($email); 
+        $user->setRole($role); 
+        $user->setStatus($status); 
+        $user->save(); 
         
         // Logging
         Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);

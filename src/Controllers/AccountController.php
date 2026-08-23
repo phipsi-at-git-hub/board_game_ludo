@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\BaseController;
+use App\Core\Logging\Logger;
 use App\Models\UserModel;
 
 class AccountController extends BaseController {
@@ -24,9 +25,11 @@ class AccountController extends BaseController {
         $email = $_POST['email'] ?? '';
 
         $user->updateProfile($username, $email);
+        
+        // Logging
+        Logger::app()->info('User account - User ' . $user->getUsername() . ' (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
 
-        header('Location: /account');
-        exit;
+        $this->redirect('/account'); 
     }
 
     // Change password
@@ -45,19 +48,24 @@ class AccountController extends BaseController {
         }
 
         $user->updatePassword($new_password);
+        
+        // Logging
+        Logger::app()->info('User account - User ' . $user->getUsername() . ' changed password. (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
 
-        header('Location: /account');
-        exit;
+        $this->redirect('/account'); 
     }
 
     // Delete account
     public function deleteAccount() {
         $user = Auth::user();
+        
+        // Logging
+        Logger::app()->notice('User account - User ' . $user->getUsername() . ' deleted own account. (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
         $user->delete();
 
         Auth::logout();
-        header('Location: /');
-        exit;
+
+        $this->redirect('/'); 
     }
 
     // Reset password
@@ -102,8 +110,10 @@ class AccountController extends BaseController {
 
         $user->updatePassword($new_password);
         $user->clearPasswordToken();
+        
+        // Logging
+        Logger::app()->info('User account - User ' . $user->getUsername() . ' reset own password. (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
 
-        header('Location: /login');
-        exit;
+        $this->redirect('/login'); 
     }
 }

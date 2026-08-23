@@ -192,7 +192,7 @@ final class UserModel extends BaseModel {
                 'username' => $user_array[Application::USERNAME], 
                 'email' => $user_array[Application::EMAIL], 
                 'role' => $user_array[Application::ROLE], 
-                'status' => (int)$user_array[Application::STATUS], 
+                'status' => $user_array[Application::STATUS], 
                 'id' => $this->id
             ]
         );
@@ -429,10 +429,10 @@ final class UserModel extends BaseModel {
         $user->role = $data['role'] ?? 'user';
         $user->status = $data['status'] ?? 'active'; 
         $user->last_login = $data['last_login']; 
-        /*
+        
         $user->created_at = $data['created_at'];
         $user->updated_at = $data['updated_at'];
-        */
+        
         return $user;
     }
 
@@ -550,5 +550,25 @@ final class UserModel extends BaseModel {
     // Get the value of updated_at
     public function getUpdated_at() {
         return $this->updated_at;
+    }
+
+    // Setter - Set username
+    public function setUsername(string $username): void {
+        $this->username = $username; 
+    }
+
+    // Setter - Set email
+    public function setEmail(string $email): void {
+        $this->email = $email; 
+    }
+
+    // Setter - Set role
+    public function setRole(string $role): void {
+        $this->role = $role; 
+    }
+
+    // Setter - Set status
+    public function setStatus(string $status): void {
+        $this->status = $status; 
     }
 }
