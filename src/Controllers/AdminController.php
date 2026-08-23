@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Auth;
-use App\Core\BaseController;
-use App\Core\Csrf;
+use App\Core\BaseController; 
 use App\Core\History\Game\GameStateHistory;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
@@ -16,6 +15,7 @@ use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 use App\Services\LogService;
+use App\Services\SystemService;
 use DateInterval;
 use DateTimeImmutable;
 
@@ -109,22 +109,41 @@ class AdminController extends BaseController {
         ); 
     }
 
-    // Users -Delete user
-    public function deleteUser(string $user_id): void {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
+    // Users - Store User
+    public function storeUser(): void {
+        $systemService = $this->app->resolve(SystemService::class); 
+        if (!$systemService->isRegistrationEnabled()) {
+            $error = 'User Registration not allowed.';
+            // ToDo: implement AJAX response for user creation form
         }
 
-        $user = UserModel::findById($user_id);
-        if ($user) {
-            $user->delete();
+        $username = $_POST['username'] ?? ''; 
+        $email = $_POST['email'] ?? ''; 
+        $role = $_POST['role'] ?? ''; 
+
+        // Create User
+        $user = UserModel::create($username, $email, null, $role, Application::INACTIVE); 
+        if (!$user) {
+            // ToDo: Handle error
         }
         
-        // Logging
-        Logger::app()->notice('Admin - User ' . $user->getFirst_name() . ' ' . $user->getLast_name() . ' (' . $user_id . ') deleted', ['user_id' => Auth::user()->getId()]);
+        // Create password token
+        $token = UserModel::createPasswordToken($user->getEmail()); 
 
-        header('Location: /admin/users');
+        $this->redirect('admin/user/detail/' . $user->getId()); 
+    }
+
+    // Users - Delete user
+    public function deleteUser(string $user_id): void {
+        $user = UserModel::findById($user_id);
+        if ($user) {
+            // Logging
+            Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') deleted', ['user_id' => Auth::user()->getId()]);
+
+            $user->delete();
+        }
+
+        $this->redirect('/admin/users');
         exit;
     }
 
@@ -148,12 +167,7 @@ class AdminController extends BaseController {
     }
 
     // Users - Update user
-    public function updateUser(string $user_id): void {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
+    public function updateUser(string $user_id): void { 
         $user = UserModel::findById($user_id);
         if (!$user) {
             http_response_code(404);
@@ -167,7 +181,7 @@ class AdminController extends BaseController {
         $user->updateProfile($username, $email);
         
         // Logging
-        Logger::app()->notice('Admin - User ' . $user->getFirst_name() . ' ' . $user->getLast_name() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);
+        Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);
 
         header('Location /admin/users');
         exit;
@@ -218,12 +232,7 @@ class AdminController extends BaseController {
     }
 
     // Games - Update game
-    public function updateGame(string $game_id): void {
-        if (!Csrf::validate($_POST['_csrf_token'])) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
+    public function updateGame(string $game_id): void { 
         $game = GameModel::findById($game_id);
         if (!$game) {
             http_response_code(404);
@@ -244,12 +253,7 @@ class AdminController extends BaseController {
     }
 
     // Games - Delete game
-    public function deleteGame(string $game_id): void {
-        if (!Csrf::validate($_POST['_csrf_token'])) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
+    public function deleteGame(string $game_id): void { 
         $game = GameModel::findById($game_id);
         if ($game) {
             $game->delete();

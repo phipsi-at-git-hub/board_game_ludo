@@ -68,13 +68,14 @@ class AuthController extends BaseController {
         $password = $_POST['password'] ?? '';
 
         $user = UserModel::create($username, $email, $password);
-        $user->updateLastLogin(); 
-        Auth::login($user);
+        if (!$user) {
+            // ToDo: Handle error
+        }
 
         // Logging
         Logger::app()->info('User registration successful', ['user_id' => $user->getId()]);
 
-        header('Location: /lobby');
+        $this->redirect('/login'); 
         exit;
     }
 
@@ -85,7 +86,7 @@ class AuthController extends BaseController {
         // Logging
         Logger::app()->info('User logout successful', ['user_id' => $user->getId()]);
 
-        header('Location: /login');
+        $this->redirect('/login'); 
         exit;
     }
 }

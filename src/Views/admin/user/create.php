@@ -116,34 +116,6 @@ use App\Constants\Application;
                     </select>
                 </div>
 
-                <div class="form-row">
-
-                    <span>
-                        <?= Localization::get('admin.users.create.card.permissions.status') ?>
-                    </span>
-
-                    <select
-                        name="status"
-                        data-ui="switch"
-                        class="enhanced">
-
-                        <option
-                            value="<?= Application::ACTIVE ?>"
-                            data-state="active"
-                            selected>
-                            <?= Localization::get('application.general.active') ?>
-                        </option>
-
-                        <option
-                            value="<?= Application::INACTIVE ?>"
-                            data-state="inactive">
-                            <?= Localization::get('application.general.inactive') ?>
-                        </option>
-
-                    </select>
-
-                </div>
-
             </div>
 
             <!-- Password Setup -->

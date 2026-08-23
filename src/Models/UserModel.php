@@ -12,7 +12,7 @@ final class UserModel extends BaseModel {
     private string $first_name;
     private string $last_name;
     private string $email;
-    private string $password_hash;
+    private ?string $password_hash = null;
     private string $role;
     private string $status;
     private ?string $last_login = null;
@@ -21,7 +21,14 @@ final class UserModel extends BaseModel {
     private ?string $reset_token = null;
     private ?string $reset_expires_at = null;
 
-    // User - Find user by id (UUID)
+    /**
+     * User - Find user by id (UUID)
+     * 
+     * findById
+     *
+     * @param string $id
+     * @return ?self
+     */
     public static function findById(string $id): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE id = :id LIMIT 1", 
@@ -32,7 +39,14 @@ final class UserModel extends BaseModel {
         return $row ? static::fromArray($row) : null;
     }
 
-    // User - Find user by email
+    /**
+     * User - Find user by email
+     * 
+     * findByEmail
+     *
+     * @param string $email
+     * @return ?self
+     */
     public static function findByEmail(string $email): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE email = :email LIMIT 1", 
@@ -43,18 +57,36 @@ final class UserModel extends BaseModel {
         return $row ? static::fromArray($row) : null;
     }
 
-    // User - Get all users
+    /**
+     * User - Get all users
+     * all
+     *
+     * @return array
+     */
     public static function all(): array {
         $rows = static::fetchAll("SELECT * FROM users ORDER BY created_at DESC");
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
 
-    // User - Count all users
+    /**
+     * User - Count all users
+     * 
+     * countAll
+     *
+     * @return int
+     */
     public static function countAll(): int {
         return static::count("SELECT COUNT(*) FROM users");
     }
 
-    // User - Count all users with specific status
+    /**
+     * User - Count all users with specific status
+     * 
+     * countByStatus
+     *
+     * @param string $status
+     * @return int
+     */
     public static function countByStatus(string $status): int {
         return static::count(
             "SELECT COUNT(*) FROM users WHERE status = :status", 
@@ -62,31 +94,20 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // User - Count all users with specific role
+    /**
+     * User - Count all users with specific role
+     * 
+     * countByRole
+     *
+     * @param string $role
+     * @return int
+     */
     public static function countByRole(string $role): int {
         return static::count(
             "SELECT COUNT(*) FROM users WHERE role = :role",
             ['role' => $role]
         );
     }
-
-    // User - Create user
-    /*
-    public static function create(string $username, string $email, string $password): self {
-        $id = self::generateUUID();
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        static::execute(
-            "INSERT INTO users (id, username, email, password_hash) VALUES (:id, :username, :email, :password_hash)", 
-            [
-                'id' => $id, 
-                'username' => $username, 
-                'email' => $email, 
-                'password_hash' => $hash, 
-            ]
-        );
-        return self::findByEmail($email);
-    }
-    */
     
     /**
      * Create new user
@@ -100,7 +121,7 @@ final class UserModel extends BaseModel {
      * @param string $status
      * @return self
      */
-    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::ACTIVE): self {
+    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::INACTIVE): self {
         $id = self::generateUUID();
         $password_hash = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
 
@@ -132,11 +153,20 @@ final class UserModel extends BaseModel {
         return self::findById($id);
     }
 
-    // Save current User
+    /**
+     * Save User
+     * 
+     * save
+     *
+     * @return bool
+     */
     public function save(): bool {
         return $this->updateUser($this->toArray());
     }
 
+    /**
+     * Update User
+     */
     private function updateUser(array $user_array) {
         return static::execute(
             sprintf(
@@ -168,7 +198,15 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // User - Update user
+    /**
+     * User - Update user
+     * 
+     * updateProfile
+     *
+     * @param string $username
+     * @param string $email
+     * @return bool
+     */
     public function updateProfile(string $username, string $email): bool {
         $this->username = $username;
         $this->email = $email;
@@ -183,7 +221,47 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // User - Delete user
+    /**
+     * User - Activate User
+     * 
+     * activate
+     * 
+     * @return bool
+     */
+    public function activate(): bool {
+        return static::execute(
+            "UPDATE users SET status = :status WHERE id = :id", 
+            [
+                'status' => Application::ACTIVE, 
+                'id' => $this->id,
+            ]
+        ); 
+    }
+
+    /**
+     * User - Deactivate user
+     * 
+     * deactivate
+     *
+     * @return bool
+     */
+    public function deactivate(): bool {
+        return static::execute(
+            "UPDATE users SET status = :status WHERE id = :id", 
+            [
+                'status' => Application::INACTIVE, 
+                'id' => $this->id, 
+            ]
+        ); 
+    }
+
+    /**
+     * User - Delete user
+     * 
+     * delete
+     *
+     * @return bool
+     */
     public function delete(): bool {
         return static::execute(
             "DELETE FROM users WHERE id = :id", 
@@ -193,7 +271,13 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // User - Update last_login
+    /**
+     * User - Update last_login
+     * 
+     * updateLastLogin
+     *
+     * @return bool
+     */
     public function updateLastLogin(): bool {
         return static::execute(
             sprintf(
@@ -215,7 +299,15 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // Password - Verify user and password
+    /**
+     * Password - Verify user and password
+     * 
+     * verify
+     *
+     * @param string $email
+     * @param string $password
+     * @return ?self
+     */
     public static function verify(string $email, string $password): ?self {
         $user = self::findByEmail($email);
         if ($user && password_verify($password, $user->password_hash)) {
@@ -224,12 +316,26 @@ final class UserModel extends BaseModel {
         return null;
     }
 
-    // Password - Verify password
+    /**
+     * Password - Verify password
+     * 
+     * verifyPassword
+     *
+     * @param string $password
+     * @return bool
+     */
     public function verifyPassword(string $password): bool {
         return password_verify($password, $this->password_hash);
     }
 
-    // Password - Update password
+    /**
+     * Password - Update password
+     * 
+     * updatePassword
+     *
+     * @param string $new_password
+     * @return bool
+     */
     public function updatePassword(string $new_password): bool {
         $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
         return static::execute(
@@ -241,7 +347,14 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // Reset password - Create reset token
+    /**
+     * Reset password - Create reset token
+     * 
+     * createPasswordToken
+     *
+     * @param string $email
+     * @return ?string
+     */
     public static function createPasswordToken(string $email): ?string {
         $user = self::findByEmail($email);
         if (!$user) {
@@ -262,7 +375,14 @@ final class UserModel extends BaseModel {
         return $token;
     }
 
-    // Reset password - Find reset token
+    /**
+     * Reset password - Find reset token
+     * 
+     * findByPasswordToken
+     *
+     * @param string $token
+     * @return ?self
+     */
     public static function findByPasswordToken(string $token): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1", 
@@ -273,7 +393,13 @@ final class UserModel extends BaseModel {
         return $row ? self::fromArray($row) : null;
     }
 
-    // Reset password - Clear reset token
+    /**
+     * Reset password - Clear reset token
+     * 
+     * clearPasswordToken
+     *
+     * @return bool
+     */
     public function clearPasswordToken(): bool {
         $this->reset_token = null;
         $this->reset_expires_at = null;
@@ -286,7 +412,14 @@ final class UserModel extends BaseModel {
         );
     }
 
-    // Helper - Create UserModel from Array
+    /**
+     * Helper - Create UserModel from Array
+     * 
+     * fromArray
+     *
+     * @param array $data
+     * @return self
+     */
     private static function fromArray(array $data): self {
         $user = new self();
         $user->id = $data['id'];
@@ -303,7 +436,13 @@ final class UserModel extends BaseModel {
         return $user;
     }
 
-    // Helper - Create Array from GameModel
+    /**
+     * Helper - Create Array from GameModel
+     * 
+     * toArray
+     *
+     * @return array
+     */
     private function toArray(): array {
         $user_array[Application::ID] = $this->id;
         $user_array[Application::USERNAME] = $this->username;

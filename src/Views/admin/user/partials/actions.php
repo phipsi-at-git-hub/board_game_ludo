@@ -27,7 +27,7 @@ use App\Core\Localization;
 
     <form
         method="POST"
-        action="/admin/users/<?= $user->getId() ?>"
+        action="/admin/user/<?= $user->getId() ?>"
         data-confirm
         data-confirm-title="<?= Localization::get('application.modal.messages.user.delete.title') ?>"
         data-confirm-message="<?= Localization::get('application.modal.messages.user.delete.confirm') ?>">
