@@ -71,7 +71,7 @@ class AccountController extends BaseController {
     // Reset password - Send link
     public function sendResetLink() {
         $email = $_POST['email'] ?? '';
-        $token = UserModel::createPasswordResetToken($email);
+        $token = UserModel::createPasswordToken($email);
 
         // Send Email for password reset
         // ToDo
@@ -95,13 +95,13 @@ class AccountController extends BaseController {
             die('Passwords do not match.');
         }
 
-        $user = UserModel::findByResetToken($token);
+        $user = UserModel::findByPasswordToken($token);
         if (!$user) {
             die('Invalid or expired token.');
         }
 
         $user->updatePassword($new_password);
-        $user->clearResetToken();
+        $user->clearPasswordToken();
 
         header('Location: /login');
         exit;

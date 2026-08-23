@@ -242,7 +242,7 @@ final class UserModel extends BaseModel {
     }
 
     // Reset password - Create reset token
-    public static function createPasswordResetToken(string $email): ?string {
+    public static function createPasswordToken(string $email): ?string {
         $user = self::findByEmail($email);
         if (!$user) {
             return null;
@@ -263,7 +263,7 @@ final class UserModel extends BaseModel {
     }
 
     // Reset password - Find reset token
-    public static function findByResetToken(string $token): ?self {
+    public static function findByPasswordToken(string $token): ?self {
         $row = static::fetchOne(
             "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1", 
             [
@@ -274,7 +274,7 @@ final class UserModel extends BaseModel {
     }
 
     // Reset password - Clear reset token
-    public function clearResetToken(): bool {
+    public function clearPasswordToken(): bool {
         $this->reset_token = null;
         $this->reset_expires_at = null;
 
