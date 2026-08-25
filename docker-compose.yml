@@ -7,6 +7,7 @@ services:
       - .env
     depends_on:
       - db
+      - mailpit
 
   web:
     image: nginx:stable
@@ -45,6 +46,14 @@ services:
       PMA_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - db
+
+  mailpit: 
+    image: axllent/mailpit:latest
+    container_name: bgl-mailpit
+    restart: unless-stopped
+    ports: 
+      - "8025:8025"
+      - "1025:1025"
 
 volumes:
   db_data:
