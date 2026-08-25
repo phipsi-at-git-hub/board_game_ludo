@@ -5,8 +5,10 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\BaseController;
+use App\Core\Http\Http;
 use App\Core\Logging\Logger;
 use App\Models\UserModel;
+use App\Services\MailService;
 
 class AccountController extends BaseController {
     // Show profile
@@ -80,14 +82,35 @@ class AccountController extends BaseController {
     public function sendResetLink() {
         $email = $_POST['email'] ?? '';
         $token = UserModel::createPasswordToken($email);
+        if ($token === null) {
+            $this->redirect('/forgot-password'); 
+        }
+        
+        $user = UserModel::findByEmail($email); 
+        if ($user === null) {
+            $this->redirect('/forgot-password'); 
+        }
+
+        $resetUrl = Http::url('/reset-password/'. $token);
 
         // Send Email for password reset
-        // ToDo
-        echo "Reset link: http://localhost:8080/reset-password/$token";
+        $mailService = new MailService(); 
+        $mailService->sendPasswordReset($user, $resetUrl); 
+
+        // Logging
+        Logger::app()->debug('Show password reset form.', []);
+
+        $this->render(
+            'account/reset_password_sent', 
+            []
+        ); 
     }
 
     // Reset password - Reset form
     public function showResetForm(string $token) {
+        // Logging
+        Logger::app()->debug('Show password reset form.', []);
+
         $this->render(
             'account/reset_password', 
             []
@@ -112,7 +135,7 @@ class AccountController extends BaseController {
         $user->clearPasswordToken();
         
         // Logging
-        Logger::app()->info('User account - User ' . $user->getUsername() . ' reset own password. (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
+        Logger::app()->info('User account - User ' . $user->getUsername() . ' reset own password.', ['user_id' => $user->getId()]);
 
         $this->redirect('/login'); 
     }

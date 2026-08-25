@@ -58,6 +58,24 @@ final class UserModel extends BaseModel {
     }
 
     /**
+     * User - Find users by role
+     * 
+     * findByRole
+     *
+     * @param string $role
+     * @return ?self
+     */
+    public static function findByRole(string $role): ?array {
+        $rows = static::fetchAll(
+            "SELECT * FROM users WHERE role = :role", 
+            [
+                'role' => $role
+            ]
+        );
+        return array_map(fn($row) => self::fromArray($row), $rows);
+    }
+
+    /**
      * User - Get all users
      * all
      *

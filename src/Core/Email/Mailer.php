@@ -3,6 +3,7 @@
 
 namespace App\Core\Email;
 
+use App\Core\Logging\Logger;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -70,9 +71,14 @@ final class Mailer {
                 $mailer->Body = $email->getBody();
             }
 
+            // Logging
+            Logger::app()->info('Email send to ' . $email->getTo(), []);
+
             return $mailer->send();
 
         } catch (Exception) {
+            // Logging
+            Logger::app()->warning('Email could not been send.', []);
             return false;
         }
     }

@@ -18,7 +18,7 @@ $timestamp = strtotime($entry->getTimestamp());
     <div class="nav-actions left">
         <ul class="nav-list horizontal">
             <li>
-                <a href="/admin/logging" class="btn-back">
+                <a href="/admin/logging/list" class="btn-back">
                     <?= Localization::get('application.general.btn.back_to_list') ?>
                 </a>
             </li>
@@ -222,18 +222,6 @@ $timestamp = strtotime($entry->getTimestamp());
             <h2>
                 <?= Localization::get('admin.logging.show.card.original.title') ?>
             </h2>
-
-            <!--
-            <div class="btn-control-group default">
-                <button
-                    type="button"
-                    class="btn-control"
-                    data-ui="toggle"
-                    data-target="original-log-entry">
-                    <?= Localization::get('admin.logging.show.card.original.btn.toggle') ?>
-                </button>
-            </div>
-            -->
 
         </div>
 

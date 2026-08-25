@@ -134,6 +134,12 @@ return [
     'account.reset_password.confirm_password' => 'Confirm Password', 
     'account.reset_password.btn.reset' => 'Reset Password', 
 
+    // Account - Reset Password Sent
+    'account.password_reset_sent.title' => '🔒 Reset Password Link sent', 
+    'account.password_reset_sent.message' => 'If a user account exists for this email address, an email with a password reset link has been sent', 
+    'account.password_reset_sent.expiration' => 'The reset link can only be used once and is only valid for a short period of time', 
+    'account.password_reset_sent.btn.back_to_login' => 'Back to Login', 
+
     // Account - Profile
     'account.profile.title' => '👤 User Account', 
     'account.profile.information' => 'ℹ️ Profile Information', 
