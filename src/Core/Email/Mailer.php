@@ -29,7 +29,7 @@ final class Mailer {
             $mailer->Host = $this->configuration->getHost();
             $mailer->Port = $this->configuration->getPort();
 
-            $mailer->SMTPAuth = true;
+            $mailer->SMTPAuth = ($this->configuration->getUsername() !== '' && $this->configuration->getPassword() !== '');
             $mailer->Username = $this->configuration->getUsername();
             $mailer->Password = $this->configuration->getPassword();
 

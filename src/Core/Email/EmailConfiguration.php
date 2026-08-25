@@ -31,8 +31,6 @@ final class EmailConfiguration {
         return (
             $this->host !== ''
             && $this->port > 0
-            && $this->username !== ''
-            && $this->password !== ''
             && $this->fromAddress !== ''
             && filter_var($this->fromAddress, FILTER_VALIDATE_EMAIL) !== false
             && in_array($this->encryption, ['tls', 'ssl', 'none'], true)
