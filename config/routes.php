@@ -37,6 +37,8 @@ $router->get('/forgot-password', [AccountController::class, 'showForgotPassword'
 $router->post('/forgot-password', [AccountController::class, 'sendResetLink'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 $router->get('/reset-password/{token}', [AccountController::class, 'showResetForm'], [fn() => Middleware::guest()]);
 $router->post('/reset-password/{token}', [AccountController::class, 'resetPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
+$router->get('/create-user-password/{token}', [AccountController::class, 'createPasswordForm'], [fn() => Middleware::guest()]);
+$router->post('/create-user-password/{token}', [AccountController::class, 'createUserPassword'], [fn() => Middleware::guest(), fn() => Middleware::csrf()]);
 
 // --- Authenticated routes ---
 $router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf()]);

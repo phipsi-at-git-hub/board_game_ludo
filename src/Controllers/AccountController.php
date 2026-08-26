@@ -101,7 +101,7 @@ class AccountController extends BaseController {
         Logger::app()->debug('Show password reset form.', []);
 
         $this->render(
-            'account/reset_password_sent', 
+            'account/set_password_sent', 
             []
         ); 
     }
@@ -112,8 +112,10 @@ class AccountController extends BaseController {
         Logger::app()->debug('Show password reset form.', []);
 
         $this->render(
-            'account/reset_password', 
-            []
+            'account/set_password', 
+            [
+                'label' => 'reset', 
+            ]
         );
     }
 
@@ -136,6 +138,43 @@ class AccountController extends BaseController {
         
         // Logging
         Logger::app()->info('User account - User ' . $user->getUsername() . ' reset own password.', ['user_id' => $user->getId()]);
+
+        $this->redirect('/login'); 
+    }
+
+    // Create user by admin - set password form
+    public function createPasswordForm(string $token): void {
+        // Logging
+        Logger::app()->debug('Show password reset form.', []);
+
+        $this->render(
+            'account/set_password', 
+            [
+                'label' => 'create_user', 
+            ]
+        );
+    }
+
+    // Crate user password - set password
+    public function createUserPassword(string $token): void {
+        $new_password = $_POST['new_password'] ?? '';
+        $confirm_password = $_POST['confirm_password'] ?? '';
+
+        if ($new_password !== $confirm_password) {
+            die('Passwords do not match.');
+        }
+
+        $user = UserModel::findByPasswordToken($token);
+        if (!$user) {
+            die('Invalid or expired token.');
+        }
+
+        $user->updatePassword($new_password); 
+        $user->activate(); 
+        $user->clearPasswordToken();
+        
+        // Logging
+        Logger::app()->notice('User account - User ' . $user->getUsername() . ' set own password and activated own account.', ['user_id' => $user->getId()]);
 
         $this->redirect('/login'); 
     }

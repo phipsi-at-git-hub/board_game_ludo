@@ -113,6 +113,7 @@ final class MailService {
             ]
         );
 
+        // ToDo: use localized body 
         $body = $resetUrl;
 
         return $this->sendToUser(

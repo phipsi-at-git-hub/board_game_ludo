@@ -2,9 +2,10 @@
 
 use App\Constants\Application;
 use App\Core\Localization;
+use App\Core\Logging\LogEntry;
 
 /**
- * @var Object $entry
+ * @var LogEntry $entry
  */
 
 $timestamp = strtotime($entry->getTimestamp());

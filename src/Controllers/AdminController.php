@@ -7,6 +7,7 @@ use App\Core\Application\App;
 use App\Core\Auth;
 use App\Core\BaseController; 
 use App\Core\History\Game\GameStateHistory;
+use App\Core\Http\Http;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
@@ -15,6 +16,7 @@ use App\Models\GameModel;
 use App\Models\SystemSettingsModel;
 use App\Models\UserModel;
 use App\Services\LogService;
+use App\Services\MailService;
 use App\Services\SystemService;
 use DateInterval;
 use DateTimeImmutable;
@@ -129,6 +131,18 @@ class AdminController extends BaseController {
         
         // Create password token
         $token = UserModel::createPasswordToken($user->getEmail()); 
+        if (!$token) {
+            // ToDo: Handle error
+        }
+
+        $resetUrl = Http::url('/create-user-password/'. $token);
+
+        // Send Email for password reset
+        $mailService = new MailService(); 
+        $mailService->sendUserCreatedByAdmin($user, $resetUrl); 
+
+        // Logging
+        Logger::app()->notice('User ' . $user->getUsername() . ' created and email with password token sent to ' . $user->getEmail() . '.', []); 
 
         $this->redirect('admin/user/detail/' . $user->getId()); 
     }
