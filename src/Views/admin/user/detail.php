@@ -11,6 +11,9 @@ use App\Policies\GamePolicy;
  * @var UserModel $current_user
  * @var array $games
  * @var array $statistics
+ * @var DateTimeImmutable $date_start
+ * @var DateTimeImmutable $date_end
+ * @var String $date_range
  */
 
 $is_detail_view = true;
@@ -120,7 +123,7 @@ $is_detail_view = true;
             </span>
 
             <span class="status-badge status-default">
-                <?= $user->getLanguage() ?>
+                <?= htmlspecialchars($user->getLanguage()) ?>
             </span>
 
         </div>
@@ -202,52 +205,8 @@ $is_detail_view = true;
             </span>
 
             <span class="status-badge status-default">
-                <?= $user->getGamePerspective() ?>
+                <?= htmlspecialchars($user->getGamePerspective()) ?>
             </span>
-
-        </div>
-
-        <div class="main-card-separator"></div>
-
-        <!-- Game Statistics -->
-
-        <div class="stats-sub">
-
-            <div>
-
-                <span class="stat-value">
-                    <?= $statistics['created'] ?? 0 ?>
-                </span>
-
-                <span class="stat-text">
-                    <?= strtoupper(Localization::get('admin.users.detail.card.games.information.created_games')) ?>
-                </span>
-
-            </div>
-
-            <div>
-
-                <span class="stat-value">
-                    <?= $statistics['participated'] ?? 0 ?>
-                </span>
-
-                <span class="stat-text">
-                    <?= strtoupper(Localization::get('admin.users.detail.card.games.information.participated_games')) ?>
-                </span>
-
-            </div>
-
-            <div>
-
-                <span class="stat-value">
-                    <?= $statistics['wins'] ?? 0 ?>
-                </span>
-
-                <span class="stat-text">
-                    <?= strtoupper(Localization::get('admin.users.detail.card.games.information.won_games')) ?>
-                </span>
-
-            </div>
 
         </div>
 
@@ -304,6 +263,8 @@ $is_detail_view = true;
 
                 <div class="entry-filter-content">
 
+                    <!-- Status -->
+
                     <div class="form-row">
 
                         <span>
@@ -317,7 +278,11 @@ $is_detail_view = true;
                             data-ui="badge-select">
 
                             <option value="all">
-                                <?= ucfirst(Localization::get('application.general.label.all')) ?>
+                                <?= ucfirst(
+                                    Localization::get(
+                                        'application.general.label.all'
+                                    )
+                                ) ?>
                             </option>
 
                             <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>">
@@ -340,15 +305,81 @@ $is_detail_view = true;
 
                     </div>
 
+                    <!-- User Relation -->
+
+                    <div class="form-row">
+
+                        <span>
+                            <?= Localization::get(
+                                'admin.users.detail.card.games.list.filter.user_relation'
+                            ) ?>
+                        </span>
+
+                        <select
+                            name="user_relation"
+                            data-ui="badge-select">
+
+                            <option value="all">
+                                <?= ucfirst(
+                                    Localization::get(
+                                        'application.general.label.all'
+                                    )
+                                ) ?>
+                            </option>
+
+                            <option value="created">
+                                <?= Localization::get(
+                                    'admin.users.detail.card.games.list.filter.user_relation.created'
+                                ) ?>
+                            </option>
+
+                            <option value="participated">
+                                <?= Localization::get(
+                                    'admin.users.detail.card.games.list.filter.user_relation.participated'
+                                ) ?>
+                            </option>
+
+                            <option value="won">
+                                <?= Localization::get(
+                                    'admin.users.detail.card.games.list.filter.user_relation.won'
+                                ) ?>
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Date Range -->
+
+                    <div class="form-row">
+
+                        <span>
+                            <?= Localization::get(
+                                'admin.users.detail.card.games.list.filter.date_range'
+                            ) ?>
+                        </span>
+
+                        <input
+                            type="text"
+                            name="date_range"
+                            data-ui="date-range"
+                            data-ui-localization="en-us"
+                            data-ui-with-time="true"
+                            value="<?= htmlspecialchars($date_range ?? '') ?>">
+
+                    </div>
+
                     <div class="form-row">
 
                         <span></span>
 
                         <button
                             type="submit"
-                            class="btn btn-actions btn-filter-apply" >
+                            class="btn btn-actions btn-date-range-apply">
 
-                            <?= Localization::get('application.general.btn.apply_filter') ?>
+                            <?= Localization::get(
+                                'application.general.btn.apply_filter'
+                            ) ?>
 
                         </button>
 
@@ -359,7 +390,6 @@ $is_detail_view = true;
             </form>
 
         </div>
-
 
         <!-- Games -->
 
@@ -374,22 +404,29 @@ $is_detail_view = true;
                 <?php if (empty($games)): ?>
 
                     <p>
-                        <?= Localization::get('admin.users.detail.card.games.no_games') ?>
+                        <?= Localization::get(
+                            'admin.users.detail.card.games.no_games'
+                        ) ?>
                     </p>
 
                 <?php else: ?>
 
-                    <?php foreach ($games as $game): 
+                    <?php foreach ($games as $game):
 
                         $is_owner = GamePolicy::isOwner($game, $current_user);
                         $is_admin = $current_user->isAdmin();
 
                         $can_edit = GamePolicy::canEdit($game, $current_user);
-                        $can_cancel = GamePolicy::canCancel($game, $current_user); 
+                        $can_cancel = GamePolicy::canCancel($game, $current_user);
                         $can_delete = GamePolicy::canDelete($game, $current_user);
 
-                        $can_join = ($is_detail_view) ? false : GamePolicy::canJoin($game, $current_user);
-                        $can_leave = ($is_detail_view) ? false : GamePolicy::canLeave($game, $current_user);
+                        $can_join = ($is_detail_view)
+                            ? false
+                            : GamePolicy::canJoin($game, $current_user);
+
+                        $can_leave = ($is_detail_view)
+                            ? false
+                            : GamePolicy::canLeave($game, $current_user);
 
                         $player_count = $game->getPlayerCount();
                         $player_max = $game->getPlayerMax();
@@ -409,14 +446,23 @@ $is_detail_view = true;
                         }
 
                         if ($player_count === 0) {
-                            $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_EMPTY;
+                            $players_class =
+                                'player-count-category-'
+                                . Application::DTO_PLAYER_COUNT_EMPTY;
                         } elseif ($player_count === 1) {
-                            $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_LOW;
+                            $players_class =
+                                'player-count-category-'
+                                . Application::DTO_PLAYER_COUNT_LOW;
                         } else {
-                            $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
+                            $players_class =
+                                'player-count-category-'
+                                . Application::DTO_PLAYER_COUNT_READY;
                         }
 
-                        $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
+                        $ruleset_text = Localization::get(
+                            'game.ruleset.'
+                            . $game->getRuleSetModel()->getPreset()
+                        );
 
                     ?>
 

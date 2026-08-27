@@ -427,6 +427,11 @@ return [
     'admin.users.detail.card.games.list.title' => 'Games List', 
     'admin.users.detail.card.games.list.filter.title' => 'Filter', 
     'admin.users.detail.card.games.list.filter.status' => 'Status', 
+    'admin.users.detail.card.games.list.filter.user_relation' => 'User Relation', 
+    'admin.users.detail.card.games.list.filter.user_relation.created' => 'Created', 
+    'admin.users.detail.card.games.list.filter.user_relation.participated' => 'Participated', 
+    'admin.users.detail.card.games.list.filter.user_relation.won' => 'Won', 
+    'admin.users.detail.card.games.list.filter.date_range' => 'Date Range', 
 
     // System Settings / Status
     'admin.system.settings.overview.title' => '⚙️ Admin System Settings', 
