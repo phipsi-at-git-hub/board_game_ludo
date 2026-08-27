@@ -1,8 +1,13 @@
 <?php
 
+use App\Core\Localization;
+use App\Models\GameModel;
+use App\Models\UserModel;
+
 /**
  * Required:
- * @var object $game 
+ * @var GameModel $game 
+ * @var UserModel $current_user
  * @var string $status_text 
  */
 ?>
@@ -15,11 +20,23 @@
         <?= htmlspecialchars($game->getName()) ?>
     </div>
 
-    <span
-        class="status-badge <?= $status_class ?>"
-        data-bind="status">
-        <?= strtoupper($status_text) ?>
-    </span>
+    <div>
+
+        <?php if ($game->isFinished() && $current_user->getId() === $game->getStateModel()->getWinnerUserId()): ?>
+            
+            <span class="role-badge role-winner">
+                <?= Localization::get('game.show.winner') ?>
+            </span>
+            
+        <?php endif; ?>
+
+        <span
+            class="status-badge <?= $status_class ?>"
+            data-bind="status">
+            <?= strtoupper($status_text) ?>
+        </span>
+
+    </div>
 
 </div>
 

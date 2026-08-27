@@ -15,6 +15,8 @@ final class UserModel extends BaseModel {
     private ?string $password_hash = null;
     private string $role;
     private string $status;
+    private ?string $language = null; 
+    private string $game_perspective;
     private ?string $last_login = null;
     private string $created_at;
     private string $updated_at;
@@ -486,12 +488,12 @@ final class UserModel extends BaseModel {
     }
 
     // Get the value of first_name
-    public function getFirst_name(): string {
+    public function getFirstName(): string {
         return $this->first_name;
     }
 
     // Get the value of last_name
-    public function getLast_name(): string {
+    public function getLastName(): string {
         return $this->last_name;
     }
 
@@ -555,18 +557,28 @@ final class UserModel extends BaseModel {
         return $this->status === Application::BANNED;
     }
 
+    // Get default language settings
+    public function getLanguage(): string {
+        return 'en-us'; 
+    }
+
+    // get default game perspective
+    public function getGamePerspective(): string {
+        return 'fixed'; 
+    }
+
     // Get last login
     public function getLastLogin() {
         return $this->last_login;
     }
 
      // Get the value of created_at
-    public function getCreated_at() {
+    public function getCreatedAt() {
         return $this->created_at;
     }
 
     // Get the value of updated_at
-    public function getUpdated_at() {
+    public function getUpdatedAt() {
         return $this->updated_at;
     }
 

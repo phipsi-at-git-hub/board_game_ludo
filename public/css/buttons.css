@@ -240,3 +240,29 @@
     transform: translate(1px); 
     box-shadow: none; 
 }
+
+/* ------------------------------
+   FILTER FORM BUTTONS
+------------------------------ */
+.btn-date-range-apply {
+    /*
+    background-color: var(--default-color); 
+    color: var(--text-color);
+    */
+    background: var(--status-active-background); 
+    color: var(--status-active-text); 
+    font-size: 14px; 
+    padding: 6px 12px; 
+}
+
+.btn-date-range-apply:hover {
+    /*
+    background-color: var(--default-color-dark); 
+    */
+    filter: brightness(0.95); 
+}
+
+.btn-date-range-apply:disabled {
+    opacity: 0.5; 
+    cursor: not-allowed; 
+}

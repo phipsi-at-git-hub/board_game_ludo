@@ -430,7 +430,7 @@
 /* ------------------------------
    BUTTONS
 ------------------------------ */
-.btn-date-range-apply {
+.btn-filter-apply {
     /*
     background-color: var(--default-color); 
     color: var(--text-color);
@@ -441,14 +441,14 @@
     padding: 6px 12px; 
 }
 
-.btn-date-range-apply:hover {
+.btn-filter-apply:hover {
     /*
     background-color: var(--default-color-dark); 
     */
     filter: brightness(0.95); 
 }
 
-.btn-date-range-apply:disabled {
+.btn-filter-apply:disabled {
     opacity: 0.5; 
     cursor: not-allowed; 
 }

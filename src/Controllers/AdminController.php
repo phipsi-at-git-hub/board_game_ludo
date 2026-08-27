@@ -147,6 +147,25 @@ class AdminController extends BaseController {
         $this->redirect('admin/user/detail/' . $user->getId()); 
     }
 
+    // Users - Show user  detail view
+    public function detailUser(string $user_id): void {
+        $user = UserModel::findById($user_id); 
+        if (!$user) {
+            // Logging
+            Logger::app()->notice('User ID ' . $user_id . ' not found.', ['user_id' => Auth::user()->getId()]); 
+        }
+        
+        $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
+
+        $this->render(
+            'admin/user/detail', 
+            [
+                'user' => $user, 
+                'games' => $games
+            ]
+        ); 
+    }
+
     // Users - Delete user
     public function deleteUser(string $user_id): void {
         $user = UserModel::findById($user_id);
@@ -224,7 +243,7 @@ class AdminController extends BaseController {
     }
 
     // Games - Game detail view 
-    public function showGame(string $game_id) {
+    public function detailGame(string $game_id) {
         // View an existing game
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -241,7 +260,7 @@ class AdminController extends BaseController {
         Logger::app()->debug('Admin show game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/game/show', 
+            'admin/game/detail', 
             [
                 'game' => $game, 
                 'history' => $history, 

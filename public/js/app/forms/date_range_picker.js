@@ -399,7 +399,7 @@ function initDateRangePickers() {
 
             applyButton = document.createElement('button');
             applyButton.type = 'button';
-            applyButton.className = 'btn btn-actions btn-date-range-apply';
+            applyButton.className = 'btn btn-actions btn-filter-apply';
             applyButton.textContent = locale === 'de-DE' ? 'Übernehmen' : 'Apply';
 
             applySection.append(applyButton);

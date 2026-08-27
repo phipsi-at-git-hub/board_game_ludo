@@ -275,8 +275,12 @@ use App\Core\Logging\LogEntry;
 
                         <span></span>
 
-                        <button type="submit" class="btn btn-actions btn-date-range-apply" >
-                            Use Filter
+                        <button 
+                            type="submit" 
+                            class="btn btn-actions btn-filter-apply" >
+
+                            <?= Localization::get('application.general.btn.apply_filter') ?>
+                            
                         </button>
 
                     </div>

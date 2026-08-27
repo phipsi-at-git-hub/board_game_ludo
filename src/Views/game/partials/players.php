@@ -66,10 +66,7 @@ $display_order = match (count($players)) {
 
                         <?php endif; ?>
 
-                        <?php if (
-                            $game->isFinished()
-                            && $player->getUserId() === $game->getStateModel()->getWinnerUserId()
-                        ): ?>
+                        <?php if ($game->isFinished() && $player->getUserId() === $game->getStateModel()->getWinnerUserId()): ?>
 
                             <span class="role-badge role-winner">
                                 <?= Localization::get('game.show.winner') ?>
