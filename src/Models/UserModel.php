@@ -16,7 +16,7 @@ final class UserModel extends BaseModel {
     private string $role;
     private string $status;
     private ?string $language = null; 
-    private string $game_perspective;
+    private string $game_camera_mode;
     private ?string $last_login = null;
     private string $created_at;
     private string $updated_at;
@@ -559,11 +559,13 @@ final class UserModel extends BaseModel {
 
     // Get default language settings
     public function getLanguage(): string {
+        // ToDo: add info to database
         return 'en-us'; 
     }
 
-    // get default game perspective
-    public function getGamePerspective(): string {
+    // get default game camera mode
+    public function getGameCameraMode(): string {
+        // ToDo: add info to database
         return 'fixed'; 
     }
 

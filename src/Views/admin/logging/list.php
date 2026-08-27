@@ -263,7 +263,7 @@ use App\Core\Logging\LogEntry;
                             type="text" 
                             name="date_range" 
                             data-ui="date-range" 
-                            data-ui-localization="en-us" 
+                            data-ui-localization="<?= Application::EN_US ?>" 
                             data-ui-with-time="true" 
                             value="<?= htmlspecialchars($date_range) ?>" > 
 

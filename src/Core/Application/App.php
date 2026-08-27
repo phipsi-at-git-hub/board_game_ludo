@@ -3,6 +3,7 @@
 
 namespace App\Core\Application;
 
+use App\Constants\Application;
 use App\Core\Asset;
 use App\Core\Debug;
 use App\Core\Env;
@@ -126,6 +127,6 @@ final class App {
 
     // Initialize localization 
     private function loadLocalization(): void {
-        Localization::load(TRANSLATIONS_PATH, 'en-us');
+        Localization::load(TRANSLATIONS_PATH, Application::EN_US);
     }
 }

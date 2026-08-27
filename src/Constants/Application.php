@@ -135,6 +135,10 @@ class Application {
     public const GAME_RULESET_ORIGINAL = 'original'; 
     public const GAME_RULESET_CUSTOM = 'custom'; 
 
+    // Game camera mode
+    public const CAMERA_MODE_FIXED = 'fixed'; 
+    public const CAMERA_MODE_FOLLOW = 'follow'; 
+
     // Game general
     public const PLAYER_COUNT = 'player_count';
     public const AVAILABLE_MOVES = 'available_moves'; 
@@ -194,6 +198,10 @@ class Application {
     public const FILE_DATE_FORMAT = 'Y-m-d'; 
     public const FILE_TIME_FORMAT = 'H:i:s'; 
     public const FILE_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; 
+
+    // Localization formats
+    public const EN_US = 'en-us'; 
+    public const DE_DE = 'de-de'; 
 
     // Storage type
     public const STORAGE_FILE = 'file'; 

@@ -201,11 +201,11 @@ $is_detail_view = true;
         <div class="form-row">
 
             <span>
-                <?= Localization::get('admin.users.detail.card.games.information.game_perspective') ?>
+                <?= Localization::get('admin.users.detail.card.games.information.game_camera_mode') ?>
             </span>
 
             <span class="status-badge status-default">
-                <?= htmlspecialchars($user->getGamePerspective()) ?>
+                <?= htmlspecialchars($user->getGameCameraMode()) ?>
             </span>
 
         </div>
@@ -363,7 +363,7 @@ $is_detail_view = true;
                             type="text"
                             name="date_range"
                             data-ui="date-range"
-                            data-ui-localization="en-us"
+                            data-ui-localization="<?= Application::EN_US ?>"
                             data-ui-with-time="true"
                             value="<?= htmlspecialchars($date_range ?? '') ?>">
 

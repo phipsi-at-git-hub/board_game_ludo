@@ -420,7 +420,7 @@ return [
     'admin.users.detail.card.metadata.created_at' => 'Created At', 
     'admin.users.detail.card.metadata.updated_at' => 'Updates At', 
     'admin.users.detail.card.games.information.title' => 'Games Information', 
-    'admin.users.detail.card.games.information.game_perspective' => 'Preferred Game Perspective', 
+    'admin.users.detail.card.games.information.game_game_camera_mode' => 'Preferred Game Camera Mode', 
     'admin.users.detail.card.games.information.created_games' => 'Created Games', 
     'admin.users.detail.card.games.information.participated_games' => 'Participated Games', 
     'admin.users.detail.card.games.information.won_games' => 'Won Games', 
