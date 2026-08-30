@@ -405,7 +405,7 @@ $is_detail_view = true;
 
                     <p>
                         <?= Localization::get(
-                            'admin.users.detail.card.games.no_games'
+                            'admin.users.detail.card.games.list.empty'
                         ) ?>
                     </p>
 
