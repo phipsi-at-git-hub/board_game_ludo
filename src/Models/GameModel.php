@@ -1860,9 +1860,17 @@ final class GameModel extends BaseModel {
             );
 
             $this->db->commit();
+        
+            // Logging
+            Logger::app()->info('Game deleted: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId()]);
+
             return true;
         } catch (Exception $e) {
             $this->db->rollBack();
+        
+            // Logging
+            Logger::app()->warning('Couldn\'t delete game: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId(), 'error' => $e]);
+
             //throw $e;
             return false;
         }
