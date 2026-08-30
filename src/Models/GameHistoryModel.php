@@ -140,4 +140,14 @@ final class GameHistoryModel extends BaseModel {
             ]
         );
     }
+
+    /**
+     * Reset game history - delete all entries of game
+     */
+    public static function resetByGameId(string $game_id): bool {
+        return static::execute(
+            "DELETE FROM game_history WHERE game_id = :game_id",
+            ['game_id' => $game_id]
+        );
+    }
 }

@@ -22,7 +22,7 @@ use App\Models\UserModel;
 
     <div>
 
-        <?php if ($game->isFinished() && $current_user->getId() === $game->getStateModel()->getWinnerUserId()): ?>
+        <?php if (!$is_admin_view  && $game->isFinished() && $current_user->getId() === $game->getStateModel()->getWinnerUserId()): ?>
             
             <span class="role-badge role-winner">
                 <?= Localization::get('game.show.winner') ?>

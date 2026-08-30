@@ -1921,6 +1921,7 @@ final class GameModel extends BaseModel {
             $this->updateStatus(Application::STATUS_WAITING);
             $this->setStatus(Application::STATUS_WAITING);
             $this->unlockGame(); 
+            GameHistoryModel::resetByGameId($this->id);
             $this->save();
             $this->db->commit();
             return true; 
