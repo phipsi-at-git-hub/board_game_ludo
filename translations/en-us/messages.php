@@ -72,6 +72,12 @@ return [
     'application.general.label.me' => 'me', 
     'application.general.label.menu' => 'menu', 
 
+    // Languages
+    'languages.id.de-de' => 'de-de', 
+    'languages.id.en-us' => 'en-us', 
+    'languages.label.de-de' => 'German', 
+    'languages.label.en-us' => 'English', 
+
     // Application navbar
     'application.navbar.btn_admin' => '🛡 Admin', 
     'application.navbar.btn_account' => '👤 User Account', 
@@ -301,6 +307,10 @@ return [
     'game.rules.allow_stack_own_figures' => '🧱 Allow stacking own figures',
     'game.rules.strict_goal_order' => '🎯 Strict goal order',
 
+    // Game - Camera modes 
+    'game.camera.mode.fixed' => 'fixed', 
+    'game.camera.mode.follow_turn' => 'follow', 
+
     // Admin - Dashboard
     'admin.dashboard.title' => '🛠️ Admin Dashboard', 
     'admin.dashboard.users_card.title' => '👤 Users', 
@@ -399,12 +409,16 @@ return [
     'admin.users.edit.card.permissions.title' => 'Permissions',  
     'admin.users.edit.card.permissions.role' => 'User Role',  
     'admin.users.edit.card.permissions.status' => 'User Status', 
+    'admin.users.edit.card.settings.title' => 'Settings', 
+    'admin.users.edit.card.settings.language' => 'Preferred Language', 
+    'admin.users.edit.card.settings.camera_mode' => 'Preferred Camera Mode', 
     'admin.users.edit.card.password.title' => 'Password', 
     'admin.users.edit.card.password.new' => 'New Password', 
     'admin.users.edit.card.password.confirm' => 'Confirm Password', 
     'admin.users.edit.card.password.hint' => 'Password Hint', 
     'admin.users.edit.card.security.title' => 'Security', 
     'admin.users.edit.card.security.reset_password_description' => 'Password Description', 
+    'admin.users.edit.card.security.send_reset_mail' => 'Send Reset Mail', 
 
     // Admin - User Detail
     'admin.users.detail.title' => '👤 Admin - Detail User', 

@@ -123,7 +123,7 @@ $is_detail_view = true;
             </span>
 
             <span class="status-badge status-default">
-                <?= htmlspecialchars($user->getLanguage()) ?>
+                <?= htmlspecialchars($user->getPreferredLanguage()) ?>
             </span>
 
         </div>
@@ -205,7 +205,7 @@ $is_detail_view = true;
             </span>
 
             <span class="status-badge status-default">
-                <?= htmlspecialchars($user->getGameCameraMode()) ?>
+                <?= htmlspecialchars(Localization::get('game.camera.mode.' . $user->getPreferredCameraMode())) ?>
             </span>
 
         </div>

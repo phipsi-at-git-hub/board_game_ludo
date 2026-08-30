@@ -93,6 +93,8 @@ class Application {
     public const LASTNAME = 'lastname';
     public const EMAIL = 'email';
     public const ROLE = 'role';
+    public const PREFERRED_LANGUAGE = 'preferred_language'; 
+    public const PREFERRED_CAMERA_MODE = 'preferred_camera_mode'; 
     public const PASSWORD_HASH = 'password_hash';
     public const RESET_TOKEN = 'reset_token';
     public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
@@ -137,7 +139,7 @@ class Application {
 
     // Game camera mode
     public const CAMERA_MODE_FIXED = 'fixed'; 
-    public const CAMERA_MODE_FOLLOW = 'follow'; 
+    public const CAMERA_MODE_FOLLOW = 'follow_turn'; 
 
     // Game general
     public const PLAYER_COUNT = 'player_count';

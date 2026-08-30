@@ -211,11 +211,15 @@ class AdminController extends BaseController {
         $email = $_POST['email'] ?? $user->getEmail();
         $role = $_POST['role'] ?? $user->getRole();
         $status = $_POST['status'] ?? $user->getStatus(); 
+        $preferred_language = $_POST['preferred_language'] ?? $user->getPreferredLanguage(); 
+        $preferred_camera_mode = $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(); 
 
         $user->setUsername($username); 
         $user->setEmail($email); 
         $user->setRole($role); 
         $user->setStatus($status); 
+        $user->setPreferredLanguage($preferred_language); 
+        $user->setPreferredCameraMode($preferred_camera_mode); 
         $user->save(); 
         
         // Logging

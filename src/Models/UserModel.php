@@ -15,8 +15,8 @@ final class UserModel extends BaseModel {
     private ?string $password_hash = null;
     private string $role;
     private string $status;
-    private ?string $language = null; 
-    private string $game_camera_mode;
+    private string $preferred_language; 
+    private string $preferred_camera_mode;
     private ?string $last_login = null;
     private string $created_at;
     private string $updated_at;
@@ -196,7 +196,9 @@ final class UserModel extends BaseModel {
                     username = :username, 
                     email = :email, 
                     role = :role, 
-                    status = :status 
+                    status = :status, 
+                    preferred_language = :preferred_language, 
+                    preferred_camera_mode = :preferred_camera_mode 
                 WHERE 
                     id = :id", 
                 
@@ -206,6 +208,8 @@ final class UserModel extends BaseModel {
                 Application::EMAIL, 
                 Application::ROLE, 
                 Application::STATUS, 
+                Application::PREFERRED_LANGUAGE, 
+                Application::PREFERRED_CAMERA_MODE, 
 
                 Application::ID
             ), [
@@ -213,6 +217,8 @@ final class UserModel extends BaseModel {
                 'email' => $user_array[Application::EMAIL], 
                 'role' => $user_array[Application::ROLE], 
                 'status' => $user_array[Application::STATUS], 
+                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE], 
+                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE], 
                 'id' => $this->id
             ]
         );
@@ -309,9 +315,7 @@ final class UserModel extends BaseModel {
                     id = :id", 
                 
                 Application::TABLE_USERS, 
-
                 Application::LAST_LOGIN, 
-
                 Application::ID
             ), [
                 'id' => $this->id
@@ -448,6 +452,8 @@ final class UserModel extends BaseModel {
         $user->password_hash = $data['password_hash'];
         $user->role = $data['role'] ?? 'user';
         $user->status = $data['status'] ?? 'active'; 
+        $user->preferred_language = $data ['preferred_language']; 
+        $user->preferred_camera_mode = $data['preferred_camera_mode'];
         $user->last_login = $data['last_login']; 
         
         $user->created_at = $data['created_at'];
@@ -470,6 +476,8 @@ final class UserModel extends BaseModel {
         $user_array[Application::PASSWORD_HASH] = $this->password_hash;
         $user_array[Application::ROLE] = $this->role;
         $user_array[Application::STATUS] = $this->status;
+        $user_array[Application::PREFERRED_LANGUAGE] = $this->preferred_language; 
+        $user_array[Application::PREFERRED_CAMERA_MODE] = $this->preferred_camera_mode; 
         $user_array[Application::LAST_LOGIN] = $this->last_login; 
         $user_array[Application::CREATED_AT] = $this->created_at;
         $user_array[Application::UPDATED_AT] = $this->updated_at;
@@ -558,15 +566,13 @@ final class UserModel extends BaseModel {
     }
 
     // Get default language settings
-    public function getLanguage(): string {
-        // ToDo: add info to database
-        return 'en-us'; 
+    public function getPreferredLanguage(): string {
+        return $this->preferred_language; 
     }
 
     // get default game camera mode
-    public function getGameCameraMode(): string {
-        // ToDo: add info to database
-        return 'fixed'; 
+    public function getPreferredCameraMode(): string { 
+        return $this->preferred_camera_mode; 
     }
 
     // Get last login
@@ -602,5 +608,15 @@ final class UserModel extends BaseModel {
     // Setter - Set status
     public function setStatus(string $status): void {
         $this->status = $status; 
+    }
+
+    // Setter - Set preferred language
+    public function setPreferredLanguage(string $language): void {
+        $this->preferred_language = $language; 
+    }
+
+    // Setter - Set preferred camera mode
+    public function setPreferredCameraMode(string $camera_mode): void {
+        $this->preferred_camera_mode = $camera_mode; 
     }
 }

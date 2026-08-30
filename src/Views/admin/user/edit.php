@@ -1,11 +1,13 @@
 <?php
 
 use App\Constants\Application;
+use App\Core\Application\App;
 use App\Core\Csrf;
 use App\Core\Localization;
+use App\Models\UserModel;
 
 /**
- * @var object $user
+ * @var UserModel $user
  */
 ?>
 
@@ -88,25 +90,25 @@ use App\Core\Localization;
 
                         <option
                             value="USER"
-                            <?= $user->getRole() === Application::USER ? 'selected' : '' ?>>
+                            <?= $user->getRole() === Application::USER ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::USER)) ?>
                         </option>
 
                         <option
                             value="MODERATOR"
-                            <?= $user->getRole() === Application::MODERATOR ? 'selected' : '' ?>>
+                            <?= $user->getRole() === Application::MODERATOR ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::MODERATOR)) ?>
                         </option>
 
                         <option
                             value="GAME_MASTER"
-                            <?= $user->getRole() === Application::GAME_MASTER ? 'selected' : '' ?>>
+                            <?= $user->getRole() === Application::GAME_MASTER ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::GAME_MASTER)) ?>
                         </option>
 
                         <option
                             value="ADMIN"
-                            <?= $user->getRole() === Application::ADMIN ? 'selected' : '' ?>>
+                            <?= $user->getRole() === Application::ADMIN ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::ADMIN)) ?>
                         </option>
 
@@ -124,15 +126,67 @@ use App\Core\Localization;
                         <option
                             value="INACTIVE"
                             data-state="inactive"
-                            <?= $user->getStatus() === 'INACTIVE' ? 'selected' : '' ?>>
+                            <?= $user->getStatus() === 'INACTIVE' ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::INACTIVE)) ?>
                         </option>
 
                         <option
                             value="ACTIVE"
                             data-state="active"
-                            <?= $user->getStatus() === 'ACTIVE' ? 'selected' : '' ?>>
+                            <?= $user->getStatus() === 'ACTIVE' ? 'selected' : '' ?> >
                             <?= Localization::get('application.general.' . strtolower(Application::ACTIVE)) ?>
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="card dashboard-card">
+                <h2><?= Localization::get('admin.users.edit.card.settings.title') ?></h2>
+
+                <div class="form-row">
+                    <label for="role">
+                        <?= Localization::get('admin.users.edit.card.settings.language') ?>
+                    </label>
+
+                    <select id="preferred_language" name="preferred_language" data-ui="badge-select">
+
+                        <option
+                            value="<?= Application::DE_DE ?>"
+                            <?= $user->getRole() === Application::DE_DE ? 'selected' : '' ?> >
+                            <?= Localization::get('languages.label.' . strtolower(Application::DE_DE)) ?>
+                        </option>
+
+                        <option
+                            value="<?= Application::EN_US ?>"
+                            <?= $user->getRole() === Application::EN_US ? 'selected' : '' ?> >
+                            <?= Localization::get('languages.label.' . strtolower(Application::EN_US)) ?>
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <?= Localization::get('admin.users.edit.card.settings.camera_mode') ?>
+
+                    <select
+                        name="preferred_camera_mode"
+                        data-ui="switch"
+                        class="enhanced">
+
+                        <option
+                            value="<?= Application::CAMERA_MODE_FOLLOW ?>"
+                            data-state="inactive"
+                            <?= $user->getPreferredCameraMode() === Application::CAMERA_MODE_FOLLOW ? 'selected' : '' ?> >
+                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FOLLOW)) ?>
+                        </option>
+
+                        <option
+                            value="<?= Application::CAMERA_MODE_FIXED ?>"
+                            data-state="active"
+                            <?= $user->getPreferredCameraMode() === Application::CAMERA_MODE_FIXED ? 'selected' : '' ?> >
+                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FIXED)) ?>
                         </option>
 
                     </select>
@@ -150,7 +204,7 @@ use App\Core\Localization;
                 <div class="nav-actions">
                     <a
                         href="/admin/user/send-reset/<?= $user->getId() ?>"
-                        class="btn btn-warning">
+                        class="btn btn-danger">
 
                         <?= Localization::get('admin.users.edit.card.security.send_reset_mail') ?>
 
