@@ -283,6 +283,7 @@ class GameController extends BaseController {
     }
 
     // Pause game
+    // ToDo: remove, since pausing a game is obsolete
     public function pause() {
         $game_id = $_POST[Application::GAME_ID] ?? null; 
         if (!$game_id) {

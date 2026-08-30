@@ -67,7 +67,7 @@ final class GameContext {
             'delete' => GamePolicy::canDelete($game, $user), 
 
             'start' => GamePolicy::canStart($game, $user), 
-            'pause' => GamePolicy::canPause($game, $user), 
+            'pause' => GamePolicy::canPause($game, $user),  // ToDo: Remove, since pausing a game is obsolete
 
             'reset' => GamePolicy::canReset($game, $user), 
             'cancel' => GamePolicy::canCancel($game, $user), 

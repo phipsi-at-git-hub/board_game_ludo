@@ -105,6 +105,7 @@ final class GamePolicy {
     }
 
     // Can user pause the game 
+    // ToDo: Remove pausing a game is obsolete
     public static function canPause(GameModel $game, UserModel $user): bool {
         return (
             $game->isRunning()
@@ -118,10 +119,10 @@ final class GamePolicy {
     // Can user reset the game 
     public static function canReset(GameModel $game, UserModel $user): bool {
         return (
-            $user->isAdmin()
-            || (
-                $game->isWaiting()
-                && $user->getId() === $game->getCreatedByUserId()
+            $game->isRunning()
+            && (
+                $user->isAdmin()
+                || $user->getId() === $game->getCreatedByUserId()
             )
         );
     }

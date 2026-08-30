@@ -146,6 +146,7 @@ final class ApiGameController extends BaseController {
     }
 
     // Pause game
+    // ToDo: Remove, since pausing a game is obsolete
     public function pause(string $game_id): void {
         $this->executeApiGameActions(
             $game_id,

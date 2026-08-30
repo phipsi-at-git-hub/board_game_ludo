@@ -14,7 +14,7 @@ use App\Core\Localization;
  * @var bool $can_edit
  * @var bool $can_delete
  * @var bool $can_start
- * @var bool $can_pause
+ * @var bool $can_pause // ToDo: Remove, since pausing a game is obsolete
  * @var bool $can_play
  * @var bool $can_reset
  * @var bool $can_cancel
@@ -28,7 +28,7 @@ $can_edit ??= false;
 $can_delete ??= false;
 
 $can_start ??= false;
-$can_pause ??= false;
+$can_pause ??= false;   // ToDo: Remove, since pausing a game is obsolete
 $can_play ??= false;
 
 $can_reset ??= false;
@@ -167,6 +167,7 @@ $api_delete ??= true;
 
     <!-- PAUSE -->
 
+    <!--
     <?php if ($show_start_pause && $can_pause): ?>
 
         <form
@@ -194,6 +195,7 @@ $api_delete ??= true;
         </form>
 
     <?php endif; ?>
+    -->
 
     <!-- SOLO TEST -->
 

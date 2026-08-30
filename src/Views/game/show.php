@@ -25,7 +25,7 @@ $can_create_test = GamePolicy::canCreateTestGame($game, $current_user);
 
 $can_start = GamePolicy::canStart($game, $current_user); 
 $can_play = GamePolicy::canPlay($game, $current_user); 
-$can_pause = GamePolicy::canPause($game, $current_user); 
+$can_pause = GamePolicy::canPause($game, $current_user);    // ToDo: Remove, since pausing a game is obsolete
 
 $can_edit = GamePolicy::canEdit($game, $current_user);
 $can_reset = GamePolicy::canReset($game, $current_user); 

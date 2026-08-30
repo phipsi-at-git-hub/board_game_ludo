@@ -1875,6 +1875,7 @@ final class GameModel extends BaseModel {
     }
 
     // Game - Update game status helper - Set game to waiting
+    // ToDo: Remove, since pausing a game is obsolete
     public function pauseGame(): void {
         $this->updateStatus(Application::STATUS_WAITING);
         $this->setStatus(Application::STATUS_WAITING);

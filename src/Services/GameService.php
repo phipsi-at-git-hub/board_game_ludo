@@ -39,7 +39,8 @@ final class GameService {
         return false; 
     }
 
-    // Pause game
+    // Pause game 
+    // ToDo: Remove, since pausing a game is obsolete
     public function pause(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canPause($game, $user)) {
             return false;
