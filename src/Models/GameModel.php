@@ -1875,6 +1875,7 @@ final class GameModel extends BaseModel {
     public function startGame(): void {
         $this->updateStatus(Application::STATUS_RUNNING);
         $this->setStatus(Application::STATUS_RUNNING);
+        $this->lockGame(); 
     }
 
     // Game - Update game status helper - finish game
@@ -1911,6 +1912,7 @@ final class GameModel extends BaseModel {
             // Set game to waiting
             $this->updateStatus(Application::STATUS_WAITING);
             $this->setStatus(Application::STATUS_WAITING);
+            $this->unlockGame(); 
             $this->save();
             $this->db->commit();
             return true; 
@@ -1919,6 +1921,18 @@ final class GameModel extends BaseModel {
             //throw$e;
             return false; 
         }
+    }
+
+    // Game - Lock game - set is_locked to true
+    public function lockGame(): void {
+        $this->is_locked = true; 
+        $this->save(); 
+    }
+
+    // Game - Unlock game - set is_locked to false
+    public function unlockGame(): void {
+        $this->is_locked = false; 
+        $this->save(); 
     }
 
     // Game - Join game - player 
