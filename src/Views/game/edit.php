@@ -210,6 +210,7 @@ use App\Core\Localization;
                 </select>
             </div>
 
+            <!--
             <div class="form-row">
                 <span><?= Localization::get('game.options.is_locked') ?></span>
 
@@ -218,6 +219,7 @@ use App\Core\Localization;
                     <option value="1" data-state="inactive" <?= ($game->isLocked()) ? 'selected' : '' ?> ><?= Localization::get('application.general.yes') ?></option>
                 </select>
             </div>
+            -->
 
             <div class="form-row">
                 <span><?= Localization::get('game.rules.allow_bots') ?></span>

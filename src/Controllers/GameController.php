@@ -83,7 +83,6 @@ class GameController extends BaseController {
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_NAME] !== '') {
             $game_options = [
                 Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
-                Application::IS_LOCKED => ($_POST[Application::IS_LOCKED]), 
             ];
 
             $rule_set = [
@@ -158,7 +157,7 @@ class GameController extends BaseController {
 
             $game_options = [
                 Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
-                Application::IS_LOCKED => ($_POST[Application::IS_LOCKED]), 
+                Application::IS_LOCKED => (int)$game->isLocked(), 
             ];
 
             $rule_set = [

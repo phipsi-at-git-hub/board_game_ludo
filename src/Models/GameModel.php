@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Constants\Application;
+use App\Core\Auth;
 use App\Core\Dto\Game\GameEngineMove;
-use Exception;
+use App\Core\Logging\Logger;
 use DomainException;
+use Exception;
 use LogicException;
 use Throwable;
 
@@ -1717,7 +1719,7 @@ final class GameModel extends BaseModel {
                     'created_by_user_id' => $user_id,
                     'status' => Application::STATUS_WAITING, 
                     'is_private' => $game_options[Application::IS_PRIVATE], 
-                    'is_locked' => $game_options[Application::IS_LOCKED], 
+                    'is_locked' => 0,   // newly created games have to be unlocked     // $game_options[Application::IS_LOCKED],        // ToDo: remove this comments, since creating locked games is obsolete
                     'is_test_game' => $game_options[Application::IS_TEST_GAME]
                 ]
             );
@@ -1787,10 +1789,17 @@ final class GameModel extends BaseModel {
             $this->rule_set_model->update($this->id, $rule_set);
 
             $this->db->commit();
+        
+            // Logging
+            Logger::app()->info('Game updated: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId()]);
 
             return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
+        
+            // Logging
+            Logger::app()->warning('Couldn\'t update game: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId(), 'error' => $e]);
+            
             //throw $e;
             return false;
         }
@@ -1816,7 +1825,7 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Update game status
-    public function updateStatus($status): void {
+    public function updateStatus(string $status): void {
         static::execute(
             sprintf(
                 "UPDATE 
