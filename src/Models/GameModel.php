@@ -790,6 +790,10 @@ final class GameModel extends BaseModel {
         $this->state_model->save();
         $this->status = Application::STATUS_FINISHED;
         $this->save();
+
+        // Update user statistics
+        $user = UserModel::findById($player->getUserId()); 
+        $user->getUserStatistics()->incrementGamesWon(); 
     }
 
     /**

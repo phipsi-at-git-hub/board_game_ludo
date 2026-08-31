@@ -34,6 +34,11 @@ final class GameService {
 
         $game->startGame();
         if($game->isRunning()) {
+            // Update user statistics for all player
+            foreach ($game->getAllPlayers() as $player) {
+                $user = UserModel::findById($player->getUserId()); 
+                $user->getUserStatistics()->incrementGamesParticipated(); 
+            }
             return true; 
         } 
         return false; 

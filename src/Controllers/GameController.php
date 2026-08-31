@@ -100,6 +100,10 @@ class GameController extends BaseController {
             ];
             
             $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
+
+            // Update user statistics 
+            $user = Auth::user(); 
+            $user->getUserStatistics()->incrementGamesCreated(); 
         
             // Logging
             Logger::app()->info('Game created: ' . $game_id, ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
