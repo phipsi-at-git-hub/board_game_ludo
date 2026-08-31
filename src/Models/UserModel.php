@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\Application;
+use Throwable;
 
 final class UserModel extends BaseModel {
     // ToDo: Use constant from application.php 
@@ -18,6 +19,7 @@ final class UserModel extends BaseModel {
     private string $preferred_language; 
     private string $preferred_camera_mode;
     private ?string $last_login = null;
+    private UserStatisticsModel $user_statistics; 
     private string $created_at;
     private string $updated_at;
     private ?string $reset_token = null;
@@ -38,7 +40,15 @@ final class UserModel extends BaseModel {
                 'id' => $id
             ]
         );
-        return $row ? static::fromArray($row) : null;
+
+        if (!$row) {
+            return null; 
+        }
+
+        $user = self::fromArray($row); 
+        $user->user_statistics = UserStatisticsModel::findByUserId($id); 
+
+        return $user; 
     }
 
     /**
@@ -56,7 +66,15 @@ final class UserModel extends BaseModel {
                 'email' => $email
             ]
         );
-        return $row ? static::fromArray($row) : null;
+
+        if (!$row) {
+            return null; 
+        }
+
+        $user = self::fromArray($row); 
+        $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
+
+        return $user; 
     }
 
     /**
@@ -145,32 +163,53 @@ final class UserModel extends BaseModel {
         $id = self::generateUUID();
         $password_hash = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
 
-        static::execute(
-            "INSERT INTO users (
-                id,
-                username,
-                email,
-                password_hash,
-                role,
-                status
-            ) VALUES (
-                :id,
-                :username,
-                :email,
-                :password_hash,
-                :role,
-                :status
-            )",
-            [
-                'id' => $id,
-                'username' => $username,
-                'email' => $email,
-                'password_hash' => $password_hash,
-                'role' => $role,
-                'status' => $status,
-            ]
-        );
-        return self::findById($id);
+        try {
+            static::beginTransaction();
+
+            static::execute(
+                sprintf(
+                    "INSERT INTO %s (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+                    ) VALUES (
+                        :id,
+                        :username,
+                        :email,
+                        :password_hash,
+                        :role,
+                        :status
+                    )",
+                    Application::TABLE_USERS,
+                    Application::ID,
+                    Application::USERNAME,
+                    Application::EMAIL,
+                    Application::PASSWORD_HASH,
+                    Application::ROLE,
+                    Application::STATUS
+                ),
+                [
+                    'id' => $id,
+                    'username' => $username,
+                    'email' => $email,
+                    'password_hash' => $password_hash,
+                    'role' => $role,
+                    'status' => $status
+                ]
+            );
+
+            UserStatisticsModel::create($id);
+
+            static::commit();
+
+            return self::findById($id);
+        } catch (Throwable $e) {
+            static::rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -213,12 +252,12 @@ final class UserModel extends BaseModel {
 
                 Application::ID
             ), [
-                'username' => $user_array[Application::USERNAME], 
-                'email' => $user_array[Application::EMAIL], 
-                'role' => $user_array[Application::ROLE], 
-                'status' => $user_array[Application::STATUS], 
-                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE], 
-                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE], 
+                'username' => $user_array[Application::USERNAME] ?? $this->username, 
+                'email' => $user_array[Application::EMAIL] ?? $this->email, 
+                'role' => $user_array[Application::ROLE] ?? $this->role, 
+                'status' => $user_array[Application::STATUS] ?? $this->status, 
+                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE] ?? $this->preferred_language, 
+                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE] ?? $this->preferred_camera_mode, 
                 'id' => $this->id
             ]
         );
@@ -578,6 +617,11 @@ final class UserModel extends BaseModel {
     // Get last login
     public function getLastLogin() {
         return $this->last_login;
+    }
+
+    // Get user statistics
+    public function getUserStatistics(): UserStatisticsModel {
+        return $this->user_statistics; 
     }
 
      // Get the value of created_at

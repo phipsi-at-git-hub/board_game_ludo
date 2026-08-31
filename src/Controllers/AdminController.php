@@ -144,7 +144,7 @@ class AdminController extends BaseController {
         // Logging
         Logger::app()->notice('User ' . $user->getUsername() . ' created and email with password token sent to ' . $user->getEmail() . '.', []); 
 
-        $this->redirect('admin/user/detail/' . $user->getId()); 
+        $this->redirect('/admin/user/detail/' . $user->getId()); 
     }
 
     // Users - Show user  detail view

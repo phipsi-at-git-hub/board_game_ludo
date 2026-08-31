@@ -17,6 +17,18 @@ abstract class BaseModel {
         return Database::getInstance();
     }
 
+    protected static function beginTransaction() {
+        return static::db()->beginTransaction(); 
+    }
+
+    protected static function commit() {
+        return static::db()->commit();
+    }
+
+    protected static function rollBack() {
+        return static::db()->rollBack();
+    }
+
     protected static function fetchOne(string $sql, array $params = []): ?array {
         $stmt = static::db()->prepare($sql);
         $stmt->execute($params);
@@ -39,10 +51,6 @@ abstract class BaseModel {
         $stmt = static::db()->prepare($sql);
         $stmt->execute($params);
         return (int) $stmt->fetchColumn();
-    }
-
-    protected static function rollBack() {
-        return static::db()->rollBack();
     }
 
     // Helper - UUID generator
