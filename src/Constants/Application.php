@@ -28,6 +28,7 @@ class Application {
 
     // Database tables
     public const TABLE_USERS = 'users'; 
+    public const TABLE_USERS_STATISTICS = 'users_statistics'; 
     public const TABLE_GAMES = 'games';
     public const TABLE_RULES = 'game_rule_set';
     public const TABLE_STATE = 'game_state';
@@ -99,6 +100,12 @@ class Application {
     public const RESET_TOKEN = 'reset_token';
     public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
     public const LAST_LOGIN = 'last_login';
+
+    // Database field names - users_statistics
+    public const LOGINS = 'logins'; 
+    public const GAMES_CREATED = 'games_created'; 
+    public const GAMES_PARTICIPATED = 'games_participated'; 
+    public const GAMES_WON = 'games_won'; 
 
     // Database field names - system_settings
     public const REGISTRATION_ENABLED = 'registration_enabled'; 
