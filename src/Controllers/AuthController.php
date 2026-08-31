@@ -31,8 +31,9 @@ class AuthController extends BaseController {
 
         if ($user && $user->isActive() && ($systemService->isLoginEnabled() || $user->isAdmin())
         ) {
-            $user->updateLastLogin();
             Auth::login($user);
+            $user->updateLastLogin();
+            $user->getUserStatistics()->incrementLogins(); 
 
             // Logging
             Logger::app()->info('User login successful', ['user_id' => $user->getId()]);

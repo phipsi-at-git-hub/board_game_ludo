@@ -382,7 +382,7 @@ final class UserModel extends BaseModel {
      */
     public static function verify(string $email, string $password): ?self {
         $user = self::findByEmail($email);
-        if ($user && password_verify($password, $user->password_hash)) {
+        if ($user && $user->password_hash !== null && password_verify($password, $user->password_hash)) {
             return $user;
         }
         return null;
@@ -397,6 +397,9 @@ final class UserModel extends BaseModel {
      * @return bool
      */
     public function verifyPassword(string $password): bool {
+        if ($this->password_hash === null) {
+            return false; 
+        }
         return password_verify($password, $this->password_hash);
     }
 
