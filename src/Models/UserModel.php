@@ -86,13 +86,15 @@ final class UserModel extends BaseModel {
      * @return ?self
      */
     public static function findByRole(string $role): ?array {
-        $rows = static::fetchAll(
-            "SELECT * FROM users WHERE role = :role", 
-            [
-                'role' => $role
-            ]
-        );
-        return array_map(fn($row) => self::fromArray($row), $rows);
+        $rows = static::fetchAll("SELECT * FROM users WHERE role = :role", ['role' => $role]); 
+        $users = []; 
+
+        foreach ($rows as $row) {
+            $user = self::fromArray($row); 
+            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
+            $users[] = $user; 
+        }
+        return $users; 
     }
 
     /**
@@ -103,7 +105,14 @@ final class UserModel extends BaseModel {
      */
     public static function all(): array {
         $rows = static::fetchAll("SELECT * FROM users ORDER BY created_at DESC");
-        return array_map(fn($row) => self::fromArray($row), $rows);
+        $users = []; 
+
+        foreach ($rows as $row) {
+            $user = self::fromArray($row); 
+            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
+            $users[] = $user; 
+        }
+        return $users; 
     }
 
     /**
