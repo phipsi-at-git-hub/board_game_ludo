@@ -10,6 +10,8 @@ use App\Models\UserModel;
  * @var UserModel $current_user
  * @var string $status_text 
  */
+
+$is_admin_view ??= false; 
 ?>
 
 <div class="game-row-header">
