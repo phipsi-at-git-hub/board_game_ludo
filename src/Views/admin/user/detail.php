@@ -130,6 +130,64 @@ $is_detail_view = true;
 
     </div>
 
+    <!-- Account Statistics -->
+
+    <div class="card">
+
+        <h2>
+            <?= Localization::get('admin.users.detail.card.statistics.title') ?>
+        </h2>
+
+        <div class="form-row">
+            
+            <span>
+                <?= Localization::get('admin.users.detail.card.statistics.logins') ?>
+            </span>
+
+            <strong>
+                <?= $user->getUserStatistics()->getLogins() ?>
+            </strong>
+
+        </div>
+
+        <div class="form-row">
+            
+            <span>
+                <?= Localization::get('admin.users.detail.card.statistics.games_created') ?>
+            </span>
+
+            <strong>
+                <?= $user->getUserStatistics()->getGamesCreated() ?>
+            </strong>
+
+        </div>
+
+        <div class="form-row">
+            
+            <span>
+                <?= Localization::get('admin.users.detail.card.statistics.games_participated') ?>
+            </span>
+
+            <strong>
+                <?= $user->getUserStatistics()->getGamesParticipated() ?>
+            </strong>
+
+        </div>
+
+        <div class="form-row">
+            
+            <span>
+                <?= Localization::get('admin.users.detail.card.statistics.games_won') ?>
+            </span>
+
+            <strong>
+                <?= $user->getUserStatistics()->getGamesWon() ?>
+            </strong>
+
+        </div>
+
+    </div>
+
     <!-- Account Metadata -->
 
     <div class="card">
