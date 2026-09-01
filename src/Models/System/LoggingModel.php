@@ -1,11 +1,12 @@
 <?php
-// src/Models/LoggingModel.php
+// src/Models/System/LoggingModel.php
 
-namespace App\Models;
+namespace App\Models\System;
 
 use App\Core\Logging\LogEntry;
 use App\Core\Logging\LoggingConfiguration;
 use App\Core\Persistence\FileSystem;
+use App\Models\BaseModel;
 
 final class LoggingModel extends BaseModel {
     /**

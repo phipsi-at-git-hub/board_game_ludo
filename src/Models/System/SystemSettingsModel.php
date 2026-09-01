@@ -1,8 +1,9 @@
 <?php 
-// src/Models/SystemSettingsModel.php
-namespace App\Models; 
+// src/Models/System/SystemSettingsModel.php
+namespace App\Models\System; 
 
 use App\Constants\Application; 
+use App\Models\BaseModel;
 
 final class SystemSettingsModel extends BaseModel {
     private string $id; 

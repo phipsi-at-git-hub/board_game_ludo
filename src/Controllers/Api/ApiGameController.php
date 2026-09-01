@@ -10,7 +10,7 @@ use App\Core\BaseController;
 use App\Core\Dto\Game\GameContext;
 use App\Core\Http\Response;
 use App\Core\Logging\Logger;
-use App\Models\GameModel;
+use App\Models\Game\GameModel;
 use App\Services\GameService;
 
 final class ApiGameController extends BaseController {

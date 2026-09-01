@@ -1,9 +1,10 @@
 <?php
-// src/Models/GameHistoryModel.php
+// src/Models/Game/GameHistoryModel.php
 
-namespace App\Models;
+namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 
 final class GameHistoryModel extends BaseModel {
     /**

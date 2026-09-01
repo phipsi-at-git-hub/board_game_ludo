@@ -1,8 +1,9 @@
 <?php
-// src/Models/GameRuleSetModel.php
-namespace App\Models;
+// src/Models/Game/GameRuleSetModel.php
+namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 
 final class GameRuleSetModel extends BaseModel {
     // ToDo: Use constant from application.php 

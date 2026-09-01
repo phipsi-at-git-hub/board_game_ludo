@@ -1,8 +1,9 @@
 <?php 
-// src/Models/GameStateModel.php
-namespace App\Models;
+// src/Models/Game/State/GameStateModel.php
+namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 
 final class GameStateModel extends BaseModel {
     // ToDo: Use constant from application.php 
@@ -261,7 +262,7 @@ final class GameStateModel extends BaseModel {
     }
 
     // Set winner user id
-    public function setWinnerUserId($user_id): void {
+    public function setWinnerUserId(?string $user_id): void {
         $this->winner_user_id = $user_id;
     }
 }

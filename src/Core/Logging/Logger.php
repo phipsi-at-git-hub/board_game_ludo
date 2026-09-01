@@ -4,7 +4,7 @@
 namespace App\Core\Logging;
 
 use App\Core\Application\App;
-use App\Models\LoggingModel;
+use App\Models\System\LoggingModel;
 use App\Services\SystemService;
 use Throwable;
 

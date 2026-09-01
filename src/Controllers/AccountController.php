@@ -7,7 +7,7 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Http\Http;
 use App\Core\Logging\Logger;
-use App\Models\UserModel;
+use App\Models\User\UserModel;
 use App\Services\MailService;
 
 class AccountController extends BaseController {

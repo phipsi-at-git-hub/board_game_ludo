@@ -13,7 +13,7 @@ use App\Core\Http\Response;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
-use App\Models\SystemSettingsModel;
+use App\Models\System\SystemSettingsModel;
 use App\Services\LogService; 
 
 final class ApiAdminController extends BaseController {

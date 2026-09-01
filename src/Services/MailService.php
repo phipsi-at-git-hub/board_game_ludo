@@ -8,7 +8,7 @@ use App\Core\Email\Email;
 use App\Core\Email\Mailer;
 use App\Core\Logging\LoggingConfiguration;
 use App\Core\Localization;
-use App\Models\UserModel;
+use App\Models\User\UserModel;
 use DateTimeInterface;
 
 final class MailService {

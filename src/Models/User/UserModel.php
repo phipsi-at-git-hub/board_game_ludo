@@ -1,8 +1,9 @@
 <?php
-// UserModel.php
-namespace App\Models;
+// src/Models/User/UserModel.php
+namespace App\Models\User;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 use Throwable;
 
 final class UserModel extends BaseModel {

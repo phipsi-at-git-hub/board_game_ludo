@@ -8,8 +8,8 @@ use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Csrf;
 use App\Core\Logging\Logger;
-use App\Models\GameModel;
-use App\Models\GameRuleSetModel;
+use App\Models\Game\GameModel;
+use App\Models\Game\GameRuleSetModel;
 use App\Services\GameService;
 use LogicException;
 

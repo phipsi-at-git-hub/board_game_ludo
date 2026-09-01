@@ -4,8 +4,8 @@
 namespace App\Services;
 
 use App\Constants\Application;
-use App\Models\SystemSettingsModel;
-use App\Models\UserModel;
+use App\Models\System\SystemSettingsModel;
+use App\Models\User\UserModel;
 
 final class SystemService {
     private SystemSettingsModel $settings;

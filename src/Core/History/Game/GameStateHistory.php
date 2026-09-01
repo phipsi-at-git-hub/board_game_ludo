@@ -3,7 +3,7 @@
 
 namespace App\Core\History\Game;
 
-use App\Models\GameHistoryModel;
+use App\Models\Game\GameHistoryModel;
 
 final class GameStateHistory {
     private string $game_id;

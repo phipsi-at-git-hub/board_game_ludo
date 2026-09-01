@@ -4,8 +4,8 @@
 namespace App\Core\Dto\Game;
 
 use App\Core\Localization;
-use App\Models\GameModel;
-use App\Models\UserModel;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
 
 final class GameContext {

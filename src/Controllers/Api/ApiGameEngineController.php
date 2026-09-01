@@ -6,7 +6,7 @@ use App\Constants\Application;
 use App\Core\BaseController;
 use App\Core\Auth;
 use App\Core\History\Game\GameStateHistory;
-use App\Models\GameModel;
+use App\Models\Game\GameModel;
 use DomainException;
 
 class ApiGameEngineController extends BaseController {

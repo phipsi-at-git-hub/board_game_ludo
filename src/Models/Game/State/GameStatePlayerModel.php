@@ -1,8 +1,9 @@
 <?php 
-// src/Models/GameStatePlayerModel.php
-namespace App\Models;
+// src/Models/Game/State/GameStatePlayerModel.php
+namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 
 final class GameStatePlayerModel extends BaseModel {
     // ToDo: Use constant from application.php 
@@ -214,7 +215,7 @@ final class GameStatePlayerModel extends BaseModel {
     }
 
     // Helper - Reset Player's Figures to start value
-    public function resetFigures($all_figures_start_at_home): void {
+    public function resetFigures(bool $all_figures_start_at_home): void {
         $index = 0;
         foreach ($this->getAllFigures() as $figure) {
             if ($all_figures_start_at_home === false && $index === 0) {

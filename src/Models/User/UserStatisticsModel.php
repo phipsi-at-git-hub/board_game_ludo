@@ -1,9 +1,10 @@
 <?php
-// src/Models/UserStatisticsModel.php
-namespace App\Models;
+// src/Models/User/UserStatisticsModel.php
+namespace App\Models\User;
 
 use App\Constants\Application;
 use App\Core\Logging\Logger;
+use App\Models\BaseModel;
 use Throwable;
 
 final class UserStatisticsModel extends BaseModel {

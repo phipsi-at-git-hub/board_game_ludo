@@ -4,8 +4,8 @@
 namespace App\Policies;
 
 use App\Core\Application\App;
-use App\Models\GameModel;
-use App\Models\UserModel;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 use App\Services\SystemService;
 
 final class GamePolicy {

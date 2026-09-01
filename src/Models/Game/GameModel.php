@@ -1,11 +1,16 @@
 <?php
-// src/Models/GameModel.php
-namespace App\Models;
+// src/Models/Game/GameModel.php
+namespace App\Models\Game;
 
 use App\Constants\Application;
 use App\Core\Auth;
 use App\Core\Dto\Game\GameEngineMove;
 use App\Core\Logging\Logger;
+use App\Models\BaseModel;
+use App\Models\Game\State\GameStateFigureModel;
+use App\Models\Game\State\GameStateModel;
+use App\Models\Game\State\GameStatePlayerModel;
+use App\Models\User\UserModel;
 use DomainException;
 use Exception;
 use LogicException;

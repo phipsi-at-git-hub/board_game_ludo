@@ -1,8 +1,9 @@
 <?php 
-// src/Models/GameStateFigureModel.php
-namespace App\Models;
+// src/Models/Game/State/GameStateFigureModel.php
+namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Models\BaseModel;
 
 final class GameStateFigureModel extends BaseModel {
     // ToDo: Use constant from application.php 
@@ -128,7 +129,7 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Delete all figures of given game
-    public static function removeAllFigures($game_id): bool {
+    public static function removeAllFigures(string $game_id): bool {
         return static::execute(
             "DELETE FROM game_state_figure WHERE game_id = :game_id",
             ['game_id' => $game_id]
@@ -210,7 +211,7 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Setter - Set Position
-    public function setPosition($position): void {
+    public function setPosition(int $position): void {
         // ToDo: make it proof
         // find first empty slot in home area an position figure there
         //$this->storePosition($this->game_id, $this->user_id, $this->figure_index, $position);

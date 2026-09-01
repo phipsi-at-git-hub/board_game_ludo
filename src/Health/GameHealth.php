@@ -6,7 +6,7 @@ use App\Constants\Application;
 use App\Controllers\Api\ApiGameController;
 use App\Controllers\Api\ApiGameEngineController;
 use App\Core\Http\Http;
-use App\Models\GameModel;
+use App\Models\Game\GameModel;
 use Throwable;
 
 final class GameHealth {

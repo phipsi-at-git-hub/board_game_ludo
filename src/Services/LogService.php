@@ -7,7 +7,7 @@ use App\Constants\Application;
 use App\Core\Date\DateRange;
 use App\Core\Logging\LogEntry;
 use App\Core\Logging\LoggingConfiguration;
-use App\Models\LoggingModel;
+use App\Models\System\LoggingModel;
 use DateTimeImmutable;
 
 final class LogService {

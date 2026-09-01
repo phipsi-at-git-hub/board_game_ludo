@@ -5,7 +5,7 @@ namespace App\Core\Dto\System;
 
 use App\Constants\Application;
 use App\Core\Localization;
-use App\Models\SystemSettingsModel;
+use App\Models\System\SystemSettingsModel;
 use App\Services\SystemService;
 
 final class SettingsContext {

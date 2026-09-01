@@ -2,7 +2,7 @@
 // Auth.php
 namespace App\Core;
 
-use App\Models\UserModel;
+use App\Models\User\UserModel;
 
 class Auth {
     public static function user(): ?UserModel {

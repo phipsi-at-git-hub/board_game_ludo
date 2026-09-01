@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Logging\Logger;
-use App\Models\UserModel;
+use App\Models\User\UserModel;
 use App\Services\SystemService;
 
 class AuthController extends BaseController {

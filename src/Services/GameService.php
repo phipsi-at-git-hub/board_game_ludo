@@ -3,8 +3,8 @@
 
 namespace App\Services;
 
-use App\Models\GameModel;
-use App\Models\UserModel;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
 
 final class GameService {
