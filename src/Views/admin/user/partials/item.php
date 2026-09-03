@@ -1,6 +1,9 @@
 <?php
+
+use App\Models\User\UserModel;
+
 /**
- * @var Object $user
+ * @var UserModel $user
  */
 ?>
 

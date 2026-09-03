@@ -3,7 +3,7 @@
 use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
-use App\Models\UserModel;
+use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
 
 /**
@@ -17,6 +17,8 @@ use App\Policies\GamePolicy;
  */
 
 $is_detail_view = true;
+
+var_dump($current_user);
 
 ?>
 
