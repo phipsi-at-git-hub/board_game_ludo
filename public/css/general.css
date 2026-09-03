@@ -180,7 +180,36 @@ html, body {
 
 .dashboard-card {
     flex: 1 1 300px;
+    display: flex; 
+    flex-direction: column; 
 }
+
+.card-actions.bottom {
+    margin-top: auto; 
+    display: flex; 
+    justify-content: center; 
+}
+
+.danger-zone {
+    transition: 
+        box-shadow 180ms ease, 
+        border-color 180ms ease, 
+        background-color 180ms ease; 
+} 
+
+.dashboard-card > form {
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+}
+
+.danger-zone:has(.btn-danger:hover) {
+    box-shadow: 
+        0 0 0 1px rgba(220, 38, 38, 0.35), 
+        0 0 24px rgba(220, 38, 38, 0.35); 
+    border-color: rgba(220, 38, 38, 0.45); 
+    background-color: rgba(220, 38, 38, 0.035); 
+} 
 
 .stats-main {
     text-align: center;

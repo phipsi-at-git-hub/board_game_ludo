@@ -168,13 +168,17 @@ return [
     'account.profile.delete_account' => '⚠️ Gefahrenzone',
     'account.profile.information.username' => 'Benutzername',
     'account.profile.information.email' => 'E-Mail',
+    'account.profile.settings.title' => '⚙️ Einstellungen',
+    'account.profile.settings.language' => 'Bevorzugte Sprache',
+    'account.profile.settings.camera_mode' => 'Bevorzugter Kameramodus',
+    'account.profile.delete_account.confirm.message' => 'Möchtest du dein Benutzerkonto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
     'account.profile.change_password.current_password' => 'Aktuelles Passwort',
     'account.profile.change_password.new_password' => 'Neues Passwort',
     'account.profile.change_password.confirm_password' => 'Passwort bestätigen',
     'account.profile.delete_account.information' => 'Diese Aktion kann nicht rückgängig gemacht werden.',
     'account.profile.btn.update_profile' => 'Profil aktualisieren',
     'account.profile.btn.change_password' => 'Passwort ändern',
-    'account.profile.btn.delete_account' => 'Benutzerkonto löschen',
+    'account.profile.btn.delete_account' => 'Benutzerkonto löschen', 
 
     // Game general
     'game.create.title' => 'Neues Spiel erstellen',
