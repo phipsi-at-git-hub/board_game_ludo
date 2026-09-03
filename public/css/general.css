@@ -184,6 +184,12 @@ html, body {
     flex-direction: column; 
 }
 
+.dashboard-card > form {
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+}
+
 .card-actions.bottom {
     margin-top: auto; 
     display: flex; 
@@ -196,12 +202,6 @@ html, body {
         border-color 180ms ease, 
         background-color 180ms ease; 
 } 
-
-.dashboard-card > form {
-    display: flex; 
-    flex-direction: column; 
-    flex: 1; 
-}
 
 .danger-zone:has(.btn-danger:hover) {
     box-shadow: 
