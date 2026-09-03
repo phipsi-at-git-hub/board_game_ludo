@@ -178,38 +178,138 @@ html, body {
     flex-wrap: wrap;
 }
 
+/* Admin Dashboard */
+.dashboard-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .dashboard-card {
     flex: 1 1 300px;
-    display: flex; 
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column;
 }
 
 .dashboard-card > form {
-    display: flex; 
-    flex-direction: column; 
-    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .card-actions.bottom {
-    margin-top: auto; 
-    display: flex; 
-    justify-content: center; 
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+}
+
+
+/* Danger Zone */
+@property --glow-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
 }
 
 .danger-zone {
-    transition: 
-        box-shadow 180ms ease, 
-        border-color 180ms ease, 
-        background-color 180ms ease; 
-} 
+    position: relative;
+    transition:
+        box-shadow 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease;
+}
+
+.danger-zone::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    border-radius: inherit;
+
+    background: conic-gradient(
+        from var(--glow-angle),
+        transparent 0deg,
+        transparent 300deg,
+        rgba(220, 38, 38, 0.15) 325deg,
+        rgba(255, 70, 70, 0.9) 350deg,
+        rgba(255, 120, 120, 1) 360deg,
+        rgba(220, 38, 38, 0.15) 370deg,
+        transparent 400deg
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.danger-zone:has(.btn-danger:hover)::before {
+    opacity: 1;
+    animation: danger-zone-glow 5s linear infinite;
+}
 
 .danger-zone:has(.btn-danger:hover) {
-    box-shadow: 
-        0 0 0 1px rgba(220, 38, 38, 0.35), 
-        0 0 24px rgba(220, 38, 38, 0.35); 
-    border-color: rgba(220, 38, 38, 0.45); 
-    background-color: rgba(220, 38, 38, 0.035); 
-} 
+    background-color: rgba(220, 38, 38, 0.035);
+    border-color: rgba(220, 38, 38, 0.45);
+    box-shadow:
+        0 0 0 1px rgba(220, 38, 38, 0.18),
+        0 0 18px rgba(220, 38, 38, 0.22);
+}
+
+@keyframes danger-zone-glow { 
+    0% { --glow-angle: 0deg; } 
+    3.125% { --glow-angle: 14deg; }
+    6.25% { --glow-angle: 26.5deg; }
+    9.375% { --glow-angle: 37deg; }
+    12.5% { --glow-angle: 45deg; } 
+    15.625% { --glow-angle: 53deg; }
+    18.75% { --glow-angle: 63.5deg; }
+    21.875% { --glow-angle: 76deg; }
+    25% { --glow-angle: 90deg; } 
+    28.125% { --glow-angle: 104deg; }
+    31.25% { --glow-angle: 116.5deg; }
+    34.375% { --glow-angle: 127deg; }
+    37.5% { --glow-angle: 135deg; }
+    40.625% { --glow-angle: 143deg; }
+    43.75% { --glow-angle: 153.5deg; }
+    46.875% { --glow-angle: 166deg; }
+    50% { --glow-angle: 180deg; } 
+    53.125% { --glow-angle: 194deg; }
+    56.25% { --glow-angle: 206.5deg; }
+    59.375% { --glow-angle: 217deg; }
+    62.5% { --glow-angle: 225deg; } 
+    65.625% { --glow-angle: 233deg; }
+    68.75% { --glow-angle: 243.5deg; }
+    71.875% { --glow-angle: 256deg; }
+    75% { --glow-angle: 270deg; } 
+    78.125% { --glow-angle: 284deg; }
+    81.25% { --glow-angle: 296.5deg; }
+    84.375% { --glow-angle: 307deg; }
+    87.5% { --glow-angle: 315deg; } 
+    90.625% { --glow-angle: 323deg; }
+    93.75% { --glow-angle: 333.5deg; }
+    96.875% { --glow-angle: 346deg; }
+    100% { --glow-angle: 360deg; } 
+
+    /*
+    from {
+        --glow-angle: 0deg;
+    }
+
+    to {
+        --glow-angle: 360deg;
+    }
+    */
+}
 
 .stats-main {
     text-align: center;
