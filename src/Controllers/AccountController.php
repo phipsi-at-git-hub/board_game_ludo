@@ -9,6 +9,7 @@ use App\Core\Http\Http;
 use App\Core\Logging\Logger;
 use App\Models\User\UserModel;
 use App\Services\MailService;
+use App\Services\UserService;
 
 class AccountController extends BaseController {
     // Show profile
@@ -18,6 +19,35 @@ class AccountController extends BaseController {
             'account/profile', 
             []
         ); 
+    }
+
+    // Users - Update user
+    // ToDo: use this method instead of updateProfile and changePassword?
+    public function update(): void { 
+        $user = Auth::user(); 
+        if (!$user) {
+            // Logging
+            Logger::app()->notice('User account not found', ['user_id' => Auth::user()->getId()]);
+        }
+
+        // Set data for UserService
+        $data = [
+            'username' => $_POST['username'] ?? $user->getUsername(), 
+            'email' => $_POST['email'] ?? $user->getEmail(), 
+            'role'  => $_POST['role'] ?? $user->getRole(), 
+            'status' => $_POST['status'] ?? $user->getStatus(), 
+            'preferred_language' => $_POST['preferred_language'] ?? $user->getPreferredLanguage(), 
+            'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(), 
+        ]; 
+        
+        // Update user
+        $userService = new UserService();
+        $userService->update($user, $data); 
+        
+        // Logging
+        Logger::app()->info('User account - User ' . $user->getUsername() . ' (' . $user->getId() . ') updated', ['user_id' => Auth::user()->getId()]);
+
+        $this->redirect('/account');
     }
 
     // Update profile

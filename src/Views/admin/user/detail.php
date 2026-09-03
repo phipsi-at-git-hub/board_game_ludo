@@ -18,8 +18,6 @@ use App\Policies\GamePolicy;
 
 $is_detail_view = true;
 
-var_dump($current_user);
-
 ?>
 
 <div class="panel">

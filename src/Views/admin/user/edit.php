@@ -154,13 +154,13 @@ use App\Models\User\UserModel;
 
                         <option
                             value="<?= Application::DE_DE ?>"
-                            <?= $user->getRole() === Application::DE_DE ? 'selected' : '' ?> >
+                            <?= $user->getPreferredLanguage() === Application::DE_DE ? 'selected' : '' ?> >
                             <?= Localization::get('languages.label.' . strtolower(Application::DE_DE)) ?>
                         </option>
 
                         <option
                             value="<?= Application::EN_US ?>"
-                            <?= $user->getRole() === Application::EN_US ? 'selected' : '' ?> >
+                            <?= $user->getPreferredLanguage() === Application::EN_US ? 'selected' : '' ?> >
                             <?= Localization::get('languages.label.' . strtolower(Application::EN_US)) ?>
                         </option>
 

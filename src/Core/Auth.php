@@ -2,6 +2,7 @@
 // Auth.php
 namespace App\Core;
 
+use App\Constants\Application;
 use App\Models\User\UserModel;
 
 class Auth {
@@ -19,7 +20,8 @@ class Auth {
 
     public static function login(UserModel $user): void {
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $user->getId();
+        $_SESSION[Application::USER_ID] = $user->getId();
+        $_SESSION[Application::LOCALE] = $user->getPreferredLanguage(); 
     }
 
     public static function logout(): void {

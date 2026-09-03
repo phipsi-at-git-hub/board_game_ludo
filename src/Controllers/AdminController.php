@@ -18,6 +18,7 @@ use App\Models\User\UserModel;
 use App\Services\LogService;
 use App\Services\MailService;
 use App\Services\SystemService;
+use App\Services\UserService;
 use DateInterval;
 use DateTimeImmutable;
 
@@ -207,20 +208,19 @@ class AdminController extends BaseController {
             die('User not found');
         }
 
-        $username = $_POST['username'] ?? $user->getUsername();
-        $email = $_POST['email'] ?? $user->getEmail();
-        $role = $_POST['role'] ?? $user->getRole();
-        $status = $_POST['status'] ?? $user->getStatus(); 
-        $preferred_language = $_POST['preferred_language'] ?? $user->getPreferredLanguage(); 
-        $preferred_camera_mode = $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(); 
-
-        $user->setUsername($username); 
-        $user->setEmail($email); 
-        $user->setRole($role); 
-        $user->setStatus($status); 
-        $user->setPreferredLanguage($preferred_language); 
-        $user->setPreferredCameraMode($preferred_camera_mode); 
-        $user->save(); 
+        // Set data for UserService
+        $data = [
+            'username' => $_POST['username'] ?? $user->getUsername(), 
+            'email' => $_POST['email'] ?? $user->getEmail(), 
+            'role'  => $_POST['role'] ?? $user->getRole(), 
+            'status' => $_POST['status'] ?? $user->getStatus(), 
+            'preferred_language' => $_POST['preferred_language'] ?? $user->getPreferredLanguage(), 
+            'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(), 
+        ]; 
+        
+        // Update user
+        $userService = new UserService();
+        $userService->update($user, $data); 
         
         // Logging
         Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);

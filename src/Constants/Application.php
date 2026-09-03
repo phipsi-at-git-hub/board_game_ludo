@@ -209,6 +209,7 @@ class Application {
     public const FILE_DATE_TIME_FORMAT = 'Y-m-d H:i:s'; 
 
     // Localization formats
+    public const LOCALE = 'locale'; 
     public const EN_US = 'en-us'; 
     public const DE_DE = 'de-de'; 
 

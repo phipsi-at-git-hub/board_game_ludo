@@ -127,6 +127,7 @@ final class App {
 
     // Initialize localization 
     private function loadLocalization(): void {
-        Localization::load(TRANSLATIONS_PATH, Application::EN_US);
+        $locale = $_SESSION[Application::LOCALE] ??  Application::EN_US; 
+        Localization::load(TRANSLATIONS_PATH, $locale);
     }
 }
