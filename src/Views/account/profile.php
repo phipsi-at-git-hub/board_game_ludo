@@ -248,6 +248,7 @@ use App\Models\User\UserModel;
     </div>
 
 
+
     <!-- Security -->
     <div class="dashboard-grid">
 
@@ -255,9 +256,7 @@ use App\Models\User\UserModel;
         <div class="card dashboard-card">
 
             <h2>
-                <?= Localization::get(
-                    'account.profile.change_password'
-                ) ?>
+                <?= Localization::get('account.profile.change_password') ?>
             </h2>
 
             <form
@@ -273,14 +272,12 @@ use App\Models\User\UserModel;
                 <input
                     type="hidden"
                     name="_csrf_token"
-                    value="<?= Csrf::generate() ?>">
+                    value="<?= Csrf::generate() ?>" >
 
                 <div class="form-group">
 
                     <label for="current_password">
-                        <?= Localization::get(
-                            'account.profile.change_password.current_password'
-                        ) ?>
+                        <?= Localization::get('account.profile.change_password.current_password') ?>
                     </label>
 
                     <input
@@ -288,16 +285,14 @@ use App\Models\User\UserModel;
                         id="current_password"
                         name="current_password"
                         autocomplete="current-password"
-                        required>
+                        required >
 
                 </div>
 
                 <div class="form-group">
 
                     <label for="new_password">
-                        <?= Localization::get(
-                            'account.profile.change_password.new_password'
-                        ) ?>
+                        <?= Localization::get('account.profile.change_password.new_password') ?>
                     </label>
 
                     <input
@@ -312,9 +307,7 @@ use App\Models\User\UserModel;
                 <div class="form-group">
 
                     <label for="confirm_password">
-                        <?= Localization::get(
-                            'account.profile.change_password.confirm_password'
-                        ) ?>
+                        <?= Localization::get('account.profile.change_password.confirm_password') ?>
                     </label>
 
                     <input
@@ -322,7 +315,7 @@ use App\Models\User\UserModel;
                         id="confirm_password"
                         name="confirm_password"
                         autocomplete="new-password"
-                        required>
+                        required >
 
                 </div>
 
@@ -332,9 +325,7 @@ use App\Models\User\UserModel;
                         type="submit"
                         class="btn btn-primary">
 
-                        <?= Localization::get(
-                            'account.profile.btn.change_password'
-                        ) ?>
+                        <?= Localization::get('account.profile.btn.change_password') ?>
 
                     </button>
 
@@ -344,33 +335,24 @@ use App\Models\User\UserModel;
 
         </div>
 
-
         <!-- Danger Zone -->
         <div class="card dashboard-card danger-zone">
 
             <h2>
-                <?= Localization::get(
-                    'account.profile.delete_account'
-                ) ?>
+                <?= Localization::get('account.profile.delete_account') ?>
             </h2>
 
             <p>
-                <?= Localization::get(
-                    'account.profile.delete_account.information'
-                ) ?>
+                <?= Localization::get('account.profile.delete_account.information') ?>
             </p>
 
             <form
                 action="/api/account"
-                method="POST"
-                onsubmit="return confirm(
-                    '<?= htmlspecialchars(
-                        Localization::get(
-                            'account.profile.delete_account.confirm.message'
-                        ),
-                        ENT_QUOTES
-                    ) ?>'
-                )">
+                method="POST" 
+                data-id="user-<?= $current_user->getId() ?>-delete" 
+                data-confirm
+                data-confirm-title="<?= Localization::get('application.modal.messages.account.delete.title') ?>"
+                data-confirm-message="<?= Localization::get('application.modal.messages.account.delete.confirm') ?>" >
 
                 <input
                     type="hidden"
@@ -388,11 +370,10 @@ use App\Models\User\UserModel;
 
                         <button
                             type="submit"
-                            class="btn btn-danger">
+                            class="btn btn-danger" 
+                            data-action="submit" >
 
-                            <?= Localization::get(
-                                'account.profile.btn.delete_account'
-                            ) ?>
+                            <?= Localization::get('account.profile.btn.delete_account') ?>
 
                         </button>
 

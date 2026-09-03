@@ -97,6 +97,10 @@ return [
     'application.modal.messages.game.cancel.confirm' => 'Hiermit wird das Spiel abgebrochen!',
     'application.modal.messages.game.delete.title' => 'Spiel löschen',
     'application.modal.messages.game.delete.confirm' => 'Hiermit wird das Spiel gelöscht!',
+    'application.modal.messages.user.delete.title' => 'Benutzer löschen', 
+    'application.modal.messages.user.delete.confirm' => 'Hiermit wird der Benutzer gelöscht!', 
+    'application.modal.messages.account.delete.title' => 'Account löschen', 
+    'application.modal.messages.account.delete.confirm' => 'Hiermit wird der Account gelöscht!', 
 
     // Application - Menu
     'application.menu.title' => 'Hauptmenü',

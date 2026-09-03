@@ -97,6 +97,10 @@ return [
     'application.modal.messages.game.cancel.confirm' => 'This will cancel the game!', 
     'application.modal.messages.game.delete.title' => 'Delete Game', 
     'application.modal.messages.game.delete.confirm' => 'This will delete the game!', 
+    'application.modal.messages.user.delete.title' => 'Delete User', 
+    'application.modal.messages.user.delete.confirm' => 'This will delete the User!', 
+    'application.modal.messages.account.delete.title' => 'Delete Account', 
+    'application.modal.messages.account.delete.confirm' => 'This will delete the Account!', 
 
     // Application - Menu
     'application.menu.title' => 'Main Menu', 
