@@ -45,8 +45,7 @@ use App\Models\User\UserModel;
                 data-bind-form 
 
                 data-id="profile-information-form" 
-                data-response="json" 
-                data-bind-targets="" >
+                data-response="json" >
 
                 <input
                     type="hidden"
@@ -119,8 +118,6 @@ use App\Models\User\UserModel;
                 method="POST"
                 data-bind-form 
 
-                data-ajax-event="change" 
-
                 data-id="profile-locale-form" 
                 data-response="json"
                 data-after-success-navigation="reload" >
@@ -189,7 +186,7 @@ use App\Models\User\UserModel;
 
                 data-id="profile-settings-form" 
                 data-response="json" 
-                data-ajax-target="form-response" >
+                data-bind-targets="form-response" >
 
                 <input
                     type="hidden"

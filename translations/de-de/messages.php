@@ -316,7 +316,7 @@ return [
     'game.rules.strict_goal_order' => '🎯 Strenge Zielreihenfolge',
 
     // Game - Camera modes
-    'game.camera.mode.fixed' => 'fest',
+    'game.camera.mode.fixed' => 'fixiert',
     'game.camera.mode.follow_turn' => 'folgend',
 
     // Admin - Dashboard

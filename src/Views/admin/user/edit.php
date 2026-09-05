@@ -194,7 +194,7 @@ use App\Models\User\UserModel;
             </div>
 
             <!-- Security -->
-            <div class="card dashboard-card">
+            <div class="card dashboard-card danger-zone">
                 <h2><?= Localization::get('admin.users.edit.card.security.title') ?></h2>
 
                 <p>
