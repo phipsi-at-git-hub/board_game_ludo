@@ -8,6 +8,7 @@
 
 use App\Controllers\AccountController;
 use App\Controllers\AdminController;
+use App\Controllers\Api\ApiAccountController;
 use App\Controllers\Api\ApiAdminController; 
 use App\Controllers\Api\ApiGameController;
 use App\Controllers\Api\ApiGameEngineController;
@@ -43,11 +44,22 @@ $router->post('/create-user-password/{token}', [AccountController::class, 'creat
 // --- Authenticated routes ---
 $router->post('/logout', [AuthController::class, 'logout'], [fn() => Middleware::auth(), fn() => Middleware::csrf()]);
 
+// --- Account routes ---
 $router->group('/account', function($group) {
     $group->get('', [AccountController::class, 'profile']);
     $group->put('/update', [AccountController::class, 'updateProfile'], [fn() => Middleware::csrf()]);
     $group->put('/password', [AccountController::class, 'changePassword'], [fn() => Middleware::csrf()]);
     $group->delete('/delete', [AccountController::class, 'deleteAccount'], [fn() => Middleware::csrf()]);
+}, [fn() => Middleware::auth()]);
+
+// --- Api Account routes ---
+$router->group('/api/account', function($group) {
+    $group->get('', [ApiAccountController::class, 'profile']);
+    $group->put('/update', [ApiAccountController::class, 'updateProfile'], [fn() => Middleware::csrf()]);
+    $group->put('/settings', [ApiAccountController::class, 'updateSettings'], [fn() => Middleware::csrf()]);
+    $group->put('/locale', [ApiAccountController::class, 'updateLocale'], [fn() => Middleware::csrf()]);
+    $group->put('/password', [ApiAccountController::class, 'changePassword'], [fn() => Middleware::csrf()]);
+    $group->delete('/delete', [ApiAccountController::class, 'deleteAccount'], [fn() => Middleware::csrf()]);
 }, [fn() => Middleware::auth()]);
 
 // --- Game routes ---

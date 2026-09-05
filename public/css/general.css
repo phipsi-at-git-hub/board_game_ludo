@@ -191,10 +191,14 @@ html, body {
     flex-direction: column;
 }
 
-.dashboard-card > form {
+.dashboard-card > form:not(:has(~form)):not(form ~form) {
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.dashboard-card > form + form {
+    margin-top: 12px; 
 }
 
 .card-actions.bottom {

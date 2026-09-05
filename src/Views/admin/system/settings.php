@@ -3,7 +3,6 @@
 use App\Constants\Application;
 use App\Core\Csrf;
 use App\Core\Localization;
-use App\Core\SystemSettings;
 use App\Services\SystemService;
 
 /**
@@ -114,7 +113,7 @@ use App\Services\SystemService;
         action="/api/admin/system/settings/update" 
 
         data-ajax-event="change" 
-        data-ajax-target="#form-response" 
+        data-ajax-target="form-response" 
 
         data-id="system-settings-form" 
         data-response="json" 

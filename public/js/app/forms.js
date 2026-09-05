@@ -95,7 +95,7 @@ function submitForm(form) {
         return type.includes('application/json') ? res.json() : res.text();
     })
     .then(data => {
-
+        // Display success or failure message
         if (typeof data === 'object') {
             if (target) {
                 target.innerHTML = data.message || 'OK';

@@ -21,9 +21,7 @@ use App\Models\User\UserModel;
         <ul class="nav-list horizontal">
             <li>
                 <a href="/lobby" class="btn-back">
-                    <?= Localization::get(
-                        'application.general.btn.back_to_lobby'
-                    ) ?>
+                    <?= Localization::get('application.general.btn.back_to_lobby') ?>
                 </a>
             </li>
         </ul>
@@ -37,15 +35,18 @@ use App\Models\User\UserModel;
         <div class="card dashboard-card">
 
             <h2>
-                <?= Localization::get(
-                    'account.profile.information'
-                ) ?>
+                <?= Localization::get('account.profile.information') ?>
             </h2>
 
             <form
+                id="profile-information-form" 
                 action="/api/account/update"
                 method="POST"
-                data-bind-form>
+                data-bind-form 
+
+                data-id="profile-information-form" 
+                data-response="json" 
+                data-bind-targets="" >
 
                 <input
                     type="hidden"
@@ -60,18 +61,14 @@ use App\Models\User\UserModel;
                 <div class="form-group">
 
                     <label for="username">
-                        <?= Localization::get(
-                            'account.profile.information.username'
-                        ) ?>
+                        <?= Localization::get('account.profile.information.username') ?>
                     </label>
 
                     <input
                         type="text"
                         id="username"
                         name="username"
-                        value="<?= htmlspecialchars(
-                            $current_user->getUsername()
-                        ) ?>"
+                        value="<?= htmlspecialchars($current_user->getUsername()) ?>" 
                         required>
 
                 </div>
@@ -79,18 +76,14 @@ use App\Models\User\UserModel;
                 <div class="form-group">
 
                     <label for="email">
-                        <?= Localization::get(
-                            'account.profile.information.email'
-                        ) ?>
+                        <?= Localization::get('account.profile.information.email') ?>
                     </label>
 
                     <input
                         type="email"
                         id="email"
                         name="email"
-                        value="<?= htmlspecialchars(
-                            $current_user->getEmail()
-                        ) ?>"
+                        value="<?= htmlspecialchars($current_user->getEmail()) ?>"
                         required>
 
                 </div>
@@ -101,9 +94,7 @@ use App\Models\User\UserModel;
                         type="submit"
                         class="btn btn-save">
 
-                        <?= Localization::get(
-                            'application.general.btn.save'
-                        ) ?>
+                        <?= Localization::get('application.general.btn.save') ?>
 
                     </button>
 
@@ -118,15 +109,21 @@ use App\Models\User\UserModel;
         <div class="card dashboard-card">
 
             <h2>
-                <?= Localization::get(
-                    'account.profile.settings.title'
-                ) ?>
+                <?= Localization::get('account.profile.settings.title') ?>
             </h2>
 
             <form
-                action="/api/account/settings"
+                id="profile-locale-form" 
+                class="many" 
+                action="/api/account/locale"
                 method="POST"
-                data-bind-form>
+                data-bind-form 
+
+                data-ajax-event="change" 
+
+                data-id="profile-locale-form" 
+                data-response="json"
+                data-after-success-navigation="reload" >
 
                 <input
                     type="hidden"
@@ -143,16 +140,15 @@ use App\Models\User\UserModel;
                 <div class="form-row">
 
                     <label for="preferred_language">
-                        <?= Localization::get(
-                            'account.profile.settings.language'
-                        ) ?>
+                        <?= Localization::get('account.profile.settings.language') ?>
                     </label>
 
                     <select
                         id="preferred_language"
                         name="preferred_language"
                         data-bind="preferred_language"
-                        data-ui="badge-select">
+                        data-ui="badge-select" 
+                        data-auto-save="change" >
 
                         <option
                             value="<?= Application::DE_DE ?>"
@@ -161,10 +157,7 @@ use App\Models\User\UserModel;
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get(
-                                'languages.label.' .
-                                strtolower(Application::DE_DE)
-                            ) ?>
+                            <?= Localization::get('languages.label.' . strtolower(Application::DE_DE)) ?>
 
                         </option>
 
@@ -175,10 +168,7 @@ use App\Models\User\UserModel;
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get(
-                                'languages.label.' .
-                                strtolower(Application::EN_US)
-                            ) ?>
+                            <?= Localization::get('languages.label.' . strtolower(Application::EN_US)) ?>
 
                         </option>
 
@@ -186,21 +176,44 @@ use App\Models\User\UserModel;
 
                 </div>
 
+            </form>
+
+            <form
+                id="profile-settings-form" 
+                action="/api/account/settings"
+                method="POST"
+                data-bind-form 
+
+                data-ajax-event="change" 
+                data-ajax-target="form-response" 
+
+                data-id="profile-settings-form" 
+                data-response="json" 
+                data-ajax-target="form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT">
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
 
                 <!-- Camera Mode -->
                 <div class="form-row">
 
                     <label for="preferred_camera_mode">
-                        <?= Localization::get(
-                            'account.profile.settings.camera_mode'
-                        ) ?>
+                        <?= Localization::get('account.profile.settings.camera_mode') ?>
                     </label>
 
                     <select
                         id="preferred_camera_mode"
                         name="preferred_camera_mode"
                         data-bind="preferred_camera_mode"
-                        data-ui="switch"
+                        data-ui="switch" 
+                        data-auto-save="change" 
                         class="enhanced">
 
                         <option
@@ -211,12 +224,7 @@ use App\Models\User\UserModel;
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get(
-                                'game.camera.mode.' .
-                                strtolower(
-                                    Application::CAMERA_MODE_FOLLOW
-                                )
-                            ) ?>
+                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FOLLOW)) ?>
 
                         </option>
 
@@ -228,12 +236,7 @@ use App\Models\User\UserModel;
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get(
-                                'game.camera.mode.' .
-                                strtolower(
-                                    Application::CAMERA_MODE_FIXED
-                                )
-                            ) ?>
+                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FIXED)) ?>
 
                         </option>
 
@@ -260,9 +263,13 @@ use App\Models\User\UserModel;
             </h2>
 
             <form
+                id="profile-password-form" 
                 action="/api/account/password"
                 method="POST"
-                data-bind-form>
+                data-bind-form
+
+                data-id="profile-password-form" 
+                data-response="json" >
 
                 <input
                     type="hidden"
