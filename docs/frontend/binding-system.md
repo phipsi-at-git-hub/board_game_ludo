@@ -10,6 +10,7 @@ Instead of implementing individual JavaScript logic for every user interaction, 
 - which elements should be updated
 - which response values are mapped
 - how the update should be applied
+- how temporary response notifications should behave
 
 The JavaScript binding layer remains generic and contains no application-specific business logic.
 
@@ -25,15 +26,18 @@ The Binding System follows these principles:
 - backend-controlled state
 - declarative DOM updates
 - separation between data, presentation and behavior
+- strict binding declarations by default
+- optional explicit loos bindings
+- temporary response notifications without endpoint-specific JavaScript
 
-The backend provides the current state through DTOs.
+The backend provides the current state through DTOs and response metadata.
 The frontend only applies these states to the DOM.
 
 ---
 
 # Architecture Overview
 
-The Binding System consists of three parts:
+The Binding System consists of three parts and two closely related responsibilities within `binding.js`:
 
 ```
 HTML
@@ -45,16 +49,28 @@ binding.js
  |
  | sends requests
  | processes responses
+ | resolve bindings
  | updates DOM
+ | displays optional notifications
  v
 
 Backend API
  |
- | returns DTOs and optional views
+ | returns DTOs, response metadata
+ | and optional views
  v
 
-JSON Response
 ```
+
+## JSON Response
+
+The system intentionally keeps data binding and notification behavior separate within the JavaScript implementation. 
+
+### Data Binding
+
+`processBinding()`is responsible for displaying temporary response messages. 
+
+Both mechanisms may operate o the same HTML element without interfering with each other. 
 
 ---
 
@@ -66,39 +82,44 @@ Example:
 User clicks JOIN
 
         |
-        v
+        V
 
 HTML Form
 
         |
-        v
+        V
 
 binding.js
 
         |
-        v
+        V
 
 POST /api/game/join/{id}
 
         |
-        v
+        V
 
 Backend
 
         |
-        v
+        V
 
 JSON Response
 
         |
-        v
+        +----------------------+
+        |                      |
+        V                      V
 
-processBindings()
+processBindings() processBindingNotification()
 
+        |                      |
+        V                      V
+
+DOM state update     Temporary Notification
         |
-        v
-
-DOM Update
+        V
+processSuccessNavigational()
 ```
 
 ---
@@ -132,6 +153,10 @@ A successful JSON response follows this structure:
 | data | DTO containing values used for bindings |
 | views | Optional server-rendered HTML fragments |
 
+Response metadata such as `success`and `message` exists at the root level of the response. 
+
+DTO values exist below `data`. 
+
 ---
 
 # Binding Source
@@ -154,6 +179,19 @@ A JSON binding form requires:
 | Attribute | Purpose |
 |-|-|
 | data-response="json" | Enables JSON binding handling |
+
+A source which participates in regular bindings also requires a `data-id`.
+
+Example: 
+
+```html
+<form
+    data-id="game-id" 
+    data-response="json" 
+    action="/api/game/join" 
+    method="POST" >
+</from>
+```
 
 ---
 
@@ -231,6 +269,84 @@ Target:
 </div>
 ```
 
+The source explicitly identifies the target, while the target explicitly accepts the source. 
+
+---
+
+### Allowing All Sources
+
+A target can explicitly opt into accepting every binding source. 
+
+Attribute: 
+
+```html 
+data-bind-allows-all-sources
+````
+
+Example:
+
+```html
+<div
+    data-id="response-message" 
+    data-bind-allows-all-sources >
+</div>
+````
+
+This means: 
+
+> Any source which explicitly targets this element is allowed to update it. 
+
+The source must still define the target through `data-bind-targets`. 
+
+Example:
+
+```html 
+<form
+    data-id="game-save" 
+    data-bind-targets="response-message" >
+</form> 
+````
+
+```html 
+<div
+    data-id="response-message" 
+    data-bind-allows-all-sources >
+</div>
+````
+
+The wildcard therefore ony removes th target-side source restriction. 
+
+It does not cause the target to be updated automatically by every source.
+
+#### Purpose
+
+This is particularly useful for global response elements such as: 
+
+- success messages
+- error messages
+- validation messages
+- general application notifications
+
+Without this option, a global target would need to explicitly list every possible source: 
+
+```html
+data-bind-sources="
+    game-save, 
+    game-delete, 
+    user-save, 
+    user-delete, 
+    ...
+"
+```
+
+Using: 
+
+```html
+data-bind-allows-all-sources
+````
+
+avoids this unnecessary maintenance. 
+
 ---
 
 # Binding Attributes
@@ -265,6 +381,92 @@ Example:
 </span>
 ```
 
+Bindings are processed sequentially. 
+
+---
+
+# Response Keys
+
+The Binding System supports two equivalent ways of defining a response path: 
+
+- `data-bind-X-key`
+- `data-bind-X-dto-key`
+
+These are not two different binding mechanisms. 
+
+`dto-key` is a conventional shortcut for a key below the response's `data` property. 
+
+Therefore:
+
+```html
+data-bind-1-dto-key="player_count"
+````
+
+is equivalent to: 
+
+```html
+data-bind-1-key="data.player_count"
+````
+
+The generic `key? mechanism can access any path within the complete JSON response. 
+
+---
+
+# Generic Key Binding
+
+## data-bind-X-key
+
+Defines a path within the complete JSON response. 
+
+Example:
+
+```html
+<span 
+    data-bind-1-key="message" 
+    data-bind-1-type="text" >
+</span>
+````
+
+Response: 
+
+```json
+{
+    "success": true, 
+    "message": "Game saved"
+}
+````
+
+The resolver accesses: 
+
+``` 
+response.message
+````
+
+Another example: 
+
+```html
+<span 
+    data-bind-1-key="errors.email" 
+    data-bind-1-type="text" >
+</span>
+````
+
+Response: 
+
+```json
+{
+    "errors": {
+        "email": "Invalid email address"
+    }
+}
+```
+
+The resolver accesses: 
+
+```
+response.errors.email
+```
+
 ---
 
 # DTO Binding
@@ -293,13 +495,84 @@ Response:
 }
 ```
 
-Result:
+Internally this is equivalent to: 
 
 ```html
-<span>
-3
-</span>
+data-bind-1-key="data.player_count"
 ```
+
+The resolver therefore accesses: 
+
+````
+response.data.player_count
+````
+
+### Why dto-key exists
+
+DTO values are the most common source of binding data. 
+
+The shortcut: 
+
+```html
+data-bind-1-dto-key="player_count"
+```
+
+is therefore intentionally retained as the convenient and explicit syntax for the common DTO case. 
+
+It should not be considered a separate binding type. 
+
+---
+## Key and DTO-Key Equality 
+
+`key`and `dto-key` are treated as equal declaration. 
+
+For example: 
+
+```html
+data-bind-1-key="data.player_count"
+```
+
+and: 
+
+```html
+data-bind-1-dto-key="player_count"
+```
+
+describe the same logical response path. 
+
+A binding must not define both attributes for the same binding index. 
+
+Invalid: 
+
+```html
+data-bind-1-key="message" 
+data-bind-1-dto-key="player_count" 
+```
+
+This is a conflicting key declaration and the binding is rejected. 
+
+Likewise, defining the same declaration twice through both syntaxes is invalid: 
+
+```html
+data-bind-1-key="data.player_count"
+data-bind-1-dto-key="player_count"
+```
+
+There is no "last declaration wins" behavior. 
+
+The two attributes are aliases for the same logical key property. 
+
+Separate bindings are completely valid: 
+
+```html
+data-bind-1-key="message"
+data-bind-1-type="text"
+
+data-bind-2-dto-key="player_count"
+data-bind-2-type="text"
+```
+
+These are two independent bindings and are processed sequentially. 
 
 ---
 
@@ -332,9 +605,61 @@ Response:
 The resolver follows the path:
 
 ```
-permissions
-    |
-    join
+response
+ |
+ +-- data
+      |
+      +-- permissions
+           |
+           +-- join
+```
+
+The same path can be expressed using the generic key syntax: 
+
+```html
+<form 
+    data-bind-1-key="data.permissions.join" >
+</from>
+```
+
+---
+
+## Array Values
+
+nested paths can also access array elements. 
+
+Example: 
+
+```html
+<input 
+    data-bind-1-dto-key="channels.0" 
+    data-bind-1-type="value" >
+```
+
+Response: 
+
+```json
+{
+    "data": {
+        "channels": [
+            "application"
+        ]
+    }
+}
+```
+
+The resolver accesses: 
+
+```
+response.data.channels[0]
+```
+
+The equivalent generic syntax is: 
+
+```html
+<input 
+    data-bind-1-key="data.channels.0" 
+    data-bind-1-type="value" >
 ```
 
 ---
@@ -898,8 +1223,12 @@ case "newType":
 - keep business logic in backend services
 - return complete DTO state
 - reuse existing binding types
-- use DTO paths for nested objects and arrays
-- use data-bind-X-dto-key-loose="true" only when a missing DTO value is a valid state 
+- use `dto-key`as the convenient shortcut for `data.*` values
+- use `key` for arbitrary response paths
+- user nested key paths for objects and arrays
+- use `data-bind-X-dto-key-loose="true"` or `data-bind-X-key-loose="true"` only when a missing value is a valid state 
+- use `data-bind-allows-all-sources`for intentionally global binding targets
+- use notification attributes for temporary response messages
 - document new generic capabilities
 
 
@@ -910,6 +1239,10 @@ case "newType":
 - duplicate form handling logic
 - create custom JavaScript for simple DOM updates
 - introduce special binding syntax for individual application data structures 
+- use bot `key` and `dto-key` for the same binding index
+- assume `dto-key` is a separate binding mechanism 
+- use CSS selectors for notification targets
+- make notification behavior endpoint-specific
 
 ---
 
@@ -928,7 +1261,23 @@ the application describes:
 The backend provides the state.
 The binding system synchronizes the interface.
 
-The same principle applies to missing DTO values: 
+The same principle applies to response paths:
+> `dto-key` is a convenient shortcut for the common `data.*` path, while `key` provides access to the complete JSON response. 
+
+The same principle applies to missing values: 
 > A missing value is an error by default, but can explicitly be declared as a valid empty state using data-bind-X-dto-key-loose="true". 
+
+The same principle applies to global targets: 
+> A target accepts only explicitly permitted sources by default, but can explicitly opt into all sources using `data-bind-allows-all-sources`.
+
+Temporary messages follow the same declarative philosophy: 
+> A form may declare a notification target, while the generic binding system determines how the response message is displayed, styles and automatically hidden. 
+
+The result is a frontend architecture in which: 
+- the backend provides state
+- HTML declares relationships 
+- binding.js applies state
+- notification behavior remains generic 
+-  application-specific business logic stays outside the binding layer
 
 This keeps the default behavior strict and predictable while allowing dynamic structures such as variable-length arrays to be represented declaratively. 
