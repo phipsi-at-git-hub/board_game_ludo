@@ -6,7 +6,17 @@ use App\Core\Localization;
 
 <nav id="navbar" class="navbar">
     <div class="logo"><a href="/lobby" class="btn-home"><?= Localization::get('application.general.title') ?></a></div>
-    <div id="form-response" data-id="form-response" data-bind-response-all class="ajax-response"></div>
+    <div 
+        id="form-response" 
+        class="ajax-response" 
+        data-id="form-response" 
+        data-bind-1-type="text" 
+        data-bind-1-dto-key="" 
+        data-bind-2-type="class" 
+        data-bind-2-dto-key="" 
+        data-bind-2-classes-fixed="ajax-response" 
+        data-bind-allows-all-sources >
+    </div>
     <div class="nav-items">
         <?php if ($current_user !== null): ?>
             <?php if ($current_user->isAdmin()): ?>

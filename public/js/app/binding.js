@@ -4,7 +4,7 @@
  * Responsibilities:
  * - Intercept JSON based actions
  * - Execute requests
- * - Process DTO responses
+ * - Process (DTO) responses
  * - Resolve n:m bindings
  * - Update DOM declaratively
  *
@@ -35,7 +35,6 @@ async function submitJsonBindingForm(form, submitter = null) {
     let json;
     try {
         json = await response.json();
-
     } catch (error) {
         console.error("Invalid JSON response", error);
         return;
@@ -80,6 +79,10 @@ function processBindings(source, response) {
 
 // Check if targets and sources are correctly set - otherwise they will not bind
 function targetAcceptsSource(target, sourceId) {
+    // If element has attribute 'data-bind-allows-all-sources' that is fine, too
+    if (target.hasAttribute("data-bind-allows-all-sources")) {
+        return true; 
+    }
     const allowedSources = parseList(target.dataset.bindSources);
     return allowedSources.includes(sourceId);
 }
@@ -114,17 +117,27 @@ function applyTargetBindings(target, response) {
             continue;
         }
 
-        const key = target.getAttribute(`data-bind-${index}-dto-key`);
+        const key = target.getAttribute(`data-bind-${index}-key`); 
+        const dtoKey = target.getAttribute(`data-bind-${index}-dto-key`); 
 
-        if (!key) {console.warn("DTO binding requires dto-key", target, index);
+        if (key && dtoKey) {
+            console.warn("Binding requires either key or dto-key, not both", target, index); 
+            index++; 
+            continue; 
+        } 
+
+        if (!key && !dtoKey) {
+            console.warn("Binding requires key or dto-key", target, index);
             index++;
             continue;
         }
 
-        let value = resolveDtoValue(response.data, key); 
-        const loose = target.getAttribute(`data-bind-${index}-dto-key-loose`) === "true"; 
+        const resolvedKey = dtoKey ? `data.${dtoKey}` : key; 
+
+        let value = resolveValue(response, resolvedKey); 
+        const loose = target.getAttribute(`data-bind-${index}-key-loose`) === "true" || target.getAttribute(`data-bind-${index}-dto-key-loose`) === "true"; 
         if (value === undefined && !loose) {
-            console.warn("DTO key missing:", key); 
+            console.warn("Key missing:", resolvedKey); 
             index++; 
             continue; 
         }
@@ -280,8 +293,8 @@ function parseList(value) {
         );
 }
 
-// Helper - Resolve the DTO value
-function resolveDtoValue(object, path) {
+// Helper - Resolve the value
+function resolveValue(object, path) {
     return path.split(".").reduce(
         (value, key) => value?.[key], object
     ); 
