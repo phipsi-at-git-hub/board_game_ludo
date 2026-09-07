@@ -8,14 +8,7 @@ use App\Core\Localization;
     <div class="logo"><a href="/lobby" class="btn-home"><?= Localization::get('application.general.title') ?></a></div>
     <div 
         id="form-response" 
-        class="ajax-response" 
-        data-id="form-response" 
-        data-bind-1-type="text" 
-        data-bind-1-dto-key="" 
-        data-bind-2-type="class" 
-        data-bind-2-dto-key="" 
-        data-bind-2-classes-fixed="ajax-response" 
-        data-bind-allows-all-sources >
+        class="ajax-response" >
     </div>
     <div class="nav-items">
         <?php if ($current_user !== null): ?>

@@ -45,7 +45,9 @@ use App\Models\User\UserModel;
                 data-bind-form 
 
                 data-id="profile-information-form" 
-                data-response="json" >
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
 
                 <input
                     type="hidden"
@@ -178,15 +180,12 @@ use App\Models\User\UserModel;
             <form
                 id="profile-settings-form" 
                 action="/api/account/settings"
-                method="POST"
-                data-bind-form 
-
-                data-ajax-event="change" 
-                data-ajax-target="form-response" 
+                method="POST" 
 
                 data-id="profile-settings-form" 
                 data-response="json" 
-                data-bind-targets="form-response" >
+                
+                data-notification-target="#form-response" >
 
                 <input
                     type="hidden"
@@ -266,7 +265,9 @@ use App\Models\User\UserModel;
                 data-bind-form
 
                 data-id="profile-password-form" 
-                data-response="json" >
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
 
                 <input
                     type="hidden"

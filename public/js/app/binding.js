@@ -45,6 +45,7 @@ async function submitJsonBindingForm(form, submitter = null) {
     }
 
     processBindings(form, json); 
+    processBindingNotification(form, json); 
     processSuccessNavigational(form); 
 }
 
@@ -247,6 +248,58 @@ function updateAttribute(element, value, target, index) {
     element.setAttribute(attribute,value); 
 }
 
+/**
+ * JSON Binding Notification System
+ *
+ * Responsibilities:
+ * - Display response messages in a form-defined target
+ * - Apply success/error notification states
+ * - Automatically hide notifications after a timeout
+ *
+ * No business logic allowed.
+ */
+
+// Process and handle notifications for json responses
+function processBindingNotification(form, response) {
+    const targetSelector = form.getAttribute("data-notification-target");
+    if (!targetSelector) {
+        return;
+    }
+
+    const target = document.querySelector(targetSelector);
+    if (!target) {
+        console.warn("Notification target not found:", targetSelector);
+        return;
+    }
+
+    const message = response.message;
+    if (message === undefined || message === null) {
+        return;
+    }
+
+    target.textContent = message;
+    target.classList.remove("success", "error", "active");
+
+    if (response.success) {
+        target.classList.add("success", "active");
+    } else {
+        target.classList.add("error", "active");
+    }
+
+    const timeout = parseInt(
+        form.getAttribute("data-notification-timeout") || "3000",
+        10
+    );
+
+    if (timeout <= 0) {
+        return;
+    }
+
+    setTimeout(() => {
+        target.classList.remove("success", "error", "active");
+    }, timeout);
+}
+
 // Process navigational actions bind to success
 function processSuccessNavigational(form) { 
     const navigation = form.getAttribute('data-after-success-navigation'); 
@@ -277,7 +330,7 @@ function processSuccessNavigational(form) {
     }
 } 
 
-// Parse list
+// Helper - Parse list
 function parseList(value) {
     if (!value) {
         return [];
