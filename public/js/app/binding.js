@@ -176,7 +176,7 @@ function updateElement(
             break;
 
         case "view":
-            element.innerHTML = value;
+            element.innerHTML = removeScripts(value);
             break;
 
         case "value":
@@ -329,6 +329,17 @@ function processSuccessNavigational(form) {
             console.warn("Unknown navigation action: ", navigation); 
     }
 } 
+
+// Helper - Remove scripts elements 
+function removeScripts(value) {
+    const template = document.createElement('template'); 
+    template.innerHTML = value; 
+
+    template.content.querySelectorAll('script').forEach(script => {
+        script.remove(); 
+    }); 
+    return template.innerHTML; 
+}
 
 // Helper - Parse list
 function parseList(value) {
