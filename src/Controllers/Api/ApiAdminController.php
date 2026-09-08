@@ -24,6 +24,22 @@ final class ApiAdminController extends BaseController {
     */
 
     /**
+     * User section
+     */
+    /**
+     * User - Update user information / account
+     */
+    public function updateUserProfile(): void {}
+    public function updateUserRole(): void {}
+    public function updateUserStatus(): void {}
+    public function updateUserLocale(): void {}
+    public function updateUserSettings(): void {} 
+    public function sendUserResetMail(): void {}
+
+    /**
+     * Settings section
+     */
+    /**
      * Helper - Current system settings
      */
     private function settings(): SystemSettingsModel {

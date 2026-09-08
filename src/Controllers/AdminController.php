@@ -85,7 +85,7 @@ class AdminController extends BaseController {
     }
 
     /**
-     * User Section
+     * User Section 
      */
     // Users - List all users
     public function listUsers(): void {

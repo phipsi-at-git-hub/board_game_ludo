@@ -35,20 +35,34 @@ use App\Models\User\UserModel;
                 </a>
             </li>
         </ul>
-    </div>
+    </div> 
 
-    <form action="/admin/user/edit/<?= $user->getId() ?>" method="POST">
+    <div class="dashboard-grid">
 
-        <input
-            type="hidden"
-            name="_csrf_token"
-            value="<?= Csrf::generate() ?>">
+        <!-- Account -->
+        <div class="card dashboard-card">
+            <h2><?= Localization::get('admin.users.edit.card.account.title') ?></h2>
 
-        <div class="dashboard-grid">
+            <form
+                id="admin-user-account-form" 
+                action="/api/admin/user/update"
+                method="POST"
+                data-bind-form 
 
-            <!-- Account -->
-            <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.card.account.title') ?></h2>
+                data-id="admin-user-account-form" 
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT" >
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>" >
 
                 <div class="form-group">
                     <label for="username">
@@ -75,18 +89,52 @@ use App\Models\User\UserModel;
                         value="<?= htmlspecialchars($user->getEmail()) ?>"
                         required>
                 </div>
-            </div>
 
-            <!-- Permissions -->
-            <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.card.permissions.title') ?></h2>
+                <div class="nav-actions">
+                    <button
+                        type="submit"
+                        class="btn btn-save">
+                        <?= Localization::get('application.general.btn.save') ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Permissions -->
+        <div class="card dashboard-card">
+            <h2><?= Localization::get('admin.users.edit.card.permissions.title') ?></h2>
+
+            <form
+                id="admin-user-role-form" 
+                action="/api/admin/user/role"
+                method="POST" 
+
+                data-id="admin-user-role-form" 
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT">
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
 
                 <div class="form-row">
                     <label for="role">
                         <?= Localization::get('admin.users.edit.card.permissions.role') ?>
                     </label>
 
-                    <select id="role" name="role" data-ui="badge-select">
+                    <select 
+                        id="role"
+                        name="role"
+                        data-bind="role"
+                        data-ui="badge-select" 
+                        data-auto-save="change" >
 
                         <option
                             value="USER"
@@ -115,13 +163,38 @@ use App\Models\User\UserModel;
                     </select>
                 </div>
 
+            </form>
+
+            <form
+                id="admin-user-status-form" 
+                action="/api/admin/user/status"
+                method="POST" 
+
+                data-id="admin-user-status-form" 
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT">
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
+
                 <div class="form-row">
                     <?= Localization::get('admin.users.edit.card.permissions.status') ?>
 
-                    <select
+                    <select 
+                        id="status"
                         name="status"
-                        data-ui="switch"
-                        class="enhanced">
+                        data-bind="status"
+                        data-ui="switch" 
+                        data-auto-save="change" 
+                        class="enhanced" >
 
                         <option
                             value="INACTIVE"
@@ -139,18 +212,47 @@ use App\Models\User\UserModel;
 
                     </select>
                 </div>
-            </div>
 
-            <!-- Settings -->
-            <div class="card dashboard-card">
-                <h2><?= Localization::get('admin.users.edit.card.settings.title') ?></h2>
+            </form>
+
+        </div>
+
+        <!-- Settings -->
+        <div class="card dashboard-card">
+            <h2><?= Localization::get('admin.users.edit.card.settings.title') ?></h2>
+
+            <form
+                id="admin-user-locale-form" 
+                class="many" 
+                action="/api/admin/user/locale"
+                method="POST"
+                data-bind-form 
+
+                data-id="admin-user-locale-form" 
+                data-response="json"
+                data-after-success-navigation="reload" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT">
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
 
                 <div class="form-row">
                     <label for="role">
                         <?= Localization::get('admin.users.edit.card.settings.language') ?>
                     </label>
 
-                    <select id="preferred_language" name="preferred_language" data-ui="badge-select">
+                    <select 
+                        id="preferred_language"
+                        name="preferred_language"
+                        data-bind="preferred_language"
+                        data-ui="badge-select" 
+                        data-auto-save="change"  >
 
                         <option
                             value="<?= Application::DE_DE ?>"
@@ -167,13 +269,38 @@ use App\Models\User\UserModel;
                     </select>
                 </div>
 
+            </form>
+
+            <form
+                id="admin-user-settings-form" 
+                action="/api/admin/user/settings"
+                method="POST" 
+
+                data-id="admin-user-settings-form" 
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="PUT">
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>">
+
                 <div class="form-row">
                     <?= Localization::get('admin.users.edit.card.settings.camera_mode') ?>
 
-                    <select
+                    <select 
+                        id="preferred_camera_mode"
                         name="preferred_camera_mode"
-                        data-ui="switch"
-                        class="enhanced">
+                        data-bind="preferred_camera_mode"
+                        data-ui="switch" 
+                        data-auto-save="change" 
+                        class="enhanced" >
 
                         <option
                             value="<?= Application::CAMERA_MODE_FOLLOW ?>"
@@ -191,35 +318,56 @@ use App\Models\User\UserModel;
 
                     </select>
                 </div>
-            </div>
 
-            <!-- Security -->
-            <div class="card dashboard-card danger-zone">
-                <h2><?= Localization::get('admin.users.edit.card.security.title') ?></h2>
+            </form>
 
-                <p>
-                    <?= Localization::get('admin.users.edit.card.security.reset_password_description') ?>
-                </p>
+        </div>
+
+        <!-- Security -->
+        <div class="card dashboard-card danger-zone">
+            <h2><?= Localization::get('admin.users.edit.card.security.title') ?></h2>
+
+            <p>
+                <?= Localization::get('admin.users.edit.card.security.reset_password_description') ?>
+            </p>
+
+            <form
+                id="admin-user-send-reset-mail-form" 
+                action="/api/admin/user/send_reset_mail"
+                method="POST"
+                data-bind-form 
+
+                data-id="admin-user-send-reset-mail-form" 
+                data-response="json" 
+                
+                data-notification-target="#form-response" >
+
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="POST" >
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="<?= Csrf::generate() ?>" >
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="nav-actions">
-                    <a
-                        href="/admin/user/send-reset/<?= $user->getId() ?>"
-                        class="btn btn-danger">
 
+                    <button class="btn btn-danger">
                         <?= Localization::get('admin.users.edit.card.security.send_reset_mail') ?>
-
-                    </a>
+                    </button>
                 </div>
-            </div>
+
+            </form>
 
         </div>
 
-        <div class="nav-actions">
-            <button type="submit" class="btn btn-save">
-                <?= Localization::get('application.general.btn.save') ?>
-            </button>
-        </div>
-
-    </form>
+    </div>
 
 </div>

@@ -134,7 +134,6 @@ use App\Models\User\UserModel;
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>">
 
-
                 <!-- Language -->
                 <div class="form-row">
 
@@ -210,7 +209,7 @@ use App\Models\User\UserModel;
                         data-bind="preferred_camera_mode"
                         data-ui="switch" 
                         data-auto-save="change" 
-                        class="enhanced">
+                        class="enhanced" >
 
                         <option
                             value="<?= Application::CAMERA_MODE_FOLLOW ?>"
