@@ -63,6 +63,11 @@ use App\Models\User\UserModel;
                     type="hidden"
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>" >
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="form-group">
                     <label for="username">
@@ -123,6 +128,11 @@ use App\Models\User\UserModel;
                     type="hidden"
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>">
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="form-row">
                     <label for="role">
@@ -184,6 +194,11 @@ use App\Models\User\UserModel;
                     type="hidden"
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>">
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="form-row">
                     <?= Localization::get('admin.users.edit.card.permissions.status') ?>
@@ -241,6 +256,11 @@ use App\Models\User\UserModel;
                     type="hidden"
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>">
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="form-row">
                     <label for="role">
@@ -290,6 +310,11 @@ use App\Models\User\UserModel;
                     type="hidden"
                     name="_csrf_token"
                     value="<?= Csrf::generate() ?>">
+                
+                <input 
+                    type="hidden" 
+                    name="user_id" 
+                    value="<?= $user->getId() ?>" >
 
                 <div class="form-row">
                     <?= Localization::get('admin.users.edit.card.settings.camera_mode') ?>

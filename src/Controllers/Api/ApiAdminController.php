@@ -9,12 +9,17 @@ use App\Core\BaseController;
 use App\Core\Date\DateRange;
 use App\Core\Dto\Logging\EntryFilterContext;
 use App\Core\Dto\System\SettingsContext;
+use App\Core\Dto\User\UserContext;
+use App\Core\Http\Http;
 use App\Core\Http\Response;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
 use App\Models\System\SystemSettingsModel;
-use App\Services\LogService; 
+use App\Models\User\UserModel;
+use App\Services\LogService;
+use App\Services\MailService;
+use App\Services\UserService;
 
 final class ApiAdminController extends BaseController {
     /*
@@ -27,14 +32,249 @@ final class ApiAdminController extends BaseController {
      * User section
      */
     /**
+     * updateUserProfile
      * User - Update user information / account
+     *
+     * @return void
      */
-    public function updateUserProfile(): void {}
-    public function updateUserRole(): void {}
-    public function updateUserStatus(): void {}
-    public function updateUserLocale(): void {}
-    public function updateUserSettings(): void {} 
-    public function sendUserResetMail(): void {}
+    public function updateUserProfile(): void {
+        $user = UserModel::findById($_POST['user_id']); 
+        $data = [
+            'username' => $_POST['username'] ?? null,
+            'email' => $_POST['email'] ?? null,
+        ];
+        $userService = new UserService();
+
+        $success = $userService->update($user, $data);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->info('User account profile updated', ['user_id' => $user->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    'application.response.messages.save.success'
+                )
+            )
+        );
+    }
+
+    /**
+     * updateUserRole
+     * User - Update user role
+     *
+     * @return void
+     */
+    public function updateUserRole(): void {
+        $user = UserModel::findById($_POST['user_id']); 
+        $data = [
+            'role' => $_POST['role'] ?? null,
+        ];
+        $userService = new UserService();
+
+        $success = $userService->update($user, $data);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->info('User account profile updated', ['user_id' => $user->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    'application.response.messages.save.success'
+                )
+            )
+        );
+    }
+
+    /**
+     * updateUserStatus
+     *
+     * @return void
+     */
+    public function updateUserStatus(): void {
+        $user = UserModel::findById($_POST['user_id']); 
+        $data = [
+            'status' => $_POST['status'] ?? null,
+        ];
+        $userService = new UserService();
+
+        $success = $userService->update($user, $data);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->info('User account profile updated', ['user_id' => $user->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    'application.response.messages.save.success'
+                )
+            )
+        );
+    }
+
+    /**
+     * updateUserLocale
+     *
+     * @return void
+     */
+    public function updateUserLocale(): void {
+        $user = UserModel::findById($_POST['user_id']); 
+        $data = [
+            'preferred_language' => $_POST['preferred_language'] ?? null,
+        ];
+        $userService = new UserService();
+
+        $success = $userService->update($user, $data);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->info('User account profile updated', ['user_id' => $user->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    'application.response.messages.save.success'
+                )
+            )
+        );
+    }
+
+    /**
+     * updateUserSettings
+     *
+     * @return void
+     */
+    public function updateUserSettings(): void {
+        $user = UserModel::findById($_POST['user_id']); 
+        $data = [
+            'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? null,
+        ];
+        $userService = new UserService();
+
+        $success = $userService->update($user, $data);
+        if (!$success) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->info('User account profile updated', ['user_id' => $user->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    'application.response.messages.save.success'
+                )
+            )
+        );
+    } 
+
+    /**
+     * sendUserResetMail
+     *
+     * @return void
+     */
+    public function sendUserResetMail(): void {
+        // ToDo: Implement
+        $user = UserModel::findById($_POST['user_id']); 
+        if (!$user) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
+        $email = $user->getEmail(); 
+        $token = UserModel::createPasswordToken($email);
+        if ($token === null) {
+            $this->redirect('/forgot-password'); 
+        }
+
+        $resetUrl = Http::url('/reset-password/'. $token);
+
+        // Send Email for password reset
+        $mailService = new MailService(); 
+        $mailService->sendPasswordReset($user, $resetUrl); 
+
+        $context = UserContext::fromUser($user);
+
+        // Logging
+        Logger::app()->notice('Reset password link sent to user' . $user->getId(), ['user_id' => Auth::user()->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                Localization::get(
+                    //'application.response.messages.save.success'
+                    'account.reset_password_sent.title'
+                )
+            )
+        );
+    }
 
     /**
      * Settings section

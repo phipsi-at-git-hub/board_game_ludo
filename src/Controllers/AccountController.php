@@ -128,7 +128,7 @@ class AccountController extends BaseController {
         $mailService->sendPasswordReset($user, $resetUrl); 
 
         // Logging
-        Logger::app()->debug('Show password reset form.', []);
+        Logger::app()->notice('Reset password link sent to user' . $user->getId(), []);
 
         $this->render(
             'account/set_password_sent', 
