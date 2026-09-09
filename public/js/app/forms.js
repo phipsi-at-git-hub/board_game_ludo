@@ -213,7 +213,6 @@ function initSwitchSelects() {
         indicator_inner.className = 'switch-indicator-inner'; 
 
         indicator.appendChild(indicator_inner); 
-
         switch_group.appendChild(indicator);
 
         const updateStateClass = (state) => {
@@ -248,6 +247,10 @@ function initSwitchSelects() {
             updateStateClass(options[current_index].dataset.state); 
         }; 
 
+
+        /* ------------------------------
+           OPTIONS BUILD
+        ------------------------------ */
         options.forEach((option, index) => {
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -276,7 +279,54 @@ function initSwitchSelects() {
             switch_group.appendChild(btn);
         });
 
+        /* ------------------------------
+           WIDTH CALCULATION
+           -> USE WIDTH OF LARGEST OPTION
+        ------------------------------ */
+        const measure = document.createElement('span');
+        measure.style.position = 'absolute'; 
+        measure.style.visibility = 'hidden'; 
+        measure.style.whiteSpace = 'nowrap'; 
+        document.body.appendChild(measure); 
+
+        let maxWidth = 0; 
+
+        options.forEach(option => {
+            measure.textContent = option.text; 
+            const width = measure.getBoundingClientRect().width; 
+            if (width > maxWidth) {
+                maxWidth = width; 
+            }
+        }); 
+
+        document.body.removeChild(measure); 
+
+        /**
+         * Horizontal padding of one switch option. 
+         * must correspond to .switch-option padding.
+         * 
+         * padding: 8px 14px;
+         * -> 14px left + 14px right
+         */
+
+        /**
+         * The switch itself has 4px padding on both sides.
+         */
+        const OPTION_PADDING = 28; 
+        const SWITCH_PADDING = 8;
+        const requiredOptionWidth = maxWidth + OPTION_PADDING; 
+        const switchWidth = requiredOptionWidth * options.length + SWITCH_PADDING; 
+
+        switch_group.style.width = `${switchWidth}px`; 
+
+        /* ------------------------------
+           CHANGE SYNC
+        ------------------------------ */
         select.addEventListener('change', syncFromSelect); 
+
+        /* ------------------------------
+           INSERT
+        ------------------------------ */
         select.classList.add('switch-enhanced');
         select.insertAdjacentElement('afterend', switch_group);
     });
