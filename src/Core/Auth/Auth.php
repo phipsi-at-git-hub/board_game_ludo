@@ -1,6 +1,6 @@
 <?php
-// Auth.php
-namespace App\Core;
+// src/Core/Auth/Auth.php
+namespace App\Core\Auth;
 
 use App\Constants\Application;
 use App\Models\User\UserModel;

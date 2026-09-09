@@ -1,7 +1,7 @@
 <?php 
 // src/Views/account/set_password.php
 
-use App\Core\Csrf; 
+use App\Core\Security\Csrf; 
 use App\Core\Localization;
 
 /**

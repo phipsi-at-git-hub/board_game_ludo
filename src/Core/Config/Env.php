@@ -1,6 +1,6 @@
 <?php
-// Env.php
-namespace App\Core;
+// src/Core/Config/Env.php
+namespace App\Core\Config;
 
 final class Env {
     private static ?string $env = null;

@@ -3,7 +3,7 @@
 namespace App\Models\Game;
 
 use App\Constants\Application;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\Dto\Game\GameEngineMove;
 use App\Core\Logging\Logger;
 use App\Models\BaseModel;

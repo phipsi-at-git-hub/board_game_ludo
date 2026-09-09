@@ -1,7 +1,7 @@
 <?php
 // bootstrap/routes.php
 
-use App\Core\Env;
+use App\Core\Config\Env;
 use App\Core\Router;
 
 $cache_file = BASE_PATH . '/storage/cache/routes.php';

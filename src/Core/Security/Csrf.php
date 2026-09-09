@@ -1,7 +1,7 @@
 <?php
-// Csrf.php
+// src/Core/Security/Csrf.php
 
-namespace App\Core;
+namespace App\Core\Security;
 
 class Csrf {
     public static function generate(): string {

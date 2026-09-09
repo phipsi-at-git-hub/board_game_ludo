@@ -1,5 +1,6 @@
 <?php 
 use App\Core\Localization;
+use App\Core\Security\Csrf;
 
 /** @var \App\Models\User\UserModel $current_user */
 ?>
@@ -17,7 +18,7 @@ use App\Core\Localization;
             <?php endif; ?>
             <a href="/account" class="btn btn-primary"><?= Localization::get('application.navbar.btn_account') ?> <?= $current_user->getUsername() ?></a>
             <form method="POST" action="/logout">
-                <input type="hidden" name="_csrf_token" value="<?= \App\Core\Csrf::generate() ?>">
+                <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                 <button class="btn btn-danger" type="submit"><?= Localization::get('application.navbar.btn_logout') ?></button>
             </form>
         <?php else: ?>

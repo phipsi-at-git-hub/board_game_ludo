@@ -13,7 +13,7 @@ use App\Services\SystemService;
     <h1 class="page-title"><?= Localization::get('game.lobby.title') ?></h1>
 
     <p class="welcome-text">
-        <?= Localization::get('game.lobby.welcome') ?>, <strong><?= htmlspecialchars(\App\Core\Auth::user()->getUsername()) ?></strong>!
+        <?= Localization::get('game.lobby.welcome') ?>, <strong><?= htmlspecialchars($current_user->getUsername()) ?></strong>!
     </p>
 
     <div class="nav-actions">

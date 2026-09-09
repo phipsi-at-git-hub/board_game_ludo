@@ -4,7 +4,7 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Date\DateRange;
 use App\Core\Dto\Logging\EntryFilterContext;
@@ -95,7 +95,7 @@ final class ApiAdminController extends BaseController {
                 400
             );
         }
-        
+
         $userService = new UserService();
 
         $success = $userService->update($user, $data);

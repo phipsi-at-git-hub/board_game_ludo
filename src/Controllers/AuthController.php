@@ -2,7 +2,7 @@
 // AuthController.php
 namespace App\Controllers;
 
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Logging\Logger;
 use App\Models\User\UserModel;

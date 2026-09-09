@@ -3,7 +3,7 @@
 namespace App\Core;
 
 use App\Core\Application\App;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Services\SystemService;
 
 abstract class BaseController {

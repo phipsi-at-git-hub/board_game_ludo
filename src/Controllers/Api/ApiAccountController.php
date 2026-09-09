@@ -5,7 +5,7 @@ namespace App\Controllers\Api;
 
 use App\Constants\Application;
 use App\Core\Application\App;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Dto\User\UserContext;
 use App\Core\Http\Response;

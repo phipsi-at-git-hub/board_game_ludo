@@ -4,7 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Constants\Application;
 use App\Core\BaseController;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\History\Game\GameStateHistory;
 use App\Models\Game\GameModel;
 use DomainException;

@@ -1,13 +1,16 @@
 <?php
 use App\Core\Localization;
-use App\Core\SystemSettings;
+
+/**
+ * @var SystemService $system_settings
+ */
 ?>
 
 <div class="panel">
 
     <h1><?= Localization::get('maintenance.dashboard.title') ?></h1>
 
-    <?php if (!SystemSettings::isSystemEnabled()): ?>
+    <?php if (!$system_settings::isSystemEnabled()): ?>
         <div class="alert alert-warning">
             <?= Localization::get('maintenance.dashboard.system_disabled') ?>
         </div>
@@ -22,7 +25,7 @@ use App\Core\SystemSettings;
 
             <div class="stats-main">
                 <div class="stat-big">
-                    <?= SystemSettings::isSystemEnabled() ? 'ONLINE' : 'OFFLINE' ?>
+                    <?= $system_settings::isSystemEnabled() ? 'ONLINE' : 'OFFLINE' ?>
                 </div>
 
                 <div class="stat-label">
@@ -35,7 +38,7 @@ use App\Core\SystemSettings;
                 <!-- Authentication -->
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isLoginEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isLoginEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -45,7 +48,7 @@ use App\Core\SystemSettings;
 
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isRegistrationEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isRegistrationEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -60,7 +63,7 @@ use App\Core\SystemSettings;
                 <!-- Games -->
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isGameCreationEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isGameCreationEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -70,7 +73,7 @@ use App\Core\SystemSettings;
 
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isGamePlayEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isGamePlayEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -85,7 +88,7 @@ use App\Core\SystemSettings;
                 <!-- Maintenance -->
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isSystemEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isSystemEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -95,7 +98,7 @@ use App\Core\SystemSettings;
 
                 <div>
                     <span class="stat-value">
-                        <?= SystemSettings::isMaintenanceModeEnabled() ? 'ON' : 'OFF' ?>
+                        <?= $system_settings::isMaintenanceModeEnabled() ? 'ON' : 'OFF' ?>
                     </span>
 
                     <span class="stat-text">
@@ -122,7 +125,7 @@ use App\Core\SystemSettings;
 
             <div class="stats-main">
                 <div class="stat-big">
-                    <?= htmlspecialchars(SystemSettings::wasUpdatedBy()->getUsername()) ?>
+                    <?= htmlspecialchars($system_settings::wasUpdatedBy()->getUsername()) ?>
                 </div>
 
                 <div class="stat-label">
@@ -134,7 +137,7 @@ use App\Core\SystemSettings;
 
                 <div>
                     <span class="stat-value">
-                        <?= htmlspecialchars(SystemSettings::wasUpdatedBy()->getRole()) ?>
+                        <?= htmlspecialchars($system_settings::wasUpdatedBy()->getRole()) ?>
                     </span>
 
                     <span class="stat-text">
@@ -144,7 +147,7 @@ use App\Core\SystemSettings;
 
                 <div>
                     <span class="stat-value">
-                        <?= htmlspecialchars(SystemSettings::wasUpdatedAt()) ?>
+                        <?= htmlspecialchars($system_settings::wasUpdatedAt()) ?>
                     </span>
 
                     <span class="stat-text">

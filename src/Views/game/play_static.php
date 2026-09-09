@@ -1,7 +1,14 @@
 <?php
 use App\Constants\Application;
-use App\Core\Csrf;
 use App\Core\Localization;
+use App\Core\Security\Csrf;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
+
+/**
+ * @var GameModel $game
+ * @var UserModel $user
+ */
 ?>
 <h1><?= $game->getName() ?></h1>
 

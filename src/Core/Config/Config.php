@@ -1,5 +1,7 @@
 <?php
-namespace App\Core;
+// src/Core/Config/Config.php
+
+namespace App\Core\Config;
 
 final class Config {
     private static array $items = [];

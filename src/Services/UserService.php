@@ -5,7 +5,7 @@
 namespace App\Services;
 
 use App\Constants\Application;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Models\User\UserModel;
 
 final class UserService {

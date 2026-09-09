@@ -2,6 +2,8 @@
 // Core/Debug.php
 namespace App\Core;
 
+use App\Core\Config\Env;
+
 class Debug {
     private static float $start_time;
     private static array $data = [];

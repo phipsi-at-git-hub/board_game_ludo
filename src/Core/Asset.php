@@ -2,6 +2,8 @@
 // src/Core/Asset.php
 namespace App\Core;
 
+use App\Core\Config\Env;
+
 class Asset {
     private const MANIFEST_FILENAME = 'asset-manifest.json';
     private const MANIFEST_FULL_PATH = PUBLIC_PATH . '/' . self::MANIFEST_FILENAME;

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Constants\Application;
 use App\Core\Application\App;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\BaseController; 
 use App\Core\History\Game\GameStateHistory;
 use App\Core\Http\Http;

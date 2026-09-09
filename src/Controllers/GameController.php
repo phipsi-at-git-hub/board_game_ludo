@@ -4,9 +4,8 @@ namespace App\Controllers;
 
 use App\Constants\Application;
 use App\Core\Application\App;
-use App\Core\Auth;
+use App\Core\Auth\Auth;
 use App\Core\BaseController;
-use App\Core\Csrf;
 use App\Core\Logging\Logger;
 use App\Models\Game\GameModel;
 use App\Models\Game\GameRuleSetModel;
@@ -75,11 +74,6 @@ class GameController extends BaseController {
 
     // Create a new game via POST
     public function store() {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_NAME] !== '') {
             $game_options = [
                 Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
@@ -145,11 +139,6 @@ class GameController extends BaseController {
 
     // Game update via POST
     public function update() {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
             $game = GameModel::findById($_POST[Application::GAME_ID]);
             if (!$game) {
@@ -403,13 +392,7 @@ class GameController extends BaseController {
      */
     // Start a Solo TEST game
     public function createSoloTest() {
-        if (!Csrf::validate($_POST['_csrf_token'] ?? null)) {
-            http_response_code(403);
-            die('Invalid CSRF token');
-        }
-
         $game = null;
-
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
             $game = GameModel::findById($_POST[Application::GAME_ID]);
             $game_id = $game->cloneGameWithOnePlayer();

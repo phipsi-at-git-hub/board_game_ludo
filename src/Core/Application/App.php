@@ -6,7 +6,7 @@ namespace App\Core\Application;
 use App\Constants\Application;
 use App\Core\Asset;
 use App\Core\Debug;
-use App\Core\Env;
+use App\Core\Config\Env;
 use App\Core\Localization;
 use App\Services\GameService;
 use App\Services\SystemService;

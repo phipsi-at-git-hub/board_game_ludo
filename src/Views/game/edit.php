@@ -1,12 +1,14 @@
 <?php
 
-use App\Core\Csrf;
 use App\Constants\Application;
 use App\Core\Localization;
+use App\Core\Security\Csrf;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 
 /**
- * @var \App\Models\GameModel $game
- * @var \App\Models\UserModel $user
+ * @var GameModel $game
+ * @var UserModel $user
  * @var array $rule_set_presets 
  * @var array $rule_set_original 
  */

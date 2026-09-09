@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Csrf;
+use App\Core\Security\Csrf;
 use App\Constants\Application;
 use App\Core\Localization;
 

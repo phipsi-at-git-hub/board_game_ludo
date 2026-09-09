@@ -2,8 +2,8 @@
 // Middleware.php
 namespace App\Core;
 
-use App\Core\Auth;
-use App\Core\Csrf;
+use App\Core\Auth\Auth;
+use App\Core\Security\Csrf;
 
 class Middleware {
     public static function auth(): void {
