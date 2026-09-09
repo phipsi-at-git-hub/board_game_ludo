@@ -101,6 +101,8 @@ return [
     'application.modal.messages.user.delete.confirm' => 'This will delete the User!', 
     'application.modal.messages.account.delete.title' => 'Delete Account', 
     'application.modal.messages.account.delete.confirm' => 'This will delete the Account!', 
+    'application.modal.messages.security.send_reset_password.title' => 'Send Reset Password Mail', 
+    'application.modal.messages.security.send_reset_password.confirm' => 'This will send an email to reset the password', 
 
     // Application - Menu
     'application.menu.title' => 'Main Menu', 

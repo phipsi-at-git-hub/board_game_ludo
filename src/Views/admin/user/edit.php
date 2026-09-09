@@ -368,7 +368,10 @@ use App\Models\User\UserModel;
                 data-id="admin-user-send-reset-mail-form" 
                 data-response="json" 
                 
-                data-notification-target="#form-response" >
+                data-notification-target="#form-response"
+                data-confirm
+                data-confirm-title="<?= Localization::get('application.modal.messages.security.send_reset_password.title') ?>"
+                data-confirm-message="<?= Localization::get('application.modal.messages.security.send_reset_password.confirm') ?>" >
 
                 <input
                     type="hidden"

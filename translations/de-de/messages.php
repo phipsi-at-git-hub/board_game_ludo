@@ -101,6 +101,8 @@ return [
     'application.modal.messages.user.delete.confirm' => 'Hiermit wird der Benutzer gelöscht!', 
     'application.modal.messages.account.delete.title' => 'Account löschen', 
     'application.modal.messages.account.delete.confirm' => 'Hiermit wird der Account gelöscht!', 
+    'application.modal.messages.security.send_reset_password.title' => 'Passwort zurücksetzen Email verschicken', 
+    'application.modal.messages.security.send_reset_password.confirm' => 'Hiermit wird eine Email mit Link zum Zurücksetzen des Passwort verschickt!', 
 
     // Application - Menu
     'application.menu.title' => 'Hauptmenü',
