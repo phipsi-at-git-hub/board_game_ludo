@@ -194,6 +194,7 @@ textarea:focus {
 
 .switch-group.disabled {
     filter: brightness(1.05); 
+    cursor: not-allowed;
 }
 
 /* Moving slider */
@@ -319,6 +320,14 @@ textarea:focus {
     animation: badge-select-shake 0.15s ease;
 }
 
+.badge-select.disabled {
+    filter: brightness(1.02); 
+}
+
+.badge-select.disabled .badge-select-trigger {
+    cursor: not-allowed;
+}
+
 @keyframes badge-select-shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-2px); }
@@ -351,8 +360,8 @@ textarea:focus {
 }
 
 
-.badge-select-trigger:hover, 
-.badge-select-trigger.active, 
+.badge-select:not(.disabled) .badge-select-trigger:hover, 
+.badge-select:not(.disabled) .badge-select-trigger.active, 
 .badge-date-range-trigger:hover, 
 .badge-date-range-trigger.active {
     background: var(--default-color-dark);

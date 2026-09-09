@@ -317,7 +317,9 @@ function initBadgeSelects() {
             dropdown.querySelectorAll('.badge-option').forEach(b => b.classList.remove('active'));
 
             const active = dropdown.querySelector(`.badge-option[data-value="${CSS.escape(option.value)}"]`);
-            if (active) active.classList.add('active');
+            if (active) {
+                active.classList.add('active');
+            }
 
             wrapper.classList.remove('default', 'inactive', 'mid', 'active', 'warning');
             if (option.dataset.state) {
@@ -336,6 +338,10 @@ function initBadgeSelects() {
             btn.dataset.value = option.value;
 
             btn.addEventListener('click', () => {
+                if (select.disabled) {
+                    return; 
+                }
+
                 select.value = option.value;
                 setActive(option);
                 wrapper.classList.remove('open');
@@ -350,9 +356,20 @@ function initBadgeSelects() {
         });
 
         /* ------------------------------
+           DISABLED STATE
+        ------------------------------ */
+        if (select.disabled) {
+            wrapper.classList.add('disabled'); 
+        }
+
+        /* ------------------------------
            TOGGLE
         ------------------------------ */
         trigger.addEventListener('click', (e) => {
+            if (select.disabled) {
+                return; 
+            }
+
             e.stopPropagation();
             wrapper.classList.toggle('open');
             trigger.classList.toggle('active'); 
@@ -372,7 +389,9 @@ function initBadgeSelects() {
         options.forEach(option => {
             measure.textContent = option.text;
             const w = measure.getBoundingClientRect().width;
-            if (w > maxWidth) maxWidth = w;
+            if (w > maxWidth) {
+                maxWidth = w;
+            }
         });
 
         document.body.removeChild(measure);
@@ -385,9 +404,7 @@ function initBadgeSelects() {
            INSERT
         ------------------------------ */
         wrapper.append(trigger, dropdown);
-
         select.classList.add('badge-select-enhanced');
-
         select.insertAdjacentElement('afterend', wrapper);
     });
 
@@ -475,6 +492,10 @@ function initBadgeMultiselect() {
             }
 
             btn.addEventListener('click', event => {
+                if (select.disabled) {
+                    return; 
+                }
+
                 event.stopPropagation();
                 const currentlySelected = getSelectedCount();
 
@@ -511,9 +532,20 @@ function initBadgeMultiselect() {
         });
 
         /* ------------------------------
+            DISABLED STATE
+        ------------------------------ */
+        if (select.disabled) {
+            wrapper.classList.add('disabled'); 
+        }
+
+        /* ------------------------------
             Open / close
         ------------------------------ */
         trigger.addEventListener('click', event => {
+            if (select.disabled) {
+                return; 
+            }
+            
             event.stopPropagation();
             wrapper.classList.toggle('open');
             trigger.classList.toggle('active');

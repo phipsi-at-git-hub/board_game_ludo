@@ -8,6 +8,7 @@ use App\Models\User\UserModel;
 
 /**
  * @var UserModel $user
+ * @var UserModel $current_user
  */
 ?>
 
@@ -144,7 +145,8 @@ use App\Models\User\UserModel;
                         name="role"
                         data-bind="role"
                         data-ui="badge-select" 
-                        data-auto-save="change" >
+                        data-auto-save="change" 
+                        <?= ($user->getId() === $current_user->getId()) ? 'disabled' : '' ?> >
 
                         <option
                             value="USER"
@@ -209,7 +211,8 @@ use App\Models\User\UserModel;
                         data-bind="status"
                         data-ui="switch" 
                         data-auto-save="change" 
-                        class="enhanced" >
+                        class="enhanced" 
+                        <?= ($user->getId() === $current_user->getId()) ? 'disabled' : '' ?> >
 
                         <option
                             value="INACTIVE"
