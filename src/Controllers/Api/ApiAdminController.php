@@ -83,6 +83,19 @@ final class ApiAdminController extends BaseController {
         $data = [
             'role' => $_POST['role'] ?? null,
         ];
+
+        // Check if the user to be updated is the current user
+        if ($user->getId() === Auth::user()->getId()) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+        
         $userService = new UserService();
 
         $success = $userService->update($user, $data);
@@ -122,6 +135,19 @@ final class ApiAdminController extends BaseController {
         $data = [
             'status' => $_POST['status'] ?? null,
         ];
+
+        // Check if the user to be updated is the current user
+        if ($user->getId() === Auth::user()->getId()) {
+            $this->jsonClean(
+                Response::error(
+                    Localization::get(
+                        'application.response.messages.save.failed'
+                    )
+                ),
+                400
+            );
+        }
+
         $userService = new UserService();
 
         $success = $userService->update($user, $data);
