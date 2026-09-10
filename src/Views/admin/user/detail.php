@@ -55,7 +55,7 @@ $is_detail_view = true;
 
     <div style="margin-bottom: 16px;">
 
-        <?php include VIEWS_PATH . '/admin/user/partials/item.php'; ?>
+        <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
 
     </div>
 
