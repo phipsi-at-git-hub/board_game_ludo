@@ -14,7 +14,7 @@ use App\Models\User\UserModel;
 
 <div class="panel">
 
-    <h1><?= Localization::get('admin.users.edit.title') ?></h1>
+    <h1><?= Localization::get('admin.users.edit.title') . ' ' . $user->getUsername() ?></h1>
 
     <div class="nav-actions left">
         <ul class="nav-list horizontal">

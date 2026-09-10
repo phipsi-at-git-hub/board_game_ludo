@@ -90,7 +90,8 @@ $api_delete = false;
         class="card game-detail"
         data-id="<?= $game->getId() ?>">
 
-        <?php include __DIR__ . '/partials/header.php'; ?>
+        <!-- include game entry -->
+        <?php include __DIR__ . '/partials/entry.php'; ?>
 
     </div>
 

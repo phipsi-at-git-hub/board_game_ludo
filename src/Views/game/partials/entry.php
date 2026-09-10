@@ -1,8 +1,8 @@
 <?php
 
 use App\Core\Localization;
-use App\Models\GameModel;
-use App\Models\UserModel;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 
 /**
  * Required:
@@ -11,7 +11,9 @@ use App\Models\UserModel;
  * @var string $status_text 
  */
 
+$is_detail_view ??= false;
 $is_admin_view ??= false; 
+
 ?>
 
 <div class="game-row-header">

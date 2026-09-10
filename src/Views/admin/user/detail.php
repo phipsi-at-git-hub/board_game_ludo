@@ -4,7 +4,6 @@ use App\Constants\Application;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Models\User\UserModel;
-use App\Policies\GamePolicy;
 
 /**
  * @var UserModel $user
@@ -23,7 +22,7 @@ $is_detail_view = true;
 <div class="panel">
 
     <h1>
-        <?= Localization::get('admin.users.detail.title') ?>
+        <?= Localization::get('admin.users.detail.title') . ' ' . $user->getUsername() ?>
     </h1>
 
     <div class="nav-actions left">
@@ -457,86 +456,8 @@ $is_detail_view = true;
             data-bind-1-view-key="games"
             data-bind-1-type="view">
 
-            <div class="game-list-cards">
-
-                <?php if (empty($games)): ?>
-
-                    <p>
-                        <?= Localization::get(
-                            'admin.users.detail.card.games.list.empty'
-                        ) ?>
-                    </p>
-
-                <?php else: ?>
-
-                    <?php foreach ($games as $game):
-
-                        $is_owner = GamePolicy::isOwner($game, $current_user);
-                        $is_admin = $current_user->isAdmin();
-
-                        $can_edit = GamePolicy::canEdit($game, $current_user);
-                        $can_cancel = GamePolicy::canCancel($game, $current_user);
-                        $can_delete = GamePolicy::canDelete($game, $current_user);
-
-                        $can_join = ($is_detail_view)
-                            ? false
-                            : GamePolicy::canJoin($game, $current_user);
-
-                        $can_leave = ($is_detail_view)
-                            ? false
-                            : GamePolicy::canLeave($game, $current_user);
-
-                        $player_count = $game->getPlayerCount();
-                        $player_max = $game->getPlayerMax();
-
-                        if ($game->isWaiting()) {
-                            $status_class = 'status-waiting';
-                            $status_text = Localization::get('game.status.waiting');
-                        } elseif ($game->isRunning()) {
-                            $status_class = 'status-running';
-                            $status_text = Localization::get('game.status.running');
-                        } elseif ($game->isFinished()) {
-                            $status_class = 'status-finished';
-                            $status_text = Localization::get('game.status.finished');
-                        } elseif ($game->isCancelled()) {
-                            $status_class = 'status-cancelled';
-                            $status_text = Localization::get('game.status.cancelled');
-                        }
-
-                        if ($player_count === 0) {
-                            $players_class =
-                                'player-count-category-'
-                                . Application::DTO_PLAYER_COUNT_EMPTY;
-                        } elseif ($player_count === 1) {
-                            $players_class =
-                                'player-count-category-'
-                                . Application::DTO_PLAYER_COUNT_LOW;
-                        } else {
-                            $players_class =
-                                'player-count-category-'
-                                . Application::DTO_PLAYER_COUNT_READY;
-                        }
-
-                        $ruleset_text = Localization::get(
-                            'game.ruleset.'
-                            . $game->getRuleSetModel()->getPreset()
-                        );
-
-                    ?>
-
-                        <div
-                            class="card game-row"
-                            onclick="window.location='/admin/game/detail/<?= $game->getId() ?>'">
-
-                            <?php include VIEWS_PATH . '/game/partials/header.php'; ?>
-
-                        </div>
-
-                    <?php endforeach; ?>
-
-                <?php endif; ?>
-
-            </div>
+            <!-- include games entries partials -->
+            <?php include VIEWS_PATH . '/game/partials/entries.php' ?>
 
         </div>
 

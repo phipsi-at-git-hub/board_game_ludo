@@ -222,6 +222,7 @@ return [
     'game.list.delete' => '🗑 Löschen',
     'game.list.delete_confirm' => 'Möchtest du das Spiel wirklich löschen?',
     'game.list.title' => 'Spieleliste',
+    'game.list.no_entries' => 'Keine Spiele', 
 
     // Game - Create
     'game.create.button_create' => 'Spiel erstellen',
@@ -453,7 +454,7 @@ return [
     'admin.users.detail.card.games.information.created_games' => 'Erstellte Spiele',
     'admin.users.detail.card.games.information.participated_games' => 'Teilgenommene Spiele',
     'admin.users.detail.card.games.information.won_games' => 'Gewonnene Spiele',
-    'admin.users.detail.card.games.list.empty' => 'Keine Spiele',
+    'admin.users.detail.card.games.list.empty' => 'Keine Spiele',           // ToDo: Remove after refactor
     'admin.users.detail.card.games.list.title' => 'Spieleliste',
     'admin.users.detail.card.games.list.filter.title' => 'Filter',
     'admin.users.detail.card.games.list.filter.status' => 'Status',
