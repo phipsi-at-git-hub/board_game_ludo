@@ -167,6 +167,7 @@ function renderMoves(moves) {
     available_moves_rendered = true;
 }
 
+// --- Reset Moves ---
 function resetMoves() {
     const moves_container = document.getElementById('moves-container');
     while (moves_container.firstChild) {
@@ -192,6 +193,29 @@ async function handleMove(move) {
     }
 }
 
+// --- Move Handling via Shortcuts
+function handleMoveShortcut(index) {
+    const moves_container = document.getElementById('moves-container'); 
+    const buttons = moves_container?.querySelectorAll('.move-item'); 
+    if (!buttons || !buttons[index]) return; 
+    buttons[index].click(); 
+}
+
+// --- Roll Dice Handling ---
+async function handleRollDice() {
+    if (!isMyTurn()) return;
+    if (current_state?.current_dice_roll) return; 
+
+    const data = await rollDice(game_id);
+    if (data.success) {
+        current_state = data.state;
+        updateScene(current_state);
+        updateHUD();
+        updateDice(); 
+        await showAvailableMoves();
+    }
+}
+
 // --- Helper ---
 function isMyTurn() {
     if (!current_state) return false;
@@ -209,24 +233,10 @@ function toggleMenu() {
     menu_overlay_element.classList.toggle('visible'); 
 }
 
-// --- GLOBAL AVAILABLE FUNCTIONS ---
-window.toggleMenu = toggleMenu; 
-
 
 // --- EVENT LISTENER ---
 // Roll Dice Button 
-btn_roll.addEventListener('click', async () => {
-    if (!isMyTurn()) return;
-
-    const data = await rollDice(game_id);
-    if (data.success) {
-        current_state = data.state;
-        updateScene(current_state);
-        updateHUD();
-        updateDice(); 
-        await showAvailableMoves();
-    }
-});
+btn_roll.addEventListener('click', handleRollDice);
 
 // Open Menu button
 btn_menu.addEventListener('click', () => {
@@ -264,6 +274,11 @@ btn_exit.addEventListener('click', () => {
         window.location.href = `../detail/${window.GAME_CONFIG.game_id}`;
     }, 300);
 });
+
+// --- GLOBAL AVAILABLE FUNCTIONS ---
+window.handleRollDice = handleRollDice; 
+window.handleMoveShortcut = handleMoveShortcut; 
+window.toggleMenu = toggleMenu; 
 
 // --- Polling / Auto-Update ---
 setInterval(updateState, 2000);

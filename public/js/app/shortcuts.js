@@ -21,6 +21,9 @@ function handleKeyboardShortcut(event) {
         return;
     }
 
+    // Are game function available
+    const gameActive = typeof window.handleRollDice === 'function' && typeof window.handleMoveShortcut === 'function'; 
+
     switch (event.key.toLowerCase()) {
         // Home / Lobby
         case "h":
@@ -36,6 +39,31 @@ function handleKeyboardShortcut(event) {
         case "a":
             redirect("/admin");
             break;
+
+        // Running Game - Roll dice
+        case 'enter': 
+            if (gameActive) window.handleRollDice(); 
+            break;
+
+        // Running Game - Move 1
+        case '1': 
+            if (gameActive) window.handleMoveShortcut(0); 
+            break; 
+
+        // Running Game - Move 1
+        case '2': 
+            if (gameActive) window.handleMoveShortcut(1); 
+            break; 
+
+        // Running Game - Move 1
+        case '3': 
+            if (gameActive) window.handleMoveShortcut(2); 
+            break; 
+
+        // Running Game - Move 1
+        case '4': 
+            if (gameActive) window.handleMoveShortcut(3); 
+            break; 
     }
 }
 
@@ -47,11 +75,10 @@ function handleEscapeShortcut() {
         return;
     } 
 
+    // Game menu handling will be added here
     if (typeof toggleMenu === 'function') {
         toggleMenu(); 
     }
-
-    // Game menu handling will be added here
 }
 
 // Check whether the target is an editable element
