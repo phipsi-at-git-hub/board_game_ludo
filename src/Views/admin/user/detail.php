@@ -53,7 +53,7 @@ $is_detail_view = true;
 
     <!-- User -->
 
-    <div style="margin-bottom: 16px;">
+    <div class="card entry-detail" >
 
         <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
 

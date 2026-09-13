@@ -7,8 +7,10 @@ use App\Models\User\UserModel;
  */
 ?>
 
+<!--
 <div class="card entry-row"
     onclick="window.location='/admin/user/detail/<?= $user->getId() ?>'">
+-->
 
     <div class="entry-row-header">
 
@@ -44,4 +46,6 @@ use App\Models\User\UserModel;
 
     </div>
 
+<!--
 </div>
+-->

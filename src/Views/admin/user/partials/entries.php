@@ -16,7 +16,12 @@ use App\Models\User\UserModel;
 
         <?php foreach ($users as $user): ?>
 
-            <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
+            <div class="card entry-row"
+                onclick="window.location='/admin/user/detail/<?= $user->getId() ?>'">
+
+                <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
+
+            </div>
 
         <?php endforeach; ?>
 
