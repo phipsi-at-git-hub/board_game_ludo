@@ -38,7 +38,10 @@ function openModal(title, body, actions = []) {
 }
 
 function closeModal() {
-    document
-        .getElementById('modal-overlay')
-        .classList.remove('active');
+    const overlay = document.getElementById('modal-overlay'); 
+    if (!overlay.classList.contains('active')) {
+        return; 
+    }
+    overlay.classList.remove('active');
+    return true; 
 }

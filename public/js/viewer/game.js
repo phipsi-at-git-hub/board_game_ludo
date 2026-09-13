@@ -205,6 +205,14 @@ function closeMenu() {
     menu_overlay_element.classList.remove('visible');
 }
 
+function toggleMenu() {
+    menu_overlay_element.classList.toggle('visible'); 
+}
+
+// --- GLOBAL AVAILABLE FUNCTIONS ---
+window.toggleMenu = toggleMenu; 
+
+
 // --- EVENT LISTENER ---
 // Roll Dice Button 
 btn_roll.addEventListener('click', async () => {
