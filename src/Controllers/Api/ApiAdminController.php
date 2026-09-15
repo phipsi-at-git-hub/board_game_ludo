@@ -15,8 +15,11 @@ use App\Core\Http\Response;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Core\Logging\LoggingConfiguration;
+use App\Models\Game\GameModel;
 use App\Models\System\SystemSettingsModel;
 use App\Models\User\UserModel;
+use App\Services\Game\GameFilterService;
+use App\Services\Game\GameQueryService;
 use App\Services\LogService;
 use App\Services\MailService;
 use App\Services\UserService;
@@ -303,6 +306,57 @@ final class ApiAdminController extends BaseController {
     }
 
     /**
+     * gameFilterView
+     *
+     * @return void
+     */
+    public function gameFilterView(): void {
+        // Parse log level if in POST body
+        $user_id = $_POST['user_id'] ?? null; 
+        $status = [$_POST['status']] ?? []; 
+        $relation = [$_POST['user_relation']] ?? []; 
+        $date_range = DateRange::fromString($_POST['date_range'] ?? ''); 
+
+        $filter = new GameFilterService(
+            userId: $user_id, 
+            userRelations: $relation, 
+            statuses: $status, 
+            dateRange: $date_range, 
+        ); 
+
+        $query = new GameQueryService($filter); 
+        $games = GameModel::findGames(
+            player: true, 
+            joins: $query->getJoins(), 
+            conditions: $query->getConditions(), 
+            params: $query->getParams(), 
+        ); 
+
+        $context = [null]; 
+
+        // Render filtered log entries
+        $views = [
+            'entries' => $this->renderView(
+                'game/partials/entries',
+                [
+                    'games' => $games
+                ]
+            )
+        ];
+
+        // Logging
+        Logger::app()->debug('Api admin logging filtered list view', ['user_id' => Auth::user()->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                'Games filter applied',
+                $views
+            )
+        );
+    }
+
+    /**
      * Settings section
      */
     /**
@@ -324,7 +378,7 @@ final class ApiAdminController extends BaseController {
     /**
      * Helper - DTO logging filter context
      */
-    private function entryFilterContext(
+    private function entryLoggingFilterContext(
         array $channels, 
         string $date_range, 
         array $available_channels, 

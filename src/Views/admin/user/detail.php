@@ -284,13 +284,18 @@ $is_detail_view = true;
             <form
                 data-id="user-games-filter-form"
                 method="post"
-                action="/api/admin/user/games/filter"
+                action="/api/admin/game/filter"
 
                 data-response="json"
                 data-bind-targets="
                     user-games-filter-games,
                     user-games-entry-count,
                 ">
+
+                <input
+                    type="hidden"
+                    name="user_id"
+                    value="<?= $user->getId() ?>">
 
                 <input
                     type="hidden"
