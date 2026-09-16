@@ -2,7 +2,7 @@
 
 // src/Services/UserService.php
 
-namespace App\Services;
+namespace App\Services\User;
 
 use App\Constants\Application;
 use App\Core\Auth\Auth;

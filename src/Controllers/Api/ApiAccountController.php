@@ -11,7 +11,7 @@ use App\Core\Dto\User\UserContext;
 use App\Core\Http\Response;
 use App\Core\Localization;
 use App\Core\Logging\Logger;
-use App\Services\UserService;
+use App\Services\User\UserService;
 
 final class ApiAccountController extends BaseController {
     private UserService $userService;

@@ -9,7 +9,7 @@ use App\Core\Http\Http;
 use App\Core\Logging\Logger;
 use App\Models\User\UserModel;
 use App\Services\MailService;
-use App\Services\UserService;
+use App\Services\User\UserService;
 
 class AccountController extends BaseController {
     // Show profile

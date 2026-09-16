@@ -18,7 +18,7 @@ use App\Models\User\UserModel;
 use App\Services\LogService;
 use App\Services\MailService;
 use App\Services\SystemService;
-use App\Services\UserService;
+use App\Services\User\UserService;
 use DateInterval;
 use DateTimeImmutable;
 

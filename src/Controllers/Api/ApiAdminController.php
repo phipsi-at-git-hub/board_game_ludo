@@ -23,7 +23,7 @@ use App\Services\Game\GameFilterService;
 use App\Services\Game\GameQueryService;
 use App\Services\LogService;
 use App\Services\MailService;
-use App\Services\UserService;
+use App\Services\User\UserService;
 
 final class ApiAdminController extends BaseController {
     /*
