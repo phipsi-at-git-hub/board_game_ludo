@@ -7,6 +7,7 @@ use App\Constants\Application;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Date\DateRange;
+use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Dto\Logging\EntryFilterContext;
 use App\Core\Dto\System\SettingsContext;
 use App\Core\Dto\User\UserContext;
@@ -313,8 +314,8 @@ final class ApiAdminController extends BaseController {
     public function gameFilterView(): void {
         // Parse log level if in POST body
         $user_id = $_POST['user_id'] ?? null; 
-        $status = [$_POST['status']] ?? []; 
-        $relation = [$_POST['user_relation']] ?? []; 
+        $status = $_POST['status'] ?? []; 
+        $relation = $_POST['user_relation'] ?? []; 
         $date_range = DateRange::fromString($_POST['date_range'] ?? ''); 
 
         $filter = new GameFilterService(
@@ -332,14 +333,21 @@ final class ApiAdminController extends BaseController {
             params: $query->getParams(), 
         ); 
 
-        $context = [null]; 
+        // Build games filter context
+        $context = GameFilterContext::fromFilter(
+            $status, 
+            $relation, 
+            $date_range->getDateRangeAsString(), 
+            $games
+        ); 
 
         // Render filtered log entries
         $views = [
             'entries' => $this->renderView(
                 'game/partials/entries',
                 [
-                    'games' => $games
+                    'games' => $games, 
+                    'is_admin_view' => true, 
                 ]
             )
         ];

@@ -336,30 +336,25 @@ $is_detail_view = true;
                         </span>
 
                         <select
-                            name="status"
-                            data-ui="badge-select">
+                            name="status[]"
+                            multiple 
+                            data-ui="badge-multiselect" 
+                            data-min-selection="1" 
+                            data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
 
-                            <option value="all">
-                                <?= ucfirst(
-                                    Localization::get(
-                                        'application.general.label.all'
-                                    )
-                                ) ?>
-                            </option>
-
-                            <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>">
+                            <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>" selected >
                                 <?= Localization::get('game.status.waiting') ?>
                             </option>
 
-                            <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>">
+                            <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>" selected >
                                 <?= Localization::get('game.status.running') ?>
                             </option>
 
-                            <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>">
+                            <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>" selected >
                                 <?= Localization::get('game.status.finished') ?>
                             </option>
 
-                            <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>">
+                            <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>" selected >
                                 <?= Localization::get('game.status.cancelled') ?>
                             </option>
 
@@ -378,30 +373,25 @@ $is_detail_view = true;
                         </span>
 
                         <select
-                            name="user_relation"
-                            data-ui="badge-select">
+                            name="user_relation[]"
+                            multiple 
+                            data-ui="badge-multiselect" 
+                            data-min-selection="1" 
+                            data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                            <option value="all">
-                                <?= ucfirst(
-                                    Localization::get(
-                                        'application.general.label.all'
-                                    )
-                                ) ?>
-                            </option>
-
-                            <option value="created">
+                            <option value="created" selected >
                                 <?= Localization::get(
                                     'admin.users.detail.card.games.list.filter.user_relation.created'
                                 ) ?>
                             </option>
 
-                            <option value="participated">
+                            <option value="participated" selected >
                                 <?= Localization::get(
                                     'admin.users.detail.card.games.list.filter.user_relation.participated'
                                 ) ?>
                             </option>
 
-                            <option value="won">
+                            <option value="won" selected >
                                 <?= Localization::get(
                                     'admin.users.detail.card.games.list.filter.user_relation.won'
                                 ) ?>
@@ -458,7 +448,7 @@ $is_detail_view = true;
         <div
             data-id="user-games-filter-games"
             data-bind-sources="user-games-filter-form"
-            data-bind-1-view-key="games"
+            data-bind-1-view-key="entries"
             data-bind-1-type="view">
 
             <!-- include games entries partials -->

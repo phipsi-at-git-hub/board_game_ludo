@@ -51,7 +51,7 @@ final class EntryFilterContext {
     }
 
 
-    public static function fromFilter(array $channels, String $date_range, array $available_channels,  int $entries_count, array $statistics): array {
+    public static function fromFilter(array $channels, string $date_range, array $available_channels,  int $entries_count, array $statistics): array {
         $dto = self::create();
 
         // Filter

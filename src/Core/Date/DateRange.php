@@ -85,6 +85,9 @@ final class DateRange {
      * @return String
      */
     public function getDateRangeAsString(): String {
+        if (!$this->start || !$this->end) {
+            return ''; 
+        }
         return $this->start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $this->end->format(Application::FILE_DATE_TIME_FORMAT); 
     }
 
