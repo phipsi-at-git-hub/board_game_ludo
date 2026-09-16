@@ -11,7 +11,7 @@ use App\Core\Dto\Game\GameContext;
 use App\Core\Http\Response;
 use App\Core\Logging\Logger;
 use App\Models\Game\GameModel;
-use App\Services\GameService;
+use App\Services\Game\GameService;
 
 final class ApiGameController extends BaseController {
     private GameService $gameService; 

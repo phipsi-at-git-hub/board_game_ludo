@@ -8,7 +8,7 @@ use App\Core\Asset;
 use App\Core\Debug;
 use App\Core\Config\Env;
 use App\Core\Localization;
-use App\Services\GameService;
+use App\Services\Game\GameService;
 use App\Services\SystemService;
 use Dotenv\Dotenv;
 

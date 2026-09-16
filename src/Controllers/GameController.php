@@ -9,7 +9,7 @@ use App\Core\BaseController;
 use App\Core\Logging\Logger;
 use App\Models\Game\GameModel;
 use App\Models\Game\GameRuleSetModel;
-use App\Services\GameService;
+use App\Services\Game\GameService;
 use LogicException;
 
 class GameController extends BaseController {

@@ -1,7 +1,7 @@
 <?php
-// src/Services/GameService.php
+// src/Services/Game/GameService.php
 
-namespace App\Services;
+namespace App\Services\Game;
 
 use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
