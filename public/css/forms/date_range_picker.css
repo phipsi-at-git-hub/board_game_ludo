@@ -396,6 +396,22 @@
 }
 
 /* ------------------------------
+   ACTIONS SECTION
+------------------------------ */
+.date-range-actions {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+}
+
+.date-range-actions-left, 
+.date-range-actions-right {
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+/* ------------------------------
    APPLY
 ------------------------------ */
 .date-range-time-apply {
@@ -430,7 +446,9 @@
 /* ------------------------------
    BUTTONS
 ------------------------------ */
-.btn-filter-apply {
+.btn-filter-apply, 
+.btn-filter-today, 
+.btn-filter-reset {
     /*
     background-color: var(--default-color); 
     color: var(--text-color);
@@ -448,7 +466,9 @@
     filter: brightness(0.95); 
 }
 
-.btn-filter-apply:disabled {
+.btn-filter-apply:disabled, 
+.btn-filter-today:disabled, 
+.btn-filter-reset:disabled {
     opacity: 0.5; 
     cursor: not-allowed; 
 }

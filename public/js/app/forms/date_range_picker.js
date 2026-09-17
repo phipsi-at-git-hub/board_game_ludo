@@ -16,6 +16,10 @@ function initDateRangePickers() {
         const localization = (input.dataset.uiLocalization || 'en-us').toLowerCase();
         const locale = localization.startsWith('de') ? 'de-DE' : 'en-US';
         const withTime = input.dataset.uiWithTime === 'true';
+        const withReset = input.dataset.uiWithReset === 'true'; 
+
+        console.log(input.dataset);
+        console.log(withReset); 
 
         /* ------------------------------
            DATE HELPERS
@@ -388,31 +392,57 @@ function initDateRangePickers() {
         }
 
         /* ------------------------------
+           ACTIONS SECTION
+        ------------------------------ */
+        const actionsSection = document.createElement('div'); 
+        actionsSection.className = 'date-range-actions'; 
+
+        const actionsLeft = document.createElement('div'); 
+        actionsLeft.className = 'date-range-actions-left'; 
+
+        const actionsRight = document.createElement('div'); 
+        actionsRight.className = 'date-range-actions-right'; 
+
+        let resetButton = null; 
+        let todayButton = null; 
+        let applyButton = null; 
+
+        todayButton = document.createElement('button'); 
+        todayButton.type = 'button'; 
+        todayButton.className = 'btn btn-actions btn-filter-today'; 
+        todayButton.textContent = locale === 'de-DE' ? 'Heute' : 'Today'; 
+
+        actionsLeft.append(todayButton); 
+
+        if (withReset) {
+            resetButton = document. createElement('button'); 
+            resetButton.type = 'button'; 
+            resetButton.className = 'btn btn-btn-actions btn-filter-reset'; 
+            resetButton.textContent = locale === 'de-DE' ? 'Zurücksetzten' : 'Reset'; 
+
+            actionsLeft.append(resetButton); 
+        }
+
+        /* ------------------------------
            APPLY SECTION
         ------------------------------ */
-        let applySection = null;
-        let applyButton = null;
-
         if (withTime) {
-            applySection = document.createElement('div');
-            applySection.className = 'date-range-apply';
-
             applyButton = document.createElement('button');
             applyButton.type = 'button';
             applyButton.className = 'btn btn-actions btn-filter-apply';
             applyButton.textContent = locale === 'de-DE' ? 'Übernehmen' : 'Apply';
 
-            applySection.append(applyButton);
+            actionsRight.append(applyButton); 
         }
+
+        actionsSection.append(actionsLeft, actionsRight); 
 
         /* ------------------------------
            STATUS
         ------------------------------ */
         const status = document.createElement('div');
         status.className = 'date-range-picker-status';
-        status.textContent = locale === 'de-DE'
-            ? 'Zeitraum auswählen'
-            : 'Pick date range';
+        status.textContent = locale === 'de-DE' ? 'Zeitraum auswählen' : 'Pick date range';
 
         /* ------------------------------
            DROPDOWN STRUCTURE
@@ -424,10 +454,7 @@ function initDateRangePickers() {
         }
 
         dropdown.append(status);
-
-        if (applySection) {
-            dropdown.append(applySection);
-        }
+        dropdown.append(actionsSection); 
 
         /* ------------------------------
            CALENDAR STATE
@@ -550,7 +577,8 @@ function initDateRangePickers() {
             endTime = endTimeField.value.trim();
 
             updateStatus();
-            updateApplyState();
+            updateApplyState(); 
+            updateActionState(); 
         }
 
         /* ------------------------------
@@ -564,13 +592,55 @@ function initDateRangePickers() {
             const validDates = !!rangeStart && !!rangeEnd;
             const validTimes = isValidTime(startTime) && isValidTime(endTime);
 
-            applyButton.disabled = !validDates || !validTimes;
+            const emptyRange = !rangeStart && !rangeEnd; 
+            const canApplyEmptyRange = withReset && emptyRange; 
+
+            //applyButton.disabled = !validDates || !validTimes;
+            applyButton.disabled = !(
+                (validDates && validTimes) || 
+                canApplyEmptyRange
+            ); 
         };
+
+        /* ------------------------------
+           ACTION BUTTON STATE
+        ------------------------------ */
+        const updateActionState = () => {
+            if (resetButton) {
+                resetButton.disabled = !rangeStart || !rangeEnd; 
+            }
+
+            if (todayButton) {
+                const today = new Date(); 
+
+                todayButton.disabled = !!rangeStart && !!rangeEnd && (
+                    isSameDay(rangeStart, today) && 
+                    isSameDay(rangeEnd, today) 
+                ); 
+            }
+        }; 
 
         /* ------------------------------
            WRITE VALUE
         ------------------------------ */
         const applyRange = () => {
+            /**
+             * Empty range is valid when reset is enabled
+             */
+            if (!rangeStart && !rangeEnd && withReset) {
+                input.value = ''; 
+
+                input.dispatchEvent(
+                    new Event('change', {
+                        bubbles: true
+                    })
+                ); 
+
+                status.classList.remove('error'); 
+                status.textContent = locale === 'de-DE' ? 'Kein Zeitraum ausgewählt' : 'No date range selected'; 
+                return true; 
+            }
+
             if (!rangeStart || !rangeEnd) {
                 return false;
             }
@@ -633,12 +703,92 @@ function initDateRangePickers() {
 
             status.classList.remove('error');
 
-            status.textContent = locale === 'de-DE'
-                ? 'Zeitraum ausgewählt'
-                : 'Date range selected';
+            status.textContent = locale === 'de-DE' ? 'Zeitraum ausgewählt' : 'Date range selected';
 
             return true;
         };
+
+        /* ------------------------------
+           SET VALUE TODAY OR NOW
+        ------------------------------ */
+        const selectToday = () => {
+            const now = new Date(); 
+
+            rangeStart = startOfDay(now); 
+            rangeEnd = withTime ? cloneDate(now) : endOfDay(now); 
+            selectingRange = false; 
+
+            if (withTime) {
+                startTime = '00:00'; 
+                endTime = '23:59'; 
+
+                startTimeField.value = startTime; 
+                endTimeField.value = endTime; 
+            }
+
+            displayedMonth = new Date(
+                now.getFullYear(), 
+                now.getMonth(), 
+                1 
+            ); 
+
+            updateTrigger(); 
+            updateStatus(); 
+            updateApplyState(); 
+            updateActionState(); 
+            renderCalendar(); 
+
+            if (!withTime) {
+                if (applyRange()) {
+                    wrapper.classList.remove('open'); 
+                    trigger.classList.remove('active'); 
+                }
+                return; 
+            } 
+        }; 
+
+        todayButton.addEventListener('click', event => {
+            event.stopPropagation(); 
+            selectToday(); 
+        }); 
+
+        /* ------------------------------
+           RESET VALUE
+        ------------------------------ */
+        const resetRange = () => {
+            rangeStart = null; 
+            rangeEnd = null; 
+            selectingRange = false; 
+
+            startTime = null; 
+            endTime = null; 
+
+            if (withTime) {
+                startTimeField.value = ''; 
+                endTimeField.value = ''; 
+            }
+
+            input.value = ''; 
+
+            updateTrigger(); 
+            updateStatus(); 
+            updateApplyState(); 
+            updateActionState(); 
+            renderCalendar(); 
+
+            input.dispatchEvent(
+                new Event('change', {
+                    bubbles: true 
+                })
+            ); 
+        }; 
+
+        if (withReset) {
+            resetButton.addEventListener('click', event => {
+                event.stopPropagation(); 
+                resetRange(); 
+            })
+        }
 
         /* ------------------------------
            CALENDAR RENDER
@@ -762,6 +912,7 @@ function initDateRangePickers() {
                         updateTrigger();
                         updateStatus();
                         updateApplyState();
+                        updateActionState(); 
                         renderCalendar();
 
                         return;
@@ -807,6 +958,7 @@ function initDateRangePickers() {
                         updateTrigger();
                         updateStatus();
                         updateApplyState();
+                        updateActionState(); 
                         renderCalendar();
 
                         return;
@@ -899,6 +1051,7 @@ function initDateRangePickers() {
         updateTrigger();
         updateStatus();
         updateApplyState();
+        updateActionState(); 
 
         /* ------------------------------
            INSERT

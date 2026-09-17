@@ -416,7 +416,8 @@ $is_detail_view = true;
                             name="date_range"
                             data-ui="date-range"
                             data-ui-localization="<?= Application::EN_US ?>"
-                            data-ui-with-time="true"
+                            data-ui-with-time="true" 
+                            data-ui-with-reset="true" 
                             value="<?= htmlspecialchars($date_range ?? '') ?>">
 
                     </div>
