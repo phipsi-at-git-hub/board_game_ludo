@@ -16,6 +16,8 @@ const btn_menu = document.getElementById('btn-menu');
 const btn_resume = document.getElementById('btn-resume');
 const btn_exit = document.getElementById('btn-exit');
 const menu_overlay_element = document.getElementById('menu-overlay');
+const btn_won_exit = document.getElementById('btn-won-exit'); 
+const game_won_menu_overlay_element = document.getElementById('game-won-menu-overlay');
 const menu_settings_camera_toggle_item = document.getElementById('settings-camera-toggle');
 
 const my_player_index = window.GAME_CONFIG.user_player_index;
@@ -59,7 +61,12 @@ async function updateState() {
 
             // Start animation for the winner of the game
             if (current_state.winner_player_index !== undefined && current_state.winner_player_index !== null) {
-                // ToDo: implement later
+                openGameWonMenu();
+                if (parseInt(current_state.winner_player_index) === parseInt(my_player_index)) {
+                    // Todo: user is winner
+                } else {
+                    // ToDo: user is not winner
+                } 
             }
         }
     } catch (e) {
@@ -233,6 +240,22 @@ function toggleMenu() {
     menu_overlay_element.classList.toggle('visible'); 
 }
 
+function openGameWonMenu() {
+    if (!game_won_menu_overlay_element.classList.contains('visible')) { 
+        game_won_menu_overlay_element.classList.add('visible'); 
+    }
+}
+
+function closeGameWonMenu() {
+    if (game_won_menu_overlay_element.classList.contains('visible')) { 
+        game_won_menu_overlay_element.classList.remove('visible'); 
+    }
+}
+
+function toggleGameWonMenu() {
+    game_won_menu_overlay_element.classList.toggle('visible'); 
+}
+
 
 // --- EVENT LISTENER ---
 // Roll Dice Button 
@@ -270,6 +293,14 @@ menu_settings_camera_toggle_item.addEventListener('change', () => {
 // Close / Leave the game
 btn_exit.addEventListener('click', () => {
     closeMenu();
+    setTimeout(function() {
+        window.location.href = `../detail/${window.GAME_CONFIG.game_id}`;
+    }, 300);
+});
+
+// Close / Leave the game
+btn_won_exit.addEventListener('click', () => {
+    closeGameWonMenu();
     setTimeout(function() {
         window.location.href = `../detail/${window.GAME_CONFIG.game_id}`;
     }, 300);

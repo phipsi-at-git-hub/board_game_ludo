@@ -135,7 +135,8 @@ button:active {
 }
 
 /* Menu Overlay */
-#menu-overlay {
+#menu-overlay, 
+#game-won-menu-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -150,14 +151,18 @@ button:active {
     transition: opacity 0.3s ease;
 }
 
-#menu-overlay.visible {
+#menu-overlay.visible, 
+#game-won-menu-overlay.visible {
     pointer-events: all;
     opacity: 1;
 }
 
-#menu {
+#menu, 
+#game-won-menu {
     background: rgba(255, 255, 255, 0.95);
     padding: 30px;
     border-radius: 20px;
     text-align: center;
 }
+
+/* Game Won Overlay */

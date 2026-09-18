@@ -68,6 +68,19 @@ use App\Core\Localization;
             </div>
         </div>
 
+        <!-- Game Won Overlay -->
+        <div id="game-won-menu-overlay">
+            <div id="game-won-menu">
+                <h2>Game Over</h2>
+
+                <p>finished</p>
+
+                <button id="btn-won-exit" class="btn btn-primary">
+                    <?= Localization::get('application.general.btn.back_to_detail') ?>
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
 
