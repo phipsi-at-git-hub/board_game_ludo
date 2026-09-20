@@ -63,9 +63,13 @@ async function updateState() {
             if (current_state.winner_player_index !== undefined && current_state.winner_player_index !== null) {
                 openGameWonMenu();
                 if (parseInt(current_state.winner_player_index) === parseInt(my_player_index)) {
-                    // Todo: user is winner
+                    // user is winner
+                    let winner_element = document.getElementById('winner'); 
+                    addCssClass(winner_element, 'visible'); 
                 } else {
-                    // ToDo: user is not winner
+                    // user is not winner
+                    let loser_element = document.getElementById('loser'); 
+                    addCssClass(loser_element, 'visible'); 
                 } 
             }
         }
@@ -256,6 +260,17 @@ function toggleGameWonMenu() {
     game_won_menu_overlay_element.classList.toggle('visible'); 
 }
 
+function addCssClass(element, cssClass) {
+    if (!element) {
+        return;
+    }
+    if (!cssClass) {
+        return; 
+    }
+    if (!element.classList.contains(cssClass)) {
+        element.classList.add(cssClass); 
+    }
+}
 
 // --- EVENT LISTENER ---
 // Roll Dice Button 

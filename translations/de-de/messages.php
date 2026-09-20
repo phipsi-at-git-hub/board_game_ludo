@@ -299,6 +299,22 @@ return [
     'game.play.menu_settings_camera_toggle' => 'Kamera wechselt zwischen den Spielern',
     'game.play.resume' => 'Spiel fortsetzen',
 
+    // Game - Winner and loser messages
+    'game.play.won.title' => 'Gewonnen!', 
+    'game.play.won.0.subject' => 'Made it! All home safe and sound! 🎲', 
+    'game.play.won.0.message' => 'You kept your cool, dogged every single kick-out, and guided your tokens safely across the finish line. A well-deserved victory - and yes, the others are definitely to be a little annoyed now!', 
+    'game.play.won.1.subject' => 'Master of the Dice! 👑', 
+    'game.play.won.1.message' => 'The sixes were definitely on your side today! With the perfect mix of strategy and dice luck, you dominated th board. Enjoy your victory lp in the home zone!', 
+    'game.play.won.2.subject' => 'Total Victory! 🎉', 
+    'game.play.won.2.message' => 'Dice hero! You didn\'t let anyone get to you and made it to the top. Time to celebrate!', 
+    'game.play.lost.title' => 'Verloren!', 
+    'game.play.lost.0.subject' => 'Don\'t get mad...keep your chin up! 😉', 
+    'game.play.lost.0.message' => 'Got kicked out right before the finish line? A classic! But that is exactly what makes the game so fun. Next time, the dice luck will be back on your side. Shake it off and roll your way back in!',  
+    'game.play.lost.1.subject' => 'Back to the start! 🛑', 
+    'game.play.lost.1.message' => 'Sometimes the dice just don\'t roll your way - first no six to get out, and then caught right on yor doorstep. Take it with a smile: the dice are being remade fore the next round!',  
+    'game.play.lost.2.subject' => 'Hey, don\'t get frustrated! ❤️', 
+    'game.play.lost.2.message' => 'So close to the finish line! But a true player instantly starts a rematch. Let\'s roll again!', 
+
     // Game - Options
     'game.options.is_private' => '⛔ Privates Spiel',
     'game.options.is_locked' => '🔒 Spiel sperren',

@@ -166,3 +166,12 @@ button:active {
 }
 
 /* Game Won Overlay */
+#winner, 
+#loser {
+    width: 400px; 
+    display: none;
+} 
+#winner.visible, 
+#loser.visible {
+    display: inherit;
+} 

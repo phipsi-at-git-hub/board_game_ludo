@@ -4,9 +4,12 @@ use App\Core\Security\Csrf;
 use App\Core\Localization;
 
 /**
- * @var \App\Models\GameModel $game
- * @var \App\Models\UserModel $user 
+ * @var \App\Models\Game\GameModel $game
+ * @var \App\Models\User\UserModel $user 
  */
+
+
+$randomIndex = rand(0, 2); 
 ?>
 
 <!-- 🎮 THREE.js Canvas -->
@@ -71,9 +74,21 @@ use App\Core\Localization;
         <!-- Game Won Overlay -->
         <div id="game-won-menu-overlay">
             <div id="game-won-menu">
-                <h2>Game Over</h2>
+                <div id="winner">
+                    <h2><?= Localization::get('game.play.won.title') ?></h2>
 
-                <p>finished</p>
+                    <h3><?= Localization::get('game.play.won.' . $randomIndex . '.subject') ?></h3>
+
+                    <p><?= Localization::get('game.play.won.' . $randomIndex . '.message') ?></p>
+                </div>
+
+                <div id="loser">
+                    <h2><?= Localization::get('game.play.lost.title') ?></h2>
+
+                    <h3><?= Localization::get('game.play.lost.' . $randomIndex . '.subject') ?></h3>
+
+                    <p><?= Localization::get('game.play.won.' . $randomIndex . '.message') ?></p>
+                </div>
 
                 <button id="btn-won-exit" class="btn btn-primary">
                     <?= Localization::get('application.general.btn.back_to_detail') ?>
