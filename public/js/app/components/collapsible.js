@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         item.addEventListener('click', () => {
-            if (event.target.closest('.history-state')) {
+            if (event.target.closest('.collapsible-no-toggle')) {
                 return;
             }
 

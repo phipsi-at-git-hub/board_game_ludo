@@ -120,7 +120,7 @@ use App\Core\Localization;
 
                             </div>
 
-                            <pre class="history-state"><?=
+                            <pre class="collapsible-no-toggle history-state"><?=
                                 htmlspecialchars(
                                     json_encode(
                                         $state,
