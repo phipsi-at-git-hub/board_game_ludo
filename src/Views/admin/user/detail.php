@@ -16,6 +16,7 @@ use App\Models\User\UserModel;
  */
 
 $is_detail_view = true;
+$is_admin_view = true; 
 
 ?>
 
