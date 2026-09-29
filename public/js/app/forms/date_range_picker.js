@@ -18,9 +18,6 @@ function initDateRangePickers() {
         const withTime = input.dataset.uiWithTime === 'true';
         const withReset = input.dataset.uiWithReset === 'true'; 
 
-        console.log(input.dataset);
-        console.log(withReset); 
-
         /* ------------------------------
            DATE HELPERS
         ------------------------------ */
