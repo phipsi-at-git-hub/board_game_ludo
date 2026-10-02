@@ -280,12 +280,8 @@ $is_admin_view = true;
 
         <!-- Game Filter -->
 
-        <div class="nested-card">
-
-            <!-- include filter partials -->
-            <?php include VIEWS_PATH . '/game/partials/filter.php' ?>
-
-        </div>
+        <!-- include filter partials -->
+        <?php include VIEWS_PATH . '/game/partials/filter.php' ?>
 
         <!-- Games -->
 

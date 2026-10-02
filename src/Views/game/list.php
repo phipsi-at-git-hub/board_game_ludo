@@ -7,6 +7,8 @@ use App\Core\Localization;
  * @var Object $current_user
  */
 
+$user = $current_user;
+
 $is_admin_view ??= false; 
 
 ?>
@@ -24,6 +26,9 @@ $is_admin_view ??= false;
             </li>
         </ul>
     </div>
+
+    <!-- include filter partials -->
+    <?php include VIEWS_PATH . '/game/partials/collapsible_filter.php' ?>
 
     <!-- include all games partials -->
     <?php include VIEWS_PATH . '/game/partials/entries.php' ?>
