@@ -6,6 +6,7 @@ use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController; 
+use App\Core\Dto\Game\GameFilterContext;
 use App\Core\History\Game\GameStateHistory;
 use App\Core\Http\Http;
 use App\Core\Localization;
@@ -15,6 +16,7 @@ use App\Health\SystemHealth;
 use App\Models\Game\GameModel;
 use App\Models\System\SystemSettingsModel;
 use App\Models\User\UserModel;
+use App\Services\Game\GameFilterService;
 use App\Services\LogService;
 use App\Services\MailService;
 use App\Services\SystemService;
@@ -233,7 +235,12 @@ class AdminController extends BaseController {
      */
     // Games - List all games
     public function listGames(): void {
-        $games = GameModel::getAllGames();
+        $games = GameModel::getAllGames(); 
+
+        // set filter preset
+        $statuses = GameFilterService::getStatusesByGamesArray($games); 
+        $userRelations = []; 
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
         
         // Logging
         Logger::app()->debug('Admin list games', ['user_id' => Auth::user()->getId()]);
@@ -241,7 +248,8 @@ class AdminController extends BaseController {
         $this->render(
             'admin/game/list', 
             [
-                'games' => $games
+                'games' => $games, 
+                'filter' => $filter, 
             ]
         );
     }

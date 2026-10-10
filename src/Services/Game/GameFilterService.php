@@ -5,8 +5,13 @@
 namespace App\Services\Game;
 
 use App\Constants\Application;
-use App\Core\Date\DateRange; 
+use App\Core\Date\DateRange;
+use App\Models\Game\GameModel;
+use App\Models\User\UserModel;
 
+/**
+ * GameFilterService
+ */
 final class GameFilterService
 {
     private ?string $userId;
@@ -30,6 +35,21 @@ final class GameFilterService
     /** @var string[]|null */
     private ?array $gameIds;
 
+    /**
+     * __construct
+     *
+     * @param ?string $userId
+     * @param ?array $userRelations
+     * @param ?array $statuses
+     * @param ?DateRange $dateRange
+     * @param ?int $playerCount
+     * @param ?int $playerCountMin
+     * @param ?int $playerCountMax
+     * @param ?bool $allowBots
+     * @param ?bool $strictGoalOrder
+     * @param ?array $gameIds
+     * @return void
+     */
     public function __construct(
         ?string $userId = null,
         ?array $userRelations = null,
@@ -63,11 +83,68 @@ final class GameFilterService
         }
     }
 
+    /**
+     * Helper
+     */
+    /**
+     * getStatusesByGamesArray
+     *
+     * @param array $games
+     * @return ?array
+     */
+    public static function getStatusesByGamesArray(array $games): ?array 
+    {
+        $statuses = []; 
+        foreach ($games as $game) {
+            if (!in_array($game->getStatus(), $statuses)) {
+                $statuses[] = $game->getStatus(); 
+            }
+        }
+        return $statuses; 
+    }
+
+    /**
+     * getUserRelationsByGamesArrayAndUser
+     *
+     * @param array $games
+     * @param UserModel $user
+     * @return ?array
+     */
+    public static function getUserRelationsByGamesArrayAndUser(array $games, UserModel $user): ?array 
+    {
+        $userRelations = []; 
+        foreach ($games as $game) {
+            if (!in_array(Application::GAMES_CREATED, $userRelations) && $game->isCreator($user)) {
+                $userRelations[] = Application::GAMES_CREATED; 
+            }
+
+            if (!in_array(Application::GAMES_PARTICIPATED, $userRelations) && $game->isParticipant($user)) {
+                $userRelations[] = Application::GAMES_PARTICIPATED; 
+            }
+
+            if (!in_array(Application::GAMES_WON, $userRelations) && $game->isWinner($user)) {
+                $userRelations[] = Application::GAMES_WON; 
+            }
+        }
+        return $userRelations; 
+    }
+
+    /**
+     * getUserId
+     *
+     * @return ?string
+     */
     public function getUserId(): ?string
     {
         return $this->userId;
     }
 
+    /**
+     * setUserId
+     *
+     * @param ?string $userId
+     * @return self
+     */
     public function setUserId(?string $userId): self
     {
         $this->userId = $userId;
@@ -111,11 +188,22 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * getCreatedFrom
+     *
+     * @return ?string
+     */
     public function getCreatedFrom(): ?string
     {
         return $this->createdFrom;
     }
 
+    /**
+     * setCreatedFrom
+     *
+     * @param ?string $createdFrom
+     * @return self
+     */
     public function setCreatedFrom(?string $createdFrom): self
     {
         $this->createdFrom = $createdFrom;
@@ -123,11 +211,22 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * getCreatedTo
+     *
+     * @return ?string
+     */
     public function getCreatedTo(): ?string
     {
         return $this->createdTo;
     }
 
+    /**
+     * setCreatedTo
+     *
+     * @param ?string $createdTo
+     * @return self
+     */
     public function setCreatedTo(?string $createdTo): self
     {
         $this->createdTo = $createdTo;
@@ -135,6 +234,12 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * setDateRange
+     *
+     * @param DateRange $dateRange
+     * @return self
+     */
     public function setDateRange(DateRange $dateRange): self
     {
         if ($dateRange->isEmpty()) {
@@ -153,11 +258,22 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * getPlayerCount
+     *
+     * @return ?int
+     */
     public function getPlayerCount(): ?int
     {
         return $this->playerCount;
     }
 
+    /**
+     * setPlayerCount
+     *
+     * @param ?int $playerCount
+     * @return self
+     */
     public function setPlayerCount(?int $playerCount): self
     {
         $this->playerCount = $playerCount;
@@ -165,11 +281,22 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * getPlayerCountMin
+     *
+     * @return ?int
+     */
     public function getPlayerCountMin(): ?int
     {
         return $this->playerCountMin;
     }
 
+    /**
+     * setPlayerCountMin
+     *
+     * @param ?int $playerCountMin
+     * @return self
+     */
     public function setPlayerCountMin(?int $playerCountMin): self
     {
         $this->playerCountMin = $playerCountMin;
@@ -177,11 +304,22 @@ final class GameFilterService
         return $this;
     }
 
+    /**
+     * getPlayerCountMax
+     *
+     * @return ?int
+     */
     public function getPlayerCountMax(): ?int
     {
         return $this->playerCountMax;
     }
 
+    /**
+     * setPlayerCountMax
+     *
+     * @param ?int $playerCountMax
+     * @return self
+     */
     public function setPlayerCountMax(?int $playerCountMax): self
     {
         $this->playerCountMax = $playerCountMax;

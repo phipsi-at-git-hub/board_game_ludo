@@ -6,9 +6,11 @@ use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
+use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Logging\Logger;
 use App\Models\Game\GameModel;
 use App\Models\Game\GameRuleSetModel;
+use App\Services\Game\GameFilterService;
 use App\Services\Game\GameService;
 use LogicException;
 
@@ -181,6 +183,11 @@ class GameController extends BaseController {
     public function list(): void {
         $user = Auth::user();
         $games = GameModel::getAllOpenGamesNew();
+
+        // set filter preset
+        $statuses = GameFilterService::getStatusesByGamesArray($games); 
+        $userRelations = []; 
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
         
         // Logging
         Logger::app()->debug('List all games', ['user_id' => $user->getId()]);
@@ -188,7 +195,8 @@ class GameController extends BaseController {
         $this->render(
             'game/list', 
             [
-                'games' => $games 
+                'games' => $games, 
+                'filter' => $filter, 
             ]
         );
     }
@@ -198,13 +206,19 @@ class GameController extends BaseController {
         $user = Auth::user();
         $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
 
+        // set filter preset
+        $statuses = GameFilterService::getStatusesByGamesArray($games); 
+        $userRelations = GameFilterService::getUserRelationsByGamesArrayAndUser($games, $user); 
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
+
         // Logging
         Logger::app()->debug('List user games', ['user_id' => $user->getId()]);
         
         $this->render(
             'game/list', 
             [
-                'games' => $games 
+                'games' => $games, 
+                'filter' => $filter, 
             ]
         );
     }

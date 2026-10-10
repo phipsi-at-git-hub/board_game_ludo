@@ -97,11 +97,11 @@ $router->group('/api/game', function($group) {
     $group->post('/cancel', [ApiGameController::class, 'cancel'], [fn() => Middleware::csrf()]); 
     $group->post('/reset', [ApiGameController::class, 'reset'], [fn() => Middleware::csrf()]); 
     $group->delete('/delete', [ApiGameController::class, 'delete'], [fn() => Middleware::csrf()]); 
+    $group->post('/filter', [ApiGameController::class, 'gameFilterView'], [fn() => Middleware::csrf()]); 
 }, [fn() => Middleware::auth()]); 
 
 // --- Game Engine API routes
-$router->group('/api/game-engine', function($group) {
-    //$group->get('/state/{id}', [ApiGameController::class, 'state']);
+$router->group('/api/game-engine', function($group) { 
     $group->post('/state', [ApiGameEngineController::class, 'state'], [fn() => Middleware::csrf()]);
     $group->post('/roll_dice', [ApiGameEngineController::class, 'rollDice'], [fn() => Middleware::csrf()]);
     $group->post('/get_available_moves', [ApiGameEngineController::class, 'getAvailableMoves'], [fn() => Middleware::csrf()]);

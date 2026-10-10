@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
 use App\Models\User\UserModel;
@@ -9,6 +10,7 @@ use App\Models\User\UserModel;
  * Required:
  * @var UserModel $user 
  * @var array $games 
+ * @var GameFilterContext $filter 
  */
 
 $is_detail_view ??= false;
@@ -16,19 +18,30 @@ $is_admin_view ??= false;
 
 $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter'; 
 
+$filter ??= null;
+// set filter presets
+$filterPresetStatusWaiting = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_WAITING, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusRunning = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_RUNNING, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusFinished = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_FINISHED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusCancelled = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_CANCELLED, $filter->statuses)) ? 'selected' : ''; 
+
+$filterPresetUserRelationCreated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_CREATED, $filter->user_relations)) ? 'selected' : ''; 
+$filterPresetUserRelationParticipated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_PARTICIPATED, $filter->user_relations)) ? 'selected' : ''; 
+$filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_WON, $filter->user_relations)) ? 'selected' : ''; 
+
 ?>
 
 <div class="nested-card collapsible-item">
 
     <form
-        data-id="user-games-filter-form"
+        data-id="games-filter-form"
         method="post"
         action="<?= $api_url ?>"
 
         data-response="json"
         data-bind-targets="
-            user-games-filter-games,
-            user-games-entry-count,
+            games-filter-games,
+            games-entry-count,
         ">
 
         <input
@@ -49,8 +62,8 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
 
             <span
                 class="status-badge status-default"
-                data-id="user-games-entry-count"
-                data-bind-sources="user-games-filter-form"
+                data-id="games-entry-count"
+                data-bind-sources="games-filter-form"
                 data-bind-1-type="text"
                 data-bind-1-dto-key="games_count">
 
@@ -79,19 +92,19 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
                         data-min-selection="1" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>" selected >
+                        <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>" <?= $filterPresetStatusWaiting ?> >
                             <?= Localization::get('game.status.waiting') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>" selected >
+                        <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>" <?= $filterPresetStatusRunning ?> >
                             <?= Localization::get('game.status.running') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>" selected >
+                        <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>" <?= $filterPresetStatusFinished ?> >
                             <?= Localization::get('game.status.finished') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>" selected >
+                        <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>" <?= $filterPresetStatusCancelled ?> >
                             <?= Localization::get('game.status.cancelled') ?>
                         </option>
 
@@ -113,18 +126,18 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
                         name="user_relation[]"
                         multiple 
                         data-ui="badge-multiselect" 
-                        data-min-selection="1" 
+                        data-min-selection="<?= ($is_admin_view) ? '1' : '0' ?>" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                        <option value="created" selected >
+                        <option value="created" <?= $filterPresetUserRelationCreated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.created') ?>
                         </option>
 
-                        <option value="participated" selected >
+                        <option value="participated" <?= $filterPresetUserRelationParticipated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.participated') ?>
                         </option>
 
-                        <option value="won" selected >
+                        <option value="won" <?= $filterPresetUserRelationWon ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.won') ?>
                         </option>
 

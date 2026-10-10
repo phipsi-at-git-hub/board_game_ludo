@@ -353,7 +353,7 @@ final class ApiAdminController extends BaseController {
         ];
 
         // Logging
-        Logger::app()->debug('Api admin logging filtered list view', ['user_id' => Auth::user()->getId()]);
+        Logger::app()->debug('Api admin user games logging filtered list view', ['user_id' => Auth::user()->getId()]);
 
         $this->jsonClean(
             Response::success(

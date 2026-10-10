@@ -7,10 +7,14 @@ use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
+use App\Core\Date\DateRange;
 use App\Core\Dto\Game\GameContext;
+use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Http\Response;
 use App\Core\Logging\Logger;
 use App\Models\Game\GameModel;
+use App\Services\Game\GameFilterService;
+use App\Services\Game\GameQueryService;
 use App\Services\Game\GameService;
 
 final class ApiGameController extends BaseController {
@@ -215,6 +219,64 @@ final class ApiGameController extends BaseController {
         $this->jsonClean(
             Response::success(
                 $this->context($game)
+            )
+        );
+    }
+
+    /**
+     * gameFilterView
+     *
+     * @return void
+     */
+    public function gameFilterView(): void {
+        // Parse log level if in POST body
+        $user_id = $_POST['user_id'] ?? null; 
+        $status = $_POST['status'] ?? []; 
+        $relation = $_POST['user_relation'] ?? []; 
+        $date_range = DateRange::fromString($_POST['date_range'] ?? ''); 
+
+        $filter = new GameFilterService(
+            userId: $user_id, 
+            userRelations: $relation, 
+            statuses: $status, 
+            dateRange: $date_range, 
+        ); 
+
+        $query = new GameQueryService($filter); 
+        $games = GameModel::findGames(
+            player: true, 
+            joins: $query->getJoins(), 
+            conditions: $query->getConditions(), 
+            params: $query->getParams(), 
+        ); 
+
+        // Build games filter context
+        $context = GameFilterContext::fromFilter(
+            $status, 
+            $relation, 
+            $date_range->getDateRangeAsString(), 
+            $games
+        ); 
+
+        // Render filtered log entries
+        $views = [
+            'entries' => $this->renderView(
+                'game/partials/entries',
+                [
+                    'games' => $games, 
+                    'is_admin_view' => false, 
+                ]
+            )
+        ];
+
+        // Logging
+        Logger::app()->debug('Api games logging filtered list view', ['user_id' => Auth::user()->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                'Games filter applied',
+                $views
             )
         );
     }

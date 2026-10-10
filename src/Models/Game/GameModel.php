@@ -2108,6 +2108,11 @@ final class GameModel extends BaseModel {
         return null;
     }
 
+    public function isWinner(UserModel $user): bool
+    {
+        return $user->getId() === $this->state_model->getWinnerUserId(); 
+    }
+
     // Helper - Get Winner Player Index
     private function getWinnerPlayerIndex(): ?int {
         if ($this->state_model->getWinnerUserId() === null) {
