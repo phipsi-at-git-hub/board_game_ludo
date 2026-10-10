@@ -101,6 +101,8 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
 
                 <!-- User Relation -->
 
+                <?php if (!$is_admin_view): ?>
+
                 <div class="form-row">
 
                     <span>
@@ -129,6 +131,8 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
                     </select>
 
                 </div>
+
+                <?php endif; ?>
 
                 <!-- Date Range -->
 
