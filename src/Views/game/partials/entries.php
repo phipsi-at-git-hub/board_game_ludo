@@ -41,7 +41,7 @@ $is_admin_view ??= false;
             $can_join = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canJoin($game, $current_user);
             $can_leave = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canLeave($game, $current_user);
 
-            if ($game->isPrivate() && !$is_owner && !$game->isRunning() && !$is_admin_view) {
+            if ($game->isPrivate() && !$is_owner && !$game->isRunning() && !$is_admin_view && !$is_admin) {
                 continue;
             }
 
