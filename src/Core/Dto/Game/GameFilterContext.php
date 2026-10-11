@@ -3,8 +3,7 @@
 
 namespace App\Core\Dto\Game;
 
-use App\Constants\Application;
-use App\Core\Application\App;
+use App\Constants\Application; 
 
 /**
  * GameFilterContext

@@ -6,7 +6,6 @@ namespace App\Services\Game;
 
 use App\Constants\Application;
 use App\Core\Date\DateRange;
-use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 
 /**
