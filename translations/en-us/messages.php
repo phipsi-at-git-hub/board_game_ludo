@@ -11,6 +11,8 @@ return [
     'application.general.offline' => 'offline', 
     'application.general.active' => 'active', 
     'application.general.inactive' => 'inactive', 
+    'application.general.closed' => 'closed', 
+    'application.general.blocked' => 'blocked', 
     'application.general.selected' => 'selected', 
     'application.general.on' => 'on', 
     'application.general.off' => 'off', 
@@ -415,6 +417,10 @@ return [
     'admin.users.list.header.status' => 'Status', 
     'admin.users.list.header.options' => 'Options', 
     'admin.users.list.header.no_users' => 'No Users found.', 
+    'admin.users.list.filter.title' => 'Filter', 
+    'admin.users.list.filter.status' => 'Status', 
+    'admin.users.list.filter.role' => 'Role', 
+    'admin.users.list.filter.date_range' => 'Date Range', 
 
     // Admin - User Create
     'admin.users.create.title' => '👤 Admin - Create User', 

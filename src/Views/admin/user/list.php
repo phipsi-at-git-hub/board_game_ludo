@@ -39,7 +39,18 @@ use App\Core\Localization;
         </ul>
     </div>
 
-    <!-- include users entries --> 
-     <?php include VIEWS_PATH . '/admin/user/partials/entries.php'; ?>
+    <!-- include filter partials -->
+    <?php include VIEWS_PATH . '/admin/user/partials/collapsible_filter.php' ?>
+
+    <div
+        data-id="users-filter"
+        data-bind-sources="users-filter-form"
+        data-bind-1-view-key="entries"
+        data-bind-1-type="view">
+
+        <!-- include games entries partials -->
+        <?php include VIEWS_PATH . '/admin/user/partials/entries.php' ?>
+
+    </div>
 
 </div>

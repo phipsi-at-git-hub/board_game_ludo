@@ -11,6 +11,8 @@ return [
     'application.general.offline' => 'offline',
     'application.general.active' => 'aktiv',
     'application.general.inactive' => 'inaktiv',
+    'application.general.closed' => 'geschlossen',
+    'application.general.blocked' => 'blockiert',
     'application.general.selected' => 'ausgewählt',
     'application.general.on' => 'an',
     'application.general.off' => 'aus',
