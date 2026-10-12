@@ -83,6 +83,37 @@ final class UserFilterService
     }
 
     /**
+     * Helper
+     */
+    /**
+     * getStatusesByUsersArray
+     *
+     * @param array $users
+     * @return ?array
+     */
+    public static function getStatusesByUsersArray(array $users): array
+    {
+        $statuses = []; 
+        foreach ($users as $user) {
+            if (!in_array($user->getStatus(), $statuses)) {
+                $statuses[] = $user->getStatus(); 
+            }
+        }
+        return $statuses; 
+    }
+
+    public static function getRolesByUsersArray(array $users): array
+    {
+        $roles = []; 
+        foreach ($users as $user) {
+            if (!in_array($user->getRole(), $roles)) {
+                $roles[] = $user->getRole(); 
+            }
+        }
+        return $roles; 
+    }
+
+    /**
      * getUserId
      *
      * @return ?string

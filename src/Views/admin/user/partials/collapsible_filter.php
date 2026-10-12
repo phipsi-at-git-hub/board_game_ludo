@@ -2,6 +2,7 @@
 // src/Views/admin/user/partials/collapsible_filter.php
 
 use App\Constants\Application;
+use App\Core\Dto\User\UserFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
 
@@ -13,27 +14,16 @@ $is_detail_view ??= false;
 $is_admin_view ??= false; 
 
 $filter ??= null;
-// set filter presets
-/*
-$filterPresetStatusWaiting = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_WAITING, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusRunning = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_RUNNING, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusFinished = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_FINISHED, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusCancelled = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_CANCELLED, $filter->statuses)) ? 'selected' : ''; 
+// set filter presets 
+$filterPresetStatusActive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::ACTIVE, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusInactive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::INACTIVE, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusClosed = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::CLOSED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusBlocked = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::BLOCKED, $filter->statuses)) ? 'selected' : ''; 
 
-$filterPresetUserRelationCreated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_CREATED, $filter->user_relations)) ? 'selected' : ''; 
-$filterPresetUserRelationParticipated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_PARTICIPATED, $filter->user_relations)) ? 'selected' : ''; 
-$filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_WON, $filter->user_relations)) ? 'selected' : ''; 
-*/
-
-$filterPresetStatusActive = 'selected'; 
-$filterPresetStatusInactive = 'selected'; 
-$filterPresetStatusClosed = 'selected'; 
-$filterPresetStatusBlocked = 'selected'; 
-
-$filterPresetStatusUser = 'selected'; 
-$filterPresetStatusModerator = 'selected'; 
-$filterPresetStatusGameMaster = 'selected'; 
-$filterPresetStatusAdmin = 'selected'; 
+$filterPresetStatusUser = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::USER, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusModerator = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::MODERATOR, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusGameMaster = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::GAME_MASTER, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::ADMIN, $filter->roles)) ? 'selected' : ''; 
 
 ?>
 

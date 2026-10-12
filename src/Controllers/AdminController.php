@@ -7,6 +7,7 @@ use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController; 
 use App\Core\Dto\Game\GameFilterContext;
+use App\Core\Dto\User\UserFilterContext;
 use App\Core\History\Game\GameStateHistory;
 use App\Core\Http\Http;
 use App\Core\Localization;
@@ -20,6 +21,7 @@ use App\Services\Game\GameFilterService;
 use App\Services\LogService;
 use App\Services\MailService;
 use App\Services\SystemService;
+use App\Services\User\UserFilterService;
 use App\Services\User\UserService;
 use DateInterval;
 use DateTimeImmutable;
@@ -92,6 +94,11 @@ class AdminController extends BaseController {
     // Users - List all users
     public function listUsers(): void {
         $users = UserModel::all();
+
+        // set filter preset
+        $statuses = UserFilterService::getStatusesByUsersArray($users); 
+        $roles = UserFilterService::getRolesByUsersArray($users) ; 
+        $filter = new UserFilterContext($statuses, $roles); 
         
         // Logging
         Logger::app()->debug('Admin users list', ['user_id' => Auth::user()->getId()]);
@@ -99,7 +106,8 @@ class AdminController extends BaseController {
         $this->render(
             'admin/user/list', 
             [
-                'users' => $users
+                'users' => $users, 
+                'filter' => $filter, 
             ]
         );
     }
