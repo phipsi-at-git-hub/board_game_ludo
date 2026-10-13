@@ -98,7 +98,7 @@ class AdminController extends BaseController {
         // set filter preset
         $statuses = UserFilterService::getStatusesByUsersArray($users); 
         $roles = UserFilterService::getRolesByUsersArray($users) ; 
-        $filter = new UserFilterContext($statuses, $roles); 
+        $filter = new UserFilterContext($statuses, $roles, null, $users); 
         
         // Logging
         Logger::app()->debug('Admin users list', ['user_id' => Auth::user()->getId()]);

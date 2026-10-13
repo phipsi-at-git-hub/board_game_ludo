@@ -120,19 +120,19 @@ $filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($fi
                         data-min-selection="1" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                        <option value="created" <?= $filterPresetStatusUser ?> >
+                        <option value="<?= htmlspecialchars(Application::USER) ?>" <?= $filterPresetStatusUser ?> >
                             <?= Localization::get('application.general.user') ?>
                         </option>
 
-                        <option value="participated" <?= $filterPresetStatusModerator ?> >
+                        <option value="<?= htmlspecialchars(Application::MODERATOR) ?>" <?= $filterPresetStatusModerator ?> >
                             <?= Localization::get('application.general.moderator') ?>
                         </option>
 
-                        <option value="won" <?= $filterPresetStatusGameMaster ?> >
+                        <option value="<?= htmlspecialchars(Application::GAME_MASTER) ?>" <?= $filterPresetStatusGameMaster ?> >
                             <?= Localization::get('application.general.game_master') ?>
                         </option>
 
-                        <option value="won" <?= $filterPresetStatusAdmin ?> >
+                        <option value="<?= htmlspecialchars(Application::ADMIN) ?>" <?= $filterPresetStatusAdmin ?> >
                             <?= Localization::get('application.general.admin') ?>
                         </option>
 
@@ -152,7 +152,7 @@ $filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($fi
 
                     <input
                         type="text"
-                        name="date_range"
+                        name="date_range_last_login"
                         data-ui="date-range"
                         data-ui-localization="<?= Application::EN_US ?>"
                         data-ui-with-time="true" 

@@ -223,4 +223,9 @@ class Application {
     public const ORDER_BY_TIMESTAMP = 'timestamp'; 
     public const ORDER_BY_CHANNEL = 'channel'; 
     public const ORDER_BY_LOG_LEVEL = 'log_level'; 
+
+    // User relation types
+    public const USER_RELATION_CREATED = 'created'; 
+    public const USER_RELATION_PARTICIPATED = 'participated'; 
+    public const USER_RELATION_WON = 'won'; 
 }

@@ -140,5 +140,6 @@ $router->group('/api/admin', function($group) {
     $group->post('/system/settings/update', [ApiAdminController::class, 'updateSystemSettings'], [fn() => Middleware::csrf()]); 
     $group->post('/logging/filter', [ApiAdminController::class, 'loggingFilterView'], [fn() => Middleware::csrf()]); 
     $group->post('/game/filter', [ApiAdminController::class, 'gameFilterView'], [fn() => Middleware::csrf()]); 
+    $group->post('/user/filter', [ApiAdminController::class, 'userFilterView'], [fn() => Middleware::csrf()]); 
 }, [fn() => Middleware::auth(), fn() => Middleware::admin()]);
 return $router;

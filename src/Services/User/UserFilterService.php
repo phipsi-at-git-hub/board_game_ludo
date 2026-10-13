@@ -3,6 +3,9 @@
 
 namespace App\Services\User;
 
+use App\Constants\Application;
+use App\Core\Date\DateRange;
+
 /**
  * UserFilterService
  */
@@ -28,8 +31,8 @@ final class UserFilterService
     private ?string $createdTo;
 
     private ?string $updatedFrom;
-    private ?string $updatedTo;
-
+    private ?string $updatedTo; 
+    
     /**
      * __construct
      *
@@ -40,12 +43,10 @@ final class UserFilterService
      * @param ?array $roles
      * @param ?string $preferredLanguage
      * @param ?string $preferredCameraMode
-     * @param ?string $lastLoginFrom
-     * @param ?string $lastLoginTo
-     * @param ?string $createdFrom
-     * @param ?string $createdTo
-     * @param ?string $updatedFrom
-     * @param ?string $updatedTo
+     * @param ?DateRange $dateRangeLastLogin
+     * @param ?DateRange $dateRangeCreated
+     * @param ?DateRange $dateRangeUpdated
+     * @return void
      */
     public function __construct(
         ?string $userId = null,
@@ -55,12 +56,9 @@ final class UserFilterService
         ?array $roles = null,
         ?string $preferredLanguage = null,
         ?string $preferredCameraMode = null,
-        ?string $lastLoginFrom = null,
-        ?string $lastLoginTo = null,
-        ?string $createdFrom = null,
-        ?string $createdTo = null,
-        ?string $updatedFrom = null,
-        ?string $updatedTo = null,
+        ?DateRange $dateRangeLastLogin = null, 
+        ?DateRange $dateRangeCreated = null, 
+        ?DateRange $dateRangeUpdated = null, 
     ) {
         $this->userId = $userId;
         $this->username = $username;
@@ -72,14 +70,26 @@ final class UserFilterService
         $this->preferredLanguage = $preferredLanguage;
         $this->preferredCameraMode = $preferredCameraMode;
 
-        $this->lastLoginFrom = $lastLoginFrom;
-        $this->lastLoginTo = $lastLoginTo;
+        $this->lastLoginFrom = null; 
+        $this->lastLoginTo = null; 
 
-        $this->createdFrom = $createdFrom;
-        $this->createdTo = $createdTo;
+        if ($dateRangeLastLogin !== null && !$dateRangeLastLogin->isEmpty()) { 
+            $this->setDateRangeLastLogin($dateRangeLastLogin); 
+        }
 
-        $this->updatedFrom = $updatedFrom;
-        $this->updatedTo = $updatedTo;
+        $this->createdFrom = null; 
+        $this->createdTo = null; 
+
+        if ($dateRangeCreated !== null && !$dateRangeCreated->isEmpty()) { 
+            $this->setDateRangeCreated($dateRangeCreated); 
+        }
+
+        $this->updatedFrom = null; 
+        $this->updatedTo = null; 
+
+        if ($dateRangeUpdated !== null && !$dateRangeUpdated->isEmpty()) { 
+            $this->setDateRangeUpdated($dateRangeUpdated); 
+        }
     }
 
     /**
@@ -102,6 +112,12 @@ final class UserFilterService
         return $statuses; 
     }
 
+    /**
+     * getRolesByUsersArray
+     *
+     * @param array $users
+     * @return array
+     */
     public static function getRolesByUsersArray(array $users): array
     {
         $roles = []; 
@@ -319,6 +335,24 @@ final class UserFilterService
 
         return $this;
     }
+    
+    public function setDateRangeLastLogin(DateRange $dateRange): self
+    {
+        if ($dateRange->isEmpty()) {
+            $this->lastLoginFrom = null;
+            $this->lastLoginTo = null;
+
+            return $this;
+        }
+
+        $start = $dateRange->getStart();
+        $end = $dateRange->getEnd();
+
+        $this->lastLoginFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->lastLoginTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+
+        return $this;
+    }
 
     /**
      * getCreatedFrom
@@ -365,6 +399,24 @@ final class UserFilterService
 
         return $this;
     }
+    
+    public function setDateRangeCreated(DateRange $dateRange): self
+    {
+        if ($dateRange->isEmpty()) {
+            $this->createdFrom = null;
+            $this->createdTo = null;
+
+            return $this;
+        }
+
+        $start = $dateRange->getStart();
+        $end = $dateRange->getEnd();
+
+        $this->createdFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->createdTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+
+        return $this;
+    }
 
     /**
      * getUpdatedFrom
@@ -408,6 +460,24 @@ final class UserFilterService
     public function setUpdatedTo(?string $updatedTo): self
     {
         $this->updatedTo = $updatedTo;
+
+        return $this;
+    }
+    
+    public function setDateRangeUpdated(DateRange $dateRange): self
+    {
+        if ($dateRange->isEmpty()) {
+            $this->updatedFrom = null;
+            $this->updatedTo = null;
+
+            return $this;
+        }
+
+        $start = $dateRange->getStart();
+        $end = $dateRange->getEnd();
+
+        $this->updatedFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->updatedTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
 
         return $this;
     }

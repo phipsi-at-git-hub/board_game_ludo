@@ -5,12 +5,21 @@ namespace App\Services\Game;
 
 use App\Constants\Application;
 
+/**
+ * GameQueryService
+ */
 final class GameQueryService
 {
     private array $joins = [];
     private array $conditions = [];
     private array $params = [];
 
+    /**
+     * __construct
+     *
+     * @param GameFilterService $filter
+     * @return void
+     */
     public function __construct(GameFilterService $filter)
     {
         $this->buildUserConditions($filter);

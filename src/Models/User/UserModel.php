@@ -27,6 +27,76 @@ final class UserModel extends BaseModel {
     private ?string $reset_expires_at = null;
 
     /**
+     * Database
+     */
+
+    /**
+     * Generic find users
+     * 
+     * findUsers
+     *
+     * @param array $joins
+     * @param array $conditions
+     * @param array $params
+     * @return array
+     */
+    public static function findUsers(
+        array $joins = [],
+        array $conditions = [],
+        array $params = []
+    ): array {
+        // Base Query
+        $sql = sprintf(
+            "
+            SELECT
+                u.*
+
+            FROM %s u
+            ",
+            Application::TABLE_USERS
+        );
+
+        // Additional Joins
+        if (!empty($joins)) {
+            $sql .= ' ' . implode(' ', $joins);
+        }
+
+        // Conditions
+        if (!empty($conditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+
+        // Order
+        $sql .= sprintf(
+            "
+            ORDER BY u.%s DESC
+            ",
+            Application::CREATED_AT
+        );
+
+        // Load Users
+        $rows = static::fetchAll(
+            $sql,
+            $params
+        );
+
+        $users = [];
+
+        foreach ($rows as $row) {
+            $user = self::fromArray($row);
+
+            // User Statistics
+            $user->user_statistics = UserStatisticsModel::findByUserId(
+                $user->getId()
+            );
+
+            $users[] = $user;
+        }
+
+        return $users;
+    }
+
+    /**
      * User - Find user by id (UUID)
      * 
      * findById

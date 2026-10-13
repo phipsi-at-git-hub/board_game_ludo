@@ -129,15 +129,15 @@ $filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array
                         data-min-selection="<?= ($is_admin_view) ? '1' : '0' ?>" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                        <option value="created" <?= $filterPresetUserRelationCreated ?> >
+                        <option value="<?= htmlspecialchars(Application::USER_RELATION_CREATED) ?>" <?= $filterPresetUserRelationCreated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.created') ?>
                         </option>
 
-                        <option value="participated" <?= $filterPresetUserRelationParticipated ?> >
+                        <option value="<?= htmlspecialchars(Application::USER_RELATION_PARTICIPATED) ?>" <?= $filterPresetUserRelationParticipated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.participated') ?>
                         </option>
 
-                        <option value="won" <?= $filterPresetUserRelationWon ?> >
+                        <option value="<?= htmlspecialchars(Application::USER_RELATION_WON) ?>" <?= $filterPresetUserRelationWon ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.won') ?>
                         </option>
 

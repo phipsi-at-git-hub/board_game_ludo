@@ -11,6 +11,7 @@ use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Dto\Logging\EntryFilterContext;
 use App\Core\Dto\System\SettingsContext;
 use App\Core\Dto\User\UserContext;
+use App\Core\Dto\User\UserFilterContext;
 use App\Core\Http\Http;
 use App\Core\Http\Response;
 use App\Core\Localization;
@@ -23,6 +24,8 @@ use App\Services\Game\GameFilterService;
 use App\Services\Game\GameQueryService;
 use App\Services\LogService;
 use App\Services\MailService;
+use App\Services\User\UserFilterService;
+use App\Services\User\UserQueryService;
 use App\Services\User\UserService;
 
 final class ApiAdminController extends BaseController {
@@ -335,13 +338,13 @@ final class ApiAdminController extends BaseController {
 
         // Build games filter context
         $context = GameFilterContext::fromFilter(
-            $status, 
-            $relation, 
-            $date_range->getDateRangeAsString(), 
-            $games
+            statuses: $status, 
+            user_relations: $relation, 
+            date_range: $date_range->getDateRangeAsString(), 
+            games: $games, 
         ); 
 
-        // Render filtered log entries
+        // Render filtered game entries
         $views = [
             'entries' => $this->renderView(
                 'game/partials/entries',
@@ -363,6 +366,55 @@ final class ApiAdminController extends BaseController {
             )
         );
     }
+
+    public function userFilterView(): void
+    {
+        $statuses = $_POST['status'] ?? []; 
+        $roles = $_POST['role'] ?? []; 
+        $dateRangeLastLogin = DateRange::fromString($_POST['date_range_last_login'] ?? ''); 
+
+        $filter = new UserFilterService(
+            statuses: $statuses, 
+            roles: $roles, 
+            dateRangeLastLogin: $dateRangeLastLogin, 
+        ); 
+
+        $query = new UserQueryService($filter); 
+        $users = UserModel::findUsers(
+            joins: $query->getJoins(), 
+            conditions: $query->getConditions(), 
+            params: $query->getParams(), 
+        ); 
+
+        // Build users filter context 
+        $context = UserFilterContext::fromFilter(
+            statuses: $statuses, 
+            roles: $roles, 
+            dateRangeLastLogin: $dateRangeLastLogin->getDateRangeAsString(), 
+            users: $users, 
+        ); 
+        
+        // Render filtered user entries
+        $views = [
+            'entries' => $this->renderView(
+                'admin/user/partials/entries', 
+                [
+                    'users' => $users, 
+                ] 
+            ) 
+        ]; 
+
+        // Logging
+        Logger::app()->debug('Api admin user logging filtered list view', ['user_id' => Auth::user()->getId()]);
+
+        $this->jsonClean(
+            Response::success(
+                $context,
+                'Games filter applied',
+                $views
+            )
+        );
+    } 
 
     /**
      * Settings section
