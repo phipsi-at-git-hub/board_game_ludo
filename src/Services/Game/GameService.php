@@ -7,8 +7,19 @@ use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
 
+/**
+ * GameService
+ */
 final class GameService {
-    // Join game
+    /**
+     * Join game
+     *
+     * join
+     * 
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function join(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canJoin($game, $user)) {
             return false;
@@ -17,16 +28,32 @@ final class GameService {
         return $game->join($user->getId());
     }
 
-    // Leave game
+    /**
+     * Leave game
+     * 
+     * leave
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function leave(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canLeave($game, $user)) {
             return false;
         }
 
         return $game->leave($user->getId());
-    }
+    } 
 
-    // Start game
+    /**
+     * Start game
+     * 
+     * start
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function start(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canStart($game, $user)) {
             return false;
@@ -44,9 +71,18 @@ final class GameService {
         return false; 
     }
 
-    // Pause game 
     // ToDo: Remove, since pausing a game is obsolete
-    public function pause(GameModel $game, UserModel $user): bool {
+    /**
+     * Pause game 
+     * 
+     * pause
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public function pause(GameModel $game, UserModel $user): bool 
+    {
         if (!GamePolicy::canPause($game, $user)) {
             return false;
         }
@@ -58,7 +94,15 @@ final class GameService {
         return false; 
     }
 
-    // Reset game
+    /**
+     * Reset game
+     * 
+     * reset
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function reset(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canReset($game, $user)) {
             return false;
@@ -67,7 +111,15 @@ final class GameService {
         return $game->resetGame();
     }
 
-    // Cancel game
+    /**
+     * Cancel game
+     * 
+     * cancel
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function cancel(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canCancel($game, $user)) {
             return false;
@@ -80,12 +132,41 @@ final class GameService {
         return false; 
     }
 
-    // Delete game
+    /**
+     * Delete game
+     * 
+     * delete
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
     public function delete(GameModel $game, UserModel $user): bool {
         if (!GamePolicy::canDelete($game, $user)) {
             return false;
         }
 
         return $game->delete();
+    }
+
+    /**
+     * Helper
+     */
+    /**
+     * gamesArrayForUser
+     *
+     * @param array $games
+     * @param UserModel $user
+     * @return void
+     */
+    public static function gamesArrayForUser(array $games, UserModel $user) 
+    {
+        $gamesArrayForUser = []; 
+        foreach ($games as $game) {
+            if (GamePolicy::canAccess($game, $user)) {
+                $gamesArrayForUser[] = $game; 
+            }
+        }
+        return $gamesArrayForUser; 
     }
 }

@@ -8,20 +8,51 @@ use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 use App\Services\SystemService;
 
-final class GamePolicy {
-    // Is user owner of the game
-    public static function isOwner(GameModel $game, UserModel $user): bool {
+/**
+ * GamePolicy
+ */
+final class GamePolicy 
+{ 
+    /**
+     * Is user owner of the game
+     * isOwner
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function isOwner(GameModel $game, UserModel $user): bool 
+    {
         return $game->getCreatedByUserId() === $user->getId(); 
     }
 
-    // Can user access the game
-    public static function canAccess(GameModel $game, UserModel $user): bool {
-        // TODO:
+    /**
+     * Can user access the game
+     * canAccess
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canAccess(GameModel $game, UserModel $user): bool 
+    {
+        if ($game->isPrivate() && !$game->isParticipant($user)) {
+            return false; 
+        }
         return true;
     }
 
-    // Can user join the game
-    public static function canJoin(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user join the game
+     * 
+     * canJoin
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canJoin(GameModel $game, UserModel $user): bool 
+    {
         if (!$game->isWaiting()) {
             return false;
         }
@@ -44,8 +75,16 @@ final class GamePolicy {
         return true;
     }
 
-    // Can user leave the game
-    public static function canLeave(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user leave the game
+     * canLeave
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canLeave(GameModel $game, UserModel $user): bool 
+    {
         if (!$game->hasPlayer($user->getId())) {
             return false; 
         } 
@@ -55,8 +94,17 @@ final class GamePolicy {
         return true; 
     }
 
-    // Can user edit the game
-    public static function canEdit(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user edit the game
+     * 
+     * canEdit
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canEdit(GameModel $game, UserModel $user): bool 
+    {
         return (
             $game->isWaiting()
             && (
@@ -66,8 +114,17 @@ final class GamePolicy {
         );
     }
 
-    // Can user delete the game
-    public static function canDelete(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user delete the game
+     * 
+     * canDelete
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canDelete(GameModel $game, UserModel $user): bool 
+    {
         return (
             $user->isAdmin()
             && (
@@ -77,8 +134,16 @@ final class GamePolicy {
         );
     }
 
-    // can user start the game
-    public static function canStart(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user start the game
+     * canStart
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canStart(GameModel $game, UserModel $user): bool 
+    {
         return (
             $game->isWaiting()
             && (
@@ -89,8 +154,17 @@ final class GamePolicy {
         );
     }
 
-    // Can user play the game 
-    public static function canPlay(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user play the game
+     * 
+     * canPlay
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canPlay(GameModel $game, UserModel $user): bool 
+    {
         $systemService = App::instance()->resolve(SystemService::class); 
         return (
             $game->isRunning() 
@@ -104,9 +178,18 @@ final class GamePolicy {
         );
     }
 
-    // Can user pause the game 
     // ToDo: Remove pausing a game is obsolete
-    public static function canPause(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user pause the game
+     * 
+     * canPause
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canPause(GameModel $game, UserModel $user): bool 
+    {
         return (
             $game->isRunning()
             && (
@@ -116,8 +199,16 @@ final class GamePolicy {
         );
     }
 
-    // Can user reset the game 
-    public static function canReset(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user reset the game
+     * canReset
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canReset(GameModel $game, UserModel $user): bool 
+    {
         return (
             $game->isRunning()
             && (
@@ -127,8 +218,17 @@ final class GamePolicy {
         );
     }
 
-    // Can user cancel the game 
-    public static function canCancel(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user cancel the game 
+     * 
+     * canCancel
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canCancel(GameModel $game, UserModel $user): bool 
+    {
         return (
             (
                 $user->isAdmin()
@@ -141,8 +241,17 @@ final class GamePolicy {
         );
     }
 
-    // Can create test game
-    public static function canCreateTestGame(GameModel $game, UserModel $user): bool {
+    /**
+     * Can user create a test game 
+     * 
+     * canCreateTestGame
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return bool
+     */
+    public static function canCreateTestGame(GameModel $game, UserModel $user): bool 
+    {
         return (
             $user->isAdmin() 
             && !$game->isTestGame() 
