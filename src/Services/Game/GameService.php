@@ -157,9 +157,9 @@ final class GameService {
      *
      * @param array $games
      * @param UserModel $user
-     * @return void
+     * @return ?array
      */
-    public static function gamesArrayForUser(array $games, UserModel $user) 
+    public static function gamesArrayForUser(array $games, UserModel $user): ?array
     {
         $gamesArrayForUser = []; 
         foreach ($games as $game) {

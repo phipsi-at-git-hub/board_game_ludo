@@ -373,6 +373,9 @@ final class ApiGameController extends BaseController
             params: $query->getParams(), 
         ); 
 
+        // Get array of all games that user can access 
+        $games = GameService::gamesArrayForUser($games, $user); 
+
         // Build games filter context
         $context = GameFilterContext::fromFilter(
             $status, 
