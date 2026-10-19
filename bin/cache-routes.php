@@ -4,7 +4,7 @@
 require __DIR__ . '/../bootstrap/paths.php';
 require BASE_PATH . '/vendor/autoload.php';
 
-use App\Core\Env;
+use App\Core\Config\Env;
 use App\Core\Router;
 
 if (!Env::isProd()) {

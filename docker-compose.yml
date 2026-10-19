@@ -6,8 +6,33 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
-      - mailpit
+      db:
+        condition: service_healthy
+      mailpit: 
+        condition: service_started
+  
+  app_init: 
+    build: . 
+    container_name: bgl-app-init
+    working_dir: /var/www/html
+    env_file: 
+      - .env
+    command: ["sh", "-c", "sleep 5 && php", "bin/clean-logs.php"]
+    depends_on: 
+      - app
+    
+  app_cron: 
+    build: . 
+    container_name: bgl-app_cron
+    working_dir: /var/www/html
+    env_file:
+      - .env
+    # use only in prod environment with: docker compose --profile production up -d
+    profiles:
+      - production
+    command: ["sh", "-c", "sleep 5 && while true; do php bin/clean-logs.php; sleep 86400; done"]
+    depends_on: 
+      - app
 
   web:
     image: nginx:stable
@@ -33,6 +58,11 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USER}", "-p${DB_PASSWORD}"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin:latest
