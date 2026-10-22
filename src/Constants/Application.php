@@ -1,161 +1,270 @@
 <?php
 // src/Constants/Application.php
+
 namespace App\Constants;
 
 class Application
 {
-    // Application general
-    public const GENERAL_ACCESS = 'access';
-    public const GENERAL_JOIN = 'join';
-    public const GENERAL_EDIT = 'edit';
-    public const GENERAL_DELETE = 'delete';
-    public const GENERAL_ON = 'on';
-    public const GENERAL_OFF = 'off';
-    public const GENERAL_PARTIAL = 'partial';
-    public const GENERAL_OK = 'ok';
-    public const GENERAL_FAIL = 'fail';
-    public const GENERAL_HEALTH = 'health';
-    public const GENERAL_DEV = 'dev';
-    public const GENERAL_PROD = 'prod';
-    public const GENERAL_HEALTHY = 'healthy';
-    public const GENERAL_CRITICAL = 'critical';
-    public const GENERAL_WARNING = 'warning';
+    /*
+     * General application values
+     */
 
-    // Application Responses
+    /**
+     * Defines general application actions.
+     */
+    public const ACTION_ACCESS = 'access';
+    public const ACTION_JOIN = 'join';
+    public const ACTION_EDIT = 'edit';
+    public const ACTION_DELETE = 'delete';
+
+    /**
+     * Defines generic on/off and partial states.
+     */
+    public const VALUE_ON = 'on';
+    public const VALUE_OFF = 'off';
+    public const VALUE_PARTIAL = 'partial';
+
+    /**
+     * Defines generic operation results.
+     */
+    public const RESULT_OK = 'ok';
+    public const RESULT_FAIL = 'fail';
+
+    /**
+     * Defines application environments.
+     */
+    public const ENVIRONMENT_DEV = 'dev';
+    public const ENVIRONMENT_PROD = 'prod';
+
+    /**
+     * Defines health check identifiers and health states.
+     */
+    public const HEALTH_CHECK = 'health';
+    public const HEALTH_STATUS_HEALTHY = 'healthy';
+    public const HEALTH_STATUS_CRITICAL = 'critical';
+    public const HEALTH_STATUS_WARNING = 'warning';
+
+
+    /*
+     * Application responses
+     */
+
+    /**
+     * Defines response notification types.
+     */
     public const RESPONSE_TYPE_SUCCESS = 'success';
     public const RESPONSE_TYPE_ERROR = 'error';
     public const RESPONSE_TYPE_WARNING = 'warning';
     public const RESPONSE_TYPE_INFO = 'info';
 
-    // Database tables
-    public const TABLE_USERS = 'users';
-    public const TABLE_USERS_STATISTICS = 'users_statistics';
-    public const TABLE_GAMES = 'games';
-    public const TABLE_RULES = 'game_rule_set';
-    public const TABLE_STATE = 'game_state';
-    public const TABLE_PLAYERS = 'game_state_players';
-    public const TABLE_FIGURES = 'game_state_figures';
-    public const TABLE_HISTORY = 'game_history';
-    public const TABLE_SYSTEM_SETTINGS = 'system_settings';
 
-    // Database field names - common
-    public const ID = 'id';
-    public const NAME = 'name';
-    public const GAME_NAME = 'name';
-    public const GAME_ID = 'game_id';
-    public const USER_ID = 'user_id';
-    public const STATUS = 'status';
-    public const CREATED_AT = 'created_at';
-    public const UPDATED_AT = 'updated_at';
+    /*
+     * Database tables
+     */
 
-    // Database field names - games
-    public const CREATED_BY_USER_ID = 'created_by_user_id';
-    public const IS_PRIVATE = 'is_private';
-    public const IS_LOCKED = 'is_locked';
-    public const IS_TEST_GAME = 'is_test_game';
+    /**
+     * Defines database table names.
+     */
+    public const DB_TABLE_USERS = 'users';
+    public const DB_TABLE_USER_STATISTICS = 'users_statistics';
+    public const DB_TABLE_GAMES = 'games';
+    public const DB_TABLE_GAME_RULE_SET = 'game_rule_set';
+    public const DB_TABLE_GAME_STATE = 'game_state';
+    public const DB_TABLE_GAME_STATE_PLAYERS = 'game_state_players';
+    public const DB_TABLE_GAME_STATE_FIGURES = 'game_state_figures';
+    public const DB_TABLE_GAME_HISTORY = 'game_history';
+    public const DB_TABLE_SYSTEM_SETTINGS = 'system_settings';
 
-    // Database field names - game_rule_set
-    public const ALLOW_BOTS = 'allow_bots';
-    public const ALL_FIGURES_START_AT_HOME = 'all_figures_start_at_home';
-    public const LEAVE_HOME_ATTEMPT = 'leave_home_attempt';
-    public const LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max';
-    public const EXTRA_ROLL_ON_SIX_LIMIT = 'extra_roll_on_six_limit';
-    public const FORCE_LEAVING_HOME_ON_SIX = 'force_leaving_home_on_six';
-    public const FORCE_CAPTURE_ENEMY_FIGURES = 'force_capture_enemy_figures';
-    public const FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow';
-    public const ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
-    public const STRICT_GOAL_ORDER = 'strict_goal_order';
-    public const START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';
-    public const ENUM_FIRST_FIGURE = 'first_figure';
-    public const ENUM_ALL_FIGURES = 'all_figures';
 
-    // Database field names - game_state
-    public const CURRENT_PLAYER_INDEX = 'current_player_index';
-    public const CURRENT_DICE_ROLL = 'current_dice_roll';
-    public const CURRENT_TURN_COUNTER = 'current_turn_counter';
-    public const LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used';
-    public const EXTRA_ROLLS_ON_SIX_USED = 'extra_rolls_on_six_used';
-    public const WINNER_USER_ID = 'winner_user_id';
+    /*
+     * Database columns
+     */
 
-    // Database field names - game_state_figures
-    public const FIGURE_INDEX = 'figure_index';
-    public const POSITION = 'position';
-    public const AREA = 'area';
+    /**
+     * Defines common database column names.
+     */
+    public const DB_COLUMN_ID = 'id';
+    public const DB_COLUMN_NAME = 'name';
+    public const DB_COLUMN_GAME_NAME = 'name';
+    public const DB_COLUMN_GAME_ID = 'game_id';
+    public const DB_COLUMN_USER_ID = 'user_id';
+    public const DB_COLUMN_STATUS = 'status';
+    public const DB_COLUMN_CREATED_AT = 'created_at';
+    public const DB_COLUMN_UPDATED_AT = 'updated_at';
 
-    // Database field names - game_state_figures
-    public const PLAYER_INDEX = 'player_index';
+    /**
+     * Defines game database columns.
+     */
+    public const DB_COLUMN_CREATED_BY_USER_ID = 'created_by_user_id';
+    public const DB_COLUMN_IS_PRIVATE = 'is_private';
+    public const DB_COLUMN_IS_LOCKED = 'is_locked';
+    public const DB_COLUMN_IS_TEST_GAME = 'is_test_game';
 
-    // Database field names - game_history 
-    public const STATE_INDEX = 'state_index';
-    public const STATE = 'state';
+    /**
+     * Defines game rule set database columns.
+     */
+    public const DB_COLUMN_ALLOW_BOTS = 'allow_bots';
+    public const DB_COLUMN_ALL_FIGURES_START_AT_HOME = 'all_figures_start_at_home';
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPT = 'leave_home_attempt';
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max';
+    public const DB_COLUMN_EXTRA_ROLL_ON_SIX_LIMIT = 'extra_roll_on_six_limit';
+    public const DB_COLUMN_FORCE_LEAVING_HOME_ON_SIX = 'force_leaving_home_on_six';
+    public const DB_COLUMN_FORCE_CAPTURE_ENEMY_FIGURES = 'force_capture_enemy_figures';
+    public const DB_COLUMN_FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow';
+    public const DB_COLUMN_ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
+    public const DB_COLUMN_STRICT_GOAL_ORDER = 'strict_goal_order';
+    public const DB_COLUMN_START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';
+    public const DB_COLUMN_ENUM_FIRST_FIGURE = 'first_figure';
+    public const DB_COLUMN_ENUM_ALL_FIGURES = 'all_figures';
 
-    // Database field names - users
-    public const USERNAME = 'username';
-    public const FIRSTNAME = 'firstname';
-    public const LASTNAME = 'lastname';
-    public const EMAIL = 'email';
-    public const ROLE = 'role';
-    public const PREFERRED_LANGUAGE = 'preferred_language';
-    public const PREFERRED_CAMERA_MODE = 'preferred_camera_mode';
-    public const PASSWORD_HASH = 'password_hash';
-    public const RESET_TOKEN = 'reset_token';
-    public const RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
-    public const LAST_LOGIN = 'last_login';
+    /**
+     * Defines game state database columns.
+     */
+    public const DB_COLUMN_CURRENT_PLAYER_INDEX = 'current_player_index';
+    public const DB_COLUMN_CURRENT_DICE_ROLL = 'current_dice_roll';
+    public const DB_COLUMN_CURRENT_TURN_COUNTER = 'current_turn_counter';
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used';
+    public const DB_COLUMN_EXTRA_ROLLS_ON_SIX_USED = 'extra_rolls_on_six_used';
+    public const DB_COLUMN_WINNER_USER_ID = 'winner_user_id';
 
-    // Database field names - users_statistics
-    public const LOGINS = 'logins';
-    public const GAMES_CREATED = 'games_created';
-    public const GAMES_PARTICIPATED = 'games_participated';
-    public const GAMES_WON = 'games_won';
+    /**
+     * Defines game figure database columns.
+     */
+    public const DB_COLUMN_FIGURE_INDEX = 'figure_index';
+    public const DB_COLUMN_POSITION = 'position';
+    public const DB_COLUMN_AREA = 'area';
 
-    // Database field names - system_settings
-    public const REGISTRATION_ENABLED = 'registration_enabled';
-    public const LOGIN_ENABLED = 'login_enabled';
-    public const SYSTEM_ENABLED = 'system_enabled';
-    public const LOGGING_DEBUG_ENABLED = 'logging_debug_enabled';
-    public const GAME_CREATION_ENABLED = 'game_creation_enabled';
-    public const GAME_PLAY_ENABLED = 'game_play_enabled';
-    public const MAINTENANCE_MODE_ENABLED = 'maintenance_mode_enabled';
-    public const MAINTENANCE_MESSAGE = 'maintenance_message';
-    public const SYSTEM_NOTICE_ENABLED = 'system_notice_enabled';
-    public const SYSTEM_NOTICE_MESSAGE = 'system_notice_message';
-    public const UPDATED_BY = 'updated_by';
+    /**
+     * Defines game state player database columns.
+     */
+    public const DB_COLUMN_PLAYER_INDEX = 'player_index';
 
-    // User roles
-    public const USER = 'user';
-    public const ADMIN = 'admin';
-    public const MODERATOR = 'moderator';
-    public const GAME_MASTER = 'game_master';
+    /**
+     * Defines game history database columns.
+     */
+    public const DB_COLUMN_STATE_INDEX = 'state_index';
+    public const DB_COLUMN_STATE = 'state';
 
-    // User status
-    public const ACTIVE = 'ACTIVE';
-    public const INACTIVE = 'INACTIVE';
-    public const CLOSED = 'CLOSED';
-    public const BLOCKED = 'BLOCKED';
-    public const BANNED = 'BANNED';
+    /**
+     * Defines user database columns.
+     */
+    public const DB_COLUMN_USERNAME = 'username';
+    public const DB_COLUMN_FIRSTNAME = 'firstname';
+    public const DB_COLUMN_LASTNAME = 'lastname';
+    public const DB_COLUMN_EMAIL = 'email';
+    public const DB_COLUMN_ROLE = 'role';
+    public const DB_COLUMN_PREFERRED_LANGUAGE = 'preferred_language';
+    public const DB_COLUMN_PREFERRED_CAMERA_MODE = 'preferred_camera_mode';
+    public const DB_COLUMN_PASSWORD_HASH = 'password_hash';
+    public const DB_COLUMN_RESET_TOKEN = 'reset_token';
+    public const DB_COLUMN_RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
+    public const DB_COLUMN_LAST_LOGIN = 'last_login';
 
-    // Game status
-    public const STATUS_WAITING  = 'WAITING';
-    public const STATUS_RUNNING  = 'RUNNING';
-    public const STATUS_FINISHED = 'FINISHED';
-    public const STATUS_CANCELLED = 'CANCELLED';
+    /**
+     * Defines user statistics database columns.
+     */
+    public const DB_COLUMN_LOGINS = 'logins';
+    public const DB_COLUMN_GAMES_CREATED = 'games_created';
+    public const DB_COLUMN_GAMES_PARTICIPATED = 'games_participated';
+    public const DB_COLUMN_GAMES_WON = 'games_won';
 
+    /**
+     * Defines system settings database columns.
+     */
+    public const DB_COLUMN_REGISTRATION_ENABLED = 'registration_enabled';
+    public const DB_COLUMN_LOGIN_ENABLED = 'login_enabled';
+    public const DB_COLUMN_SYSTEM_ENABLED = 'system_enabled';
+    public const DB_COLUMN_LOGGING_DEBUG_ENABLED = 'logging_debug_enabled';
+    public const DB_COLUMN_GAME_CREATION_ENABLED = 'game_creation_enabled';
+    public const DB_COLUMN_GAME_PLAY_ENABLED = 'game_play_enabled';
+    public const DB_COLUMN_MAINTENANCE_MODE_ENABLED = 'maintenance_mode_enabled';
+    public const DB_COLUMN_MAINTENANCE_MESSAGE = 'maintenance_message';
+    public const DB_COLUMN_SYSTEM_NOTICE_ENABLED = 'system_notice_enabled';
+    public const DB_COLUMN_SYSTEM_NOTICE_MESSAGE = 'system_notice_message';
+    public const DB_COLUMN_UPDATED_BY = 'updated_by';
+
+
+    /*
+     * User domain values
+     */
+
+    /**
+     * Defines user roles.
+     */
+    public const USER_ROLE_USER = 'user';
+    public const USER_ROLE_ADMIN = 'admin';
+    public const USER_ROLE_MODERATOR = 'moderator';
+    public const USER_ROLE_GAME_MASTER = 'game_master';
+
+    /**
+     * Defines user account statuses.
+     */
+    public const USER_STATUS_ACTIVE = 'ACTIVE';
+    public const USER_STATUS_INACTIVE = 'INACTIVE';
+    public const USER_STATUS_CLOSED = 'CLOSED';
+    public const USER_STATUS_BLOCKED = 'BLOCKED';
+    public const USER_STATUS_BANNED = 'BANNED';
+
+    /**
+     * Defines user relation types.
+     */
+    public const USER_RELATION_CREATED = 'created';
+    public const USER_RELATION_PARTICIPATED = 'participated';
+    public const USER_RELATION_WON = 'won';
+
+
+    /*
+     * Game domain values
+     */
+
+    /**
+     * Defines game lifecycle statuses.
+     */
+    public const GAME_STATUS_WAITING = 'WAITING';
+    public const GAME_STATUS_RUNNING = 'RUNNING';
+    public const GAME_STATUS_FINISHED = 'FINISHED';
+    public const GAME_STATUS_CANCELLED = 'CANCELLED';
+
+    /**
+     * Defines game rule set types.
+     */
     public const GAME_RULESET_CLASSIC = 'classic';
     public const GAME_RULESET_ADVANCED = 'advanced';
     public const GAME_RULESET_ORIGINAL = 'original';
     public const GAME_RULESET_CUSTOM = 'custom';
 
-    // Game camera mode
-    public const CAMERA_MODE_FIXED = 'fixed';
-    public const CAMERA_MODE_FOLLOW = 'follow_turn';
+    /**
+     * Defines game camera modes.
+     */
+    public const GAME_CAMERA_MODE_FIXED = 'fixed';
+    public const GAME_CAMERA_MODE_FOLLOW = 'follow_turn';
 
-    // Game general
-    public const PLAYER_COUNT = 'player_count';
-    public const AVAILABLE_MOVES = 'available_moves';
-    // Game visibility 
-    public const VISIBILITY_PRIVATE = '';
+    /**
+     * Defines game visibility values.
+     */
+    public const GAME_VISIBILITY_PRIVATE = '';
 
-    // Game  DTO keys
+    /**
+     * Defines general game data keys.
+     */
+    public const GAME_KEY_PLAYER_COUNT = 'player_count';
+    public const GAME_KEY_AVAILABLE_MOVES = 'available_moves';
+
+    /**
+     * Defines figure areas.
+     */
+    public const FIGURE_AREA_HOME = 'home';
+    public const FIGURE_AREA_FIELD = 'field';
+    public const FIGURE_AREA_GOAL = 'goal';
+
+
+    /*
+     * DTO keys
+     */
+
+    /**
+     * Defines game DTO keys.
+     */
     public const DTO_GAME_ID = 'game_id';
     public const DTO_GAME_NAME = 'game_name';
     public const DTO_GAME_STATUS = 'game_status';
@@ -164,69 +273,795 @@ class Application
     public const DTO_CURRENT_PLAYER_ID = 'current_player_id';
     public const DTO_CURRENT_PLAYER_INDEX = 'current_player_index';
     public const DTO_CURRENT_PLAYER_USERNAME = 'current_player_username';
+    public const DTO_WINNER_USER_ID = 'winner_user_id';
+    public const DTO_WINNER_PLAYER_INDEX = 'winner_player_index';
+    public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll';
+    public const DTO_RULESET = 'ruleset';
+
+    /**
+     * Defines player DTO keys.
+     */
     public const DTO_USER_ID = 'user_id';
     public const DTO_USERNAME = 'username';
     public const DTO_PLAYER_INDEX = 'player_index';
+    public const DTO_PLAYER_COUNT_EMPTY = 'empty';
+    public const DTO_PLAYER_COUNT_LOW = 'low';
+    public const DTO_PLAYER_COUNT_READY = 'ready';
+
+    /**
+     * Defines figure DTO keys.
+     */
     public const DTO_FIGURES = 'figures';
     public const DTO_FIGURE_INDEX = 'figure_index';
+    public const DTO_AREA = 'area';
+    public const DTO_POSITION = 'position';
+
+    /**
+     * Defines move DTO keys.
+     */
     public const DTO_MOVE = 'move';
     public const DTO_FROM = 'from';
     public const DTO_TO = 'to';
-    public const DTO_AREA = 'area';
-    public const DTO_POSITION = 'position';
     public const DTO_ABSOLUTE_TARGET = 'absolute_target';
     public const DTO_IS_KICK = 'is_kick';
     public const DTO_KICKED_PLAYER_ID = 'kicked_player_id';
     public const DTO_KICKED_PLAYER_INDEX = 'kicked_player_index';
     public const DTO_KICKED_FIGURE_INDEX = 'kicked_figure_index';
-    public const DTO_WINNER_USER_ID = 'winner_user_id';
-    public const DTO_WINNER_PLAYER_INDEX = 'winner_player_index';
     public const DTO_IS_GOAL_ENTRY = 'is_goal_entry';
     public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow';
     public const DTO_IS_PASS = 'is_pass';
-    public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll';
-    public const DTO_RULESET = 'ruleset';
 
-    // Player DTO key
-    public const DTO_PLAYER_COUNT_EMPTY = 'empty';
-    public const DTO_PLAYER_COUNT_LOW = 'low';
-    public const DTO_PLAYER_COUNT_READY = 'ready';
 
-    // Figure Areas
-    public const AREA_HOME  = 'home';
-    public const AREA_FIELD = 'field';
-    public const AREA_GOAL  = 'goal';
+    /*
+     * HTTP request values
+     */
 
-    // HTTP requests
-    public const REQUEST_METHOD = 'REQUEST_METHOD';
-    public const REQUEST_METHOD_GET = 'GET';
-    public const REQUEST_METHOD_POST = 'POST';
-    public const REQUEST_METHOD_PUT = 'PUT';
-    public const REQUEST_METHOD_DELETE = 'DELETE';
+    /**
+     * Defines the server variable used to determine the request method.
+     */
+    public const HTTP_SERVER_REQUEST_METHOD = 'REQUEST_METHOD';
 
-    // Date and Time formats
-    public const FILE_DATE_FORMAT = 'Y-m-d';
-    public const FILE_TIME_FORMAT = 'H:i:s';
-    public const FILE_DATE_TIME_FORMAT = 'Y-m-d H:i:s';
+    /**
+     * Defines supported HTTP request methods.
+     */
+    public const HTTP_METHOD_GET = 'GET';
+    public const HTTP_METHOD_POST = 'POST';
+    public const HTTP_METHOD_PUT = 'PUT';
+    public const HTTP_METHOD_DELETE = 'DELETE';
 
-    // Localization formats
-    public const LOCALE = 'locale';
-    public const EN_US = 'en-us';
-    public const DE_DE = 'de-de';
 
-    // Storage type
-    public const STORAGE_FILE = 'file';
-    public const STORAGE_DATABASE = 'database';
+    /*
+     * Date and time formats
+     */
 
-    // Order by options
-    public const ORDER_ASC = 'asc';
-    public const ORDER_DESC = 'desc';
-    public const ORDER_BY_TIMESTAMP = 'timestamp';
-    public const ORDER_BY_CHANNEL = 'channel';
-    public const ORDER_BY_LOG_LEVEL = 'log_level';
+    /**
+     * Defines date and time formats used for file-related values.
+     */
+    public const DATE_FORMAT_FILE_DATE = 'Y-m-d';
+    public const DATE_FORMAT_FILE_TIME = 'H:i:s';
+    public const DATE_FORMAT_FILE_DATE_TIME = 'Y-m-d H:i:s';
 
-    // User relation types
-    public const USER_RELATION_CREATED = 'created';
-    public const USER_RELATION_PARTICIPATED = 'participated';
-    public const USER_RELATION_WON = 'won';
+
+    /*
+     * Localization
+     */
+
+    /**
+     * Defines the locale key and supported locale identifiers.
+     */
+    public const LOCALIZATION_LOCALE_KEY = 'locale';
+    public const LOCALE_EN_US = 'en-us';
+    public const LOCALE_DE_DE = 'de-de';
+
+
+    /*
+     * Storage
+     */
+
+    /**
+     * Defines supported storage types.
+     */
+    public const STORAGE_TYPE_FILE = 'file';
+    public const STORAGE_TYPE_DATABASE = 'database';
+
+
+    /*
+     * Sorting
+     */
+
+    /**
+     * Defines sort directions.
+     */
+    public const SORT_DIRECTION_ASC = 'asc';
+    public const SORT_DIRECTION_DESC = 'desc';
+
+    /**
+     * Defines supported logging sort keys.
+     */
+    public const SORT_KEY_TIMESTAMP = 'timestamp';
+    public const SORT_KEY_CHANNEL = 'channel';
+    public const SORT_KEY_LOG_LEVEL = 'log_level';
+
+
+    /*
+     * Deprecated constants
+     *
+     * These aliases preserve compatibility with existing code.
+     * Migrate usages to the corresponding replacement constants.
+     */
+
+    /**
+     * @deprecated Use ACTION_ACCESS instead.
+     */
+    public const GENERAL_ACCESS = self::ACTION_ACCESS;
+
+    /**
+     * @deprecated Use ACTION_JOIN instead.
+     */
+    public const GENERAL_JOIN = self::ACTION_JOIN;
+
+    /**
+     * @deprecated Use ACTION_EDIT instead.
+     */
+    public const GENERAL_EDIT = self::ACTION_EDIT;
+
+    /**
+     * @deprecated Use ACTION_DELETE instead.
+     */
+    public const GENERAL_DELETE = self::ACTION_DELETE;
+
+    /**
+     * @deprecated Use VALUE_ON instead.
+     */
+    public const GENERAL_ON = self::VALUE_ON;
+
+    /**
+     * @deprecated Use VALUE_OFF instead.
+     */
+    public const GENERAL_OFF = self::VALUE_OFF;
+
+    /**
+     * @deprecated Use VALUE_PARTIAL instead.
+     */
+    public const GENERAL_PARTIAL = self::VALUE_PARTIAL;
+
+    /**
+     * @deprecated Use RESULT_OK instead.
+     */
+    public const GENERAL_OK = self::RESULT_OK;
+
+    /**
+     * @deprecated Use RESULT_FAIL instead.
+     */
+    public const GENERAL_FAIL = self::RESULT_FAIL;
+
+    /**
+     * @deprecated Use HEALTH_CHECK instead.
+     */
+    public const GENERAL_HEALTH = self::HEALTH_CHECK;
+
+    /**
+     * @deprecated Use ENVIRONMENT_DEV instead.
+     */
+    public const GENERAL_DEV = self::ENVIRONMENT_DEV;
+
+    /**
+     * @deprecated Use ENVIRONMENT_PROD instead.
+     */
+    public const GENERAL_PROD = self::ENVIRONMENT_PROD;
+
+    /**
+     * @deprecated Use HEALTH_STATUS_HEALTHY instead.
+     */
+    public const GENERAL_HEALTHY = self::HEALTH_STATUS_HEALTHY;
+
+    /**
+     * @deprecated Use HEALTH_STATUS_CRITICAL instead.
+     */
+    public const GENERAL_CRITICAL = self::HEALTH_STATUS_CRITICAL;
+
+    /**
+     * @deprecated Use HEALTH_STATUS_WARNING instead.
+     */
+    public const GENERAL_WARNING = self::HEALTH_STATUS_WARNING;
+
+
+    /*
+     * Deprecated database table aliases
+     */
+
+    /**
+     * @deprecated Use DB_TABLE_USERS instead.
+     */
+    public const TABLE_USERS = self::DB_TABLE_USERS;
+
+    /**
+     * @deprecated Use DB_TABLE_USER_STATISTICS instead.
+     */
+    public const TABLE_USERS_STATISTICS = self::DB_TABLE_USER_STATISTICS;
+
+    /**
+     * @deprecated Use DB_TABLE_GAMES instead.
+     */
+    public const TABLE_GAMES = self::DB_TABLE_GAMES;
+
+    /**
+     * @deprecated Use DB_TABLE_GAME_RULE_SET instead.
+     */
+    public const TABLE_RULES = self::DB_TABLE_GAME_RULE_SET;
+
+    /**
+     * @deprecated Use DB_TABLE_GAME_STATE instead.
+     */
+    public const TABLE_STATE = self::DB_TABLE_GAME_STATE;
+
+    /**
+     * @deprecated Use DB_TABLE_GAME_STATE_PLAYERS instead.
+     */
+    public const TABLE_PLAYERS = self::DB_TABLE_GAME_STATE_PLAYERS;
+
+    /**
+     * @deprecated Use DB_TABLE_GAME_STATE_FIGURES instead.
+     */
+    public const TABLE_FIGURES = self::DB_TABLE_GAME_STATE_FIGURES;
+
+    /**
+     * @deprecated Use DB_TABLE_GAME_HISTORY instead.
+     */
+    public const TABLE_HISTORY = self::DB_TABLE_GAME_HISTORY;
+
+    /**
+     * @deprecated Use DB_TABLE_SYSTEM_SETTINGS instead.
+     */
+    public const TABLE_SYSTEM_SETTINGS = self::DB_TABLE_SYSTEM_SETTINGS;
+
+
+    /*
+     * Deprecated database column aliases
+     */
+
+    /**
+     * @deprecated Use DB_COLUMN_ID instead.
+     */
+    public const ID = self::DB_COLUMN_ID;
+
+    /**
+     * @deprecated Use DB_COLUMN_NAME instead.
+     */
+    public const NAME = self::DB_COLUMN_NAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAME_NAME instead.
+     */
+    public const GAME_NAME = self::DB_COLUMN_GAME_NAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAME_ID instead.
+     */
+    public const GAME_ID = self::DB_COLUMN_GAME_ID;
+
+    /**
+     * @deprecated Use DB_COLUMN_USER_ID instead.
+     */
+    public const USER_ID = self::DB_COLUMN_USER_ID;
+
+    /**
+     * @deprecated Use DB_COLUMN_STATUS instead.
+     */
+    public const STATUS = self::DB_COLUMN_STATUS;
+
+    /**
+     * @deprecated Use DB_COLUMN_CREATED_AT instead.
+     */
+    public const CREATED_AT = self::DB_COLUMN_CREATED_AT;
+
+    /**
+     * @deprecated Use DB_COLUMN_UPDATED_AT instead.
+     */
+    public const UPDATED_AT = self::DB_COLUMN_UPDATED_AT;
+
+    /**
+     * @deprecated Use DB_COLUMN_CREATED_BY_USER_ID instead.
+     */
+    public const CREATED_BY_USER_ID = self::DB_COLUMN_CREATED_BY_USER_ID;
+
+    /**
+     * @deprecated Use DB_COLUMN_IS_PRIVATE instead.
+     */
+    public const IS_PRIVATE = self::DB_COLUMN_IS_PRIVATE;
+
+    /**
+     * @deprecated Use DB_COLUMN_IS_LOCKED instead.
+     */
+    public const IS_LOCKED = self::DB_COLUMN_IS_LOCKED;
+
+    /**
+     * @deprecated Use DB_COLUMN_IS_TEST_GAME instead.
+     */
+    public const IS_TEST_GAME = self::DB_COLUMN_IS_TEST_GAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_ALLOW_BOTS instead.
+     */
+    public const ALLOW_BOTS = self::DB_COLUMN_ALLOW_BOTS;
+
+    /**
+     * @deprecated Use DB_COLUMN_ALL_FIGURES_START_AT_HOME instead.
+     */
+    public const ALL_FIGURES_START_AT_HOME = self::DB_COLUMN_ALL_FIGURES_START_AT_HOME;
+
+    /**
+     * @deprecated Use DB_COLUMN_LEAVE_HOME_ATTEMPT instead.
+     */
+    public const LEAVE_HOME_ATTEMPT = self::DB_COLUMN_LEAVE_HOME_ATTEMPT;
+
+    /**
+     * @deprecated Use DB_COLUMN_LEAVE_HOME_ATTEMPTS_MAX instead.
+     */
+    public const LEAVE_HOME_ATTEMPTS_MAX = self::DB_COLUMN_LEAVE_HOME_ATTEMPTS_MAX;
+
+    /**
+     * @deprecated Use DB_COLUMN_EXTRA_ROLL_ON_SIX_LIMIT instead.
+     */
+    public const EXTRA_ROLL_ON_SIX_LIMIT = self::DB_COLUMN_EXTRA_ROLL_ON_SIX_LIMIT;
+
+    /**
+     * @deprecated Use DB_COLUMN_FORCE_LEAVING_HOME_ON_SIX instead.
+     */
+    public const FORCE_LEAVING_HOME_ON_SIX = self::DB_COLUMN_FORCE_LEAVING_HOME_ON_SIX;
+
+    /**
+     * @deprecated Use DB_COLUMN_FORCE_CAPTURE_ENEMY_FIGURES instead.
+     */
+    public const FORCE_CAPTURE_ENEMY_FIGURES = self::DB_COLUMN_FORCE_CAPTURE_ENEMY_FIGURES;
+
+    /**
+     * @deprecated Use DB_COLUMN_FORCE_EXTRA_LAP_ON_OVERFLOW instead.
+     */
+    public const FORCE_EXTRA_LAP_ON_OVERFLOW = self::DB_COLUMN_FORCE_EXTRA_LAP_ON_OVERFLOW;
+
+    /**
+     * @deprecated Use DB_COLUMN_ALLOW_STACK_OWN_FIGURES instead.
+     */
+    public const ALLOW_STACK_OWN_FIGURES = self::DB_COLUMN_ALLOW_STACK_OWN_FIGURES;
+
+    /**
+     * @deprecated Use DB_COLUMN_STRICT_GOAL_ORDER instead.
+     */
+    public const STRICT_GOAL_ORDER = self::DB_COLUMN_STRICT_GOAL_ORDER;
+
+    /**
+     * @deprecated Use DB_COLUMN_START_FIELD_MUST_BE_CLEARED instead.
+     */
+    public const START_FIELD_MUST_BE_CLEARED = self::DB_COLUMN_START_FIELD_MUST_BE_CLEARED;
+
+    /**
+     * @deprecated Use DB_COLUMN_ENUM_FIRST_FIGURE instead.
+     */
+    public const ENUM_FIRST_FIGURE = self::DB_COLUMN_ENUM_FIRST_FIGURE;
+
+    /**
+     * @deprecated Use DB_COLUMN_ENUM_ALL_FIGURES instead.
+     */
+    public const ENUM_ALL_FIGURES = self::DB_COLUMN_ENUM_ALL_FIGURES;
+
+    /**
+     * @deprecated Use DB_COLUMN_CURRENT_PLAYER_INDEX instead.
+     */
+    public const CURRENT_PLAYER_INDEX = self::DB_COLUMN_CURRENT_PLAYER_INDEX;
+
+    /**
+     * @deprecated Use DB_COLUMN_CURRENT_DICE_ROLL instead.
+     */
+    public const CURRENT_DICE_ROLL = self::DB_COLUMN_CURRENT_DICE_ROLL;
+
+    /**
+     * @deprecated Use DB_COLUMN_CURRENT_TURN_COUNTER instead.
+     */
+    public const CURRENT_TURN_COUNTER = self::DB_COLUMN_CURRENT_TURN_COUNTER;
+
+    /**
+     * @deprecated Use DB_COLUMN_LEAVE_HOME_ATTEMPTS_USED instead.
+     */
+    public const LEAVE_HOME_ATTEMPTS_USED = self::DB_COLUMN_LEAVE_HOME_ATTEMPTS_USED;
+
+    /**
+     * @deprecated Use DB_COLUMN_EXTRA_ROLLS_ON_SIX_USED instead.
+     */
+    public const EXTRA_ROLLS_ON_SIX_USED = self::DB_COLUMN_EXTRA_ROLLS_ON_SIX_USED;
+
+    /**
+     * @deprecated Use DB_COLUMN_WINNER_USER_ID instead.
+     */
+    public const WINNER_USER_ID = self::DB_COLUMN_WINNER_USER_ID;
+
+    /**
+     * @deprecated Use DB_COLUMN_FIGURE_INDEX instead.
+     */
+    public const FIGURE_INDEX = self::DB_COLUMN_FIGURE_INDEX;
+
+    /**
+     * @deprecated Use DB_COLUMN_POSITION instead.
+     */
+    public const POSITION = self::DB_COLUMN_POSITION;
+
+    /**
+     * @deprecated Use DB_COLUMN_AREA instead.
+     */
+    public const AREA = self::DB_COLUMN_AREA;
+
+    /**
+     * @deprecated Use DB_COLUMN_PLAYER_INDEX instead.
+     */
+    public const PLAYER_INDEX = self::DB_COLUMN_PLAYER_INDEX;
+
+    /**
+     * @deprecated Use DB_COLUMN_STATE_INDEX instead.
+     */
+    public const STATE_INDEX = self::DB_COLUMN_STATE_INDEX;
+
+    /**
+     * @deprecated Use DB_COLUMN_STATE instead.
+     */
+    public const STATE = self::DB_COLUMN_STATE;
+
+    /**
+     * @deprecated Use DB_COLUMN_USERNAME instead.
+     */
+    public const USERNAME = self::DB_COLUMN_USERNAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_FIRSTNAME instead.
+     */
+    public const FIRSTNAME = self::DB_COLUMN_FIRSTNAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_LASTNAME instead.
+     */
+    public const LASTNAME = self::DB_COLUMN_LASTNAME;
+
+    /**
+     * @deprecated Use DB_COLUMN_EMAIL instead.
+     */
+    public const EMAIL = self::DB_COLUMN_EMAIL;
+
+    /**
+     * @deprecated Use DB_COLUMN_ROLE instead.
+     */
+    public const ROLE = self::DB_COLUMN_ROLE;
+
+    /**
+     * @deprecated Use DB_COLUMN_PREFERRED_LANGUAGE instead.
+     */
+    public const PREFERRED_LANGUAGE = self::DB_COLUMN_PREFERRED_LANGUAGE;
+
+    /**
+     * @deprecated Use DB_COLUMN_PREFERRED_CAMERA_MODE instead.
+     */
+    public const PREFERRED_CAMERA_MODE = self::DB_COLUMN_PREFERRED_CAMERA_MODE;
+
+    /**
+     * @deprecated Use DB_COLUMN_PASSWORD_HASH instead.
+     */
+    public const PASSWORD_HASH = self::DB_COLUMN_PASSWORD_HASH;
+
+    /**
+     * @deprecated Use DB_COLUMN_RESET_TOKEN instead.
+     */
+    public const RESET_TOKEN = self::DB_COLUMN_RESET_TOKEN;
+
+    /**
+     * @deprecated Use DB_COLUMN_RESET_TOKEN_EXPIRES_AT instead.
+     */
+    public const RESET_TOKEN_EXPIRES_AT = self::DB_COLUMN_RESET_TOKEN_EXPIRES_AT;
+
+    /**
+     * @deprecated Use DB_COLUMN_LAST_LOGIN instead.
+     */
+    public const LAST_LOGIN = self::DB_COLUMN_LAST_LOGIN;
+
+    /**
+     * @deprecated Use DB_COLUMN_LOGINS instead.
+     */
+    public const LOGINS = self::DB_COLUMN_LOGINS;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAMES_CREATED instead.
+     */
+    public const GAMES_CREATED = self::DB_COLUMN_GAMES_CREATED;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAMES_PARTICIPATED instead.
+     */
+    public const GAMES_PARTICIPATED = self::DB_COLUMN_GAMES_PARTICIPATED;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAMES_WON instead.
+     */
+    public const GAMES_WON = self::DB_COLUMN_GAMES_WON;
+
+    /**
+     * @deprecated Use DB_COLUMN_REGISTRATION_ENABLED instead.
+     */
+    public const REGISTRATION_ENABLED = self::DB_COLUMN_REGISTRATION_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_LOGIN_ENABLED instead.
+     */
+    public const LOGIN_ENABLED = self::DB_COLUMN_LOGIN_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_SYSTEM_ENABLED instead.
+     */
+    public const SYSTEM_ENABLED = self::DB_COLUMN_SYSTEM_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_LOGGING_DEBUG_ENABLED instead.
+     */
+    public const LOGGING_DEBUG_ENABLED = self::DB_COLUMN_LOGGING_DEBUG_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAME_CREATION_ENABLED instead.
+     */
+    public const GAME_CREATION_ENABLED = self::DB_COLUMN_GAME_CREATION_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_GAME_PLAY_ENABLED instead.
+     */
+    public const GAME_PLAY_ENABLED = self::DB_COLUMN_GAME_PLAY_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_MAINTENANCE_MODE_ENABLED instead.
+     */
+    public const MAINTENANCE_MODE_ENABLED = self::DB_COLUMN_MAINTENANCE_MODE_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_MAINTENANCE_MESSAGE instead.
+     */
+    public const MAINTENANCE_MESSAGE = self::DB_COLUMN_MAINTENANCE_MESSAGE;
+
+    /**
+     * @deprecated Use DB_COLUMN_SYSTEM_NOTICE_ENABLED instead.
+     */
+    public const SYSTEM_NOTICE_ENABLED = self::DB_COLUMN_SYSTEM_NOTICE_ENABLED;
+
+    /**
+     * @deprecated Use DB_COLUMN_SYSTEM_NOTICE_MESSAGE instead.
+     */
+    public const SYSTEM_NOTICE_MESSAGE = self::DB_COLUMN_SYSTEM_NOTICE_MESSAGE;
+
+    /**
+     * @deprecated Use DB_COLUMN_UPDATED_BY instead.
+     */
+    public const UPDATED_BY = self::DB_COLUMN_UPDATED_BY;
+
+
+    /*
+     * Deprecated user aliases
+     */
+
+    /**
+     * @deprecated Use USER_ROLE_USER instead.
+     */
+    public const USER = self::USER_ROLE_USER;
+
+    /**
+     * @deprecated Use USER_ROLE_ADMIN instead.
+     */
+    public const ADMIN = self::USER_ROLE_ADMIN;
+
+    /**
+     * @deprecated Use USER_ROLE_MODERATOR instead.
+     */
+    public const MODERATOR = self::USER_ROLE_MODERATOR;
+
+    /**
+     * @deprecated Use USER_ROLE_GAME_MASTER instead.
+     */
+    public const GAME_MASTER = self::USER_ROLE_GAME_MASTER;
+
+    /**
+     * @deprecated Use USER_STATUS_ACTIVE instead.
+     */
+    public const ACTIVE = self::USER_STATUS_ACTIVE;
+
+    /**
+     * @deprecated Use USER_STATUS_INACTIVE instead.
+     */
+    public const INACTIVE = self::USER_STATUS_INACTIVE;
+
+    /**
+     * @deprecated Use USER_STATUS_CLOSED instead.
+     */
+    public const CLOSED = self::USER_STATUS_CLOSED;
+
+    /**
+     * @deprecated Use USER_STATUS_BLOCKED instead.
+     */
+    public const BLOCKED = self::USER_STATUS_BLOCKED;
+
+    /**
+     * @deprecated Use USER_STATUS_BANNED instead.
+     */
+    public const BANNED = self::USER_STATUS_BANNED;
+
+
+    /*
+     * Deprecated game aliases
+     */
+
+    /**
+     * @deprecated Use GAME_STATUS_WAITING instead.
+     */
+    public const STATUS_WAITING = self::GAME_STATUS_WAITING;
+
+    /**
+     * @deprecated Use GAME_STATUS_RUNNING instead.
+     */
+    public const STATUS_RUNNING = self::GAME_STATUS_RUNNING;
+
+    /**
+     * @deprecated Use GAME_STATUS_FINISHED instead.
+     */
+    public const STATUS_FINISHED = self::GAME_STATUS_FINISHED;
+
+    /**
+     * @deprecated Use GAME_STATUS_CANCELLED instead.
+     */
+    public const STATUS_CANCELLED = self::GAME_STATUS_CANCELLED;
+
+    /**
+     * @deprecated Use GAME_CAMERA_MODE_FIXED instead.
+     */
+    public const CAMERA_MODE_FIXED = self::GAME_CAMERA_MODE_FIXED;
+
+    /**
+     * @deprecated Use GAME_CAMERA_MODE_FOLLOW instead.
+     */
+    public const CAMERA_MODE_FOLLOW = self::GAME_CAMERA_MODE_FOLLOW;
+
+    /**
+     * @deprecated Use GAME_VISIBILITY_PRIVATE instead.
+     */
+    public const VISIBILITY_PRIVATE = self::GAME_VISIBILITY_PRIVATE;
+
+    /**
+     * @deprecated Use GAME_KEY_PLAYER_COUNT instead.
+     */
+    public const PLAYER_COUNT = self::GAME_KEY_PLAYER_COUNT;
+
+    /**
+     * @deprecated Use GAME_KEY_AVAILABLE_MOVES instead.
+     */
+    public const AVAILABLE_MOVES = self::GAME_KEY_AVAILABLE_MOVES;
+
+    /**
+     * @deprecated Use FIGURE_AREA_HOME instead.
+     */
+    public const AREA_HOME = self::FIGURE_AREA_HOME;
+
+    /**
+     * @deprecated Use FIGURE_AREA_FIELD instead.
+     */
+    public const AREA_FIELD = self::FIGURE_AREA_FIELD;
+
+    /**
+     * @deprecated Use FIGURE_AREA_GOAL instead.
+     */
+    public const AREA_GOAL = self::FIGURE_AREA_GOAL;
+
+
+    /*
+     * Deprecated HTTP aliases
+     */
+
+    /**
+     * @deprecated Use HTTP_SERVER_REQUEST_METHOD instead.
+     */
+    public const REQUEST_METHOD = self::HTTP_SERVER_REQUEST_METHOD;
+
+    /**
+     * @deprecated Use HTTP_METHOD_GET instead.
+     */
+    public const REQUEST_METHOD_GET = self::HTTP_METHOD_GET;
+
+    /**
+     * @deprecated Use HTTP_METHOD_POST instead.
+     */
+    public const REQUEST_METHOD_POST = self::HTTP_METHOD_POST;
+
+    /**
+     * @deprecated Use HTTP_METHOD_PUT instead.
+     */
+    public const REQUEST_METHOD_PUT = self::HTTP_METHOD_PUT;
+
+    /**
+     * @deprecated Use HTTP_METHOD_DELETE instead.
+     */
+    public const REQUEST_METHOD_DELETE = self::HTTP_METHOD_DELETE;
+
+
+    /*
+     * Deprecated date and time aliases
+     */
+
+    /**
+     * @deprecated Use DATE_FORMAT_FILE_DATE instead.
+     */
+    public const FILE_DATE_FORMAT = self::DATE_FORMAT_FILE_DATE;
+
+    /**
+     * @deprecated Use DATE_FORMAT_FILE_TIME instead.
+     */
+    public const FILE_TIME_FORMAT = self::DATE_FORMAT_FILE_TIME;
+
+    /**
+     * @deprecated Use DATE_FORMAT_FILE_DATE_TIME instead.
+     */
+    public const FILE_DATE_TIME_FORMAT = self::DATE_FORMAT_FILE_DATE_TIME;
+
+
+    /*
+     * Deprecated localization aliases
+     */
+
+    /**
+     * @deprecated Use LOCALIZATION_LOCALE_KEY instead.
+     */
+    public const LOCALE = self::LOCALIZATION_LOCALE_KEY;
+
+    /**
+     * @deprecated Use LOCALE_EN_US instead.
+     */
+    public const EN_US = self::LOCALE_EN_US;
+
+    /**
+     * @deprecated Use LOCALE_DE_DE instead.
+     */
+    public const DE_DE = self::LOCALE_DE_DE;
+
+
+    /*
+     * Deprecated storage aliases
+     */
+
+    /**
+     * @deprecated Use STORAGE_TYPE_FILE instead.
+     */
+    public const STORAGE_FILE = self::STORAGE_TYPE_FILE;
+
+    /**
+     * @deprecated Use STORAGE_TYPE_DATABASE instead.
+     */
+    public const STORAGE_DATABASE = self::STORAGE_TYPE_DATABASE;
+
+
+    /*
+     * Deprecated sorting aliases
+     */
+
+    /**
+     * @deprecated Use SORT_DIRECTION_ASC instead.
+     */
+    public const ORDER_ASC = self::SORT_DIRECTION_ASC;
+
+    /**
+     * @deprecated Use SORT_DIRECTION_DESC instead.
+     */
+    public const ORDER_DESC = self::SORT_DIRECTION_DESC;
+
+    /**
+     * @deprecated Use SORT_KEY_TIMESTAMP instead.
+     */
+    public const ORDER_BY_TIMESTAMP = self::SORT_KEY_TIMESTAMP;
+
+    /**
+     * @deprecated Use SORT_KEY_CHANNEL instead.
+     */
+    public const ORDER_BY_CHANNEL = self::SORT_KEY_CHANNEL;
+
+    /**
+     * @deprecated Use SORT_KEY_LOG_LEVEL instead.
+     */
+    public const ORDER_BY_LOG_LEVEL = self::SORT_KEY_LOG_LEVEL;
 }
