@@ -31,8 +31,8 @@ final class UserFilterService
     private ?string $createdTo;
 
     private ?string $updatedFrom;
-    private ?string $updatedTo; 
-    
+    private ?string $updatedTo;
+
     /**
      * __construct
      *
@@ -56,9 +56,9 @@ final class UserFilterService
         ?array $roles = null,
         ?string $preferredLanguage = null,
         ?string $preferredCameraMode = null,
-        ?DateRange $dateRangeLastLogin = null, 
-        ?DateRange $dateRangeCreated = null, 
-        ?DateRange $dateRangeUpdated = null, 
+        ?DateRange $dateRangeLastLogin = null,
+        ?DateRange $dateRangeCreated = null,
+        ?DateRange $dateRangeUpdated = null,
     ) {
         $this->userId = $userId;
         $this->username = $username;
@@ -70,25 +70,25 @@ final class UserFilterService
         $this->preferredLanguage = $preferredLanguage;
         $this->preferredCameraMode = $preferredCameraMode;
 
-        $this->lastLoginFrom = null; 
-        $this->lastLoginTo = null; 
+        $this->lastLoginFrom = null;
+        $this->lastLoginTo = null;
 
-        if ($dateRangeLastLogin !== null && !$dateRangeLastLogin->isEmpty()) { 
-            $this->setDateRangeLastLogin($dateRangeLastLogin); 
+        if ($dateRangeLastLogin !== null && !$dateRangeLastLogin->isEmpty()) {
+            $this->setDateRangeLastLogin($dateRangeLastLogin);
         }
 
-        $this->createdFrom = null; 
-        $this->createdTo = null; 
+        $this->createdFrom = null;
+        $this->createdTo = null;
 
-        if ($dateRangeCreated !== null && !$dateRangeCreated->isEmpty()) { 
-            $this->setDateRangeCreated($dateRangeCreated); 
+        if ($dateRangeCreated !== null && !$dateRangeCreated->isEmpty()) {
+            $this->setDateRangeCreated($dateRangeCreated);
         }
 
-        $this->updatedFrom = null; 
-        $this->updatedTo = null; 
+        $this->updatedFrom = null;
+        $this->updatedTo = null;
 
-        if ($dateRangeUpdated !== null && !$dateRangeUpdated->isEmpty()) { 
-            $this->setDateRangeUpdated($dateRangeUpdated); 
+        if ($dateRangeUpdated !== null && !$dateRangeUpdated->isEmpty()) {
+            $this->setDateRangeUpdated($dateRangeUpdated);
         }
     }
 
@@ -103,13 +103,13 @@ final class UserFilterService
      */
     public static function getStatusesByUsersArray(array $users): array
     {
-        $statuses = []; 
+        $statuses = [];
         foreach ($users as $user) {
             if (!in_array($user->getStatus(), $statuses)) {
-                $statuses[] = $user->getStatus(); 
+                $statuses[] = $user->getStatus();
             }
         }
-        return $statuses; 
+        return $statuses;
     }
 
     /**
@@ -120,13 +120,13 @@ final class UserFilterService
      */
     public static function getRolesByUsersArray(array $users): array
     {
-        $roles = []; 
+        $roles = [];
         foreach ($users as $user) {
             if (!in_array($user->getRole(), $roles)) {
-                $roles[] = $user->getRole(); 
+                $roles[] = $user->getRole();
             }
         }
-        return $roles; 
+        return $roles;
     }
 
     /**
@@ -335,7 +335,7 @@ final class UserFilterService
 
         return $this;
     }
-    
+
     public function setDateRangeLastLogin(DateRange $dateRange): self
     {
         if ($dateRange->isEmpty()) {
@@ -399,7 +399,7 @@ final class UserFilterService
 
         return $this;
     }
-    
+
     public function setDateRangeCreated(DateRange $dateRange): self
     {
         if ($dateRange->isEmpty()) {
@@ -463,7 +463,7 @@ final class UserFilterService
 
         return $this;
     }
-    
+
     public function setDateRangeUpdated(DateRange $dateRange): self
     {
         if ($dateRange->isEmpty()) {

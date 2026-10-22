@@ -8,14 +8,16 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 
-final class DateRange {
+final class DateRange
+{
     private ?DateTimeImmutable $start;
     private ?DateTimeImmutable $end;
 
     /**
      * @param DateTimeInterface[] $dates
      */
-    public function __construct(array $dates = []) {
+    public function __construct(array $dates = [])
+    {
         $this->start = null;
         $this->end = null;
 
@@ -51,7 +53,8 @@ final class DateRange {
      *
      * @return bool
      */
-    public function isEmpty(): bool {
+    public function isEmpty(): bool
+    {
         return $this->start === null;
     }
 
@@ -62,7 +65,8 @@ final class DateRange {
      *
      * @return DateTimeImmutable
      */
-    public function getStart(): ?DateTimeImmutable {
+    public function getStart(): ?DateTimeImmutable
+    {
         return $this->start;
     }
 
@@ -73,7 +77,8 @@ final class DateRange {
      *
      * @return DateTimeImmutable
      */
-    public function getEnd(): ?DateTimeImmutable {
+    public function getEnd(): ?DateTimeImmutable
+    {
         return $this->end;
     }
 
@@ -84,11 +89,12 @@ final class DateRange {
      *
      * @return String
      */
-    public function getDateRangeAsString(): String {
+    public function getDateRangeAsString(): String
+    {
         if (!$this->start || !$this->end) {
-            return ''; 
+            return '';
         }
-        return $this->start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $this->end->format(Application::FILE_DATE_TIME_FORMAT); 
+        return $this->start->format(Application::FILE_DATE_TIME_FORMAT) . ' - ' . $this->end->format(Application::FILE_DATE_TIME_FORMAT);
     }
 
     /**
@@ -97,19 +103,20 @@ final class DateRange {
      * @param string $formattedString -> format: start date & time - end date & time -> yyyy-mm-dd hh:mm:ss - yyyy-mm-dd hh:mm:ss
      * @return self
      */
-    public static function fromString(string $formattedString): self {
-        $parts = explode(' - ', $formattedString, 2); 
+    public static function fromString(string $formattedString): self
+    {
+        $parts = explode(' - ', $formattedString, 2);
         if (count($parts) !== 2) {
-            return new self(); 
+            return new self();
         }
 
         try {
             return new self([
-                new DateTimeImmutable($parts[0]), 
-                new DateTimeImmutable($parts[1]), 
-            ]); 
+                new DateTimeImmutable($parts[0]),
+                new DateTimeImmutable($parts[1]),
+            ]);
         } catch (Exception) {
-            return new self(); 
+            return new self();
         }
     }
 
@@ -121,13 +128,14 @@ final class DateRange {
      * @param  mixed $date
      * @return bool
      */
-    public function contains(DateTimeInterface|string $date): bool {
+    public function contains(DateTimeInterface|string $date): bool
+    {
         if ($this->isEmpty()) {
             return false;
         }
 
         if (is_string($date)) {
-            $date = new DateTimeImmutable($date); 
+            $date = new DateTimeImmutable($date);
         }
 
         $timestamp = $date->getTimestamp();
@@ -144,7 +152,8 @@ final class DateRange {
      *
      * @return bool
      */
-    public function isSingleDay(): bool {
+    public function isSingleDay(): bool
+    {
         if ($this->isEmpty()) {
             return false;
         }
@@ -164,17 +173,18 @@ final class DateRange {
      *
      * @return iterable
      */
-    public function getDays(): iterable {
+    public function getDays(): iterable
+    {
         if ($this->isEmpty()) {
-            return; 
+            return;
         }
-        
-        $current = $this->start->setTime(0, 0, 0); 
-        $last = $this->end->setTime(0, 0, 0,); 
+
+        $current = $this->start->setTime(0, 0, 0);
+        $last = $this->end->setTime(0, 0, 0,);
 
         while ($current <= $last) {
-            yield $current; 
-            $current = $current->modify('+1 day'); 
+            yield $current;
+            $current = $current->modify('+1 day');
         }
     }
 }

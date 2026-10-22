@@ -6,16 +6,19 @@ use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Services\SystemService;
 
-abstract class BaseController {
-    protected App $app; 
+abstract class BaseController
+{
+    protected App $app;
 
     // Constructor 
-    public function __construct(App $app) {
-        $this->app = $app; 
+    public function __construct(App $app)
+    {
+        $this->app = $app;
     }
 
     // Renderer
-    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void {
+    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void
+    {
         if (!$view) {
             return;
         }
@@ -27,13 +30,13 @@ abstract class BaseController {
 
         // current_user should always be available in views
         $data['current_user'] = null;
-        
+
         if (Auth::user()) {
             $data['current_user'] = Auth::user();
         }
 
         // system_settings should always be available in views
-        $data['system_settings'] = $this->app->resolve(SystemService::class); 
+        $data['system_settings'] = $this->app->resolve(SystemService::class);
 
         extract($data);
 
@@ -46,38 +49,42 @@ abstract class BaseController {
     }
 
     // Renderer for view fragment
-    protected function renderView(string $view, array $data = []): string {
+    protected function renderView(string $view, array $data = []): string
+    {
         if (!$view) {
-            return ''; 
+            return '';
         }
 
-        $data['current_user'] = null; 
+        $data['current_user'] = null;
 
         if (Auth::user()) {
-            $data['current_user'] = Auth::user(); 
+            $data['current_user'] = Auth::user();
         }
 
-        extract($data); 
-        ob_start(); 
-        require VIEWS_PATH . '/' . $view . '.php'; 
-        return ob_get_clean(); 
+        extract($data);
+        ob_start();
+        require VIEWS_PATH . '/' . $view . '.php';
+        return ob_get_clean();
     }
 
     // Redirect
-    protected function redirect(string $url): void {
+    protected function redirect(string $url): void
+    {
         header("Location: $url");
         exit;
     }
 
     // JSON
     // ToDo: Clean this up and only use jsonClean in the future
-    protected function json(array $data): void {
+    protected function json(array $data): void
+    {
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;
     }
 
-    protected function jsonClean(array $data, int $status = 200): void {
+    protected function jsonClean(array $data, int $status = 200): void
+    {
         ob_clean();
         http_response_code($status);
         header('Content-Type: application/json');

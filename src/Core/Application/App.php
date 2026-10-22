@@ -12,9 +12,10 @@ use App\Services\Game\GameService;
 use App\Services\SystemService;
 use Dotenv\Dotenv;
 
-final class App {
+final class App
+{
     // Application itself
-    private static ?App $instance = null; 
+    private static ?App $instance = null;
 
     // Application container 
     private Container $container;
@@ -26,8 +27,9 @@ final class App {
     private float $startedAt;
 
     // Constructor 
-    public function __construct() {
-        self::$instance = $this; 
+    public function __construct()
+    {
+        self::$instance = $this;
 
         $this->startedAt = microtime(true);
         $this->container = new Container();
@@ -35,7 +37,8 @@ final class App {
     }
 
     // Bootstrap application lifecycle 
-    public function boot(): void {
+    public function boot(): void
+    {
         if ($this->booted) {
             return;
         }
@@ -48,65 +51,74 @@ final class App {
     }
 
     // Allow global access
-    public static function instance(): App|null {
+    public static function instance(): App|null
+    {
         if (self::$instance === null) {
-            return null; 
+            return null;
         }
-        return self::$instance; 
+        return self::$instance;
     }
 
     // Get application container 
-    public function container(): Container {
+    public function container(): Container
+    {
         return $this->container;
     }
 
     // Resolve application container 
-    public function resolve(string $class): mixed {
-        return $this->container->get($class); 
+    public function resolve(string $class): mixed
+    {
+        return $this->container->get($class);
     }
 
     // Check whether application is booted 
-    public function isBooted(): bool {
+    public function isBooted(): bool
+    {
         return $this->booted;
     }
 
     // Get application runtime duration 
-    public function getRuntime(): float {
+    public function getRuntime(): float
+    {
         return microtime(true) - $this->startedAt;
     }
 
     // Register framework level bindings - Infrastructure objects belong here. 
-    private function registerCoreBindings(): void {
+    private function registerCoreBindings(): void
+    {
         $this->container->instance(self::class, $this);
         $this->container->instance(Container::class, $this->container);
     }
 
     // Register application services - These are request lifetime singletons. 
-    private function registerServices(): void {
+    private function registerServices(): void
+    {
         $this->container->singleton(
             SystemService::class,
-            function(Container $container) {
+            function (Container $container) {
                 return new SystemService();
             }
         );
 
         $this->container->singleton(
             GameService::class,
-            function(Container $container) {
+            function (Container $container) {
                 return new GameService();
             }
         );
     }
 
     // Load environment configuration 
-    private function loadEnvironment(): void {
+    private function loadEnvironment(): void
+    {
         $dotenv = Dotenv::createImmutable(BASE_PATH);
         $dotenv->load();
         Env::get();
     }
 
     // Configure PHP runtime 
-    private function configureErrorHandling(): void {
+    private function configureErrorHandling(): void
+    {
         if (Env::isDev()) {
             ini_set('display_errors', '1');
             ini_set('display_startup_errors', '1');
@@ -121,13 +133,15 @@ final class App {
     }
 
     // Load helper functions 
-    private function loadHelpers(): void {
+    private function loadHelpers(): void
+    {
         require_once BASE_PATH . '/src/Core/helpers.php';
     }
 
     // Initialize localization 
-    private function loadLocalization(): void {
-        $locale = $_SESSION[Application::LOCALE] ??  Application::EN_US; 
+    private function loadLocalization(): void
+    {
+        $locale = $_SESSION[Application::LOCALE] ??  Application::EN_US;
         Localization::load(TRANSLATIONS_PATH, $locale);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
-use App\Core\BaseController; 
+use App\Core\BaseController;
 use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Dto\User\UserFilterContext;
 use App\Core\History\Game\GameStateHistory;
@@ -26,64 +26,66 @@ use App\Services\User\UserService;
 use DateInterval;
 use DateTimeImmutable;
 
-class AdminController extends BaseController { 
+class AdminController extends BaseController
+{
     // Dashboard
-    public function dashboard(): void {
+    public function dashboard(): void
+    {
         // Users statistics 
         $users_card = [
-            'users_total' => UserModel::countAll(), 
-            'users_active' => UserModel::countByStatus('active'), 
-            'users_inactive' => UserModel::countByStatus('inactive'), 
-            'admins_total' => UserModel::countByRole('admin'), 
+            'users_total' => UserModel::countAll(),
+            'users_active' => UserModel::countByStatus('active'),
+            'users_inactive' => UserModel::countByStatus('inactive'),
+            'admins_total' => UserModel::countByRole('admin'),
         ];
 
         // Games statistics
         $games_card = [
-            'games_total' => GameModel::countAll(), 
-            'games_waiting' => GameModel::countByStatus('waiting'), 
-            'games_active' => GameModel::countByStatus('running'), 
-            'games_finished' => GameModel::countByStatus('finished'), 
+            'games_total' => GameModel::countAll(),
+            'games_waiting' => GameModel::countByStatus('waiting'),
+            'games_active' => GameModel::countByStatus('running'),
+            'games_finished' => GameModel::countByStatus('finished'),
         ];
 
         // System logs statistics
-        $todayStart = (new DateTimeImmutable())->setTime(0, 0, 0); 
-        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
+        $todayStart = (new DateTimeImmutable())->setTime(0, 0, 0);
+        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59);
         $logService = new LogService([
-            LoggingConfiguration::CHANNEL_APPLICATION, 
+            LoggingConfiguration::CHANNEL_APPLICATION,
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            $todayStart, 
+            $todayStart,
             $todayEnd
-        ]); 
-        $log_statistics = $logService->getStatistics(); 
+        ]);
+        $log_statistics = $logService->getStatistics();
         $logs_card = [
-            'total' => $log_statistics['total'], 
-            'highest_level' => $log_statistics['highest_level'], 
-            'emergency' => $log_statistics['emergency'], 
-            'alert' => $log_statistics['alert'], 
-            'critical' => $log_statistics['critical'], 
-            'error' => $log_statistics['error'], 
-            'warning' => $log_statistics['warning'], 
-            'notice' => $log_statistics['notice'], 
-            'info' => $log_statistics['info'], 
-            'debug' => $log_statistics['debug'], 
+            'total' => $log_statistics['total'],
+            'highest_level' => $log_statistics['highest_level'],
+            'emergency' => $log_statistics['emergency'],
+            'alert' => $log_statistics['alert'],
+            'critical' => $log_statistics['critical'],
+            'error' => $log_statistics['error'],
+            'warning' => $log_statistics['warning'],
+            'notice' => $log_statistics['notice'],
+            'info' => $log_statistics['info'],
+            'debug' => $log_statistics['debug'],
         ];
 
         // System statistics
         $stats_card = [
-            'main' => 'Main', 
-        ]; 
-        
+            'main' => 'Main',
+        ];
+
         // Logging
         Logger::app()->debug('Admin Dashboard', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/dashboard', 
+            'admin/dashboard',
             [
                 'users_card' => $users_card,
-                'games_card' => $games_card,  
-                'logs_card' => $logs_card, 
-                'stats_card' => $stats_card, 
+                'games_card' => $games_card,
+                'logs_card' => $logs_card,
+                'stats_card' => $stats_card,
             ]
         );
     }
@@ -92,22 +94,23 @@ class AdminController extends BaseController {
      * User Section 
      */
     // Users - List all users
-    public function listUsers(): void {
+    public function listUsers(): void
+    {
         $users = UserModel::all();
 
         // set filter preset
-        $statuses = UserFilterService::getStatusesByUsersArray($users); 
-        $roles = UserFilterService::getRolesByUsersArray($users) ; 
-        $filter = new UserFilterContext($statuses, $roles, null, $users); 
-        
+        $statuses = UserFilterService::getStatusesByUsersArray($users);
+        $roles = UserFilterService::getRolesByUsersArray($users);
+        $filter = new UserFilterContext($statuses, $roles, null, $users);
+
         // Logging
         Logger::app()->debug('Admin users list', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/user/list', 
+            'admin/user/list',
             [
-                'users' => $users, 
-                'filter' => $filter, 
+                'users' => $users,
+                'filter' => $filter,
             ]
         );
     }
@@ -115,70 +118,74 @@ class AdminController extends BaseController {
     /**
      * Users - Create User View
      */
-    public function createUserView(): void {
+    public function createUserView(): void
+    {
         $this->render(
-            'admin/user/create', 
+            'admin/user/create',
             []
-        ); 
+        );
     }
 
     // Users - Store User
-    public function storeUser(): void {
-        $systemService = $this->app->resolve(SystemService::class); 
+    public function storeUser(): void
+    {
+        $systemService = $this->app->resolve(SystemService::class);
         if (!$systemService->isRegistrationEnabled()) {
             $error = 'User Registration not allowed.';
             // ToDo: implement AJAX response for user creation form
         }
 
-        $username = $_POST['username'] ?? ''; 
-        $email = $_POST['email'] ?? ''; 
-        $role = $_POST['role'] ?? ''; 
+        $username = $_POST['username'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $role = $_POST['role'] ?? '';
 
         // Create User
-        $user = UserModel::create($username, $email, null, $role, Application::INACTIVE); 
+        $user = UserModel::create($username, $email, null, $role, Application::INACTIVE);
         if (!$user) {
             // ToDo: Handle error
         }
-        
+
         // Create password token
-        $token = UserModel::createPasswordToken($user->getEmail()); 
+        $token = UserModel::createPasswordToken($user->getEmail());
         if (!$token) {
             // ToDo: Handle error
         }
 
-        $resetUrl = Http::url('/create-user-password/'. $token);
+        $resetUrl = Http::url('/create-user-password/' . $token);
 
         // Send Email for password reset
-        $mailService = new MailService(); 
-        $mailService->sendUserCreatedByAdmin($user, $resetUrl); 
+        $mailService = new MailService();
+        $mailService->sendUserCreatedByAdmin($user, $resetUrl);
 
         // Logging
-        Logger::app()->notice('User ' . $user->getUsername() . ' created and email with password token sent to ' . $user->getEmail() . '.', []); 
+        Logger::app()->notice('User ' . $user->getUsername() . ' created and email with password token sent to ' . $user->getEmail() . '.', []);
 
-        $this->redirect('/admin/user/detail/' . $user->getId()); 
+        $this->redirect('/admin/user/detail/' . $user->getId());
     }
 
     // Users - Show user  detail view
-    public function detailUser(string $user_id): void {
-        $user = UserModel::findById($user_id); 
+    public function detailUser(string $user_id): void
+    {
+        $user = UserModel::findById($user_id);
         if (!$user) {
             // Logging
-            Logger::app()->notice('User ID ' . $user_id . ' not found.', ['user_id' => Auth::user()->getId()]); 
+            Logger::app()->notice('User ID ' . $user_id . ' not found.', ['user_id' => Auth::user()->getId()]);
         }
-        
+
         $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
 
         $this->render(
-            'admin/user/detail', 
+            'admin/user/detail',
             [
-                'user' => $user, 
+                'user' => $user,
                 'games' => $games
             ]
-        ); 
+        );
     }
 
     // Users - Delete user
-    public function deleteUser(string $user_id): void {
+    public function deleteUser(string $user_id): void
+    {
         $user = UserModel::findById($user_id);
         if ($user) {
             // Logging
@@ -192,18 +199,19 @@ class AdminController extends BaseController {
     }
 
     // Users - Edit user
-    public function editUser(string $user_id): void {
+    public function editUser(string $user_id): void
+    {
         $user = UserModel::findById($user_id);
         if (!$user) {
             http_response_code(404);
             die('User not found');
         }
-        
+
         // Logging
         Logger::app()->debug('Admin edit user: ' . $user_id . ' view', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/user/edit', 
+            'admin/user/edit',
             [
                 'user' => $user
             ]
@@ -211,7 +219,8 @@ class AdminController extends BaseController {
     }
 
     // Users - Update user
-    public function updateUser(string $user_id): void { 
+    public function updateUser(string $user_id): void
+    {
         $user = UserModel::findById($user_id);
         if (!$user) {
             http_response_code(404);
@@ -220,18 +229,18 @@ class AdminController extends BaseController {
 
         // Set data for UserService
         $data = [
-            'username' => $_POST['username'] ?? $user->getUsername(), 
-            'email' => $_POST['email'] ?? $user->getEmail(), 
-            'role'  => $_POST['role'] ?? $user->getRole(), 
-            'status' => $_POST['status'] ?? $user->getStatus(), 
-            'preferred_language' => $_POST['preferred_language'] ?? $user->getPreferredLanguage(), 
-            'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(), 
-        ]; 
-        
+            'username' => $_POST['username'] ?? $user->getUsername(),
+            'email' => $_POST['email'] ?? $user->getEmail(),
+            'role'  => $_POST['role'] ?? $user->getRole(),
+            'status' => $_POST['status'] ?? $user->getStatus(),
+            'preferred_language' => $_POST['preferred_language'] ?? $user->getPreferredLanguage(),
+            'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? $user->getPreferredCameraMode(),
+        ];
+
         // Update user
         $userService = new UserService();
-        $userService->update($user, $data); 
-        
+        $userService->update($user, $data);
+
         // Logging
         Logger::app()->notice('Admin - User ' . $user->getUsername() . ' (' . $user_id . ') updated', ['user_id' => Auth::user()->getId()]);
 
@@ -242,28 +251,30 @@ class AdminController extends BaseController {
      * Game Section
      */
     // Games - List all games
-    public function listGames(): void {
-        $games = GameModel::getAllGames(); 
+    public function listGames(): void
+    {
+        $games = GameModel::getAllGames();
 
         // set filter preset
-        $statuses = GameFilterService::getStatusesByGamesArray($games); 
-        $userRelations = []; 
-        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
-        
+        $statuses = GameFilterService::getStatusesByGamesArray($games);
+        $userRelations = [];
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games);
+
         // Logging
         Logger::app()->debug('Admin list games', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/game/list', 
+            'admin/game/list',
             [
-                'games' => $games, 
-                'filter' => $filter, 
+                'games' => $games,
+                'filter' => $filter,
             ]
         );
     }
 
     // Games - Game detail view 
-    public function detailGame(string $game_id) {
+    public function detailGame(string $game_id)
+    {
         // View an existing game
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -274,22 +285,23 @@ class AdminController extends BaseController {
         }
 
         // History
-        $history = GameStateHistory::findByGameId($game_id); 
-        
+        $history = GameStateHistory::findByGameId($game_id);
+
         // Logging
         Logger::app()->debug('Admin show game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/game/detail', 
+            'admin/game/detail',
             [
-                'game' => $game, 
-                'history' => $history, 
+                'game' => $game,
+                'history' => $history,
             ]
         );
     }
 
     // Games - Update game
-    public function updateGame(string $game_id): void { 
+    public function updateGame(string $game_id): void
+    {
         $game = GameModel::findById($game_id);
         if (!$game) {
             http_response_code(404);
@@ -301,7 +313,7 @@ class AdminController extends BaseController {
 
         // ToDo: Fix this -> update(3 arguments)
         //$game->update($name, $status);
-        
+
         // Logging
         Logger::app()->notice('Admin updated game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
@@ -309,76 +321,81 @@ class AdminController extends BaseController {
     }
 
     // Games - Delete game
-    public function deleteGame(string $game_id): void { 
+    public function deleteGame(string $game_id): void
+    {
         $game = GameModel::findById($game_id);
         if ($game) {
             $game->delete();
         }
-        
+
         // Logging
         Logger::app()->notice('Admin deleted game ' . $game_id, ['user_id' => Auth::user()->getId()]);
 
-        $this->redirect('/admin/games'); 
+        $this->redirect('/admin/games');
     }
 
     /**
      * System Settings Section
      */
     // System Settings - Overview
-    public function systemSettings(): void {
+    public function systemSettings(): void
+    {
         $system_settings = SystemSettingsModel::findSystemSettings();
         $maintenance_messages = [
-            'system.settings.maintenance.message.000.title', 
-            'system.settings.maintenance.message.001.title', 
-            'system.settings.maintenance.message.002.title', 
-            'system.settings.maintenance.message.003.title', 
-        ]; 
+            'system.settings.maintenance.message.000.title',
+            'system.settings.maintenance.message.001.title',
+            'system.settings.maintenance.message.002.title',
+            'system.settings.maintenance.message.003.title',
+        ];
         $notice_messages = [
-            'system.settings.system.notice.000.title', 
-            'system.settings.system.notice.001.title', 
-            'system.settings.system.notice.002.title', 
-            'system.settings.system.notice.003.title', 
-        ]; 
-        
+            'system.settings.system.notice.000.title',
+            'system.settings.system.notice.001.title',
+            'system.settings.system.notice.002.title',
+            'system.settings.system.notice.003.title',
+        ];
+
         // Logging
         Logger::app()->debug('Admin system settings', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/system/settings', 
+            'admin/system/settings',
             [
-                'system_settings' => $system_settings, 
-                'maintenance_messages' => $maintenance_messages, 
-                'notice_messages' => $notice_messages, 
+                'system_settings' => $system_settings,
+                'maintenance_messages' => $maintenance_messages,
+                'notice_messages' => $notice_messages,
             ]
         );
     }
 
     // System Settings - Update
-    public function updateSystemSettings() {
+    public function updateSystemSettings()
+    {
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST) {
-            $system_settings = SystemSettingsModel::findSystemSettings(); 
-            $system_settings->updateBooleansToFalse(); 
-            $system_settings->updateFromArray($_POST); 
+            $system_settings = SystemSettingsModel::findSystemSettings();
+            $system_settings->updateBooleansToFalse();
+            $system_settings->updateFromArray($_POST);
             $system_settings->update();
             return $this->jsonClean(
                 [
-                    'success' => true, 
-                    'status' => 'ok', 
-                    'message' => Localization::get('application.response.messages.save.success'), 
-                ], 200
+                    'success' => true,
+                    'status' => 'ok',
+                    'message' => Localization::get('application.response.messages.save.success'),
+                ],
+                200
             );
         }
-        
+
         // Logging
         Logger::app()->notice('Admin system settings updated', ['user_id' => Auth::user()->getId()]);
 
         return $this->jsonClean(
             [
-                'success' => false, 
-                'status' => 'fail', 
-                'message' => Localization::get('application.response.messages.save.failed'), 
+                'success' => false,
+                'status' => 'fail',
+                'message' => Localization::get('application.response.messages.save.failed'),
                 'error' => 'Error'
-            ], 400
+            ],
+            400
         );
     }
 
@@ -386,104 +403,107 @@ class AdminController extends BaseController {
      * System Heath Section
      */
     // System Health - Overview
-    public function systemHealth(): void {
+    public function systemHealth(): void
+    {
         $overall = SystemHealth::getStatus();
-        $database = SystemHealth::getDatabaseDetails(); 
-        $environment = SystemHealth::getEnvironmentDetails(); 
-        $game = SystemHealth::getGameDetails(); 
-        
+        $database = SystemHealth::getDatabaseDetails();
+        $environment = SystemHealth::getEnvironmentDetails();
+        $game = SystemHealth::getGameDetails();
+
         // Logging
         Logger::app()->debug('Admin system health', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/system/health', 
+            'admin/system/health',
             [
-                'overall' => $overall, 
-                'database' => $database, 
-                'environment' => $environment, 
+                'overall' => $overall,
+                'database' => $database,
+                'environment' => $environment,
                 'game' => $game
             ]
-        ); 
+        );
     }
 
     /**
      * Logging Section
      */
     // Logging - List all logs
-    public function loggingList(): void { 
+    public function loggingList(): void
+    {
         // Get all available logging channels
-        $availableChannels = LoggingConfiguration::getChannelsWithFileStorage(); 
-        $channels = $availableChannels; 
+        $availableChannels = LoggingConfiguration::getChannelsWithFileStorage();
+        $channels = $availableChannels;
 
         // System logs statistics
-        $todayStart = ((new DateTimeImmutable())->setTime(0, 0, 0))->sub(new DateInterval('P7D')); 
-        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59); 
+        $todayStart = ((new DateTimeImmutable())->setTime(0, 0, 0))->sub(new DateInterval('P7D'));
+        $todayEnd = (new DateTimeImmutable())->setTime(23, 59, 59);
         $logService = new LogService([
-            LoggingConfiguration::CHANNEL_APPLICATION, 
+            LoggingConfiguration::CHANNEL_APPLICATION,
             LoggingConfiguration::CHANNEL_SYSTEM
         ], [
-            $todayStart, 
-            $todayEnd 
-        ]); 
+            $todayStart,
+            $todayEnd
+        ]);
 
         // Sort log entries
-        $logService->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC); 
+        $logService->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC);
 
-        $date_range = $logService->getDateRangeAsString(); 
-        $log_entries = $logService->getEntries(); 
-        $log_statistics = $logService->getStatistics(); 
-        
+        $date_range = $logService->getDateRangeAsString();
+        $log_entries = $logService->getEntries();
+        $log_statistics = $logService->getStatistics();
+
         // Logging
         Logger::app()->debug('Admin logging list', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/logging/list', 
+            'admin/logging/list',
             [
-                'available_channels' => $availableChannels, 
-                'channels' => $channels, 
-                'date_range' => $date_range, 
-                'entries' => $log_entries, 
+                'available_channels' => $availableChannels,
+                'channels' => $channels,
+                'date_range' => $date_range,
+                'entries' => $log_entries,
                 'statistics' => $log_statistics
             ]
-        ); 
+        );
     }
 
     // Logging - Detail view log entry
-    public function loggingShow(): void {
-        $id = $_POST[Application::ID] ?? null; 
-        $channel = $_POST['channel'] ?? null; 
-        $timestamp = $_POST['timestamp'] ?? null; 
+    public function loggingShow(): void
+    {
+        $id = $_POST[Application::ID] ?? null;
+        $channel = $_POST['channel'] ?? null;
+        $timestamp = $_POST['timestamp'] ?? null;
 
         if (!is_string($id) || !is_string($channel) || !is_string($timestamp)) {
-            $this->redirect('/admin/logging/list'); 
-            return; 
+            $this->redirect('/admin/logging/list');
+            return;
         }
-        
-        $dateStart = new DateTimeImmutable($timestamp); 
+
+        $dateStart = new DateTimeImmutable($timestamp);
 
         // System logs statistics
         $logService = new LogService(
-            [$channel], 
+            [$channel],
             [
-                $dateStart 
+                $dateStart
             ]
-        ); 
+        );
 
-        $entry = $logService->getEntryById($id); 
+        $entry = $logService->getEntryById($id);
 
-        if($entry === null) {
-            $this->redirect('/admin/logging/list'); 
-            return; 
+        if ($entry === null) {
+            $this->redirect('/admin/logging/list');
+            return;
         }
-        
+
         // Logging
         Logger::app()->debug('Admin logging show', ['user_id' => Auth::user()->getId()]);
 
         $this->render(
-            'admin/logging/show', 
+            'admin/logging/show',
             [
-                'entry' => $entry, 
+                'entry' => $entry,
             ]
-        ); 
+        );
     }
 }

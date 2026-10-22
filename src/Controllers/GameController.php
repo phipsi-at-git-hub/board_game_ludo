@@ -17,9 +17,9 @@ use LogicException;
 /**
  * GameController
  */
-class GameController extends BaseController 
+class GameController extends BaseController
 {
-    private GameService $gameService; 
+    private GameService $gameService;
 
     /**
      * __construct
@@ -27,11 +27,11 @@ class GameController extends BaseController
      * @param App $app
      * @return void
      */
-    public function __construct(App $app) 
-    { 
-        parent::__construct($app); 
-        $this->gameService = $app->resolve(GameService::class); 
-    } 
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->gameService = $app->resolve(GameService::class);
+    }
 
     /**
      * Generic game action handler 
@@ -43,7 +43,7 @@ class GameController extends BaseController
      * @param string $redirect
      * @return void
      */
-    private function executeGameActions(string $game_id, callable $action, string $redirect): void 
+    private function executeGameActions(string $game_id, callable $action, string $redirect): void
     {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -51,15 +51,15 @@ class GameController extends BaseController
         $success = $action($game, $user);
         if (!$success) {
             $this->render(
-                'game/error', 
+                'game/error',
                 [
-                    'message' => 'Action not allowed.' 
+                    'message' => 'Action not allowed.'
                 ]
-            ); 
+            );
         }
         $this->redirect($redirect);
     }
-    
+
     /**
      * View 
      * Lobby leads to game creation, games list and back
@@ -68,16 +68,16 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function lobby(): void 
+    public function lobby(): void
     {
         // Only for logged in users (secured through middleware)
         $user = Auth::user();
-        
+
         // Logging
         Logger::app()->debug('Lobby', ['user_id' => $user->getId()]);
 
         $this->render(
-            'game/lobby', 
+            'game/lobby',
             ['user' => $user]
         );
     }
@@ -90,19 +90,19 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function create(): void 
+    public function create(): void
     {
         $rule_set = (new GameRuleSetModel())->initializeDefaultRuleSet();
 
         $this->render(
-            'game/create', 
+            'game/create',
             [
-                'rule_set' => $rule_set, 
-                'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
-            ], 
-            '', 
-            [], 
-            ['app/forms/game_ruleset'], 
+                'rule_set' => $rule_set,
+                'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(),
+            ],
+            '',
+            [],
+            ['app/forms/game_ruleset'],
         );
     }
 
@@ -114,33 +114,33 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function store(): void 
+    public function store(): void
     {
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_NAME] !== '') {
             $game_options = [
-                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
+                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]),
             ];
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]), 
+                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]),
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
-                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
-                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
+                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]),
+                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]),
                 Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
-                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]), 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]), 
+                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]),
+                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]),
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
             ];
-            
+
             $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
 
             // Update user statistics 
-            $user = Auth::user(); 
-            $user->getUserStatistics()->incrementGamesCreated(); 
-        
+            $user = Auth::user();
+            $user->getUserStatistics()->incrementGamesCreated();
+
             // Logging
             Logger::app()->info('Game created: ' . $game_id, ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
 
@@ -150,7 +150,7 @@ class GameController extends BaseController
         $rule_set = (new GameRuleSetModel())->initializeDefaultRuleSet();
 
         $this->render(
-            'game/create', 
+            'game/create',
             ['rule_set' => $rule_set]
         );
     }
@@ -164,23 +164,23 @@ class GameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function edit(string $game_id): void 
+    public function edit(string $game_id): void
     {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
 
         if ($game->isWaiting()) {
             $this->render(
-                'game/edit', 
+                'game/edit',
                 [
-                    'game' => $game, 
-                    'user' => $user, 
-                    'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(), 
-                    'rule_set_original' => $game->getRuleSetModel()->getAllRulesAsArray(), 
-                ], 
-                '', 
-                [], 
-                ['app/forms/game_ruleset'], 
+                    'game' => $game,
+                    'user' => $user,
+                    'rule_set_presets' => GameRuleSetModel::getPresetsAsArray(),
+                    'rule_set_original' => $game->getRuleSetModel()->getAllRulesAsArray(),
+                ],
+                '',
+                [],
+                ['app/forms/game_ruleset'],
             );
             exit;
         }
@@ -196,7 +196,7 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function update():void 
+    public function update(): void
     {
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
             $game = GameModel::findById($_POST[Application::GAME_ID]);
@@ -208,26 +208,26 @@ class GameController extends BaseController
             $game_name = $_POST[Application::GAME_NAME];
 
             $game_options = [
-                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]), 
-                Application::IS_LOCKED => (int)$game->isLocked(), 
+                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]),
+                Application::IS_LOCKED => (int)$game->isLocked(),
             ];
 
             $rule_set = [
                 Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_AT_HOME => (isset($_POST[Application::ALL_FIGURES_START_AT_HOME])) ? ($_POST[Application::ALL_FIGURES_START_AT_HOME]) : (int)$game->getRuleSetModel()->getAllFiguresStartAtHome(), 
+                Application::ALL_FIGURES_START_AT_HOME => (isset($_POST[Application::ALL_FIGURES_START_AT_HOME])) ? ($_POST[Application::ALL_FIGURES_START_AT_HOME]) : (int)$game->getRuleSetModel()->getAllFiguresStartAtHome(),
                 Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
-                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]), 
-                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]), 
+                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]),
+                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]),
                 Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
-                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]), 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]), 
+                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]),
+                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]),
                 Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
                 Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
                 Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
             ];
 
             $game->update($game_name, $game_options, $rule_set);
-        
+
             // Logging
             Logger::app()->info('Game updated: ' . $game->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $game->getId()]);
 
@@ -244,25 +244,25 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function list(): void 
+    public function list(): void
     {
         $user = Auth::user();
         $games = GameModel::getAllOpenGamesNew();
-        $games = GameService::gamesArrayForUser($games, $user); 
+        $games = GameService::gamesArrayForUser($games, $user);
 
         // set filter preset
-        $statuses = GameFilterService::getStatusesByGamesArray($games); 
-        $userRelations = []; 
-        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
-        
+        $statuses = GameFilterService::getStatusesByGamesArray($games);
+        $userRelations = [];
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games);
+
         // Logging
         Logger::app()->debug('List all games', ['user_id' => $user->getId()]);
-        
+
         $this->render(
-            'game/list', 
+            'game/list',
             [
-                'games' => $games, 
-                'filter' => $filter, 
+                'games' => $games,
+                'filter' => $filter,
             ]
         );
     }
@@ -274,24 +274,24 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function usersGames(): void 
+    public function usersGames(): void
     {
         $user = Auth::user();
         $games = GameModel::getAllGamesWithUserInvolvedNew($user->getId());
 
         // set filter preset
-        $statuses = GameFilterService::getStatusesByGamesArray($games); 
-        $userRelations = GameFilterService::getUserRelationsByGamesArrayAndUser($games, $user); 
-        $filter = new GameFilterContext($statuses, $userRelations, null, $games); 
+        $statuses = GameFilterService::getStatusesByGamesArray($games);
+        $userRelations = GameFilterService::getUserRelationsByGamesArrayAndUser($games, $user);
+        $filter = new GameFilterContext($statuses, $userRelations, null, $games);
 
         // Logging
         Logger::app()->debug('List user games', ['user_id' => $user->getId()]);
-        
+
         $this->render(
-            'game/list', 
+            'game/list',
             [
-                'games' => $games, 
-                'filter' => $filter, 
+                'games' => $games,
+                'filter' => $filter,
             ]
         );
     }
@@ -305,7 +305,7 @@ class GameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function show(string $game_id):void 
+    public function show(string $game_id): void
     {
         // View an existing game
         $game = GameModel::findById($game_id);
@@ -315,14 +315,14 @@ class GameController extends BaseController
             http_response_code(404);
             die('Game not found');
         }
-        
+
         // Logging
         Logger::app()->debug('Show game ' . $game->getId(), ['user_id' => $user->getId(), 'game_id' => $game->getId()]);
 
         $this->render(
-            'game/show', 
+            'game/show',
             [
-                'game' => $game, 
+                'game' => $game,
                 'user' => $user
             ]
         );
@@ -336,14 +336,14 @@ class GameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function join(string $game_id): void 
+    public function join(string $game_id): void
     {
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->join($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->join($game, $user),
             "/game/detail/$game_id"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Join game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -356,14 +356,14 @@ class GameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function leave(string $game_id):void 
+    public function leave(string $game_id): void
     {
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->leave($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->leave($game, $user),
             "/game/detail/$game_id"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Leave game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -375,20 +375,20 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function start():void 
+    public function start(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         if (!$game_id) {
-            $this->redirect('/game/list'); 
-            return; 
+            $this->redirect('/game/list');
+            return;
         }
 
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->start($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->start($game, $user),
             "/game/detail/$game_id"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Start game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -401,20 +401,20 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function pause():void 
+    public function pause(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         if (!$game_id) {
-            $this->redirect('/game/list'); 
-            return; 
+            $this->redirect('/game/list');
+            return;
         }
-        
+
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->pause($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->pause($game, $user),
             "/game/detail/$game_id"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Pause game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -426,20 +426,20 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function reset(): void 
+    public function reset(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         if (!$game_id) {
-            $this->redirect('/game/list'); 
-            return; 
+            $this->redirect('/game/list');
+            return;
         }
 
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->reset($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->reset($game, $user),
             "/game/detail/$game_id"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Reset game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -451,19 +451,19 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function cancel(): void 
+    public function cancel(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         if (!$game_id) {
-            $this->redirect('/game/list'); 
-            return; 
+            $this->redirect('/game/list');
+            return;
         }
 
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->cancel($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->cancel($game, $user),
             "/game/detail/$game_id"
-        ); 
+        );
     }
 
     /** 
@@ -473,20 +473,20 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function delete(): void 
+    public function delete(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         if (!$game_id) {
-            $this->redirect('/game/list'); 
-            return; 
+            $this->redirect('/game/list');
+            return;
         }
 
         $this->executeGameActions(
-            $game_id, 
-            fn($game, $user) => $this->gameService->delete($game, $user), 
+            $game_id,
+            fn($game, $user) => $this->gameService->delete($game, $user),
             "/game/list"
-        ); 
-        
+        );
+
         // Logging
         Logger::app()->info('Delete game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
     }
@@ -499,7 +499,7 @@ class GameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function play(string $game_id):void 
+    public function play(string $game_id): void
     {
         $game = GameModel::findById($game_id);
         $user = Auth::user();
@@ -526,19 +526,19 @@ class GameController extends BaseController
                 ];
             }
         }
-        
+
         // Logging
         Logger::app()->info('Play game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
 
         $this->render(
-            'game/play', 
+            'game/play',
             [
-                'game' => $game, 
-                'moves' => $moves, 
+                'game' => $game,
+                'moves' => $moves,
                 'user' => $user
-            ], 
-            $game->getName(), 
-            ['game'] 
+            ],
+            $game->getName(),
+            ['game']
         );
     }
 
@@ -552,7 +552,7 @@ class GameController extends BaseController
      *
      * @return void
      */
-    public function createSoloTest(): void 
+    public function createSoloTest(): void
     {
         $game = null;
         if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
@@ -572,7 +572,7 @@ class GameController extends BaseController
     }
 
     // Start a given solo test game
-    public function startSoloTest(): void 
+    public function startSoloTest(): void
     {
         $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
@@ -589,7 +589,8 @@ class GameController extends BaseController
     }
 
     // Roll dice
-    public function roll() {
+    public function roll()
+    {
         $user = Auth::user();
         $game_id = $_POST[Application::GAME_ID];
         $game = GameModel::findById($game_id);
@@ -606,7 +607,8 @@ class GameController extends BaseController
     }
 
     // Move figure
-    public function move() {
+    public function move()
+    {
         $user = Auth::user();
         $game_id = $_POST[Application::GAME_ID];
         $move = json_decode($_POST[Application::DTO_MOVE], true);
@@ -629,17 +631,18 @@ class GameController extends BaseController
     }
 
     // Game State for Frontend
-    public function state(string $game_id) {
+    public function state(string $game_id)
+    {
         if (!$game_id) {
             return $this->json([
-                'success' => false, 
+                'success' => false,
                 'error' => 'Missing game_id'
             ]);
         }
         $game = GameModel::findById($game_id);
 
         return $this->json([
-            'success' => true, 
+            'success' => true,
             'state' => $game->getGameStateSnapshot()
         ]);
     }

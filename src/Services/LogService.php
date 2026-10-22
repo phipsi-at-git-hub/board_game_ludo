@@ -10,12 +10,13 @@ use App\Core\Logging\LoggingConfiguration;
 use App\Models\System\LoggingModel;
 use DateTimeImmutable;
 
-final class LogService {
+final class LogService
+{
     private array $channels;
-    private DateRange $dateRange; 
-    private array $logLevels = []; 
+    private DateRange $dateRange;
+    private array $logLevels = [];
     private array $entries = [];
-    
+
     /**
      * __construct
      *
@@ -24,14 +25,15 @@ final class LogService {
      * @param  mixed $log_levels
      * @return void
      */
-    public function __construct(array $channels, array $dates, array $log_levels = []) {
+    public function __construct(array $channels, array $dates, array $log_levels = [])
+    {
         $this->channels = $channels;
-        $this->dateRange = new DateRange($dates); 
-        $this->logLevels = $log_levels; 
+        $this->dateRange = new DateRange($dates);
+        $this->logLevels = $log_levels;
 
         $this->load();
     }
- 
+
     /**
      * Load logs from configured channels and dates
      * 
@@ -39,21 +41,22 @@ final class LogService {
      *
      * @return void
      */
-    private function load(): void {
+    private function load(): void
+    {
         if ($this->dateRange->isEmpty()) {
-            return; 
-        } 
+            return;
+        }
         foreach ($this->channels as $channel) {
             foreach ($this->dateRange->getDays() as $date) {
-                $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT)); 
+                $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT));
                 foreach ($entries as $entry) {
                     if (!$this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
-                        continue; 
+                        continue;
                     }
                     if (!empty($this->logLevels) && !in_array($entry->getLevel(), $this->logLevels, true)) {
-                        continue; 
+                        continue;
                     }
-                    $this->entries[] = $entry; 
+                    $this->entries[] = $entry;
                 }
             }
         }
@@ -66,10 +69,11 @@ final class LogService {
      *
      * @return array
      */
-    public function getEntries(): array {
+    public function getEntries(): array
+    {
         return $this->entries;
     }
-    
+
     /**
      * Get log entry with UUID
      * 
@@ -78,13 +82,14 @@ final class LogService {
      * @param  mixed $id
      * @return LogEntry
      */
-    public function getEntryById(string $id): ?LogEntry {
+    public function getEntryById(string $id): ?LogEntry
+    {
         foreach ($this->entries as $entry) {
             if ($entry->getId() === $id) {
-                return $entry; 
+                return $entry;
             }
         }
-        return null; 
+        return null;
     }
 
     /**
@@ -96,7 +101,8 @@ final class LogService {
      * @param  mixed $direction
      * @return self
      */
-    public function orderBy(string $field = Application::ORDER_BY_TIMESTAMP, string $direction = Application::ORDER_ASC): self {
+    public function orderBy(string $field = Application::ORDER_BY_TIMESTAMP, string $direction = Application::ORDER_ASC): self
+    {
         if (!in_array($field, [Application::ORDER_BY_TIMESTAMP, Application::ORDER_BY_CHANNEL, Application::ORDER_BY_LOG_LEVEL], true)) {
             $field = Application::ORDER_BY_TIMESTAMP;
         }
@@ -132,14 +138,16 @@ final class LogService {
      *
      * @return String
      */
-    public function getDateRangeAsString(): String {
-        return $this->dateRange->getDateRangeAsString(); 
+    public function getDateRangeAsString(): String
+    {
+        return $this->dateRange->getDateRangeAsString();
     }
 
     /**
      * Get all available log channels
      */
-    public function getChannels(): array {
+    public function getChannels(): array
+    {
         return LoggingConfiguration::getChannels();
     }
 
@@ -150,8 +158,9 @@ final class LogService {
      *
      * @return array
      */
-    public function getLogLevels(): array {
-        return $this->logLevels; 
+    public function getLogLevels(): array
+    {
+        return $this->logLevels;
     }
 
     /**
@@ -161,7 +170,8 @@ final class LogService {
      *
      * @return array
      */
-    public function getLevels(): array {
+    public function getLevels(): array
+    {
         return LoggingConfiguration::getLevels();
     }
 
@@ -172,7 +182,8 @@ final class LogService {
      *
      * @return int
      */
-    public function getCount(): int {
+    public function getCount(): int
+    {
         return count($this->entries);
     }
 
@@ -184,7 +195,8 @@ final class LogService {
      * @param  mixed $level
      * @return int
      */
-    public function getCountByLevel(string $level): int {
+    public function getCountByLevel(string $level): int
+    {
         $count = 0;
 
         foreach ($this->entries as $entry) {
@@ -202,7 +214,8 @@ final class LogService {
      *
      * @return array
      */
-    public function getStatistics(): array {
+    public function getStatistics(): array
+    {
         $statistics = [];
 
         foreach (LoggingConfiguration::getLevels() as $level) {
@@ -223,7 +236,8 @@ final class LogService {
      * @param  mixed $statistics
      * @return string
      */
-    public function getHighestLevel(array $statistics): ?string {
+    public function getHighestLevel(array $statistics): ?string
+    {
         foreach (
             [
                 LoggingConfiguration::LEVEL_EMERGENCY,
@@ -250,7 +264,8 @@ final class LogService {
      *
      * @return bool
      */
-    public function hasCriticalLogs(): bool {
+    public function hasCriticalLogs(): bool
+    {
         return (
             $this->getCountByLevel(LoggingConfiguration::LEVEL_EMERGENCY)
             + $this->getCountByLevel(LoggingConfiguration::LEVEL_ALERT)
@@ -265,7 +280,8 @@ final class LogService {
      *
      * @return bool
      */
-    public function hasErrors(): bool {
+    public function hasErrors(): bool
+    {
         return $this->getCountByLevel(
             LoggingConfiguration::LEVEL_ERROR
         ) > 0;
@@ -279,7 +295,8 @@ final class LogService {
      * @param  mixed $limit
      * @return array
      */
-    public function getLatest(int $limit = 100): array {
+    public function getLatest(int $limit = 100): array
+    {
         return array_slice(
             array_reverse($this->entries),
             0,
@@ -294,7 +311,8 @@ final class LogService {
      *
      * @return array
      */
-    public function getDashboardStatistics(): array {
+    public function getDashboardStatistics(): array
+    {
         $statistics = $this->getStatistics();
 
         return [

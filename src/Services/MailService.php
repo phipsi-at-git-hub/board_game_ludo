@@ -11,17 +11,20 @@ use App\Core\Localization;
 use App\Models\User\UserModel;
 use DateTimeInterface;
 
-final class MailService {
+final class MailService
+{
     private Mailer $mailer;
 
-    public function __construct(?Mailer $mailer = null) {
+    public function __construct(?Mailer $mailer = null)
+    {
         $this->mailer = $mailer ?? new Mailer();
     }
 
     /**
      * Send email to user
      */
-    public function sendToUser(UserModel $user, string $subject, string $body, ?string $htmlBody = null): bool {
+    public function sendToUser(UserModel $user, string $subject, string $body, ?string $htmlBody = null): bool
+    {
         $email = Email::create(
             $user->getEmail(),
             $subject,
@@ -36,7 +39,8 @@ final class MailService {
     /**
      * Send email to all system administrators
      */
-    public function sendToAdministrators(string $subject, string $body, ?string $htmlBody = null): bool {
+    public function sendToAdministrators(string $subject, string $body, ?string $htmlBody = null): bool
+    {
         $administrators = UserModel::findByRole(Application::ADMIN);
         $success = true;
 
@@ -57,7 +61,8 @@ final class MailService {
     /**
      * Send registration email
      */
-    public function sendRegistration(UserModel $user, string $verificationUrl): bool {
+    public function sendRegistration(UserModel $user, string $verificationUrl): bool
+    {
         $subject = Localization::get('mail.registration.subject');
 
         $body = Localization::get(
@@ -74,11 +79,12 @@ final class MailService {
             $body
         );
     }
-    
+
     /**
      * Send password reset email
      */
-    public function sendPasswordReset(UserModel $user, string $resetUrl): bool {
+    public function sendPasswordReset(UserModel $user, string $resetUrl): bool
+    {
         return $this->sendPasswordActionMail(
             $user,
             $resetUrl,
@@ -90,7 +96,8 @@ final class MailService {
     /**
      * Send email for a user created by an administrator
      */
-    public function sendUserCreatedByAdmin(UserModel $user, string $resetUrl): bool {
+    public function sendUserCreatedByAdmin(UserModel $user, string $resetUrl): bool
+    {
         return $this->sendPasswordActionMail(
             $user,
             $resetUrl,
@@ -102,7 +109,8 @@ final class MailService {
     /**
      * Send password related user email
      */
-    private function sendPasswordActionMail(UserModel $user, string $resetUrl, string $subjectKey, string $bodyKey): bool {
+    private function sendPasswordActionMail(UserModel $user, string $resetUrl, string $subjectKey, string $bodyKey): bool
+    {
         $subject = Localization::get($subjectKey);
 
         $body = Localization::get(
@@ -126,7 +134,8 @@ final class MailService {
     /**
      * Send log notification based on log level
      */
-    public function sendLogNotificationByLogLevel(string $logLevel, int $logCount, DateTimeInterface $logTime): bool {
+    public function sendLogNotificationByLogLevel(string $logLevel, int $logCount, DateTimeInterface $logTime): bool
+    {
         switch ($logLevel) {
             case LoggingConfiguration::LEVEL_EMERGENCY:
             case LoggingConfiguration::LEVEL_ALERT:
@@ -145,7 +154,8 @@ final class MailService {
     /**
      * Prepare and send log notification
      */
-    private function sendLogNotification(string $logLevel, int $logCount, DateTimeInterface $logTime): bool {
+    private function sendLogNotification(string $logLevel, int $logCount, DateTimeInterface $logTime): bool
+    {
         $levelName = $this->getLogLevelName($logLevel);
         if ($levelName === null) {
             return false;
@@ -176,7 +186,8 @@ final class MailService {
     /**
      * Get localized log level name
      */
-    private function getLogLevelName(string $logLevel): ?string {
+    private function getLogLevelName(string $logLevel): ?string
+    {
         return match ($logLevel) {
             LoggingConfiguration::LEVEL_EMERGENCY => Localization::get('log.level.emergency'),
             LoggingConfiguration::LEVEL_ALERT => Localization::get('log.level.alert'),

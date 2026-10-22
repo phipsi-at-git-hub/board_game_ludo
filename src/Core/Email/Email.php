@@ -3,7 +3,8 @@
 
 namespace App\Core\Email;
 
-final class Email {
+final class Email
+{
     private string $to;
     private string $subject;
     private string $body;
@@ -37,43 +38,48 @@ final class Email {
     /**
      * Get recipient address
      */
-    public function getTo(): string {
+    public function getTo(): string
+    {
         return $this->to;
     }
 
     /**
      * Get recipient name
      */
-    public function getToName(): ?string {
+    public function getToName(): ?string
+    {
         return $this->toName;
     }
 
     /**
      * Get subject
      */
-    public function getSubject(): string {
+    public function getSubject(): string
+    {
         return $this->subject;
     }
 
     /**
      * Get plain text body
      */
-    public function getBody(): string {
+    public function getBody(): string
+    {
         return $this->body;
     }
 
     /**
      * Get HTML body
      */
-    public function getHtmlBody(): ?string {
+    public function getHtmlBody(): ?string
+    {
         return $this->htmlBody;
     }
 
     /**
      * Has HTML body
      */
-    public function hasHtmlBody(): bool {
+    public function hasHtmlBody(): bool
+    {
         return $this->htmlBody !== null;
     }
 }
- 

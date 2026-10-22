@@ -91,15 +91,15 @@ final class GameFilterService
      * @param array $games
      * @return ?array
      */
-    public static function getStatusesByGamesArray(array $games): ?array 
+    public static function getStatusesByGamesArray(array $games): ?array
     {
-        $statuses = []; 
+        $statuses = [];
         foreach ($games as $game) {
             if (!in_array($game->getStatus(), $statuses)) {
-                $statuses[] = $game->getStatus(); 
+                $statuses[] = $game->getStatus();
             }
         }
-        return $statuses; 
+        return $statuses;
     }
 
     /**
@@ -109,23 +109,23 @@ final class GameFilterService
      * @param UserModel $user
      * @return ?array
      */
-    public static function getUserRelationsByGamesArrayAndUser(array $games, UserModel $user): ?array 
+    public static function getUserRelationsByGamesArrayAndUser(array $games, UserModel $user): ?array
     {
-        $userRelations = []; 
+        $userRelations = [];
         foreach ($games as $game) {
             if (!in_array(Application::GAMES_CREATED, $userRelations) && $game->isCreator($user)) {
-                $userRelations[] = Application::GAMES_CREATED; 
+                $userRelations[] = Application::GAMES_CREATED;
             }
 
             if (!in_array(Application::GAMES_PARTICIPATED, $userRelations) && $game->isParticipant($user)) {
-                $userRelations[] = Application::GAMES_PARTICIPATED; 
+                $userRelations[] = Application::GAMES_PARTICIPATED;
             }
 
             if (!in_array(Application::GAMES_WON, $userRelations) && $game->isWinner($user)) {
-                $userRelations[] = Application::GAMES_WON; 
+                $userRelations[] = Application::GAMES_WON;
             }
         }
-        return $userRelations; 
+        return $userRelations;
     }
 
     /**

@@ -16,8 +16,9 @@ use Exception;
 use LogicException;
 use Throwable;
 
-final class GameModel extends BaseModel {
-    private const GAME_ENGINE_VERSION = '0.4.0'; 
+final class GameModel extends BaseModel
+{
+    private const GAME_ENGINE_VERSION = '0.4.0';
     private const PLAYERS_MAX = 4;
     private const FIGURES_PER_PLAYER = 4;
     private const FIELD_LENGTH = 40;
@@ -43,12 +44,13 @@ final class GameModel extends BaseModel {
     private array $player_array;    // max 4
     // private array $figure_array;    // max 16
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->rule_set_model = new GameRuleSetModel();
         $this->state_model = new GameStateModel();
-        $this->player_array = []; 
+        $this->player_array = [];
     }
 
     /**
@@ -57,7 +59,8 @@ final class GameModel extends BaseModel {
     /**
      * Game Engine - Apply Move 
      */
-    public function applyMove(string $user_id, array $move): void {
+    public function applyMove(string $user_id, array $move): void
+    {
         // Check if it's users turn 
         $this->assertPlayerTurn($user_id);
         // Check if turn counter is validate
@@ -137,7 +140,8 @@ final class GameModel extends BaseModel {
     /**
      * Game Engine - Roll dice and prepare move
      */
-    public function rollDice(String $user_id): int {
+    public function rollDice(String $user_id): int
+    {
         $current_player = $this->getCurrentPlayer();
 
         // Ensure that it is the player's turn
@@ -165,14 +169,16 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - get a random dice roll
-    protected function rollDiceValue(): int {
+    protected function rollDiceValue(): int
+    {
         return random_int(1, 6);
     }
 
     /**
      * Game Engine - Calculate possible moves for players
      */
-    public function getAvailableMoves(string $user_id, int $dice_value): array {
+    public function getAvailableMoves(string $user_id, int $dice_value): array
+    {
         $player = $this->getPlayerById($user_id);
         //$moves = [];
         $move = GameEngineMove::create();
@@ -184,7 +190,7 @@ final class GameModel extends BaseModel {
 
             $area = $figure->getArea();
             $move = [
-                Application::DTO_GAME_TURN => $this->state_model->getCurrentTurnCounter(), 
+                Application::DTO_GAME_TURN => $this->state_model->getCurrentTurnCounter(),
                 Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(),
                 Application::DTO_FROM => [
                     Application::DTO_AREA => $area,
@@ -212,7 +218,7 @@ final class GameModel extends BaseModel {
                 if ($enemy !== null) {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
+                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
                     $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
@@ -262,7 +268,7 @@ final class GameModel extends BaseModel {
                         if ($enemy !== null) {
                             $move[Application::DTO_IS_KICK] = true;
                             $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                            $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
+                            $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
                             $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
                         }
 
@@ -272,11 +278,11 @@ final class GameModel extends BaseModel {
 
                     // Common goal entry
                     $move[Application::DTO_TO] = [
-                        Application::DTO_AREA => Application::AREA_GOAL, 
-                        Application::DTO_POSITION => $steps_into_goal, 
+                        Application::DTO_AREA => Application::AREA_GOAL,
+                        Application::DTO_POSITION => $steps_into_goal,
                     ];
 
-                    $move[Application::DTO_IS_GOAL_ENTRY] = true; 
+                    $move[Application::DTO_IS_GOAL_ENTRY] = true;
 
                     $moves[] = $move;
                     continue;
@@ -286,8 +292,8 @@ final class GameModel extends BaseModel {
                 $absolute_position = ($player->getStartOffset() + $new_relative_position) % self::FIELD_LENGTH;
 
                 $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => Application::AREA_FIELD, 
-                    Application::DTO_POSITION => $new_relative_position, 
+                    Application::DTO_AREA => Application::AREA_FIELD,
+                    Application::DTO_POSITION => $new_relative_position,
                 ];
 
                 $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
@@ -297,7 +303,7 @@ final class GameModel extends BaseModel {
                 if ($enemy !== null) {
                     $move[Application::DTO_IS_KICK] = true;
                     $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex(); 
+                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
                     $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
@@ -312,8 +318,8 @@ final class GameModel extends BaseModel {
                 $new_goal_position = $figure->getPosition() + $dice_value;
 
                 $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => Application::AREA_GOAL, 
-                    Application::DTO_POSITION => $new_goal_position, 
+                    Application::DTO_AREA => Application::AREA_GOAL,
+                    Application::DTO_POSITION => $new_goal_position,
                 ];
 
                 $moves[] = $move;
@@ -336,7 +342,8 @@ final class GameModel extends BaseModel {
 
     // Game Engine - Check if figure can move
     // This is the MAIN METHOD for GAME ENGINE LOGIC
-    private function canMoveFigure(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): bool {
+    private function canMoveFigure(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): bool
+    {
         $area = $figure->getArea();
 
         /**
@@ -413,7 +420,7 @@ final class GameModel extends BaseModel {
 
                     // calculate new field / board position
                     $wrapped_relative_position = $new_relative_position % self::FIELD_LENGTH;
-                    $absolute_target = ($player->getStartOffset() + $wrapped_relative_position) %self::FIELD_LENGTH;
+                    $absolute_target = ($player->getStartOffset() + $wrapped_relative_position) % self::FIELD_LENGTH;
 
                     // check stack
                     if (!$this->rule_set_model->getAllowStackOwnFigures()) {
@@ -460,7 +467,8 @@ final class GameModel extends BaseModel {
     /**
      * Game Engine - End turn
      */
-    private function endTurn(): void {
+    private function endTurn(): void
+    {
         $this->state_model->setCurrentDiceRoll(null);
         $this->state_model->resetLeaveHomeAttemptsUsed();
         $this->state_model->resetExtraRollsOnSixUsed();
@@ -476,7 +484,8 @@ final class GameModel extends BaseModel {
      * Game Engine - Pass turn
      * Called when the player cannot make a move or deliberately passes
      */
-    public function passTurn(string $user_id): void {
+    public function passTurn(string $user_id): void
+    {
         // Check if it's users turn
         $this->assertPlayerTurn($user_id);
 
@@ -540,28 +549,32 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Validate move turn with current game urn  counter
-    private function validateTurnCounter(int $move_turn_counter): void {
+    private function validateTurnCounter(int $move_turn_counter): void
+    {
         if ($move_turn_counter !== $this->state_model->getCurrentTurnCounter()) {
             throw new LogicException('Stale move');
         }
     }
 
     // Game Engine - Set next player in line as active current player
-    private function nextPlayer(): void {
+    private function nextPlayer(): void
+    {
         $next_player_index = ($this->state_model->getCurrentPlayerIndex() + 1) % $this->getPlayerCount();
         $this->state_model->setCurrentPlayerIndex($next_player_index);
         $this->state_model->setCurrentDiceRoll(null);
     }
 
     // Game Engine - Check if it's current players turn
-    private function assertPlayerTurn(String $user_id): void {
+    private function assertPlayerTurn(String $user_id): void
+    {
         if ($this->getCurrentPlayer()->getUserId() !== $user_id) {
             throw new LogicException('Not your turn');
         }
     }
 
     // Game Engine - get absolute position on the field of given figure
-    public function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int {
+    public function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int
+    {
         if ($figure->getArea() !== Application::AREA_FIELD) {
             return $figure->getPosition();
             throw new LogicException('Figure is not on field');
@@ -577,9 +590,10 @@ final class GameModel extends BaseModel {
 
     // Game Engine - Can figure on start field be moved
     // This method returns true if at least one figure on the start field can be moved or no figure is on the start field
-    private function canFigureOnStartFieldBeMoved(GameStatePlayerModel $player, int $dice_value): bool {
+    private function canFigureOnStartFieldBeMoved(GameStatePlayerModel $player, int $dice_value): bool
+    {
         $figures = $player->getAllFigures();
-        $on_start_field = [false, false, false, false]; 
+        $on_start_field = [false, false, false, false];
         $figures_on_start_field = [];
 
         // Check if any and which figure is on start field
@@ -613,7 +627,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if start field is blocked
-    private function isStartFieldBlockedByPlayer(GameStatePlayerModel $player): bool {
+    private function isStartFieldBlockedByPlayer(GameStatePlayerModel $player): bool
+    {
         $start_offset = $player->getStartOffset();
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() !== Application::AREA_FIELD) {
@@ -631,7 +646,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if start field is blocked
-    private function isStartFieldBlocked(GameStatePlayerModel $player): bool {
+    private function isStartFieldBlocked(GameStatePlayerModel $player): bool
+    {
         $start_offset = $player->getStartOffset();
 
         foreach ($this->player_array as $other_player) {
@@ -652,7 +668,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if any of own figures is on position
-    private function isOwnFigureOnAbsolutePosition(GameStatePlayerModel $player, int $absolute_position): bool {
+    private function isOwnFigureOnAbsolutePosition(GameStatePlayerModel $player, int $absolute_position): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() !== Application::AREA_FIELD) {
                 continue;
@@ -668,7 +685,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Get the absolute position of enemy figure
-    private function getEnemyFiguresOnAbsolutePosition(GameStatePlayerModel $current_player, int $absolute_position): ?array {
+    private function getEnemyFiguresOnAbsolutePosition(GameStatePlayerModel $current_player, int $absolute_position): ?array
+    {
         foreach ($this->player_array as $other_player) {
             if ($other_player->getUserId() === $current_player->getUserId()) {
                 continue;
@@ -683,7 +701,7 @@ final class GameModel extends BaseModel {
 
                 if ($figure_absolute_position === $absolute_position) {
                     return [
-                        'player' => $other_player, 
+                        'player' => $other_player,
                         'figure' => $figure
                     ];
                 }
@@ -693,7 +711,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if figure can enter goal area
-    private function canEnterGoal(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): ?int {
+    private function canEnterGoal(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): ?int
+    {
         if ($figure->getArea() !== Application::AREA_FIELD) {
             return null;
         }
@@ -715,7 +734,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if figure can move through goal area to finish
-    private function isGoalPositionBlockedByStrictOrder(GameStatePlayerModel $player, GameStateFigureModel $current_figure, int $target_goal_position): bool {
+    private function isGoalPositionBlockedByStrictOrder(GameStatePlayerModel $player, GameStateFigureModel $current_figure, int $target_goal_position): bool
+    {
         if (!$this->rule_set_model->getStrictGoalOrder()) {
             return false;
         }
@@ -737,7 +757,8 @@ final class GameModel extends BaseModel {
         return false;
     }
 
-    private function isGoalPositionOccupied(GameStatePlayerModel $player, int $target_goal_position): bool {
+    private function isGoalPositionOccupied(GameStatePlayerModel $player, int $target_goal_position): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() === Application::AREA_GOAL && $figure->getPosition() === $target_goal_position) {
                 return true;
@@ -747,7 +768,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if player has other movable figures
-    private function playerHasOtherMovableFigure(GameStatePlayerModel $player, GameStateFigureModel $excluded_figure, int $dice_value): bool {
+    private function playerHasOtherMovableFigure(GameStatePlayerModel $player, GameStateFigureModel $excluded_figure, int $dice_value): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure === $excluded_figure) {
                 continue;
@@ -761,8 +783,9 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Check if player has won the game
-    private function hasPlayerWon(GameStatePlayerModel $player): bool {
-        $slots = array_fill(0, self::GOAL_LENGTH, false); 
+    private function hasPlayerWon(GameStatePlayerModel $player): bool
+    {
+        $slots = array_fill(0, self::GOAL_LENGTH, false);
         foreach ($player->getAllFigures() as $figure) {
             $position = $figure->getPosition();
             if ($figure->getArea() !== Application::AREA_GOAL) {
@@ -785,20 +808,22 @@ final class GameModel extends BaseModel {
     }
 
     // Game Engine - Get version
-    public function getVersion(): string {
-        return self::GAME_ENGINE_VERSION; 
+    public function getVersion(): string
+    {
+        return self::GAME_ENGINE_VERSION;
     }
 
     // Game Engine - Set winner of the game
-    private function setWinner(GameStatePlayerModel $player): void {
+    private function setWinner(GameStatePlayerModel $player): void
+    {
         $this->state_model->setWinnerUserId($player->getUserId());
         $this->state_model->save();
         $this->status = Application::STATUS_FINISHED;
         $this->save();
 
         // Update user statistics
-        $user = UserModel::findById($player->getUserId()); 
-        $user->getUserStatistics()->incrementGamesWon(); 
+        $user = UserModel::findById($player->getUserId());
+        $user->getUserStatistics()->incrementGamesWon();
     }
 
     /**
@@ -838,7 +863,7 @@ final class GameModel extends BaseModel {
             LEFT JOIN %s r
                 ON g.%s = r.%s
             ",
-            
+
             Application::USERNAME,
 
             Application::ALLOW_BOTS,
@@ -914,7 +939,7 @@ final class GameModel extends BaseModel {
                     Application::GAME_ID
                 ),
                 [
-                    'game_id'=>$game->getId()
+                    'game_id' => $game->getId()
                 ]
             );
 
@@ -940,7 +965,7 @@ final class GameModel extends BaseModel {
 
                         ORDER BY p.%s ASC
                         ",
-                        
+
                         Application::USERNAME,
 
                         Application::TABLE_PLAYERS,
@@ -955,11 +980,11 @@ final class GameModel extends BaseModel {
                         Application::PLAYER_INDEX
                     ),
                     [
-                        'game_id'=>$game->getId()
+                        'game_id' => $game->getId()
                     ]
                 );
 
-                $game->player_array = array_map(fn($row) => GameStatePlayerModel::fromArray($row),$players);
+                $game->player_array = array_map(fn($row) => GameStatePlayerModel::fromArray($row), $players);
             }
 
             // Figures 
@@ -975,15 +1000,13 @@ final class GameModel extends BaseModel {
                         Application::GAME_ID
                     ),
                     [
-                        'game_id'=>$game->getId()
+                        'game_id' => $game->getId()
                     ]
                 );
 
                 $playersByUser = [];
                 foreach ($game->player_array as $playerModel) {
-                    $playersByUser[
-                        $playerModel->getUserId()
-                    ] = $playerModel;
+                    $playersByUser[$playerModel->getUserId()] = $playerModel;
                 }
 
                 foreach ($figures as $figureRow) {
@@ -1003,21 +1026,25 @@ final class GameModel extends BaseModel {
     }
 
     // Get all games new
-    public static function getAllGamesNew(): array {
-        return self::findGames(true, false); 
+    public static function getAllGamesNew(): array
+    {
+        return self::findGames(true, false);
     }
 
     // Get all open games new
-    public static function getAllOpenGamesNew(): array {
-        return self::findGames(true, false, [], ["g.status = :status"], ["status" => Application::STATUS_WAITING]); 
+    public static function getAllOpenGamesNew(): array
+    {
+        return self::findGames(true, false, [], ["g.status = :status"], ["status" => Application::STATUS_WAITING]);
     }
     // Database - Get all games created by the given user
-    public static function getAllGamesCreatedByUserNew(string $user_id): array {
-        return self::findGames(true, false, [], ["g.created_by_user_id = :user_id"], ["user_id" => $user_id]); 
+    public static function getAllGamesCreatedByUserNew(string $user_id): array
+    {
+        return self::findGames(true, false, [], ["g.created_by_user_id = :user_id"], ["user_id" => $user_id]);
     }
 
     // Database - Get all games with the given user as an participant
-    public static function getAllGamesWithUserParticipatingNew(string $user_id): array {
+    public static function getAllGamesWithUserParticipatingNew(string $user_id): array
+    {
         return self::findGames(
             true,
             false,
@@ -1045,7 +1072,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Get all games with given user involved
-    public static function getAllGamesWithUserInvolvedNew(string $user_id): array {
+    public static function getAllGamesWithUserInvolvedNew(string $user_id): array
+    {
         return self::findGames(
             true,
             false,
@@ -1080,7 +1108,8 @@ final class GameModel extends BaseModel {
     }
 
     // Get all games
-    public static function getAllGames(): array {
+    public static function getAllGames(): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT 
@@ -1115,40 +1144,40 @@ final class GameModel extends BaseModel {
                     ON g.%s = p.%s 
                 GROUP BY g.%s
                 ORDER BY g.%s DESC",
-                
+
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::IS_TEST_GAME, 
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
+                Application::IS_TEST_GAME,
                 Application::CREATED_AT,
-                Application::UPDATED_AT, 
+                Application::UPDATED_AT,
                 Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
                 Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
+                Application::TABLE_USERS,
                 Application::CREATED_BY_USER_ID,
-                Application::ID, 
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
+
                 Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
@@ -1161,7 +1190,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Get all open game available to join
-    public static function getAllOpenGames(): array {
+    public static function getAllOpenGames(): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT 
@@ -1197,40 +1227,40 @@ final class GameModel extends BaseModel {
                 WHERE g.%s = :status
                 GROUP BY g.%s
                 ORDER BY g.%s DESC",
-                
+
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::IS_TEST_GAME, 
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
+                Application::IS_TEST_GAME,
                 Application::CREATED_AT,
-                Application::UPDATED_AT, 
+                Application::UPDATED_AT,
                 Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
                 Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
+                Application::TABLE_USERS,
                 Application::CREATED_BY_USER_ID,
-                Application::ID, 
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
+
                 Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
@@ -1245,7 +1275,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Get all games created by the given user
-    public static function getAllGamesCreatedByUser(string $user_id): array {
+    public static function getAllGamesCreatedByUser(string $user_id): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT 
@@ -1281,40 +1312,40 @@ final class GameModel extends BaseModel {
                 WHERE g.%s = :created_by_user_id
                 GROUP BY g.%s
                 ORDER BY g.%s DESC",
-                
+
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::IS_TEST_GAME, 
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
+                Application::IS_TEST_GAME,
                 Application::CREATED_AT,
-                Application::UPDATED_AT, 
+                Application::UPDATED_AT,
                 Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
                 Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
+                Application::TABLE_USERS,
                 Application::CREATED_BY_USER_ID,
-                Application::ID, 
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
+
                 Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
@@ -1329,7 +1360,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Get all games with the given user as an participant
-    public static function getAllGamesWithUserParticipating(string $user_id): array {
+    public static function getAllGamesWithUserParticipating(string $user_id): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT 
@@ -1365,40 +1397,40 @@ final class GameModel extends BaseModel {
                 WHERE p.%s = :user_id
                 GROUP BY g.%s
                 ORDER BY g.%s DESC",
-                
+
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::IS_TEST_GAME, 
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
+                Application::IS_TEST_GAME,
                 Application::CREATED_AT,
-                Application::UPDATED_AT, 
+                Application::UPDATED_AT,
                 Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
                 Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
+                Application::TABLE_USERS,
                 Application::CREATED_BY_USER_ID,
-                Application::ID, 
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
+
                 Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
@@ -1413,7 +1445,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Get all games with given user involved
-    public static function getAllGamesWithUserInvolved(string $user_id): array{
+    public static function getAllGamesWithUserInvolved(string $user_id): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT 
@@ -1449,46 +1482,46 @@ final class GameModel extends BaseModel {
                 WHERE p.%s = :user_id OR g.%s = :user_id
                 GROUP BY g.%s
                 ORDER BY g.%s DESC",
-                
+
                 Application::ID,
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
                 Application::USERNAME,
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
-                Application::IS_TEST_GAME, 
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
+                Application::IS_TEST_GAME,
                 Application::CREATED_AT,
-                Application::UPDATED_AT, 
+                Application::UPDATED_AT,
                 Application::USER_ID,
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
                 Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
+                Application::TABLE_USERS,
                 Application::CREATED_BY_USER_ID,
-                Application::ID, 
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
-                
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
+
                 Application::TABLE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
                 Application::USER_ID,
-                Application::CREATED_BY_USER_ID, 
+                Application::CREATED_BY_USER_ID,
                 Application::ID,
                 Application::CREATED_AT
             ),
@@ -1498,7 +1531,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Find game by id
-    public static function findById(string $game_id): ?self {
+    public static function findById(string $game_id): ?self
+    {
         $row = static::fetchOne(
             sprintf(
                 "SELECT 
@@ -1521,33 +1555,33 @@ final class GameModel extends BaseModel {
                 LEFT JOIN %s r
                     ON g.%s = r.%s
                 WHERE g.%s = :game_id 
-                LIMIT 1", 
+                LIMIT 1",
 
-                Application::USERNAME, 
-                Application::ALLOW_BOTS, 
-                Application::ALL_FIGURES_START_AT_HOME, 
-                Application::LEAVE_HOME_ATTEMPT, 
-                Application::LEAVE_HOME_ATTEMPTS_MAX, 
-                Application::EXTRA_ROLL_ON_SIX_LIMIT, 
-                Application::FORCE_LEAVING_HOME_ON_SIX, 
-                Application::FORCE_CAPTURE_ENEMY_FIGURES, 
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW, 
-                Application::ALLOW_STACK_OWN_FIGURES, 
-                Application::STRICT_GOAL_ORDER, 
-                Application::START_FIELD_MUST_BE_CLEARED, 
+                Application::USERNAME,
+                Application::ALLOW_BOTS,
+                Application::ALL_FIGURES_START_AT_HOME,
+                Application::LEAVE_HOME_ATTEMPT,
+                Application::LEAVE_HOME_ATTEMPTS_MAX,
+                Application::EXTRA_ROLL_ON_SIX_LIMIT,
+                Application::FORCE_LEAVING_HOME_ON_SIX,
+                Application::FORCE_CAPTURE_ENEMY_FIGURES,
+                Application::FORCE_EXTRA_LAP_ON_OVERFLOW,
+                Application::ALLOW_STACK_OWN_FIGURES,
+                Application::STRICT_GOAL_ORDER,
+                Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES, 
+                Application::TABLE_GAMES,
 
-                Application::TABLE_USERS, 
-                Application::CREATED_BY_USER_ID, 
-                Application::ID, 
+                Application::TABLE_USERS,
+                Application::CREATED_BY_USER_ID,
+                Application::ID,
 
-                Application::TABLE_RULES, 
-                Application::ID, 
-                Application::GAME_ID, 
+                Application::TABLE_RULES,
+                Application::ID,
+                Application::GAME_ID,
 
                 Application::ID
-            ), 
+            ),
             ['game_id' => $game_id]
         );
 
@@ -1572,22 +1606,22 @@ final class GameModel extends BaseModel {
                     s.%s
                 FROM %s s
                 WHERE s.%s = :game_id
-                LIMIT 1", 
+                LIMIT 1",
 
-                Application::GAME_ID, 
-                Application::CURRENT_PLAYER_INDEX, 
-                Application::CURRENT_DICE_ROLL, 
-                Application::CURRENT_TURN_COUNTER, 
-                Application::LEAVE_HOME_ATTEMPTS_USED, 
-                Application::EXTRA_ROLLS_ON_SIX_USED, 
-                Application::WINNER_USER_ID, 
-                Application::CREATED_AT, 
-                Application::UPDATED_AT, 
+                Application::GAME_ID,
+                Application::CURRENT_PLAYER_INDEX,
+                Application::CURRENT_DICE_ROLL,
+                Application::CURRENT_TURN_COUNTER,
+                Application::LEAVE_HOME_ATTEMPTS_USED,
+                Application::EXTRA_ROLLS_ON_SIX_USED,
+                Application::WINNER_USER_ID,
+                Application::CREATED_AT,
+                Application::UPDATED_AT,
 
-                Application::TABLE_STATE, 
+                Application::TABLE_STATE,
 
                 Application::GAME_ID
-            ), 
+            ),
             ['game_id' => $game_id]
         );
 
@@ -1607,25 +1641,25 @@ final class GameModel extends BaseModel {
                 JOIN %s u
                     ON p.%s = u.%s
                 WHERE p.%s = :game_id
-                ORDER BY p.%s ASC", 
+                ORDER BY p.%s ASC",
 
-                Application::GAME_ID, 
-                Application::USER_ID, 
-                Application::PLAYER_INDEX, 
-                Application::USERNAME, 
-                Application::CREATED_AT, 
-                Application::UPDATED_AT, 
+                Application::GAME_ID,
+                Application::USER_ID,
+                Application::PLAYER_INDEX,
+                Application::USERNAME,
+                Application::CREATED_AT,
+                Application::UPDATED_AT,
 
-                Application::TABLE_PLAYERS, 
+                Application::TABLE_PLAYERS,
 
-                Application::TABLE_USERS, 
-                Application::USER_ID, 
-                Application::ID, 
+                Application::TABLE_USERS,
+                Application::USER_ID,
+                Application::ID,
 
-                Application::GAME_ID, 
+                Application::GAME_ID,
 
                 Application::CREATED_AT
-            ), 
+            ),
             ['game_id' => $game_id]
         );
 
@@ -1643,17 +1677,17 @@ final class GameModel extends BaseModel {
                     f.%s, 
                     f.%s 
                 FROM %s f
-                WHERE f.%s = :game_id", 
+                WHERE f.%s = :game_id",
 
-                Application::GAME_ID, 
-                Application::USER_ID, 
-                Application::FIGURE_INDEX, 
-                Application::POSITION, 
-                Application::AREA, 
-                Application::CREATED_AT, 
+                Application::GAME_ID,
+                Application::USER_ID,
+                Application::FIGURE_INDEX,
+                Application::POSITION,
+                Application::AREA,
+                Application::CREATED_AT,
                 Application::UPDATED_AT,
 
-                Application::TABLE_FIGURES, 
+                Application::TABLE_FIGURES,
                 Application::GAME_ID
             ),
             ['game_id' => $game_id]
@@ -1672,12 +1706,13 @@ final class GameModel extends BaseModel {
                 $players_by_user_id[$user_id]->addFigure($figure);
             }
         }
-        
+
         return $game;
     }
 
     // Database - Find game by name
-    public static function findByName(string $game_name): ?self {
+    public static function findByName(string $game_name): ?self
+    {
         $row = static::fetchAll(
             "SELECT * FROM games WHERE name = :name LIMIT 1",
             ['name' => $game_name]
@@ -1686,12 +1721,14 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Count all games
-    public static function countAll() : int {
+    public static function countAll(): int
+    {
         return static::count("SELECT COUNT(*) FROM games");
     }
 
     // Database - Count all games with specific status
-    public static function countByStatus(string $status): int {
+    public static function countByStatus(string $status): int
+    {
         return static::count(
             "SELECT COUNT(*) FROM games WHERE status = :status",
             ['status' => $status]
@@ -1699,7 +1736,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Create new game
-    public function create(string $user_id, string $game_name, array $game_options, array $rules): ?string {
+    public function create(string $user_id, string $game_name, array $game_options, array $rules): ?string
+    {
         $game_id = self::generateUUID();
 
         // Standard games are no test games
@@ -1715,19 +1753,19 @@ final class GameModel extends BaseModel {
                     VALUES (:id, :name, :created_by_user_id, :status, :is_private, :is_locked, :is_test_game, NOW(), NOW())",
                     Application::TABLE_GAMES,
                     Application::ID,
-                    Application::NAME, 
+                    Application::NAME,
                     Application::CREATED_BY_USER_ID,
-                    Application::STATUS, 
-                    Application::IS_PRIVATE, 
-                    Application::IS_LOCKED, 
+                    Application::STATUS,
+                    Application::IS_PRIVATE,
+                    Application::IS_LOCKED,
                     Application::IS_TEST_GAME
                 ),
                 [
                     'id' => $game_id,
-                    'name' => $game_name, 
+                    'name' => $game_name,
                     'created_by_user_id' => $user_id,
-                    'status' => Application::STATUS_WAITING, 
-                    'is_private' => $game_options[Application::IS_PRIVATE], 
+                    'status' => Application::STATUS_WAITING,
+                    'is_private' => $game_options[Application::IS_PRIVATE],
                     'is_locked' => 0,   // newly created games have to be unlocked     // $game_options[Application::IS_LOCKED],        // ToDo: remove this comments, since creating locked games is obsolete
                     'is_test_game' => $game_options[Application::IS_TEST_GAME]
                 ]
@@ -1750,12 +1788,14 @@ final class GameModel extends BaseModel {
     }
 
     // Save current game state - only the GameModel
-    public function save(): bool {
+    public function save(): bool
+    {
         return $this->updateGame($this->toArray());
     }
 
     // Database - Update current state of the game
-    private function updateGame(array $game_array) {
+    private function updateGame(array $game_array)
+    {
         return static::execute(
             sprintf(
                 "UPDATE 
@@ -1767,30 +1807,32 @@ final class GameModel extends BaseModel {
                     is_private = :is_private, 
                     is_locked = :is_locked 
                 WHERE 
-                    id = :id", 
-                
-                Application::TABLE_GAMES, 
+                    id = :id",
 
-                Application::NAME, 
-                Application::CREATED_BY_USER_ID, 
-                Application::STATUS, 
-                Application::IS_PRIVATE, 
-                Application::IS_LOCKED, 
+                Application::TABLE_GAMES,
+
+                Application::NAME,
+                Application::CREATED_BY_USER_ID,
+                Application::STATUS,
+                Application::IS_PRIVATE,
+                Application::IS_LOCKED,
 
                 Application::ID
-            ), [
-                'name' => $game_array[Application::NAME], 
-                'created_by_user_id' => $game_array[Application::CREATED_BY_USER_ID], 
-                'status' => $game_array[Application::STATUS], 
-                'is_private' => (int)$game_array[Application::IS_PRIVATE], 
-                'is_locked' => (int)$game_array[Application::IS_LOCKED], 
+            ),
+            [
+                'name' => $game_array[Application::NAME],
+                'created_by_user_id' => $game_array[Application::CREATED_BY_USER_ID],
+                'status' => $game_array[Application::STATUS],
+                'is_private' => (int)$game_array[Application::IS_PRIVATE],
+                'is_locked' => (int)$game_array[Application::IS_LOCKED],
                 'id' => $game_array[Application::ID]
             ]
         );
     }
 
     // Database - Update game 
-    public function update(string $game_name, array $game_data, array $rule_set): bool {
+    public function update(string $game_name, array $game_data, array $rule_set): bool
+    {
         try {
             $this->db->beginTransaction();
 
@@ -1798,24 +1840,25 @@ final class GameModel extends BaseModel {
             $this->rule_set_model->update($this->id, $rule_set);
 
             $this->db->commit();
-        
+
             // Logging
             Logger::app()->info('Game updated: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId()]);
 
             return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
-        
+
             // Logging
             Logger::app()->warning('Couldn\'t update game: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId(), 'error' => $e]);
-            
+
             //throw $e;
             return false;
         }
     }
 
     // Database - Update game data
-    public function updateGameData(string $game_name, array $game_options): void {
+    public function updateGameData(string $game_name, array $game_options): void
+    {
         $this->db->execute(
             sprintf(
                 "UPDATE games 
@@ -1824,17 +1867,19 @@ final class GameModel extends BaseModel {
                     is_private = :is_private, 
                     is_locked = :is_locked 
                 WHERE id = :id"
-            ), [
-                'id' => $this->id, 
-                'name' => $game_name, 
-                'is_private' => $game_options['is_private'], 
+            ),
+            [
+                'id' => $this->id,
+                'name' => $game_name,
+                'is_private' => $game_options['is_private'],
                 'is_locked' => $game_options['is_locked']
             ]
         );
     }
 
     // Database - Update game status
-    public function updateStatus(string $status): void {
+    public function updateStatus(string $status): void
+    {
         static::execute(
             sprintf(
                 "UPDATE 
@@ -1844,8 +1889,8 @@ final class GameModel extends BaseModel {
                 WHERE
                     %s = :game_id",
 
-                Application::TABLE_GAMES, 
-                Application::STATUS, 
+                Application::TABLE_GAMES,
+                Application::STATUS,
                 Application::ID
             ),
             [
@@ -1856,7 +1901,8 @@ final class GameModel extends BaseModel {
     }
 
     // Database - Delete game
-    public function delete(): bool {
+    public function delete(): bool
+    {
         try {
             $this->db->beginTransaction();
 
@@ -1869,14 +1915,14 @@ final class GameModel extends BaseModel {
             );
 
             $this->db->commit();
-        
+
             // Logging
             Logger::app()->info('Game deleted: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId()]);
 
             return true;
         } catch (Exception $e) {
             $this->db->rollBack();
-        
+
             // Logging
             Logger::app()->warning('Couldn\'t delete game: ' . $this->getId(), ['user_id' => Auth::user()->getId(), 'game_id' => $this->getId(), 'error' => $e]);
 
@@ -1889,33 +1935,38 @@ final class GameModel extends BaseModel {
      * Game 
      * */
     // Game - Update game status helper - Start game
-    public function startGame(): void {
+    public function startGame(): void
+    {
         $this->updateStatus(Application::STATUS_RUNNING);
         $this->setStatus(Application::STATUS_RUNNING);
-        $this->lockGame(); 
+        $this->lockGame();
     }
 
     // Game - Update game status helper - finish game
-    public function finishGame(): void {
+    public function finishGame(): void
+    {
         $this->updateStatus(Application::STATUS_FINISHED);
         $this->setStatus(Application::STATUS_FINISHED);
     }
 
     // Game - Update game status helper - Set game to waiting
     // ToDo: Remove, since pausing a game is obsolete
-    public function pauseGame(): void {
+    public function pauseGame(): void
+    {
         $this->updateStatus(Application::STATUS_WAITING);
         $this->setStatus(Application::STATUS_WAITING);
     }
 
     // Game - Update game status helper - Cancel game
-    public function cancelGame(): void {
+    public function cancelGame(): void
+    {
         $this->updateStatus(Application::STATUS_CANCELLED);
         $this->setStatus(Application::STATUS_CANCELLED);
     }
 
     // Game - Reset Game State, Figures and Game Status helper
-    public function resetGame(): bool {
+    public function resetGame(): bool
+    {
         try {
             $this->db->beginTransaction();
             // Reset game state
@@ -1929,44 +1980,47 @@ final class GameModel extends BaseModel {
             // Set game to waiting
             $this->updateStatus(Application::STATUS_WAITING);
             $this->setStatus(Application::STATUS_WAITING);
-            $this->unlockGame(); 
+            $this->unlockGame();
             GameHistoryModel::resetByGameId($this->id);
             $this->save();
             $this->db->commit();
-            return true; 
+            return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
             //throw$e;
-            return false; 
+            return false;
         }
     }
 
     // Game - Lock game - set is_locked to true
-    public function lockGame(): void {
-        $this->is_locked = true; 
-        $this->save(); 
+    public function lockGame(): void
+    {
+        $this->is_locked = true;
+        $this->save();
     }
 
     // Game - Unlock game - set is_locked to false
-    public function unlockGame(): void {
-        $this->is_locked = false; 
-        $this->save(); 
+    public function unlockGame(): void
+    {
+        $this->is_locked = false;
+        $this->save();
     }
 
     // Game - Join game - player 
-    public function join(string $user_id): bool {
+    public function join(string $user_id): bool
+    {
         if ($this->status !== Application::STATUS_WAITING) {
-            return false; 
+            return false;
             throw new DomainException('Game cannot be joined');
         }
 
         if ($this->hasPlayer($user_id)) {
-            return false; 
+            return false;
             throw new DomainException('User already joined');
         }
 
         if ($this->getPlayerCount() >= $this->getPlayerMax()) {
-            return false; 
+            return false;
             throw new DomainException('Game is full');
         }
 
@@ -1977,7 +2031,7 @@ final class GameModel extends BaseModel {
             GameStatePlayerModel::addPlayer($this->getId(), $user_id, $this->getPlayerCount(), $this->rule_set_model->getAllFiguresStartAtHome());
 
             $this->db->commit();
-            
+
             return true;
         } catch (Throwable $e) {
             $this->db->rollBack();
@@ -1986,7 +2040,8 @@ final class GameModel extends BaseModel {
     }
 
     // Game - Leave game - player
-    public function leave(string $user_id): bool {
+    public function leave(string $user_id): bool
+    {
         if ($this->status === Application::STATUS_RUNNING) {
             throw new DomainException('Game leave now');
         }
@@ -2000,7 +2055,7 @@ final class GameModel extends BaseModel {
 
             GameStateFigureModel::removeAllUserFigures($this->getId(), $user_id);
             GameStatePlayerModel::removePlayer($this->getId(), $user_id);
-            
+
             $this->db->commit();
             return true;
         } catch (Throwable $e) {
@@ -2013,58 +2068,61 @@ final class GameModel extends BaseModel {
      * Helper
      */
     // Helper - Get Game State Snapshot
-    public function getGameStateSnapshot(): array {
+    public function getGameStateSnapshot(): array
+    {
         $players = [];
 
-        foreach($this->getAllPlayers() as $player) {
+        foreach ($this->getAllPlayers() as $player) {
             $figures = [];
 
             foreach ($player->getAllFigures() as $figure) {
                 $figures[] = [
-                    Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(), 
-                    Application::DTO_AREA => $figure->getArea(), 
+                    Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(),
+                    Application::DTO_AREA => $figure->getArea(),
                     //Application::DTO_POSITION => $figure->getPosition()
                     Application::DTO_POSITION => ($this->getAbsoluteFieldPosition($player, $figure)) ?? $figure->getPosition()
                 ];
             }
 
             $players[] = [
-                Application::DTO_USER_ID => $player->getUserId(), 
-                Application::DTO_PLAYER_INDEX => $player->getPlayerIndex(), 
-                Application::DTO_USERNAME => $player->getUsername(), 
+                Application::DTO_USER_ID => $player->getUserId(),
+                Application::DTO_PLAYER_INDEX => $player->getPlayerIndex(),
+                Application::DTO_USERNAME => $player->getUsername(),
                 Application::DTO_FIGURES => $figures
             ];
         }
 
         return [
-            Application::DTO_GAME_ID => $this->getId(), 
-            Application::DTO_GAME_NAME => $this->getName(), 
-            Application::DTO_GAME_STATUS => $this->getStatus(), 
-            Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(), 
-            Application::DTO_CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(), 
-            Application::DTO_CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(), 
-            Application::DTO_WINNER_USER_ID => $this->state_model->getWinnerUserId(), 
-            Application::DTO_WINNER_PLAYER_INDEX => $this->getWinnerPlayerIndex(), 
-            Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(), 
+            Application::DTO_GAME_ID => $this->getId(),
+            Application::DTO_GAME_NAME => $this->getName(),
+            Application::DTO_GAME_STATUS => $this->getStatus(),
+            Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(),
+            Application::DTO_CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(),
+            Application::DTO_CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(),
+            Application::DTO_WINNER_USER_ID => $this->state_model->getWinnerUserId(),
+            Application::DTO_WINNER_PLAYER_INDEX => $this->getWinnerPlayerIndex(),
+            Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(),
             Application::DTO_PLAYERS => $players
         ];
     }
 
     // Helper - Convert db rows to GameModel dynamically
-    private static function fromArrayDynamic(array $row): self {
+    private static function fromArrayDynamic(array $row): self
+    {
         $game = new self();
 
         foreach ($row as $key => $value) {
-            $game->{$key} = $value; 
+            $game->{$key} = $value;
         }
         return $game;
     }
 
     // Helper - Convert db rows to GameModel strict
-    private static function fromArray(array $row): self {
+    private static function fromArray(array $row): self
+    {
         $game = new self();
         $game->id = $row['id'];
-        $game->name = $row['name'] ?? null; 
+        $game->name = $row['name'] ?? null;
         $game->created_by_user_id = $row['created_by_user_id'] ?? null;
         $game->status = $row['status'] ?? null;
         $game->is_private = $row['is_private'] ?? null;
@@ -2082,7 +2140,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Create Array from GameModel
-    private function toArray(): array {
+    private function toArray(): array
+    {
         $game_array[Application::ID] = $this->id;
         $game_array[Application::NAME] = $this->name;
         $game_array[Application::CREATED_BY_USER_ID] = $this->created_by_user_id;
@@ -2095,7 +2154,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Get Winner 
-    public function getWinner(): ?GameStatePlayerModel {
+    public function getWinner(): ?GameStatePlayerModel
+    {
         if ($this->state_model->getWinnerUserId() === null) {
             return null;
         }
@@ -2110,11 +2170,12 @@ final class GameModel extends BaseModel {
 
     public function isWinner(UserModel $user): bool
     {
-        return $user->getId() === $this->state_model->getWinnerUserId(); 
+        return $user->getId() === $this->state_model->getWinnerUserId();
     }
 
     // Helper - Get Winner Player Index
-    private function getWinnerPlayerIndex(): ?int {
+    private function getWinnerPlayerIndex(): ?int
+    {
         if ($this->state_model->getWinnerUserId() === null) {
             return null;
         }
@@ -2128,52 +2189,62 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Status is waiting
-    public function isWaiting() : bool {
+    public function isWaiting(): bool
+    {
         return $this->status === Application::STATUS_WAITING;
     }
 
     // Helper - Status is running
-    public function isRunning() : bool {
+    public function isRunning(): bool
+    {
         return $this->status === Application::STATUS_RUNNING;
     }
 
     // Helper - Status is finished
-    public function isFinished() : bool {
+    public function isFinished(): bool
+    {
         return $this->status === Application::STATUS_FINISHED;
     }
 
     // Helper - Status is cancelled
-    public function isCancelled() : bool {
+    public function isCancelled(): bool
+    {
         return $this->status === Application::STATUS_CANCELLED;
     }
 
     // Helper - Is private
-    public function isPrivate() : bool {
+    public function isPrivate(): bool
+    {
         return $this->is_private;
     }
 
     // Helper - Is locked
-    public function isLocked() : bool {
+    public function isLocked(): bool
+    {
         return $this->is_locked;
     }
 
     // Helper -  Is solo test game
-    public function isTestGame(): bool {
+    public function isTestGame(): bool
+    {
         return $this->is_test_game;
     }
 
     // Helper - Check for available player slots
-    public function isFull(): bool {
+    public function isFull(): bool
+    {
         return $this->getPlayerCount() >= $this->getPlayerMax();
     }
 
     // Helper - get player offset
-    public function getPlayerStartOffset(int $player_index): int {
-        return ( self::FIELD_LENGTH / self::PLAYERS_MAX ) * $player_index;
+    public function getPlayerStartOffset(int $player_index): int
+    {
+        return (self::FIELD_LENGTH / self::PLAYERS_MAX) * $player_index;
     }
 
     // Helper - Check if given user is already a player of the game
-    public function isParticipant(UserModel $user): bool {
+    public function isParticipant(UserModel $user): bool
+    {
         // ToDo: Implement
         $user_id = $user->getId();
         for ($i = 0; $i < count($this->player_array); $i++) {
@@ -2186,7 +2257,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check if given user is creator of the game
-    public function isCreator(UserModel $user): bool {
+    public function isCreator(UserModel $user): bool
+    {
         if ($this->created_by_user_id === $user->getId()) {
             return true;
         }
@@ -2194,7 +2266,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check if this game has participants
-    public function hasParticipants(): bool {
+    public function hasParticipants(): bool
+    {
         if ($this->getPlayerCount() > 0) {
             return true;
         }
@@ -2202,7 +2275,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check if user is already player in game
-    public function hasPlayer(string $user_id): bool {
+    public function hasPlayer(string $user_id): bool
+    {
         foreach ($this->player_array as $player) {
             if ($player->getUserId() === $user_id) {
                 return true;
@@ -2212,12 +2286,14 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Get current player
-    public function getCurrentPlayer(): GameStatePlayerModel {
+    public function getCurrentPlayer(): GameStatePlayerModel
+    {
         return $this->getPlayerByPlayerIndex($this->getStateModel()->getCurrentPlayerIndex());
     }
 
     // Helper - Is players turn
-    public function isPlayersTurn(UserModel $user): bool{
+    public function isPlayersTurn(UserModel $user): bool
+    {
         if ($this->getCurrentPlayer()->getUserId() === $user->getId()) {
             return true;
         }
@@ -2225,24 +2301,25 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Clone existing game
-    public function cloneGameWithOnePlayer(): ?string {
+    public function cloneGameWithOnePlayer(): ?string
+    {
         if ($this->is_test_game) {
             return null;
         }
-        
+
         $game_user_id = $this->getCreatedByUserId();
         $game_name = 'Solo Test - ' . $this->name;
 
         $game_options = [
-            Application::IS_PRIVATE => (int)$this->IsPrivate(), 
-            Application::IS_LOCKED => (int)$this->isLocked(), 
+            Application::IS_PRIVATE => (int)$this->IsPrivate(),
+            Application::IS_LOCKED => (int)$this->isLocked(),
             Application::IS_TEST_GAME => 1,
         ];
 
         $rule_set = [
             Application::ALLOW_BOTS => $this->rule_set_model->getAllowBots(),
-            Application::LEAVE_HOME_ATTEMPT => $this->rule_set_model->getLeaveHomeAttemptVariant(), 
-            Application::LEAVE_HOME_ATTEMPTS_MAX => $this->rule_set_model->getLeaveHomeAttemptsMax(), 
+            Application::LEAVE_HOME_ATTEMPT => $this->rule_set_model->getLeaveHomeAttemptVariant(),
+            Application::LEAVE_HOME_ATTEMPTS_MAX => $this->rule_set_model->getLeaveHomeAttemptsMax(),
             Application::EXTRA_ROLL_ON_SIX_LIMIT => $this->rule_set_model->getExtraRollOnSixLimit(),
             Application::FORCE_EXTRA_LAP_ON_OVERFLOW => $this->rule_set_model->getForceExtraLapOnOverflow(),
             Application::ALLOW_STACK_OWN_FIGURES => $this->rule_set_model->getAllowStackOwnFigures(),
@@ -2254,12 +2331,14 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Can user use triple roll
-    public function canUseTripleRoll($user): bool {
+    public function canUseTripleRoll($user): bool
+    {
         return true;
     }
 
     // Helper - has any available move
-    private function hasAvailableMoves(GameStatePlayerModel $player, int $dice_value): bool {
+    private function hasAvailableMoves(GameStatePlayerModel $player, int $dice_value): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($this->canMoveFigure($player, $figure, $dice_value)) {
                 return true;
@@ -2269,14 +2348,15 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check is move is already in list
-    private function isMoveInList(array $move, array $available_moves): bool {
+    private function isMoveInList(array $move, array $available_moves): bool
+    {
         foreach ($available_moves as $available_move) {
             if (
-                $move[Application::DTO_FIGURE_INDEX] === $available_move[Application::DTO_FIGURE_INDEX] 
-                && $move[Application::DTO_TO][Application::DTO_AREA] === $available_move[Application::DTO_TO][Application::DTO_AREA] 
-                && ($move[Application::DTO_TO][Application::DTO_POSITION] ?? null) === ($available_move[Application::DTO_TO][Application::DTO_POSITION] ?? null) 
-                && ($move[Application::DTO_IS_KICK] ?? false) === ($available_move[Application::DTO_IS_KICK] ?? false) 
-                && ($move[Application::DTO_IS_GOAL_ENTRY] ?? null) === ($available_move[Application::DTO_IS_GOAL_ENTRY] ?? null) 
+                $move[Application::DTO_FIGURE_INDEX] === $available_move[Application::DTO_FIGURE_INDEX]
+                && $move[Application::DTO_TO][Application::DTO_AREA] === $available_move[Application::DTO_TO][Application::DTO_AREA]
+                && ($move[Application::DTO_TO][Application::DTO_POSITION] ?? null) === ($available_move[Application::DTO_TO][Application::DTO_POSITION] ?? null)
+                && ($move[Application::DTO_IS_KICK] ?? false) === ($available_move[Application::DTO_IS_KICK] ?? false)
+                && ($move[Application::DTO_IS_GOAL_ENTRY] ?? null) === ($available_move[Application::DTO_IS_GOAL_ENTRY] ?? null)
                 && ($move[Application::DTO_IS_LAP_OVERFLOW] ?? null) === ($available_move[Application::DTO_IS_LAP_OVERFLOW] ?? null)
             ) {
                 return true;
@@ -2286,7 +2366,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Check if all figures are in home area
-    private function allFiguresInHome(GameStatePlayerModel $player): bool {
+    private function allFiguresInHome(GameStatePlayerModel $player): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() !== Application::AREA_HOME) {
                 return false;
@@ -2295,7 +2376,8 @@ final class GameModel extends BaseModel {
         return true;
     }
     // Helper - Checks if the player still has pieces in their home base.
-    private function hasFiguresInHome(GameStatePlayerModel $player): bool {
+    private function hasFiguresInHome(GameStatePlayerModel $player): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() === Application::AREA_HOME) {
                 return true;
@@ -2305,7 +2387,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Has no Figure on Board
-    private function hasNoFigureOnBoard(GameStatePlayerModel $player): bool {
+    private function hasNoFigureOnBoard(GameStatePlayerModel $player): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() === Application::AREA_FIELD) {
                 return false;
@@ -2315,7 +2398,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Has Figure on start field
-    private function hasFigureOnStartField(GameStatePlayerModel $player): bool {
+    private function hasFigureOnStartField(GameStatePlayerModel $player): bool
+    {
         foreach ($player->getAllFigures() as $figure) {
             if ($figure->getArea() === Application::AREA_FIELD && $figure->getPosition() === 0) {
                 return true;
@@ -2325,7 +2409,8 @@ final class GameModel extends BaseModel {
     }
 
     // Helper - Allowed to edit Rule all_figures_start_at_home
-    public function editAllowedRuleAllFiguresStartAtHome(): bool {
+    public function editAllowedRuleAllFiguresStartAtHome(): bool
+    {
         if ($this->hasParticipants()) {
             return false;
         }
@@ -2334,19 +2419,20 @@ final class GameModel extends BaseModel {
 
     // Helper - Debug State 
     // ToDo: check if this is ever used and useful!
-    public function getDebugState(string $user_id) {
+    public function getDebugState(string $user_id)
+    {
         if ($this->state_model->getCurrentDiceRoll() === null) {
             return [
-                Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(), 
-                Application::CURRENT_DICE_ROLL => 'NULL', 
-                Application::AVAILABLE_MOVES => [], 
+                Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(),
+                Application::CURRENT_DICE_ROLL => 'NULL',
+                Application::AVAILABLE_MOVES => [],
                 Application::EXTRA_ROLLS_ON_SIX_USED => $this->state_model->getExtraRollsOnSixUsed()
             ];
         }
         return [
-            Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(), 
-            Application::CURRENT_DICE_ROLL => $this->state_model->getCurrentDiceRoll(), 
-            Application::AVAILABLE_MOVES => $this->getAvailableMoves($user_id, $this->state_model->getCurrentDiceRoll()), 
+            Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(),
+            Application::CURRENT_DICE_ROLL => $this->state_model->getCurrentDiceRoll(),
+            Application::AVAILABLE_MOVES => $this->getAvailableMoves($user_id, $this->state_model->getCurrentDiceRoll()),
             Application::EXTRA_ROLLS_ON_SIX_USED => $this->state_model->getExtraRollsOnSixUsed()
         ];
     }
@@ -2355,32 +2441,38 @@ final class GameModel extends BaseModel {
      * Getter
      */
     // Get the value of id
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     // Get the value of id
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
     // Get the value of created_by_user_id
-    public function getCreatedByUserId() {
+    public function getCreatedByUserId()
+    {
         return $this->created_by_user_id;
     }
 
     // Get the value of created_by_user_name
-    public function getCreatedByUserName() {
+    public function getCreatedByUserName()
+    {
         return $this->created_by_user_name;
     }
 
     // Get number of maximum allowed player
-    public function getPlayerMax(): int {
+    public function getPlayerMax(): int
+    {
         return self::PLAYERS_MAX;
     }
 
     // Get the number of player of the game
-    public function getPlayerCount(): int {
+    public function getPlayerCount(): int
+    {
         if (isset($this->player_count)) {
             return $this->player_count;
         }
@@ -2388,60 +2480,70 @@ final class GameModel extends BaseModel {
     }
 
     // Get player count category by number of player of the game
-    public function getPlayerCountCategory(): string {
-        $count = (isset($this->player_count)) ? $this->player_count : count($this->player_array); 
+    public function getPlayerCountCategory(): string
+    {
+        $count = (isset($this->player_count)) ? $this->player_count : count($this->player_array);
 
         if ($count === 0) {
-            return Application::DTO_PLAYER_COUNT_EMPTY; 
-        } 
+            return Application::DTO_PLAYER_COUNT_EMPTY;
+        }
         if ($count === 1) {
-            return Application::DTO_PLAYER_COUNT_LOW; 
-        } 
-        return Application::DTO_PLAYER_COUNT_READY; 
+            return Application::DTO_PLAYER_COUNT_LOW;
+        }
+        return Application::DTO_PLAYER_COUNT_READY;
     }
 
     //Get the value of status
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
     // Get the value of created_at
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
 
     // Get the value of updated_at
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updated_at;
     }
 
     // Get Subset of Models - Future preparations 
     // Get the value of rule_set_model
-    public function getRuleSetModel(): GameRuleSetModel {
+    public function getRuleSetModel(): GameRuleSetModel
+    {
         return $this->rule_set_model;
     }
 
     // Get the value of state_model
-    public function getStateModel(): GameStateModel {
+    public function getStateModel(): GameStateModel
+    {
         return $this->state_model;
     }
 
     // Get array of all player in the game
-    public function getAllPlayers(): array {
+    public function getAllPlayers(): array
+    {
         return $this->player_array;
     }
-    
+
     // Get player given by player id
-    public function getPlayerById(string $player_id): GameStatePlayerModel {
+    public function getPlayerById(string $player_id): GameStatePlayerModel
+    {
         return GameStatePlayerModel::getPlayerById($this->id, $player_id);
     }
 
-    public function getPlayerIndexByPlayerId(string $player_id) {
+    public function getPlayerIndexByPlayerId(string $player_id)
+    {
         return $this->getPlayerById($player_id)->getPlayerIndex();
     }
-    
+
     // Get player given by player id
-    public function getPlayerByPlayerIndex(int $player_index): GameStatePlayerModel {
+    public function getPlayerByPlayerIndex(int $player_index): GameStatePlayerModel
+    {
         return GameStatePlayerModel::getPlayerByPlayerIndex($this->id, $player_index);
     }
 
@@ -2449,13 +2551,14 @@ final class GameModel extends BaseModel {
      * Setter
      */
     // Setter - Set status
-    public function setStatus(string $status): bool {
+    public function setStatus(string $status): bool
+    {
         if (
-            $status === Application::STATUS_CANCELLED 
-            || $status === Application::STATUS_FINISHED 
-            || $status === Application::STATUS_FINISHED 
-            || $status === Application::STATUS_RUNNING 
-            || $status === Application::STATUS_WAITING 
+            $status === Application::STATUS_CANCELLED
+            || $status === Application::STATUS_FINISHED
+            || $status === Application::STATUS_FINISHED
+            || $status === Application::STATUS_RUNNING
+            || $status === Application::STATUS_WAITING
         ) {
             $this->status = $status;
             return true;

@@ -4,33 +4,35 @@ namespace App\Core;
 
 use App\Core\Config\Env;
 
-class Asset {
+class Asset
+{
     private const MANIFEST_FILENAME = 'asset-manifest.json';
     private const MANIFEST_FULL_PATH = PUBLIC_PATH . '/' . self::MANIFEST_FILENAME;
-    protected static string $build_dir = __DIR__ . '/../..public'; 
+    protected static string $build_dir = __DIR__ . '/../..public';
 
     // Asset - Bust all asset files
-    public static function buildAssets(bool $create_manifest = false): void {
+    public static function buildAssets(bool $create_manifest = false): void
+    {
         if (!Env::isDev()) {
             return;
         }
 
         $directories = [
-            PUBLIC_PATH . '/js', 
-            PUBLIC_PATH . '/css', 
-            PUBLIC_PATH . '/images', 
+            PUBLIC_PATH . '/js',
+            PUBLIC_PATH . '/css',
+            PUBLIC_PATH . '/images',
         ];
 
         // 1. Look for files in directories
-        $files = []; 
+        $files = [];
         $newest_original = 0;
-        $oldest_busted = null; 
+        $oldest_busted = null;
         foreach ($directories as $dir) {
-            if (!is_dir($dir))  {
+            if (!is_dir($dir)) {
                 continue;
             }
 
-            $iterator = new \RecursiveIteratorIterator(( new \RecursiveDirectoryIterator($dir)));
+            $iterator = new \RecursiveIteratorIterator((new \RecursiveDirectoryIterator($dir)));
 
             foreach ($iterator as $file) {
                 // Skip already busted files
@@ -38,7 +40,7 @@ class Asset {
                     // save busted asset file age
                     $mtime = filemtime($file->getPathname());
                     if ($oldest_busted === null || $mtime < $oldest_busted) {
-                        $oldest_busted = $mtime; 
+                        $oldest_busted = $mtime;
                     }
                     continue;
                 }
@@ -57,17 +59,17 @@ class Asset {
 
         // 1.1 Early exit if no newer original then busted asset
         if ($oldest_busted !== null && $newest_original < $oldest_busted) {
-            return; 
+            return;
         }
 
         // 2. Create mapping (original to busted)
         $map = [];
         foreach ($files as $file_path) {
-            $relative_path = str_replace(PUBLIC_PATH . '/', '', $file_path); 
+            $relative_path = str_replace(PUBLIC_PATH . '/', '', $file_path);
             $info = pathinfo($file_path);
-            $hash = filemtime($file_path); 
-            $busted_name = $info['filename'] . '.' . $hash . '.' . $info['extension']; 
-            $busted_path = $info['dirname'] . '/' . $busted_name; 
+            $hash = filemtime($file_path);
+            $busted_name = $info['filename'] . '.' . $hash . '.' . $info['extension'];
+            $busted_path = $info['dirname'] . '/' . $busted_name;
             $map[$relative_path] = str_replace(PUBLIC_PATH . '/', '', $busted_path);
         }
 
@@ -129,14 +131,15 @@ class Asset {
         if ($create_manifest) {
             file_put_contents(
                 //PUBLIC_PATH . '/asset-manifest.json', 
-                self::MANIFEST_FULL_PATH, 
+                self::MANIFEST_FULL_PATH,
                 json_encode($map, JSON_PRETTY_PRINT)
             );
         }
     }
 
     // Delete old busted version of assets
-    private static function cleanupOldBustedVersions(string $relative_path): void {
+    private static function cleanupOldBustedVersions(string $relative_path): void
+    {
         $full_path = PUBLIC_PATH . '/' . $relative_path;
         $info = pathinfo($full_path);
         $pattern = $info['dirname'] . '/' . $info['filename'] . '.[0-9]*.' . $info['extension'];
@@ -148,8 +151,9 @@ class Asset {
     }
 
     // Asset - Get asset-url
-    public static function asset(string $path, bool $use_manifest = false): string {
-        $path = ltrim($path, '/'); 
+    public static function asset(string $path, bool $use_manifest = false): string
+    {
+        $path = ltrim($path, '/');
 
         // 1. Use manifest (optional)
         if ($use_manifest) {
@@ -157,7 +161,7 @@ class Asset {
             $manifest_path = self::MANIFEST_FULL_PATH;
 
             if (file_exists($manifest_path)) {
-                $manifest = json_decode(file_get_contents($manifest_path), true); 
+                $manifest = json_decode(file_get_contents($manifest_path), true);
 
                 if (isset($manifest[$path])) {
                     return '/' . $manifest[$path];
@@ -166,8 +170,8 @@ class Asset {
         }
 
         // 2. Look out for busted files without a manifest
-        $full_path = PUBLIC_PATH . '/' . $path; 
-        $info = pathinfo($full_path); 
+        $full_path = PUBLIC_PATH . '/' . $path;
+        $info = pathinfo($full_path);
         $pattern = $info['dirname'] . '/' . $info['filename'] . '.[0-9]*.' . $info['extension'];
         $matches = glob($pattern);
 
@@ -180,17 +184,20 @@ class Asset {
     }
 
     // Asset - Get asset-url in css
-    public static function css(string $path, bool $use_manifest = false): string {
-        return self::asset(CSS_PATH . '/' . $path, $use_manifest); 
+    public static function css(string $path, bool $use_manifest = false): string
+    {
+        return self::asset(CSS_PATH . '/' . $path, $use_manifest);
     }
 
     // Asset - Get asset-url in img
-    public static function img(string $path, bool $use_manifest = false): string {
-        return self::asset(IMG_PATH . '/' . $path, $use_manifest); 
+    public static function img(string $path, bool $use_manifest = false): string
+    {
+        return self::asset(IMG_PATH . '/' . $path, $use_manifest);
     }
 
     // Asset - Get asset-url in js
-    public static function js(string $path, bool $use_manifest = false): string {
-        return self::asset(JS_PATH . '/' . $path, $use_manifest); 
+    public static function js(string $path, bool $use_manifest = false): string
+    {
+        return self::asset(JS_PATH . '/' . $path, $use_manifest);
     }
 }

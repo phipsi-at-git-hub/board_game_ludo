@@ -7,21 +7,25 @@ use App\Constants\Application;
 use App\Models\System\SystemSettingsModel;
 use App\Models\User\UserModel;
 
-final class SystemService {
+final class SystemService
+{
     private SystemSettingsModel $settings;
 
-    public function __construct(?SystemSettingsModel $settings = null) {
+    public function __construct(?SystemSettingsModel $settings = null)
+    {
         $this->settings = $settings ?? SystemSettingsModel::findSystemSettings();
     }
 
     /**
      * Settings
      */
-    public function getSettings(): SystemSettingsModel {
+    public function getSettings(): SystemSettingsModel
+    {
         return $this->settings;
     }
 
-    public function reload(): SystemSettingsModel {
+    public function reload(): SystemSettingsModel
+    {
         $this->settings = SystemSettingsModel::findSystemSettings();
         return $this->settings;
     }
@@ -30,52 +34,62 @@ final class SystemService {
      * Basic state
      */
     // Helper - Is system settings valid
-    public function isValid(): bool {
+    public function isValid(): bool
+    {
         return $this->settings->isValid();
     }
 
     // Helper - Is system enabled
-    public function isSystemEnabled(): bool {
+    public function isSystemEnabled(): bool
+    {
         return $this->settings->getSystemEnabled();
     }
 
     // Helper - Is system disabled
-    public function isSystemDisabled(): bool {
+    public function isSystemDisabled(): bool
+    {
         return !$this->isSystemEnabled();
     }
 
     // Helper - Is loggings debugs enabled
-    public function isLoggingDebugEnabled(): bool {
-        return $this->settings->getLoggingDebugEnabled(); 
+    public function isLoggingDebugEnabled(): bool
+    {
+        return $this->settings->getLoggingDebugEnabled();
     }
 
     // Helper - Is user registration enabled enabled
-    public function isRegistrationEnabled(): bool {
+    public function isRegistrationEnabled(): bool
+    {
         return $this->settings->getRegistrationEnabled();
     }
 
     // Helper - Is user login enabled enabled
-    public function isLoginEnabled(): bool {
+    public function isLoginEnabled(): bool
+    {
         return $this->settings->getLoginEnabled();
     }
 
     // Helper - Is game creation enabled
-    public function isGameCreationEnabled(): bool {
+    public function isGameCreationEnabled(): bool
+    {
         return $this->settings->getGameCreationEnabled();
     }
 
     // Helper - Is game play enabled
-    public function isGamePlayEnabled(): bool {
+    public function isGamePlayEnabled(): bool
+    {
         return $this->settings->getGamePlayEnabled();
     }
 
     // Helper - Is maintenance mode enabled
-    public function isMaintenanceModeEnabled(): bool {
+    public function isMaintenanceModeEnabled(): bool
+    {
         return $this->settings->getMaintenanceModeEnabled();
     }
 
     // Helper - Is system notice enabled
-    public function isSystemNoticeEnabled(): bool {
+    public function isSystemNoticeEnabled(): bool
+    {
         return $this->settings->getSystemNoticeEnabled();
     }
 
@@ -83,22 +97,26 @@ final class SystemService {
      * Messages
      */
     // Helper - show maintenance message
-    public function getMaintenanceMessage(): ?string {
+    public function getMaintenanceMessage(): ?string
+    {
         return $this->settings->getMaintenanceMessage();
     }
 
     // Helper - show maintenance message as a string
-    public function getMaintenanceMessageString(): ?string {
+    public function getMaintenanceMessageString(): ?string
+    {
         return $this->settings->getMaintenanceMessageString();
     }
 
     // Helper - show system notice message
-    public function getSystemNoticeMessage(): ?string {
+    public function getSystemNoticeMessage(): ?string
+    {
         return $this->settings->getSystemNoticeMessage();
     }
 
     // Helper - show system notice message as a string
-    public function getSystemNoticeMessageString(): ?string {
+    public function getSystemNoticeMessageString(): ?string
+    {
         return $this->settings->getSystemNoticeMessageString();
     }
 
@@ -106,12 +124,14 @@ final class SystemService {
      * Metadata
      */
     // Helper - Updated at
-    public function getUpdatedAt(): string {
+    public function getUpdatedAt(): string
+    {
         return $this->settings->getUpdatedAt();
     }
 
     // Helper - Updated by
-    public function getUpdatedBy(): ?UserModel {
+    public function getUpdatedBy(): ?UserModel
+    {
         return UserModel::findById($this->settings->getUpdatedBy());
     }
 
@@ -119,22 +139,26 @@ final class SystemService {
      * Aggregated states
      */
     // Helper - Is authentication available
-    public function isAuthenticationEnabled(): bool {
+    public function isAuthenticationEnabled(): bool
+    {
         return ($this->isRegistrationEnabled() && $this->isLoginEnabled());
     }
 
     // Helper - Are games generally available
-    public function isGameEnabled(): bool {
+    public function isGameEnabled(): bool
+    {
         return ($this->isGameCreationEnabled() && $this->isGamePlayEnabled());
     }
 
     // Is any maintenance related state active
-    public function isMaintenanceActive(): bool {
+    public function isMaintenanceActive(): bool
+    {
         return ($this->isMaintenanceModeEnabled() || $this->isSystemNoticeEnabled()) || $this->isLoggingDebugEnabled();
     }
 
     // Is the system fully operational
-    public function isFullyOperational(): bool {
+    public function isFullyOperational(): bool
+    {
         return (
             $this->isSystemEnabled()
             && $this->isAuthenticationEnabled()
@@ -147,7 +171,8 @@ final class SystemService {
      * Status helpers
      */
     // Helper - Get system settings authentication status as String
-    public function getAuthenticationStatus(): string {
+    public function getAuthenticationStatus(): string
+    {
         if ($this->isRegistrationEnabled() && $this->isLoginEnabled()) {
             return Application::GENERAL_ON;
         }
@@ -159,7 +184,8 @@ final class SystemService {
     }
 
     // Helper - Get system settings games status as String
-    public function getGamesStatus(): string {
+    public function getGamesStatus(): string
+    {
         if ($this->isGameCreationEnabled() && $this->isGamePlayEnabled()) {
             return Application::GENERAL_ON;
         }
@@ -171,7 +197,8 @@ final class SystemService {
     }
 
     // Helper - Get system settings maintenance status as String
-    public function getMaintenanceStatus(): string {
+    public function getMaintenanceStatus(): string
+    {
         if ($this->isMaintenanceModeEnabled() && $this->isSystemNoticeEnabled()) {
             return Application::GENERAL_ON;
         }

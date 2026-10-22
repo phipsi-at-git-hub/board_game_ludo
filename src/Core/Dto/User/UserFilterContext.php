@@ -10,12 +10,12 @@ use App\Constants\Application;
  */
 final readonly class UserFilterContext
 {
-    public array $statuses; 
-    public array $roles; 
-    public ?string $dateRangeLastLogin; 
-    public int $users_count; 
-    public array $availableStatuses; 
-    public array $availableRoles; 
+    public array $statuses;
+    public array $roles;
+    public ?string $dateRangeLastLogin;
+    public int $users_count;
+    public array $availableStatuses;
+    public array $availableRoles;
 
     /**
      * __construct
@@ -25,30 +25,29 @@ final readonly class UserFilterContext
      * @return void
      */
     public function __construct(
-        array $statuses, 
-        array $roles, 
-        ?string $dateRangeLastLogin, 
-        array $users, 
-    )
-    {
-        $this->statuses = $statuses; 
-        $this->roles = $roles; 
-        $this->dateRangeLastLogin = $dateRangeLastLogin; 
-        $this->users_count = count($users); 
+        array $statuses,
+        array $roles,
+        ?string $dateRangeLastLogin,
+        array $users,
+    ) {
+        $this->statuses = $statuses;
+        $this->roles = $roles;
+        $this->dateRangeLastLogin = $dateRangeLastLogin;
+        $this->users_count = count($users);
 
         $this->availableStatuses = [
-            Application::ACTIVE, 
-            Application::INACTIVE, 
-            Application::CLOSED, 
-            Application::BLOCKED, 
-        ]; 
+            Application::ACTIVE,
+            Application::INACTIVE,
+            Application::CLOSED,
+            Application::BLOCKED,
+        ];
         $this->availableRoles = [
-            Application::USER, 
-            Application::ADMIN, 
-            Application::MODERATOR, 
-            Application::GAME_MASTER, 
-        ]; 
-    } 
+            Application::USER,
+            Application::ADMIN,
+            Application::MODERATOR,
+            Application::GAME_MASTER,
+        ];
+    }
 
     /**
      * fromFilter
@@ -58,20 +57,19 @@ final readonly class UserFilterContext
      * @return array
      */
     public static function fromFilter(
-        array $statuses, 
-        array $roles, 
-        ?string $dateRangeLastLogin, 
-        array $users, 
-    ): array
-    {
+        array $statuses,
+        array $roles,
+        ?string $dateRangeLastLogin,
+        array $users,
+    ): array {
         $context = new self(
-            statuses: $statuses, 
-            roles: $roles, 
-            dateRangeLastLogin: $dateRangeLastLogin, 
-            users: $users, 
-        ); 
-        return $context->jsonSerialize(); 
-    } 
+            statuses: $statuses,
+            roles: $roles,
+            dateRangeLastLogin: $dateRangeLastLogin,
+            users: $users,
+        );
+        return $context->jsonSerialize();
+    }
 
     /**
      * jsonSerialize
@@ -81,12 +79,12 @@ final readonly class UserFilterContext
     public function jsonSerialize(): array
     {
         return [
-            'statuses' => $this->statuses, 
-            'roles' => $this->roles, 
-            'date_range_last_login' => $this->dateRangeLastLogin, 
-            'users_count' => $this->users_count, 
-            'available_statuses' => $this->availableStatuses, 
-            'available_roles' => $this->availableRoles, 
-        ]; 
-    } 
+            'statuses' => $this->statuses,
+            'roles' => $this->roles,
+            'date_range_last_login' => $this->dateRangeLastLogin,
+            'users_count' => $this->users_count,
+            'available_statuses' => $this->availableStatuses,
+            'available_roles' => $this->availableRoles,
+        ];
+    }
 }

@@ -7,7 +7,8 @@ use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 
-final class Container {
+final class Container
+{
     /**
      * Registered bindings
      */
@@ -27,7 +28,8 @@ final class Container {
      *     fn(Container $container) => new SystemService()
      * );
      */
-    public function bind(string $abstract, callable $factory): void {
+    public function bind(string $abstract, callable $factory): void
+    {
         $this->bindings[$abstract] = [
             'factory' => $factory,
             'singleton' => false
@@ -40,7 +42,8 @@ final class Container {
      * Singleton means:
      * One instance during this request lifecycle.
      */
-    public function singleton(string $abstract, callable $factory): void {
+    public function singleton(string $abstract, callable $factory): void
+    {
         $this->bindings[$abstract] = [
             'factory' => $factory,
             'singleton' => true
@@ -50,14 +53,16 @@ final class Container {
     /**
      * Register an already created instance
      */
-    public function instance(string $abstract, mixed $instance): void {
+    public function instance(string $abstract, mixed $instance): void
+    {
         $this->instances[$abstract] = $instance;
     }
 
     /**
      * Resolve a dependency
      */
-    public function get(string $abstract): mixed {
+    public function get(string $abstract): mixed
+    {
         /*
          * Return existing singleton instance
          */
@@ -90,7 +95,8 @@ final class Container {
     /**
      * Check whether a binding exists
      */
-    public function has(string $abstract): bool {
+    public function has(string $abstract): bool
+    {
         return array_key_exists($abstract, $this->bindings) || array_key_exists($abstract, $this->instances);
     }
 
@@ -100,7 +106,8 @@ final class Container {
      * Useful for special cases,
      * but should rarely be required.
      */
-    public function forget(string $abstract): void {
+    public function forget(string $abstract): void
+    {
         unset($this->instances[$abstract]);
     }
 
@@ -109,7 +116,8 @@ final class Container {
      *
      * This allows simple classes without manual binding.
      */
-    private function resolve(string $class): mixed {
+    private function resolve(string $class): mixed
+    {
         try {
             $reflection = new ReflectionClass($class);
         } catch (ReflectionException $e) {
@@ -149,7 +157,8 @@ final class Container {
      *
      * Mainly useful for testing.
      */
-    public function clear(): void {
+    public function clear(): void
+    {
         $this->instances = [];
     }
 }

@@ -4,31 +4,37 @@ namespace App\Core;
 
 use App\Core\Config\Env;
 
-class Debug {
+class Debug
+{
     private static float $start_time;
     private static array $data = [];
 
-    public static function start(): void {
+    public static function start(): void
+    {
         self::$start_time = microtime(true);
     }
 
     // Set key value pairs
-    public static function set(string $key, mixed $value): void {
+    public static function set(string $key, mixed $value): void
+    {
         self::$data[$key] = $value;
     }
 
     // Set route debug info
-    public static function setRoute(string $method, string $uri, string $action): void {
+    public static function setRoute(string $method, string $uri, string $action): void
+    {
         self::set('route_info', "{$method} {$uri} → {$action}");
     }
 
     // Get all debug info
-    public static function all(): array {
+    public static function all(): array
+    {
         return self::$data;
     }
 
     // Render a toolbar
-    public static function render(): void {
+    public static function render(): void
+    {
         if (!Env::isDev()) {
             return;
         }

@@ -7,7 +7,8 @@ use App\Core\Logging\Logger;
 use App\Models\BaseModel;
 use Throwable;
 
-final class UserStatisticsModel extends BaseModel {
+final class UserStatisticsModel extends BaseModel
+{
     private string $user_id;
     private int $logins;
     private int $games_created;
@@ -22,7 +23,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param string $user_id
      * @return ?self
      */
-    public static function findByUserId(string $user_id): ?self {
+    public static function findByUserId(string $user_id): ?self
+    {
         $row = static::fetchOne(
             sprintf(
                 "SELECT * FROM %s WHERE %s = :user_id LIMIT 1",
@@ -44,7 +46,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param string $user_id
      * @return self
      */
-    public static function create(string $user_id): self {
+    public static function create(string $user_id): self
+    {
         static::execute(
             sprintf(
                 "INSERT INTO %s (
@@ -82,7 +85,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param int $logins
      * @return bool
      */
-    public function updateLogins(int $logins): bool {
+    public function updateLogins(int $logins): bool
+    {
         $this->logins = $logins;
         return $this->update([Application::LOGINS => $this->logins]);
     }
@@ -95,7 +99,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param int $games_created
      * @return bool
      */
-    public function updateGamesCreated(int $games_created): bool {
+    public function updateGamesCreated(int $games_created): bool
+    {
         $this->games_created = $games_created;
         return $this->update([Application::GAMES_CREATED => $this->games_created]);
     }
@@ -108,7 +113,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param int $games_participated
      * @return bool
      */
-    public function updateGamesParticipated(int $games_participated): bool {
+    public function updateGamesParticipated(int $games_participated): bool
+    {
         $this->games_participated = $games_participated;
         return $this->update([Application::GAMES_PARTICIPATED => $this->games_participated]);
     }
@@ -121,7 +127,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param int $games_won
      * @return bool
      */
-    public function updateGamesWon(int $games_won): bool {
+    public function updateGamesWon(int $games_won): bool
+    {
         $this->games_won = $games_won;
         return $this->update([Application::GAMES_WON => $this->games_won]);
     }
@@ -133,7 +140,8 @@ final class UserStatisticsModel extends BaseModel {
      *
      * @return bool
      */
-    public function incrementLogins(): bool {
+    public function incrementLogins(): bool
+    {
         return $this->increment(Application::LOGINS);
     }
 
@@ -144,7 +152,8 @@ final class UserStatisticsModel extends BaseModel {
      *
      * @return bool
      */
-    public function incrementGamesCreated(): bool {
+    public function incrementGamesCreated(): bool
+    {
         return $this->increment(Application::GAMES_CREATED);
     }
 
@@ -155,7 +164,8 @@ final class UserStatisticsModel extends BaseModel {
      *
      * @return bool
      */
-    public function incrementGamesParticipated(): bool {
+    public function incrementGamesParticipated(): bool
+    {
         return $this->increment(Application::GAMES_PARTICIPATED);
     }
 
@@ -166,7 +176,8 @@ final class UserStatisticsModel extends BaseModel {
      *
      * @return bool
      */
-    public function incrementGamesWon(): bool {
+    public function incrementGamesWon(): bool
+    {
         return $this->increment(Application::GAMES_WON);
     }
 
@@ -178,7 +189,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param array $statistics
      * @return bool
      */
-    private function update(array $statistics): bool {
+    private function update(array $statistics): bool
+    {
         $updates = [];
         $params = ['user_id' => $this->user_id];
 
@@ -222,7 +234,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param string $column
      * @return bool
      */
-    private function increment(string $column): bool {
+    private function increment(string $column): bool
+    {
         try {
             $result = static::execute(
                 sprintf(
@@ -264,7 +277,8 @@ final class UserStatisticsModel extends BaseModel {
      * @param array $data
      * @return self
      */
-    private static function fromArray(array $data): self {
+    private static function fromArray(array $data): self
+    {
         $statistics = new self();
 
         $statistics->user_id = self::hydrateUUIDOrNull($data, Application::USER_ID);
@@ -277,27 +291,32 @@ final class UserStatisticsModel extends BaseModel {
     }
 
     // Get the value of user_id
-    public function getUserId(): string {
+    public function getUserId(): string
+    {
         return $this->user_id;
     }
 
     // Get the value of logins
-    public function getLogins(): int {
+    public function getLogins(): int
+    {
         return $this->logins;
     }
 
     // Get the value of games_created
-    public function getGamesCreated(): int {
+    public function getGamesCreated(): int
+    {
         return $this->games_created;
     }
 
     // Get the value of games_participated
-    public function getGamesParticipated(): int {
+    public function getGamesParticipated(): int
+    {
         return $this->games_participated;
     }
 
     // Get the value of games_won
-    public function getGamesWon(): int {
+    public function getGamesWon(): int
+    {
         return $this->games_won;
     }
 }

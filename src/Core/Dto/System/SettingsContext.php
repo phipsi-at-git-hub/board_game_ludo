@@ -8,8 +8,10 @@ use App\Core\Localization;
 use App\Models\System\SystemSettingsModel;
 use App\Services\SystemService;
 
-final class SettingsContext {
-    private static function create(): array {
+final class SettingsContext
+{
+    private static function create(): array
+    {
         return [
             'system_enabled' => false,
             'maintenance_mode_enabled' => false,
@@ -40,9 +42,10 @@ final class SettingsContext {
         ];
     }
 
-    public static function fromSystem(SystemSettingsModel $settings): array {
+    public static function fromSystem(SystemSettingsModel $settings): array
+    {
         $dto = self::create();
-        $system_settings = new SystemService(); 
+        $system_settings = new SystemService();
 
         // Raw settings
         $dto['system_enabled'] = $settings->getSystemEnabled();
@@ -57,26 +60,26 @@ final class SettingsContext {
 
         // Overview State 
         $dto['system_state_label'] = $system_settings->isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline'));
-        $dto['system_state_status'] = $system_settings->isSystemEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL; 
+        $dto['system_state_status'] = $system_settings->isSystemEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL;
 
         // Authentication Badge 
-        $authentication_enabled = $system_settings->isAuthenticationEnabled(); 
-        $dto['authentication_status'] = $authentication_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL; 
+        $authentication_enabled = $system_settings->isAuthenticationEnabled();
+        $dto['authentication_status'] = $authentication_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL;
         $dto['authentication_status_classes'] = 'status-' . $dto['authentication_status'];  // status is css class prefix
         $dto['authentication_status_label'] = strtoupper($authentication_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
 
         // Games Badge 
-        $games_enabled = $system_settings->isGameEnabled(); 
+        $games_enabled = $system_settings->isGameEnabled();
         $dto['games_status'] = $games_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL;
         $dto['games_status_classes'] = 'status-' . $dto['games_status'];  // status is css class prefix
         $dto['games_status_label'] = strtoupper($games_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
 
         // Maintenance Badge 
-        $maintenance_enabled = $system_settings->isMaintenanceActive(); 
+        $maintenance_enabled = $system_settings->isMaintenanceActive();
         $dto['maintenance_status'] = !$maintenance_enabled ? Application::GENERAL_OK : Application::GENERAL_WARNING;
         $dto['maintenance_status_classes'] = 'status-' . $dto['maintenance_status'];  // status is css class prefix
         $dto['maintenance_status_label'] = strtoupper(!$maintenance_enabled ? Application::GENERAL_OFF : Application::GENERAL_ON);
-        
+
         return $dto;
     }
 }

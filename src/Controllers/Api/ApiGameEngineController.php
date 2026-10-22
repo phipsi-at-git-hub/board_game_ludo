@@ -9,9 +9,11 @@ use App\Core\History\Game\GameStateHistory;
 use App\Models\Game\GameModel;
 use DomainException;
 
-class ApiGameEngineController extends BaseController {
+class ApiGameEngineController extends BaseController
+{
     // API - Game - State for Frontend
-    public function state() {
+    public function state()
+    {
         try {
             $game_id = $_POST[Application::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
@@ -25,14 +27,15 @@ class ApiGameEngineController extends BaseController {
             ]);
         } catch (\Throwable $e) {
             return $this->jsonClean([
-                'success' => false, 
+                'success' => false,
                 'error' => $e->getMessage()
             ], 400);
         }
     }
 
     // API - Game - Roll dice
-    public function rollDice() {
+    public function rollDice()
+    {
         try {
             $game_id = $_POST[Application::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
@@ -52,14 +55,15 @@ class ApiGameEngineController extends BaseController {
             ]);
         } catch (\Throwable $e) {
             return $this->jsonClean([
-                'success' => false, 
+                'success' => false,
                 'error' => $e->getMessage()
             ], 400);
         }
     }
 
     // API - Game - Returns possible moves for players
-    public function getAvailableMoves() {
+    public function getAvailableMoves()
+    {
         try {
             $game_id = $_POST[Application::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
@@ -86,14 +90,15 @@ class ApiGameEngineController extends BaseController {
             return $this->jsonClean(['success' => true, 'moves' => $moves]);
         } catch (\Throwable $e) {
             return $this->jsonClean([
-                'success' => false, 
+                'success' => false,
                 'error' => $e->getMessage()
             ], 400);
         }
     }
 
     // API - Game - Execute given move for player
-    public function applyMove() {
+    public function applyMove()
+    {
         $temp = $_POST;
         try {
             $game_id = $_POST[Application::GAME_ID] ?? null;
@@ -113,12 +118,12 @@ class ApiGameEngineController extends BaseController {
                 } else {
                     $game->applyMove($user->getId(), $move);
                 }
-                
+
                 // Add state index to history
                 GameStateHistory::create(
-                    $game->getId(), 
-                    $game->getGameStateSnapshot(), 
-                ); 
+                    $game->getId(),
+                    $game->getGameStateSnapshot(),
+                );
 
                 return $this->jsonClean([
                     'success' => true,
@@ -126,25 +131,27 @@ class ApiGameEngineController extends BaseController {
                 ]);
             } catch (DomainException $e) {
                 return $this->jsonClean([
-                    'success' => false, 
-                    'error' => $e->getMessage(), 
+                    'success' => false,
+                    'error' => $e->getMessage(),
                     'move' => $move
-                    ], 400);
+                ], 400);
             }
         } catch (\Throwable $e) {
             return $this->jsonClean([
-                'success' => false, 
-                'error' => $e->getMessage(), 
+                'success' => false,
+                'error' => $e->getMessage(),
                 'move' => $temp
             ], 400);
         }
     }
 
     // API - Game - Passes turn for player
-    public function passTurn() {
-        try {} catch (\Throwable $e) {
+    public function passTurn()
+    {
+        try {
+        } catch (\Throwable $e) {
             return $this->jsonClean([
-                'success' => false, 
+                'success' => false,
                 'error' => $e->getMessage()
             ], 400);
         }
@@ -159,12 +166,12 @@ class ApiGameEngineController extends BaseController {
         }
 
         $game->passTurn($user->getId());
-                
+
         // Add state index to history
         GameStateHistory::create(
-            $game->getId(), 
-            $game->getGameStateSnapshot(), 
-        ); 
+            $game->getId(),
+            $game->getGameStateSnapshot(),
+        );
 
         return $this->jsonClean([
             'success' => true,
@@ -173,12 +180,14 @@ class ApiGameEngineController extends BaseController {
     }
 
     // API - Health - Health check
-    public function health() {
+    public function health()
+    {
         return $this->jsonClean(
             [
-                'success' => true, 
+                'success' => true,
                 'status' => 'ok'
-            ], 200
+            ],
+            200
         );
     }
 }

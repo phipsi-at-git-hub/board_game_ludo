@@ -3,7 +3,8 @@
 
 namespace App\Core\Email;
 
-final class EmailConfiguration {
+final class EmailConfiguration
+{
     private string $host;
     private int $port;
     private string $username;
@@ -13,7 +14,8 @@ final class EmailConfiguration {
     private string $fromAddress;
     private string $fromName;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->host = $_ENV['MAIL_HOST'] ?? '';
         $this->port = (int)($_ENV['MAIL_PORT'] ?? 587);
         $this->username = $_ENV['MAIL_USERNAME'] ?? '';
@@ -27,7 +29,8 @@ final class EmailConfiguration {
     /**
      * Check whether configuration is valid
      */
-    public function isValid(): bool {
+    public function isValid(): bool
+    {
         return (
             $this->host !== ''
             && $this->port > 0
@@ -40,49 +43,56 @@ final class EmailConfiguration {
     /**
      * Get SMTP host
      */
-    public function getHost(): string {
+    public function getHost(): string
+    {
         return $this->host;
     }
 
     /**
      * Get SMTP port
      */
-    public function getPort(): int {
+    public function getPort(): int
+    {
         return $this->port;
     }
 
     /**
      * Get SMTP username
      */
-    public function getUsername(): string {
+    public function getUsername(): string
+    {
         return $this->username;
     }
 
     /**
      * Get SMTP password
      */
-    public function getPassword(): string {
+    public function getPassword(): string
+    {
         return $this->password;
     }
 
     /**
      * Get SMTP encryption
      */
-    public function getEncryption(): string {
+    public function getEncryption(): string
+    {
         return $this->encryption;
     }
 
     /**
      * Get sender address
      */
-    public function getFromAddress(): string {
+    public function getFromAddress(): string
+    {
         return $this->fromAddress;
     }
 
     /**
      * Get sender name
      */
-    public function getFromName(): string {
+    public function getFromName(): string
+    {
         return $this->fromName;
     }
 }

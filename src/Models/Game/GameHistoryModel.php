@@ -6,11 +6,13 @@ namespace App\Models\Game;
 use App\Constants\Application;
 use App\Models\BaseModel;
 
-final class GameHistoryModel extends BaseModel {
+final class GameHistoryModel extends BaseModel
+{
     /**
      * Create game history entry
      */
-    public static function create(string $game_id, int $state_index, array $state): bool {
+    public static function create(string $game_id, int $state_index, array $state): bool
+    {
         return static::execute(
             sprintf(
                 "
@@ -53,7 +55,8 @@ final class GameHistoryModel extends BaseModel {
     /**
      * Get complete game history
      */
-    public static function findByGameId(string $game_id): array {
+    public static function findByGameId(string $game_id): array
+    {
         return static::fetchAll(
             sprintf(
                 "
@@ -75,7 +78,8 @@ final class GameHistoryModel extends BaseModel {
     /**
      * Get latest game history entry
      */
-    public static function findLatest(string $game_id): ?array {
+    public static function findLatest(string $game_id): ?array
+    {
         return static::fetchOne(
             sprintf(
                 "
@@ -98,7 +102,8 @@ final class GameHistoryModel extends BaseModel {
     /**
      * Get next state index for game
      */
-    public static function getNextStateIndex(string $game_id): int {
+    public static function getNextStateIndex(string $game_id): int
+    {
         $row = static::fetchOne(
             sprintf(
                 "
@@ -120,7 +125,8 @@ final class GameHistoryModel extends BaseModel {
     /**
      * Get single state by index
      */
-    public static function findByGameIdAndIndex(string $game_id, int $state_index): ?array {
+    public static function findByGameIdAndIndex(string $game_id, int $state_index): ?array
+    {
         return static::fetchOne(
             sprintf(
                 "
@@ -145,7 +151,8 @@ final class GameHistoryModel extends BaseModel {
     /**
      * Reset game history - delete all entries of game
      */
-    public static function resetByGameId(string $game_id): bool {
+    public static function resetByGameId(string $game_id): bool
+    {
         return static::execute(
             "DELETE FROM game_history WHERE game_id = :game_id",
             ['game_id' => $game_id]

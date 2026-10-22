@@ -11,8 +11,8 @@ use App\Services\SystemService;
 /**
  * GamePolicy
  */
-final class GamePolicy 
-{ 
+final class GamePolicy
+{
     /**
      * Is user owner of the game
      * isOwner
@@ -21,9 +21,9 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function isOwner(GameModel $game, UserModel $user): bool 
+    public static function isOwner(GameModel $game, UserModel $user): bool
     {
-        return $game->getCreatedByUserId() === $user->getId(); 
+        return $game->getCreatedByUserId() === $user->getId();
     }
 
     /**
@@ -34,10 +34,10 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canAccess(GameModel $game, UserModel $user): bool 
+    public static function canAccess(GameModel $game, UserModel $user): bool
     {
         if ($game->isPrivate() && !$game->isParticipant($user)) {
-            return false; 
+            return false;
         }
         return true;
     }
@@ -51,7 +51,7 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canJoin(GameModel $game, UserModel $user): bool 
+    public static function canJoin(GameModel $game, UserModel $user): bool
     {
         if (!$game->isWaiting()) {
             return false;
@@ -83,15 +83,15 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canLeave(GameModel $game, UserModel $user): bool 
+    public static function canLeave(GameModel $game, UserModel $user): bool
     {
         if (!$game->hasPlayer($user->getId())) {
-            return false; 
-        } 
-        if ($game->isRunning()) {
-            return false; 
+            return false;
         }
-        return true; 
+        if ($game->isRunning()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -103,7 +103,7 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canEdit(GameModel $game, UserModel $user): bool 
+    public static function canEdit(GameModel $game, UserModel $user): bool
     {
         return (
             $game->isWaiting()
@@ -123,13 +123,13 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canDelete(GameModel $game, UserModel $user): bool 
+    public static function canDelete(GameModel $game, UserModel $user): bool
     {
         return (
             $user->isAdmin()
             && (
                 $game->isFinished()
-                || $game->isCancelled() 
+                || $game->isCancelled()
             )
         );
     }
@@ -142,7 +142,7 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canStart(GameModel $game, UserModel $user): bool 
+    public static function canStart(GameModel $game, UserModel $user): bool
     {
         return (
             $game->isWaiting()
@@ -163,17 +163,17 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canPlay(GameModel $game, UserModel $user): bool 
+    public static function canPlay(GameModel $game, UserModel $user): bool
     {
-        $systemService = App::instance()->resolve(SystemService::class); 
+        $systemService = App::instance()->resolve(SystemService::class);
         return (
-            $game->isRunning() 
+            $game->isRunning()
             && (
                 (
-                    $systemService->isGamePlayEnabled() 
+                    $systemService->isGamePlayEnabled()
                     && $user->getId() === $game->getCreatedByUserId()
-                ) 
-                || $user->isAdmin()  
+                )
+                || $user->isAdmin()
             )
         );
     }
@@ -188,7 +188,7 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canPause(GameModel $game, UserModel $user): bool 
+    public static function canPause(GameModel $game, UserModel $user): bool
     {
         return (
             $game->isRunning()
@@ -207,7 +207,7 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canReset(GameModel $game, UserModel $user): bool 
+    public static function canReset(GameModel $game, UserModel $user): bool
     {
         return (
             $game->isRunning()
@@ -227,15 +227,15 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canCancel(GameModel $game, UserModel $user): bool 
+    public static function canCancel(GameModel $game, UserModel $user): bool
     {
         return (
             (
                 $user->isAdmin()
-                && (!$game->isCancelled() && !$game->isFinished()) 
+                && (!$game->isCancelled() && !$game->isFinished())
             )
             || (
-                ($game->isWaiting() || $game->isRunning()) 
+                ($game->isWaiting() || $game->isRunning())
                 && self::isOwner($game, $user)
             )
         );
@@ -250,11 +250,11 @@ final class GamePolicy
      * @param UserModel $user
      * @return bool
      */
-    public static function canCreateTestGame(GameModel $game, UserModel $user): bool 
+    public static function canCreateTestGame(GameModel $game, UserModel $user): bool
     {
         return (
-            $user->isAdmin() 
-            && !$game->isTestGame() 
+            $user->isAdmin()
+            && !$game->isTestGame()
         );
     }
 }

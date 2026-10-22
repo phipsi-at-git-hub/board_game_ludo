@@ -10,7 +10,8 @@ use App\Policies\GamePolicy;
 /**
  * GameService
  */
-final class GameService {
+final class GameService
+{
     /**
      * Join game
      *
@@ -20,7 +21,8 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function join(GameModel $game, UserModel $user): bool {
+    public function join(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canJoin($game, $user)) {
             return false;
         }
@@ -37,13 +39,14 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function leave(GameModel $game, UserModel $user): bool {
+    public function leave(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canLeave($game, $user)) {
             return false;
         }
 
         return $game->leave($user->getId());
-    } 
+    }
 
     /**
      * Start game
@@ -54,21 +57,22 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function start(GameModel $game, UserModel $user): bool {
+    public function start(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canStart($game, $user)) {
             return false;
         }
 
         $game->startGame();
-        if($game->isRunning()) {
+        if ($game->isRunning()) {
             // Update user statistics for all player
             foreach ($game->getAllPlayers() as $player) {
-                $user = UserModel::findById($player->getUserId()); 
-                $user->getUserStatistics()->incrementGamesParticipated(); 
+                $user = UserModel::findById($player->getUserId());
+                $user->getUserStatistics()->incrementGamesParticipated();
             }
-            return true; 
-        } 
-        return false; 
+            return true;
+        }
+        return false;
     }
 
     // ToDo: Remove, since pausing a game is obsolete
@@ -81,7 +85,7 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function pause(GameModel $game, UserModel $user): bool 
+    public function pause(GameModel $game, UserModel $user): bool
     {
         if (!GamePolicy::canPause($game, $user)) {
             return false;
@@ -89,9 +93,9 @@ final class GameService {
 
         $game->pauseGame();
         if ($game->isWaiting()) {
-            return true; 
-        } 
-        return false; 
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -103,7 +107,8 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function reset(GameModel $game, UserModel $user): bool {
+    public function reset(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canReset($game, $user)) {
             return false;
         }
@@ -120,16 +125,17 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function cancel(GameModel $game, UserModel $user): bool {
+    public function cancel(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canCancel($game, $user)) {
             return false;
         }
 
-        $game->cancelGame(); 
+        $game->cancelGame();
         if ($game->isCancelled()) {
-            return true; 
-        } 
-        return false; 
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -141,7 +147,8 @@ final class GameService {
      * @param UserModel $user
      * @return bool
      */
-    public function delete(GameModel $game, UserModel $user): bool {
+    public function delete(GameModel $game, UserModel $user): bool
+    {
         if (!GamePolicy::canDelete($game, $user)) {
             return false;
         }
@@ -161,12 +168,12 @@ final class GameService {
      */
     public static function gamesArrayForUser(array $games, UserModel $user): ?array
     {
-        $gamesArrayForUser = []; 
+        $gamesArrayForUser = [];
         foreach ($games as $game) {
             if (GamePolicy::canAccess($game, $user)) {
-                $gamesArrayForUser[] = $game; 
+                $gamesArrayForUser[] = $game;
             }
         }
-        return $gamesArrayForUser; 
+        return $gamesArrayForUser;
     }
 }

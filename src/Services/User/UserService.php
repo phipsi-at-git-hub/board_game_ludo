@@ -8,7 +8,8 @@ use App\Constants\Application;
 use App\Core\Auth\Auth;
 use App\Models\User\UserModel;
 
-final class UserService {
+final class UserService
+{
     /**
      * Update user
      *
@@ -18,7 +19,8 @@ final class UserService {
      * @param array $data
      * @return bool
      */
-    public function update(UserModel $user, array $data): bool {
+    public function update(UserModel $user, array $data): bool
+    {
         $user->setUsername($data['username'] ?? $user->getUsername());
         $user->setEmail($data['email'] ?? $user->getEmail());
         $user->setRole($data['role'] ?? $user->getRole());
@@ -26,15 +28,15 @@ final class UserService {
         $user->setPreferredLanguage($data['preferred_language'] ?? $user->getPreferredLanguage());
         $user->setPreferredCameraMode($data['preferred_camera_mode'] ?? $user->getPreferredCameraMode());
         if (!$user->save()) {
-            return false; 
+            return false;
         }
 
         // Synchronize session locale when the current user updates their own profile
-        $current_user = Auth::user(); 
+        $current_user = Auth::user();
         if ($current_user && $current_user->getId() === $user->getId()) {
             $_SESSION[Application::LOCALE] = $user->getPreferredLanguage();
         }
 
         return true;
-    } 
+    }
 }

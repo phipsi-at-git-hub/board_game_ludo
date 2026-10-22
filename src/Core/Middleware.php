@@ -5,22 +5,26 @@ namespace App\Core;
 use App\Core\Auth\Auth;
 use App\Core\Security\Csrf;
 
-class Middleware {
-    public static function auth(): void {
+class Middleware
+{
+    public static function auth(): void
+    {
         if (!Auth::check()) {
             header('Location: /login');
             exit;
         }
     }
 
-    public static function guest(): void {
+    public static function guest(): void
+    {
         if (Auth::check()) {
             header('Location: /');
             exit;
         }
     }
 
-    public static function anyRole(array $roles): void {
+    public static function anyRole(array $roles): void
+    {
         $user = Auth::user();
 
         if (!$user || !in_array($user->getRole(), $roles, true)) {
@@ -29,28 +33,32 @@ class Middleware {
         }
     }
 
-    public static function admin(): void {
+    public static function admin(): void
+    {
         if (!Auth::check() || !Auth::user()->isAdmin()) {
             http_response_code(403);
             die('Access denied');
         }
     }
 
-    public static function moderator(): void {
+    public static function moderator(): void
+    {
         if (!Auth::check() || !Auth::user()->isModerator()) {
             http_response_code(403);
             die('Access denied');
         }
     }
 
-    public static function gameMaster(): void {
+    public static function gameMaster(): void
+    {
         if (!Auth::check() || !Auth::user()->isGameMaster()) {
             http_response_code(403);
             die('Access denied');
         }
     }
 
-    public static function csrf(): void {
+    public static function csrf(): void
+    {
         $method = $_SERVER['REQUEST_METHOD'];
         // Check POST, PUT, DELETE
         if (in_array($method, ['POST', 'PUT', 'DELETE'])) {

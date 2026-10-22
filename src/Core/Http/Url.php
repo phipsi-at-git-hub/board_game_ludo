@@ -2,8 +2,10 @@
 // Core/Http/Url.php
 namespace App\Core\Http;
 
-final class Url {
-    public static function baseUrl(): string {
+final class Url
+{
+    public static function baseUrl(): string
+    {
         $protocol = (
             !empty($_SERVER['HTTP'])
             && $_SERVER['HTTPS'] !== 'off'
@@ -12,7 +14,8 @@ final class Url {
         return $protocol . '://' . $host;
     }
 
-    public static function url(string $path): string {
+    public static function url(string $path): string
+    {
         return rtrim(self::baseUrl(), '/') . '/' . ltrim($path, '/');
     }
 }

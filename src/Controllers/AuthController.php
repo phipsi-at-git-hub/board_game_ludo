@@ -8,32 +8,38 @@ use App\Core\Logging\Logger;
 use App\Models\User\UserModel;
 use App\Services\SystemService;
 
-class AuthController extends BaseController {
-    public function showLogin() {
+class AuthController extends BaseController
+{
+    public function showLogin()
+    {
         $this->render(
-            'auth/login', 
+            'auth/login',
             []
         );
     }
 
-    public function showRegister() {
+    public function showRegister()
+    {
         $this->render(
-            'auth/register', 
-            []);
+            'auth/register',
+            []
+        );
     }
 
-    public function login() {
+    public function login()
+    {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
         $user = UserModel::verify($email, $password);
-        $systemService = $this->app->resolve(SystemService::class); 
+        $systemService = $this->app->resolve(SystemService::class);
 
-        if ($user && $user->isActive() && ($systemService->isLoginEnabled() || $user->isAdmin())
+        if (
+            $user && $user->isActive() && ($systemService->isLoginEnabled() || $user->isAdmin())
         ) {
             Auth::login($user);
             $user->updateLastLogin();
-            $user->getUserStatistics()->incrementLogins(); 
+            $user->getUserStatistics()->incrementLogins();
 
             // Logging
             Logger::app()->info('User login successful', ['user_id' => $user->getId()]);
@@ -44,24 +50,25 @@ class AuthController extends BaseController {
 
         $error = (!$systemService->isLoginEnabled() && $user) ? 'Login not allowed.' : 'Invalid login credentials.';
         $this->render(
-            'auth/login', 
+            'auth/login',
             [
                 'error' => $error
             ]
         );
     }
 
-    public function register() {
-        $systemService = $this->app->resolve(SystemService::class); 
+    public function register()
+    {
+        $systemService = $this->app->resolve(SystemService::class);
         if (!$systemService->isRegistrationEnabled()) {
             $error = 'User Registration not allowed.';
             $this->render(
-                'auth/register', 
+                'auth/register',
                 [
                     'error' => $error
                 ]
             );
-            return; 
+            return;
         }
 
         $username = $_POST['username'] ?? '';
@@ -76,18 +83,19 @@ class AuthController extends BaseController {
         // Logging
         Logger::app()->info('User registration successful', ['user_id' => $user->getId()]);
 
-        $this->redirect('/login'); 
+        $this->redirect('/login');
         exit;
     }
 
-    public function logout() {
-        $user = Auth::user(); 
+    public function logout()
+    {
+        $user = Auth::user();
         Auth::logout();
 
         // Logging
         Logger::app()->info('User logout successful', ['user_id' => $user->getId()]);
 
-        $this->redirect('/login'); 
+        $this->redirect('/login');
         exit;
     }
 }

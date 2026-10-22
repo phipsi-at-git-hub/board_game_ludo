@@ -2,9 +2,11 @@
 // Core/Http/Request.php
 namespace App\Core\Http;
 
-final class Request {
+final class Request
+{
     // HTTP - Simple HTTP request for health checks, lightweight API calls
-    public static function callUrlSimple(string $url, int $timeout = 3): ?string {
+    public static function callUrlSimple(string $url, int $timeout = 3): ?string
+    {
         $context = stream_context_create([
             'http' => [
                 'timeout' => $timeout,
@@ -16,7 +18,8 @@ final class Request {
     }
 
     // HTTP - Detailed HTTP request (cURL) for health diagnostics, debugging, system monitoring
-    public static function callUrlDetailed(string $url, int $timeout = 5): ?array {
+    public static function callUrlDetailed(string $url, int $timeout = 5): ?array
+    {
         $time_start = microtime(true);
         $ch = curl_init($url);
         curl_setopt_array($ch, [

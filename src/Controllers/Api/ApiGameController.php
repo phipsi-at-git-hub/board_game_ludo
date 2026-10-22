@@ -21,9 +21,9 @@ use App\Services\Game\GameService;
 /**
  * ApiGameController
  */
-final class ApiGameController extends BaseController 
+final class ApiGameController extends BaseController
 {
-    private GameService $gameService; 
+    private GameService $gameService;
 
     /**
      * __construct
@@ -31,11 +31,11 @@ final class ApiGameController extends BaseController
      * @param App $app
      * @return void
      */
-    public function __construct(App $app) 
-    { 
-        parent::__construct($app); 
-        $this->gameService = $app->resolve(GameService::class); 
-    } 
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->gameService = $app->resolve(GameService::class);
+    }
 
     /**
      * Helper
@@ -48,9 +48,9 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return GameModel
      */
-    private function requireGame(string $game_id): GameModel 
-    { 
-        $game = GameModel::findById($game_id); 
+    private function requireGame(string $game_id): GameModel
+    {
+        $game = GameModel::findById($game_id);
         if (!$game) {
             $this->jsonClean(
                 Response::error('Game not found'),
@@ -68,8 +68,8 @@ final class ApiGameController extends BaseController
      * @param GameModel $game
      * @return array
      */
-    private function context(GameModel $game): array 
-    { 
+    private function context(GameModel $game): array
+    {
         return GameContext::fromGame(
             $game,
             Auth::user()
@@ -86,7 +86,7 @@ final class ApiGameController extends BaseController
      * @param string $success_message
      * @return void
      */
-    private function executeApiGameActions(string $game_id, callable $action, string $success_message): void 
+    private function executeApiGameActions(string $game_id, callable $action, string $success_message): void
     {
         $game = $this->requireGame($game_id);
         $success = $action($game);
@@ -97,7 +97,7 @@ final class ApiGameController extends BaseController
             );
         }
 
-        $game = GameModel::findById($game->getId()); 
+        $game = GameModel::findById($game->getId());
         $this->jsonClean(
             Response::success(
                 $this->context($game),
@@ -117,24 +117,25 @@ final class ApiGameController extends BaseController
      * @param callable $view_builder
      * @return void
      */
-    private function executeApiGameActionWithViews(string $game_id, callable $action, string $success_message, callable $view_builder): void 
+    private function executeApiGameActionWithViews(string $game_id, callable $action, string $success_message, callable $view_builder): void
     {
-        $game = $this->requireGame($game_id); 
-        $success = $action($game); 
+        $game = $this->requireGame($game_id);
+        $success = $action($game);
         if (!$success) {
             $this->jsonClean(
-                Response::error('Action not allowed'), 400 
-            ); 
-        } 
+                Response::error('Action not allowed'),
+                400
+            );
+        }
 
-        $game = GameModel::findById($game->getId()); 
+        $game = GameModel::findById($game->getId());
         $this->jsonClean(
             Response::success(
-                $this->context($game), 
-                $success_message, 
-                $view_builder($game) 
+                $this->context($game),
+                $success_message,
+                $view_builder($game)
             )
-        ); 
+        );
     }
 
     /**
@@ -145,17 +146,17 @@ final class ApiGameController extends BaseController
      * @param GameModel $game
      * @return array
      */
-    private function buildPlayersView(GameModel $game): array 
+    private function buildPlayersView(GameModel $game): array
     {
         return [
             'players' => $this->renderView(
-                'game/partials/players', 
+                'game/partials/players',
                 [
-                    'game' => $game, 
-                    'current_user' => Auth::user() 
-                ] 
-            ) 
-        ]; 
+                    'game' => $game,
+                    'current_user' => Auth::user()
+                ]
+            )
+        ];
     }
 
     /** 
@@ -166,20 +167,20 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function join(string $game_id): void 
+    public function join(string $game_id): void
     {
         // Logging
         Logger::app()->info('Join game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
 
         $this->executeApiGameActionWithViews(
-            $game_id, 
+            $game_id,
             fn(GameModel $game) => $this->gameService->join(
-                $game, 
-                Auth::user() 
-            ), 
-            'Joined game', 
-            fn(GameModel $game) => $this->buildPlayersView($game) 
-        ); 
+                $game,
+                Auth::user()
+            ),
+            'Joined game',
+            fn(GameModel $game) => $this->buildPlayersView($game)
+        );
     }
 
     /** 
@@ -190,19 +191,19 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function leave(string $game_id): void 
-    { 
+    public function leave(string $game_id): void
+    {
         // Logging
         Logger::app()->info('Leave game', ['user_id' => Auth::user()->getId(), 'game_id' => $game_id]);
-        
+
         $this->executeApiGameActionWithViews(
-            $game_id, 
+            $game_id,
             fn(GameModel $game) => $this->gameService->leave(
-                $game, 
-                Auth::user() 
-            ), 
-            'Left game', 
-            fn(GameModel $game) => $this->buildPlayersView($game) 
+                $game,
+                Auth::user()
+            ),
+            'Left game',
+            fn(GameModel $game) => $this->buildPlayersView($game)
         );
     }
 
@@ -214,15 +215,15 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function start(string $game_id): void 
+    public function start(string $game_id): void
     {
         $this->executeApiGameActions(
             $game_id,
             fn(GameModel $game) =>
-                $this->gameService->start(
-                    $game,
-                    Auth::user()
-                ),
+            $this->gameService->start(
+                $game,
+                Auth::user()
+            ),
             'Game started'
         );
     }
@@ -236,15 +237,15 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function pause(string $game_id): void 
+    public function pause(string $game_id): void
     {
         $this->executeApiGameActions(
             $game_id,
             fn(GameModel $game) =>
-                $this->gameService->pause(
-                    $game,
-                    Auth::user()
-                ),
+            $this->gameService->pause(
+                $game,
+                Auth::user()
+            ),
             'Game paused'
         );
     }
@@ -257,15 +258,15 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function reset(string $game_id): void 
+    public function reset(string $game_id): void
     {
         $this->executeApiGameActions(
             $game_id,
             fn(GameModel $game) =>
-                $this->gameService->reset(
-                    $game,
-                    Auth::user()
-                ),
+            $this->gameService->reset(
+                $game,
+                Auth::user()
+            ),
             'Game reset'
         );
     }
@@ -278,15 +279,15 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function cancel(string $game_id): void 
+    public function cancel(string $game_id): void
     {
         $this->executeApiGameActions(
             $game_id,
             fn(GameModel $game) =>
-                $this->gameService->cancel(
-                    $game,
-                    Auth::user()
-                ),
+            $this->gameService->cancel(
+                $game,
+                Auth::user()
+            ),
             'Game cancelled'
         );
     }
@@ -298,9 +299,9 @@ final class ApiGameController extends BaseController
      *
      * @return void
      */
-    public function delete(): void 
+    public function delete(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null; 
+        $game_id = $_POST[Application::GAME_ID] ?? null;
         $game = $this->requireGame($game_id);
         $success = $this->gameService->delete(
             $game,
@@ -318,7 +319,8 @@ final class ApiGameController extends BaseController
             Response::success(
                 ['deleted' => true],
                 'Game deleted'
-            ), 201
+            ),
+            201
         );
     }
 
@@ -330,7 +332,7 @@ final class ApiGameController extends BaseController
      * @param string $game_id
      * @return void
      */
-    public function show(string $game_id): void 
+    public function show(string $game_id): void
     {
         $game = $this->requireGame($game_id);
         $this->jsonClean(
@@ -345,52 +347,52 @@ final class ApiGameController extends BaseController
      *
      * @return void
      */
-    public function gameFilterView(): void 
+    public function gameFilterView(): void
     {
         // Parse log level if in POST body
-        $user_id = $_POST['user_id'] ?? null; 
-        $status = $_POST['status'] ?? []; 
-        $relation = $_POST['user_relation'] ?? []; 
-        $date_range = DateRange::fromString($_POST['date_range'] ?? ''); 
+        $user_id = $_POST['user_id'] ?? null;
+        $status = $_POST['status'] ?? [];
+        $relation = $_POST['user_relation'] ?? [];
+        $date_range = DateRange::fromString($_POST['date_range'] ?? '');
 
         // Get user by user_id
-        $user = UserModel::findById($user_id); 
+        $user = UserModel::findById($user_id);
 
         // Create game filter
         $filter = new GameFilterService(
-            userId: $user_id, 
-            userRelations: $relation, 
-            statuses: $status, 
-            dateRange: $date_range, 
-        ); 
+            userId: $user_id,
+            userRelations: $relation,
+            statuses: $status,
+            dateRange: $date_range,
+        );
 
         // Create sql query for game model by filter 
-        $query = new GameQueryService($filter); 
+        $query = new GameQueryService($filter);
         $games = GameModel::findGames(
-            player: true, 
-            joins: $query->getJoins(), 
-            conditions: $query->getConditions(), 
-            params: $query->getParams(), 
-        ); 
+            player: true,
+            joins: $query->getJoins(),
+            conditions: $query->getConditions(),
+            params: $query->getParams(),
+        );
 
         // Get array of all games that user can access 
-        $games = GameService::gamesArrayForUser($games, $user); 
+        $games = GameService::gamesArrayForUser($games, $user);
 
         // Build games filter context
         $context = GameFilterContext::fromFilter(
-            $status, 
-            $relation, 
-            $date_range->getDateRangeAsString(), 
+            $status,
+            $relation,
+            $date_range->getDateRangeAsString(),
             $games
-        ); 
+        );
 
         // Render filtered log entries
         $views = [
             'entries' => $this->renderView(
                 'game/partials/entries',
                 [
-                    'games' => $games, 
-                    'is_admin_view' => false, 
+                    'games' => $games,
+                    'is_admin_view' => false,
                 ]
             )
         ];

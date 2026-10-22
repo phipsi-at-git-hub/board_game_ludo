@@ -6,8 +6,10 @@ namespace App\Core\Dto\User;
 use App\Core\Localization;
 use App\Models\User\UserModel;
 
-final class UserContext {
-    private static function create(): array {
+final class UserContext
+{
+    private static function create(): array
+    {
         return [
             'user_id' => null,
             'username' => null,
@@ -24,7 +26,8 @@ final class UserContext {
         ];
     }
 
-    public static function fromUser(UserModel $user): array {
+    public static function fromUser(UserModel $user): array
+    {
         $dto = self::create();
 
         $dto['user_id'] = $user->getId();

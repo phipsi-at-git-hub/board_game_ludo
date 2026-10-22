@@ -28,7 +28,8 @@ use App\Services\User\UserFilterService;
 use App\Services\User\UserQueryService;
 use App\Services\User\UserService;
 
-final class ApiAdminController extends BaseController {
+final class ApiAdminController extends BaseController
+{
     /*
     public function __construct() {
         // ToDo: add SystemService in Models to provide main methods if needed
@@ -44,8 +45,9 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function updateUserProfile(): void {
-        $user = UserModel::findById($_POST['user_id']); 
+    public function updateUserProfile(): void
+    {
+        $user = UserModel::findById($_POST['user_id']);
         $data = [
             'username' => $_POST['username'] ?? null,
             'email' => $_POST['email'] ?? null,
@@ -85,8 +87,9 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function updateUserRole(): void {
-        $user = UserModel::findById($_POST['user_id']); 
+    public function updateUserRole(): void
+    {
+        $user = UserModel::findById($_POST['user_id']);
         $data = [
             'role' => $_POST['role'] ?? null,
         ];
@@ -137,8 +140,9 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function updateUserStatus(): void {
-        $user = UserModel::findById($_POST['user_id']); 
+    public function updateUserStatus(): void
+    {
+        $user = UserModel::findById($_POST['user_id']);
         $data = [
             'status' => $_POST['status'] ?? null,
         ];
@@ -189,8 +193,9 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function updateUserLocale(): void {
-        $user = UserModel::findById($_POST['user_id']); 
+    public function updateUserLocale(): void
+    {
+        $user = UserModel::findById($_POST['user_id']);
         $data = [
             'preferred_language' => $_POST['preferred_language'] ?? null,
         ];
@@ -228,8 +233,9 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function updateUserSettings(): void {
-        $user = UserModel::findById($_POST['user_id']); 
+    public function updateUserSettings(): void
+    {
+        $user = UserModel::findById($_POST['user_id']);
         $data = [
             'preferred_camera_mode' => $_POST['preferred_camera_mode'] ?? null,
         ];
@@ -260,16 +266,17 @@ final class ApiAdminController extends BaseController {
                 )
             )
         );
-    } 
+    }
 
     /**
      * sendUserResetMail
      *
      * @return void
      */
-    public function sendUserResetMail(): void {
+    public function sendUserResetMail(): void
+    {
         // ToDo: Implement
-        $user = UserModel::findById($_POST['user_id']); 
+        $user = UserModel::findById($_POST['user_id']);
         if (!$user) {
             $this->jsonClean(
                 Response::error(
@@ -281,17 +288,17 @@ final class ApiAdminController extends BaseController {
             );
         }
 
-        $email = $user->getEmail(); 
+        $email = $user->getEmail();
         $token = UserModel::createPasswordToken($email);
         if ($token === null) {
-            $this->redirect('/forgot-password'); 
+            $this->redirect('/forgot-password');
         }
 
-        $resetUrl = Http::url('/reset-password/'. $token);
+        $resetUrl = Http::url('/reset-password/' . $token);
 
         // Send Email for password reset
-        $mailService = new MailService(); 
-        $mailService->sendPasswordReset($user, $resetUrl); 
+        $mailService = new MailService();
+        $mailService->sendPasswordReset($user, $resetUrl);
 
         $context = UserContext::fromUser($user);
 
@@ -314,43 +321,44 @@ final class ApiAdminController extends BaseController {
      *
      * @return void
      */
-    public function gameFilterView(): void {
+    public function gameFilterView(): void
+    {
         // Parse log level if in POST body
-        $user_id = $_POST['user_id'] ?? null; 
-        $status = $_POST['status'] ?? []; 
-        $relation = $_POST['user_relation'] ?? []; 
-        $date_range = DateRange::fromString($_POST['date_range'] ?? ''); 
+        $user_id = $_POST['user_id'] ?? null;
+        $status = $_POST['status'] ?? [];
+        $relation = $_POST['user_relation'] ?? [];
+        $date_range = DateRange::fromString($_POST['date_range'] ?? '');
 
         $filter = new GameFilterService(
-            userId: $user_id, 
-            userRelations: $relation, 
-            statuses: $status, 
-            dateRange: $date_range, 
-        ); 
+            userId: $user_id,
+            userRelations: $relation,
+            statuses: $status,
+            dateRange: $date_range,
+        );
 
-        $query = new GameQueryService($filter); 
+        $query = new GameQueryService($filter);
         $games = GameModel::findGames(
-            player: true, 
-            joins: $query->getJoins(), 
-            conditions: $query->getConditions(), 
-            params: $query->getParams(), 
-        ); 
+            player: true,
+            joins: $query->getJoins(),
+            conditions: $query->getConditions(),
+            params: $query->getParams(),
+        );
 
         // Build games filter context
         $context = GameFilterContext::fromFilter(
-            statuses: $status, 
-            user_relations: $relation, 
-            date_range: $date_range->getDateRangeAsString(), 
-            games: $games, 
-        ); 
+            statuses: $status,
+            user_relations: $relation,
+            date_range: $date_range->getDateRangeAsString(),
+            games: $games,
+        );
 
         // Render filtered game entries
         $views = [
             'entries' => $this->renderView(
                 'game/partials/entries',
                 [
-                    'games' => $games, 
-                    'is_admin_view' => true, 
+                    'games' => $games,
+                    'is_admin_view' => true,
                 ]
             )
         ];
@@ -369,40 +377,40 @@ final class ApiAdminController extends BaseController {
 
     public function userFilterView(): void
     {
-        $statuses = $_POST['status'] ?? []; 
-        $roles = $_POST['role'] ?? []; 
-        $dateRangeLastLogin = DateRange::fromString($_POST['date_range_last_login'] ?? ''); 
+        $statuses = $_POST['status'] ?? [];
+        $roles = $_POST['role'] ?? [];
+        $dateRangeLastLogin = DateRange::fromString($_POST['date_range_last_login'] ?? '');
 
         $filter = new UserFilterService(
-            statuses: $statuses, 
-            roles: $roles, 
-            dateRangeLastLogin: $dateRangeLastLogin, 
-        ); 
+            statuses: $statuses,
+            roles: $roles,
+            dateRangeLastLogin: $dateRangeLastLogin,
+        );
 
-        $query = new UserQueryService($filter); 
+        $query = new UserQueryService($filter);
         $users = UserModel::findUsers(
-            joins: $query->getJoins(), 
-            conditions: $query->getConditions(), 
-            params: $query->getParams(), 
-        ); 
+            joins: $query->getJoins(),
+            conditions: $query->getConditions(),
+            params: $query->getParams(),
+        );
 
         // Build users filter context 
         $context = UserFilterContext::fromFilter(
-            statuses: $statuses, 
-            roles: $roles, 
-            dateRangeLastLogin: $dateRangeLastLogin->getDateRangeAsString(), 
-            users: $users, 
-        ); 
-        
+            statuses: $statuses,
+            roles: $roles,
+            dateRangeLastLogin: $dateRangeLastLogin->getDateRangeAsString(),
+            users: $users,
+        );
+
         // Render filtered user entries
         $views = [
             'entries' => $this->renderView(
-                'admin/user/partials/entries', 
+                'admin/user/partials/entries',
                 [
-                    'users' => $users, 
-                ] 
-            ) 
-        ]; 
+                    'users' => $users,
+                ]
+            )
+        ];
 
         // Logging
         Logger::app()->debug('Api admin user logging filtered list view', ['user_id' => Auth::user()->getId()]);
@@ -414,7 +422,7 @@ final class ApiAdminController extends BaseController {
                 $views
             )
         );
-    } 
+    }
 
     /**
      * Settings section
@@ -422,14 +430,16 @@ final class ApiAdminController extends BaseController {
     /**
      * Helper - Current system settings
      */
-    private function settings(): SystemSettingsModel {
+    private function settings(): SystemSettingsModel
+    {
         return SystemSettingsModel::findSystemSettings();
     }
 
     /**
      * Helper - DTO settings context
      */
-    private function settingsContext(): array {
+    private function settingsContext(): array
+    {
         return SettingsContext::fromSystem(
             $this->settings()
         );
@@ -439,25 +449,26 @@ final class ApiAdminController extends BaseController {
      * Helper - DTO logging filter context
      */
     private function entryLoggingFilterContext(
-        array $channels, 
-        string $date_range, 
-        array $available_channels, 
-        int $entries_count, 
-        array $entry_statistics  
+        array $channels,
+        string $date_range,
+        array $available_channels,
+        int $entries_count,
+        array $entry_statistics
     ): array {
         return EntryFilterContext::fromFilter(
-            $channels, 
-            $date_range, 
-            $available_channels, 
-            $entries_count, 
-            $entry_statistics 
-        ); 
-    } 
+            $channels,
+            $date_range,
+            $available_channels,
+            $entries_count,
+            $entry_statistics
+        );
+    }
 
     /**
      * Generic settings update handler
      */
-    private function updateSettings(callable $callback): void {
+    private function updateSettings(callable $callback): void
+    {
         if ($_SERVER[Application::REQUEST_METHOD] !== Application::REQUEST_METHOD_POST) {
             $this->jsonClean(
                 Response::error('Invalid request'),
@@ -467,7 +478,7 @@ final class ApiAdminController extends BaseController {
 
         $settings = $this->settings();
         $success = $callback($settings);
-        
+
         // Logging
         Logger::app()->info('Admin settings updated', ['user_id' => Auth::user()->getId()]);
 
@@ -495,7 +506,8 @@ final class ApiAdminController extends BaseController {
     /**
      * Update all system settings
      */
-    public function updateSystemSettings(): void { 
+    public function updateSystemSettings(): void
+    {
         $this->updateSettings(
             function (SystemSettingsModel $settings): bool {
                 $settings->updateBooleansToFalse();
@@ -510,7 +522,8 @@ final class ApiAdminController extends BaseController {
     /**
      * Render logging filter view
      */
-    public function loggingFilterView(): void {
+    public function loggingFilterView(): void
+    {
         if ($_SERVER[Application::REQUEST_METHOD] !== Application::REQUEST_METHOD_POST) {
             $this->jsonClean(
                 Response::error('Invalid request'),
@@ -539,10 +552,10 @@ final class ApiAdminController extends BaseController {
         }
 
         // Parse log level if in POST body
-        $log_levels = $_POST['log_levels'] ?? []; 
+        $log_levels = $_POST['log_levels'] ?? [];
 
         if (!is_array($log_levels)) {
-            $log_levels = []; 
+            $log_levels = [];
         }
 
         // Load filtered log entries
@@ -551,12 +564,12 @@ final class ApiAdminController extends BaseController {
             [
                 $date_range->getStart(),
                 $date_range->getEnd()
-            ], 
-            $log_levels 
+            ],
+            $log_levels
         );
 
         // Sort log entries
-        $log_service->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC); 
+        $log_service->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC);
 
         // Get filtered log entries
         $entries = $log_service->getEntries();
@@ -566,11 +579,11 @@ final class ApiAdminController extends BaseController {
 
         // Build logging filter context
         $context = EntryFilterContext::fromFilter(
-            $channels, 
-            $date_range_string, 
-            $available_channels, 
-            $log_service->getCount(), 
-            $log_service->getStatistics() 
+            $channels,
+            $date_range_string,
+            $available_channels,
+            $log_service->getCount(),
+            $log_service->getStatistics()
         );
 
         // Render filtered log entries

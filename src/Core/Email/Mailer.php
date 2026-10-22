@@ -7,17 +7,20 @@ use App\Core\Logging\Logger;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-final class Mailer {
+final class Mailer
+{
     private EmailConfiguration $configuration;
 
-    public function __construct(?EmailConfiguration $configuration = null) {
+    public function __construct(?EmailConfiguration $configuration = null)
+    {
         $this->configuration = $configuration ?? new EmailConfiguration();
     }
 
     /**
      * Send email
      */
-    public function send(Email $email): bool {
+    public function send(Email $email): bool
+    {
         if (!$this->configuration->isValid()) {
             return false;
         }
@@ -75,7 +78,6 @@ final class Mailer {
             Logger::app()->info('Email send to ' . $email->getTo(), []);
 
             return $mailer->send();
-
         } catch (Exception) {
             // Logging
             Logger::app()->warning('Email could not been send.', []);

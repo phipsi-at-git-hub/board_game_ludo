@@ -5,58 +5,70 @@ namespace App\Core;
 use App\Core\Application\App;
 use \App\Core\Debug;
 
-class Router {
+class Router
+{
     private array $routes = [];
-    private App $app; 
+    private App $app;
 
     // Constructor 
-    public function __construct(App $app) {
-        $this->app = $app; 
+    public function __construct(App $app)
+    {
+        $this->app = $app;
     }
 
     // Standard HTTP
-    public function get(string $path, callable|array $action, array $middleware = []): void {
+    public function get(string $path, callable|array $action, array $middleware = []): void
+    {
         $this->addRoute('GET', $path, $action, $middleware);
     }
 
-    public function post(string $path, callable|array $action, array $middleware = []): void {
+    public function post(string $path, callable|array $action, array $middleware = []): void
+    {
         $this->addRoute('POST', $path, $action, $middleware);
     }
 
-    public function put(string $path, callable|array $action, array $middleware = []): void {
+    public function put(string $path, callable|array $action, array $middleware = []): void
+    {
         $this->addRoute('PUT', $path, $action, $middleware);
     }
 
-    public function delete(string $path, callable|array $action, array $middleware = []): void {
+    public function delete(string $path, callable|array $action, array $middleware = []): void
+    {
         $this->addRoute('DELETE', $path, $action, $middleware);
     }
 
     // Group multiple routes
-    public function group(string $prefix, callable $callback, array $middlewares = []): void {
+    public function group(string $prefix, callable $callback, array $middlewares = []): void
+    {
         $proxy = new class($this, rtrim($prefix, '/'), $middlewares) {
             private Router $router;
             private string $prefix;
             private array $middlewares;
 
-            public function __construct(Router $router, string $prefix, array $middlewares) {
+            public function __construct(Router $router, string $prefix, array $middlewares)
+            {
                 $this->router = $router;
                 $this->prefix = $prefix;
                 $this->middlewares = $middlewares;
             }
 
-            public function get(string $path, callable|array $action, array $routeMiddleware = []): void {
+            public function get(string $path, callable|array $action, array $routeMiddleware = []): void
+            {
                 $this->router->get($this->prefix . $path, $action, array_merge($this->middlewares, $routeMiddleware));
             }
 
-            public function post(string $path, callable|array $action, array $routeMiddleware = []): void {
+            public function post(string $path, callable|array $action, array $routeMiddleware = []): void
+            {
                 $this->router->post($this->prefix . $path, $action, array_merge($this->middlewares, $routeMiddleware));
             }
 
-            public function put(string $path, callable|array $action, array $routeMiddleware = []): void {
+            public function put(string $path, callable|array $action, array $routeMiddleware = []): void
+            {
                 $this->router->put($this->prefix . $path, $action, array_merge($this->middlewares, $routeMiddleware));
             }
 
-            public function delete(string $path, callable|array $action, array $routeMiddleware = []): void {
+            public function delete(string $path, callable|array $action, array $routeMiddleware = []): void
+            {
                 $this->router->delete($this->prefix . $path, $action, array_merge($this->middlewares, $routeMiddleware));
             }
         };
@@ -65,7 +77,8 @@ class Router {
     }
 
     // Add interne method
-    private function addRoute(string $method, string $path, callable|array $action, array $middleware = []): void {
+    private function addRoute(string $method, string $path, callable|array $action, array $middleware = []): void
+    {
         $path = $this->normalize($path);
         $this->routes[$method][$path] = [
             'action' => $action,
@@ -74,8 +87,9 @@ class Router {
     }
 
     // Dispatch – Execute route
-    public function dispatch(App $app): void {
-        $this->app = $app; 
+    public function dispatch(App $app): void
+    {
+        $this->app = $app;
         $method = $_SERVER['REQUEST_METHOD'];
 
         if ($method === 'POST' && isset($_POST['_method'])) {
@@ -89,20 +103,20 @@ class Router {
             //$pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $path);
             //$pattern = preg_replace('#\{id\}#', '([0-9a-f]{32})', $path);
             $pattern = preg_replace(
-                '#\{id\}#', 
-                '([0-9a-fA-F\-]{36})', 
+                '#\{id\}#',
+                '([0-9a-fA-F\-]{36})',
                 $path
             );
             $pattern = preg_replace(
-                '#\{token\}#', 
-                '([0-9a-fA-F\-]{64})', 
+                '#\{token\}#',
+                '([0-9a-fA-F\-]{64})',
                 $pattern
             );
             //$pattern = "#^" . $pattern . "$#";
             $pattern = "#^" . rtrim($pattern, '/') . "/?$#";
 
             if (preg_match($pattern, $uri, $matches)) {
-                array_shift($matches); 
+                array_shift($matches);
                 $routeFound = true;
 
                 // Execute Middleware
@@ -114,9 +128,9 @@ class Router {
                 $action = $route['action'];
                 if (is_array($action)) {
                     [$controllerClass, $methodName] = $action;
-                    $controller = new $controllerClass($this->app); 
+                    $controller = new $controllerClass($this->app);
                     //$controller = $this->container->get($controllerClass); 
-                    $controller->$methodName(...$matches); 
+                    $controller->$methodName(...$matches);
 
                     // Debug in DEV
                     Debug::setRoute($method, $path, get_class($controller) . '@' . $methodName, $route['middleware']);
@@ -143,7 +157,8 @@ class Router {
     }
 
     // Normalize paths
-    private function normalize(string $path): string {
+    private function normalize(string $path): string
+    {
         $path = '/' . trim($path, '/');
         return $path === '//' ? '/' : $path;
     }

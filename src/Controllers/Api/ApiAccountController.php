@@ -13,10 +13,12 @@ use App\Core\Localization;
 use App\Core\Logging\Logger;
 use App\Services\User\UserService;
 
-final class ApiAccountController extends BaseController {
+final class ApiAccountController extends BaseController
+{
     private UserService $userService;
 
-    public function __construct(App $app) {
+    public function __construct(App $app)
+    {
         parent::__construct($app);
 
         $this->userService = $app->resolve(UserService::class);
@@ -25,15 +27,17 @@ final class ApiAccountController extends BaseController {
     /**
      * Account context.
      */
-    private function context(): array {
+    private function context(): array
+    {
         return UserContext::fromUser(Auth::user());
     }
 
     /**
      * Update profile information.
      */
-    public function updateProfile(): void {
-        $user = Auth::user(); 
+    public function updateProfile(): void
+    {
+        $user = Auth::user();
         $data = [
             'username' => $_POST['username'] ?? $user->getUsername(),
             'email' => $_POST['email'] ?? $user->getEmail(),
@@ -69,8 +73,9 @@ final class ApiAccountController extends BaseController {
      *
      * Used by the Binding System for individual settings.
      */
-    public function updateLocale(): void {
-        $user = Auth::user(); 
+    public function updateLocale(): void
+    {
+        $user = Auth::user();
         $data = [];
 
         if (isset($_POST['preferred_language'])) {
@@ -97,7 +102,7 @@ final class ApiAccountController extends BaseController {
         }
 
         // Logging
-        Logger::app()->info('User account locale setting updated',['user_id' => $user->getId()]);
+        Logger::app()->info('User account locale setting updated', ['user_id' => $user->getId()]);
 
         $this->jsonClean(
             Response::success(
@@ -114,8 +119,9 @@ final class ApiAccountController extends BaseController {
      *
      * Used by the Binding System for individual settings.
      */
-    public function updateSettings(): void {
-        $user = Auth::user(); 
+    public function updateSettings(): void
+    {
+        $user = Auth::user();
         $data = [];
 
         if (isset($_POST['preferred_language'])) {
@@ -146,7 +152,7 @@ final class ApiAccountController extends BaseController {
         }
 
         // Logging
-        Logger::app()->info('User account settings updated',['user_id' => $user->getId()]);
+        Logger::app()->info('User account settings updated', ['user_id' => $user->getId()]);
 
         $this->jsonClean(
             Response::success(
@@ -161,8 +167,9 @@ final class ApiAccountController extends BaseController {
     /**
      * Change current user's password.
      */
-    public function changePassword(): void {
-        $user = Auth::user(); 
+    public function changePassword(): void
+    {
+        $user = Auth::user();
         $currentPassword = $_POST['current_password'] ?? '';
         $newPassword = $_POST['new_password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
@@ -214,7 +221,7 @@ final class ApiAccountController extends BaseController {
         }
 
         // Logging
-        Logger::app()->info('User account password changed',['user_id' => $user->getId()]);
+        Logger::app()->info('User account password changed', ['user_id' => $user->getId()]);
 
         $this->jsonClean(
             Response::success(
@@ -229,7 +236,8 @@ final class ApiAccountController extends BaseController {
     /**
      * Show current account.
      */
-    public function show(): void {
+    public function show(): void
+    {
         $this->jsonClean(
             Response::success(
                 $this->context()

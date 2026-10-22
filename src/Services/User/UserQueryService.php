@@ -198,7 +198,8 @@ final class UserQueryService
      * @param UserFilterService $filter
      * @return void
      */
-    private function buildPreferredLanguageConditions(UserFilterService $filter): void {
+    private function buildPreferredLanguageConditions(UserFilterService $filter): void
+    {
         $language = $filter->getPreferredLanguage();
 
         if ($language === null) {
@@ -219,7 +220,8 @@ final class UserQueryService
      * @param UserFilterService $filter
      * @return void
      */
-    private function buildPreferredCameraModeConditions(UserFilterService $filter): void {
+    private function buildPreferredCameraModeConditions(UserFilterService $filter): void
+    {
         $cameraMode = $filter->getPreferredCameraMode();
 
         if ($cameraMode === null) {

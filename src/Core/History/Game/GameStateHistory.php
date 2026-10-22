@@ -5,7 +5,8 @@ namespace App\Core\History\Game;
 
 use App\Models\Game\GameHistoryModel;
 
-final class GameStateHistory {
+final class GameStateHistory
+{
     private string $game_id;
     private int $state_index;
     private array $state;
@@ -26,7 +27,8 @@ final class GameStateHistory {
     /**
      * Create new history entry
      */
-    public static function create(string $game_id, array $state): bool {
+    public static function create(string $game_id, array $state): bool
+    {
         $state_index = GameHistoryModel::getNextStateIndex($game_id);
         return GameHistoryModel::create(
             $game_id,
@@ -38,7 +40,8 @@ final class GameStateHistory {
     /**
      * Load complete history of game
      */
-    public static function findByGameId(string $game_id): array {
+    public static function findByGameId(string $game_id): array
+    {
         $rows = GameHistoryModel::findByGameId($game_id);
         return array_map(
             fn(array $row) => self::fromArray($row),
@@ -49,7 +52,8 @@ final class GameStateHistory {
     /**
      * Load latest state
      */
-    public static function findLatest(string $game_id): ?self {
+    public static function findLatest(string $game_id): ?self
+    {
         $row = GameHistoryModel::findLatest($game_id);
         return $row
             ? self::fromArray($row)
@@ -59,7 +63,8 @@ final class GameStateHistory {
     /**
      * Load specific state
      */
-    public static function findByIndex(string $game_id, int $state_index): ?self {
+    public static function findByIndex(string $game_id, int $state_index): ?self
+    {
         $row = GameHistoryModel::findByGameIdAndIndex($game_id, $state_index);
         return $row
             ? self::fromArray($row)
@@ -69,7 +74,8 @@ final class GameStateHistory {
     /**
      * Create object from database row
      */
-    private static function fromArray(array $data): self {
+    private static function fromArray(array $data): self
+    {
         return new self(
             $data['game_id'],
             (int)$data['state_index'],
@@ -86,28 +92,32 @@ final class GameStateHistory {
     /**
      * Getter - Game ID
      */
-    public function getGameId(): string {
+    public function getGameId(): string
+    {
         return $this->game_id;
     }
 
     /**
      * Getter - State index
      */
-    public function getStateIndex(): int {
+    public function getStateIndex(): int
+    {
         return $this->state_index;
     }
 
     /**
      * Getter - State
      */
-    public function getState(): array {
+    public function getState(): array
+    {
         return $this->state;
     }
 
     /**
      * Getter - Creation timestamp
      */
-    public function getCreatedAt(): string {
+    public function getCreatedAt(): string
+    {
         return $this->created_at;
     }
 }

@@ -7,8 +7,9 @@ use App\Constants\Application;
 use App\Core\Application\App;
 use App\Core\Utility\UUID;
 
-final class LogEntry { 
-    private ?string $id; 
+final class LogEntry
+{
+    private ?string $id;
     private string $level;
     private string $message;
     private array $context;
@@ -45,7 +46,7 @@ final class LogEntry {
     ): self {
         $entry = new self();
 
-        $entry->id = UUID::generate(); 
+        $entry->id = UUID::generate();
         $entry->level = $level;
         $entry->message = $message;
         $entry->context = $context;
@@ -74,10 +75,11 @@ final class LogEntry {
     /**
      * Create LogEntry from array
      */
-    public static function fromArray(array $data): self {
+    public static function fromArray(array $data): self
+    {
         $entry = new self();
 
-        $entry->id = $data[Application::ID] ?? null; 
+        $entry->id = $data[Application::ID] ?? null;
         $entry->level = $data['level'];
         $entry->message = $data['message'];
         $entry->context = $data['context'] ?? [];
@@ -109,7 +111,8 @@ final class LogEntry {
     /**
      * Create LogEntry from JSON string
      */
-    public static function fromString(string $json): self {
+    public static function fromString(string $json): self
+    {
         return self::fromArray(
             json_decode(
                 $json,
@@ -123,7 +126,8 @@ final class LogEntry {
     /**
      * Resolve the caller of the Logger
      */
-    private function resolveCaller(): void {
+    private function resolveCaller(): void
+    {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         foreach ($trace as $index => $frame) {
             $class = $frame['class'] ?? null;
@@ -136,13 +140,13 @@ final class LogEntry {
                 if ($caller === null) {
                     return;
                 }
-                
+
                 $this->class = $caller_class['class'] ?? null;
                 $this->method = $caller_class['function'] ?? null;
 
                 $file = $caller['file'] ?? null;
                 if ($file !== null && defined('BASE_PATH')) {
-                    $file = str_replace(BASE_PATH . DIRECTORY_SEPARATOR, '', $file); 
+                    $file = str_replace(BASE_PATH . DIRECTORY_SEPARATOR, '', $file);
                 }
 
                 $this->file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
@@ -155,34 +159,37 @@ final class LogEntry {
     /**
      * JSON representation for log file
      */
-    public function toString(): string {
+    public function toString(): string
+    {
         return json_encode(
             $this->toArray(),
             JSON_UNESCAPED_UNICODE
-            | JSON_UNESCAPED_SLASHES
-            | JSON_THROW_ON_ERROR
+                | JSON_UNESCAPED_SLASHES
+                | JSON_THROW_ON_ERROR
         );
     }
 
     /**
      * Pretty JSON representation for log detail view
      */
-    public function toPrettyString(): string {
+    public function toPrettyString(): string
+    {
         return json_encode(
-            $this->toArray(), 
-            JSON_PRETTY_PRINT 
-            | JSON_UNESCAPED_UNICODE 
-            | JSON_UNESCAPED_SLASHES 
-            | JSON_THROW_ON_ERROR 
-        ); 
+            $this->toArray(),
+            JSON_PRETTY_PRINT
+                | JSON_UNESCAPED_UNICODE
+                | JSON_UNESCAPED_SLASHES
+                | JSON_THROW_ON_ERROR
+        );
     }
 
     /**
      * Array representation
      */
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
-            Application::ID => $this->id, 
+            Application::ID => $this->id,
 
             'timestamp' => $this->timestamp,
 
@@ -209,71 +216,88 @@ final class LogEntry {
         ];
     }
 
-    public function getId(): ?string {
-        return $this->id; 
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 
-    public function getLevel(): string {
+    public function getLevel(): string
+    {
         return $this->level;
     }
 
-    public function getMessage(): string {
+    public function getMessage(): string
+    {
         return $this->message;
     }
 
-    public function getContext(): array {
+    public function getContext(): array
+    {
         return $this->context;
     }
 
-    public function getChannel(): string {
+    public function getChannel(): string
+    {
         return $this->channel;
     }
 
-    public function getTimestamp(): string {
+    public function getTimestamp(): string
+    {
         return $this->timestamp;
     }
 
-    public function getRequestId(): ?string {
+    public function getRequestId(): ?string
+    {
         return $this->request_id;
     }
 
-    public function getRequestMethod(): ?string {
+    public function getRequestMethod(): ?string
+    {
         return $this->request_method;
     }
 
-    public function getRequestUri(): ?string {
+    public function getRequestUri(): ?string
+    {
         return $this->request_uri;
     }
 
-    public function getClientIp(): ?string {
+    public function getClientIp(): ?string
+    {
         return $this->client_ip;
     }
 
-    public function getRuntime(): ?string {
+    public function getRuntime(): ?string
+    {
         return $this->runtime;
     }
 
-    public function getClass(): ?string {
+    public function getClass(): ?string
+    {
         return $this->class;
     }
 
-    public function getMethod(): ?string {
+    public function getMethod(): ?string
+    {
         return $this->method;
     }
 
-    public function getFile(): ?string {
+    public function getFile(): ?string
+    {
         return $this->file;
     }
 
-    public function getLine(): ?int {
+    public function getLine(): ?int
+    {
         return $this->line;
     }
 
-    public function getSessionId(): ?string {
+    public function getSessionId(): ?string
+    {
         return $this->session_id;
     }
 
-    public function getUserId(): ?string {
+    public function getUserId(): ?string
+    {
         return $this->user_id;
     }
 }

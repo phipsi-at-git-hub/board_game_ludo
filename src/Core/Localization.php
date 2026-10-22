@@ -4,11 +4,13 @@ namespace App\Core;
 
 use App\Constants\Application;
 
-class Localization {
+class Localization
+{
     private static array $translations = [];
     private static string $locale = Application::EN_US;
 
-    public static function load(string $translationsPath, string $locale): void {
+    public static function load(string $translationsPath, string $locale): void
+    {
         self::$locale = $locale;
         $file = $translationsPath . '/' . $locale . '/messages.php';
         if (file_exists($file)) {
@@ -16,7 +18,8 @@ class Localization {
         }
     }
 
-    public static function get(string $key, array $replace = []): string {
+    public static function get(string $key, array $replace = []): string
+    {
         $text = self::$translations[$key] ?? $key;
         foreach ($replace as $k => $v) {
             $text = str_replace("{{$k}}", $v, $text);

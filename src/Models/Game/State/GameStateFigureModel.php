@@ -1,11 +1,12 @@
-<?php 
+<?php
 // src/Models/Game/State/GameStateFigureModel.php
 namespace App\Models\Game\State;
 
 use App\Constants\Application;
 use App\Models\BaseModel;
 
-final class GameStateFigureModel extends BaseModel {
+final class GameStateFigureModel extends BaseModel
+{
     // ToDo: Use constant from application.php 
     private string $game_id;
     private string $user_id;
@@ -17,7 +18,8 @@ final class GameStateFigureModel extends BaseModel {
     private string $updated_at;
 
     // Find game state figures by game id
-    public static function findByGameId(string $game_id): array {
+    public static function findByGameId(string $game_id): array
+    {
         return static::fetchAll(
             "SELECT * 
             FROM game_state_figures 
@@ -27,7 +29,8 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Find game state players for given game
-    public static function findByFigureIndex(string $game_id, string $user_id, int $figure_index): self {
+    public static function findByFigureIndex(string $game_id, string $user_id, int $figure_index): self
+    {
         $row = static::fetchOne(
             sprintf(
                 "SELECT * 
@@ -39,8 +42,8 @@ final class GameStateFigureModel extends BaseModel {
             ),
             [
                 'game_id' => $game_id,
-                'user_id' => $user_id, 
-                'figure_index' => $figure_index 
+                'user_id' => $user_id,
+                'figure_index' => $figure_index
             ]
         );
 
@@ -48,7 +51,8 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Find game state figures by game id and player id
-    public static function findByGameIdAndPlayerId(string $game_id, string $player_id): array {
+    public static function findByGameIdAndPlayerId(string $game_id, string $player_id): array
+    {
         $rows = static::fetchAll(
             sprintf(
                 "SELECT *
@@ -56,8 +60,9 @@ final class GameStateFigureModel extends BaseModel {
                 WHERE
                     game_id = :game_id AND 
                     user_id = :user_id"
-            ), [
-                'game_id' => $game_id, 
+            ),
+            [
+                'game_id' => $game_id,
                 'user_id' => $player_id
             ]
         );
@@ -65,10 +70,11 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Create initial figures for given game
-    public static function createInitialFigureSet(string $game_id, string $user_id, bool $all_start_from_home = true): void {
+    public static function createInitialFigureSet(string $game_id, string $user_id, bool $all_start_from_home = true): void
+    {
         $figures = [];
         for ($i = 0; $i < 4; $i++) {
-            $area = Application::AREA_HOME; 
+            $area = Application::AREA_HOME;
             $position = $i;
             if ($all_start_from_home === false && (int)$i === 3) {
                 $area = Application::AREA_FIELD;
@@ -83,8 +89,8 @@ final class GameStateFigureModel extends BaseModel {
                 [
                     'game_id' => $game_id,
                     'user_id' => $user_id,
-                    'figure_index' => $i, 
-                    'position' => $position, 
+                    'figure_index' => $i,
+                    'position' => $position,
                     'area' => $area
                 ]
             );
@@ -92,12 +98,14 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Store complete GameStateFigureModel
-    public function save(): bool {
+    public function save(): bool
+    {
         return $this->updateFigure($this->game_id, $this->user_id, $this->figure_index, $this->toArray());
     }
 
     // Store position
-    public function savePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool {
+    public function savePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool
+    {
         $game_state_figure_array = $this->toArray();
         $game_state_figure_array[Application::POSITION] = $figure_position;
 
@@ -105,31 +113,35 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Store position
-    public function saveArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool {
+    public function saveArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool
+    {
         $game_state_figure_array = $this->toArray();
-        $game_state_figure_array[Application::AREA] = $figure_area; 
+        $game_state_figure_array[Application::AREA] = $figure_area;
         var_dump($game_state_figure_array);
 
         return $this->updateFigure($game_id, $user_id, $figure_index, $game_state_figure_array);
     }
 
     // Update given figures for given game
-    public static function updateFigure(string $game_id, string $user_id, int $figure_index, array $figure_array): bool {
+    public static function updateFigure(string $game_id, string $user_id, int $figure_index, array $figure_array): bool
+    {
         return static::execute(
             sprintf(
                 "UPDATE game_state_figures SET area = :area, position = :position WHERE game_id = :game_id AND user_id = :user_id AND figure_index = :figure_index"
-            ), [
-                'position' => $figure_array[Application::POSITION], 
-                'area' => $figure_array[Application::AREA], 
-                'game_id' => $game_id, 
-                'user_id' => $user_id, 
+            ),
+            [
+                'position' => $figure_array[Application::POSITION],
+                'area' => $figure_array[Application::AREA],
+                'game_id' => $game_id,
+                'user_id' => $user_id,
                 'figure_index' => $figure_index
             ]
         );
     }
 
     // Delete all figures of given game
-    public static function removeAllFigures(string $game_id): bool {
+    public static function removeAllFigures(string $game_id): bool
+    {
         return static::execute(
             "DELETE FROM game_state_figure WHERE game_id = :game_id",
             ['game_id' => $game_id]
@@ -137,7 +149,8 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Delete all figures of given user
-    public static function removeAllUserFigures(string $game_id, string $user_id): bool {
+    public static function removeAllUserFigures(string $game_id, string $user_id): bool
+    {
         return static::execute(
             "DELETE FROM game_state_figures WHERE game_id = :game_id AND user_id = :user_id",
             ['game_id' => $game_id, 'user_id' => $user_id]
@@ -146,42 +159,50 @@ final class GameStateFigureModel extends BaseModel {
 
     // Getter
     // Getter - Get game id
-    public function getGameId(): string {
+    public function getGameId(): string
+    {
         return $this->game_id;
     }
 
     // Getter - Get user id
-    public function getUserId(): string {
+    public function getUserId(): string
+    {
         return $this->user_id;
     }
 
     // Getter - Get username
-    public function getUsername(): string {
+    public function getUsername(): string
+    {
         return $this->user_name;
     }
 
     // Getter - Get figure index
-    public function getFigureIndex(): int {
+    public function getFigureIndex(): int
+    {
         return $this->figure_index;
     }
 
     // Getter - Get position
-    public function getPosition(): int {
+    public function getPosition(): int
+    {
         return $this->position;
     }
 
     // Getter - Get area
-    public function getArea(): string {
+    public function getArea(): string
+    {
         return $this->area;
     }
 
     // Getter - Get created at
-    public function getCreatedAt(): string {
+    public function getCreatedAt(): string
+    {
         return $this->created_at;
     }
 
     // Getter - Get updated at
-    public function getUpdatedAt(): string {
+    public function getUpdatedAt(): string
+    {
         return $this->updated_at;
     }
 
@@ -190,17 +211,19 @@ final class GameStateFigureModel extends BaseModel {
      */
 
     // Reset given figure for given game
-    public function setFigure(string $area, int $position): void {
+    public function setFigure(string $area, int $position): void
+    {
         $this->setArea($area);
         $this->setPosition($position);
     }
 
     // Setter - Set Area
-    public function setArea(string $area): bool {
+    public function setArea(string $area): bool
+    {
         // ToDo: make it proof
         if (
-            $area === Application::AREA_HOME 
-            || $area === Application::AREA_FIELD 
+            $area === Application::AREA_HOME
+            || $area === Application::AREA_FIELD
             || $area === Application::AREA_GOAL
         ) {
             //$this->storeArea($this->game_id, $this->user_id, $this->figure_index, $area);
@@ -211,7 +234,8 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Setter - Set Position
-    public function setPosition(int $position): void {
+    public function setPosition(int $position): void
+    {
         // ToDo: make it proof
         // find first empty slot in home area an position figure there
         //$this->storePosition($this->game_id, $this->user_id, $this->figure_index, $position);
@@ -220,28 +244,32 @@ final class GameStateFigureModel extends BaseModel {
 
     // Helper
     // Helper - Find first empty slot in home area
-    public function findFirstEmptySlotInHome(): int {
+    public function findFirstEmptySlotInHome(): int
+    {
         // ToDo: Implement
         return 0;
     }
     // Helper - Find empty slots in goal area
-    public function findEmptySlotsInGoal(): int {
+    public function findEmptySlotsInGoal(): int
+    {
         // ToDo: Implement
         return 0;
     }
 
     // Helper - Convert db rows to GameModel dynamically
-    private static function fromArrayDynamic(array $row): self {
+    private static function fromArrayDynamic(array $row): self
+    {
         $game_state_figure = new self();
 
         foreach ($row as $key => $value) {
-            $game_state_figure->{$key} = $value; 
+            $game_state_figure->{$key} = $value;
         }
         return $game_state_figure;
     }
 
     // Helper - Convert db rows to GameStateFigureModel strict
-    public static function fromArray(array $row) : self {
+    public static function fromArray(array $row): self
+    {
         $game_state_figure = new self();
 
         $game_state_figure->game_id = self::hydrateString($row, Application::GAME_ID);
@@ -257,7 +285,8 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Helper - Create Array from GameStateFigureModel
-    private function toArray(): array {
+    private function toArray(): array
+    {
         $game_state_figure[Application::GAME_ID] = $this->game_id;
         $game_state_figure[Application::USER_ID] = $this->user_id;
         $game_state_figure[Application::FIGURE_INDEX] = $this->figure_index;
@@ -268,17 +297,20 @@ final class GameStateFigureModel extends BaseModel {
     }
 
     // Helper - Is Figure at home
-    public function isHome(): bool {
+    public function isHome(): bool
+    {
         return ($this->area === Application::AREA_HOME);
     }
 
     // Helper - Is Figure on field
-    public function isField(): bool {
+    public function isField(): bool
+    {
         return ($this->area === Application::AREA_FIELD);
     }
 
     // Helper - Is Figure in goal
-    public function isGoal(): bool {
+    public function isGoal(): bool
+    {
         return ($this->area === Application::AREA_GOAL);
     }
 }

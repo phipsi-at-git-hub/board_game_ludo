@@ -3,19 +3,22 @@
 
 namespace App\Core\Persistence;
 
-final class FileSystem {
+final class FileSystem
+{
     private static ?FileSystem $instance = null;
 
     private function __construct() {}
 
-    public static function getInstance(): self {
+    public static function getInstance(): self
+    {
         return self::$instance ??= new self();
     }
 
     /**
      * Write file
      */
-    public function write(string $path, string $content): bool {
+    public function write(string $path, string $content): bool
+    {
         $this->ensureDirectoryExists(dirname($path));
         return file_put_contents(
             $path,
@@ -27,7 +30,8 @@ final class FileSystem {
     /**
      * Append file
      */
-    public function append(string $path, string $content): bool {
+    public function append(string $path, string $content): bool
+    {
         $this->ensureDirectoryExists(dirname($path));
         return file_put_contents(
             $path,
@@ -44,7 +48,8 @@ final class FileSystem {
      * file-1.log
      * file-2.log
      */
-    public function appendRotated(string $path, string $content, int $maxSize): bool {
+    public function appendRotated(string $path, string $content, int $maxSize): bool
+    {
         $target = $this->getCurrentRotatedFilename($path);
         if (!$this->exists($target) || ($this->size($target) + strlen($content)) <= $maxSize) {
             return $this->append($target, $content);
@@ -59,7 +64,8 @@ final class FileSystem {
     /**
      * Read complete file
      */
-    public function read(string $path): ?string {
+    public function read(string $path): ?string
+    {
         if (!$this->exists($path)) {
             return null;
         }
@@ -71,7 +77,8 @@ final class FileSystem {
      *
      * Reads only requested range.
      */
-    public function readLines(string $path, int $start = 0, ?int $limit = null): array {
+    public function readLines(string $path, int $start = 0, ?int $limit = null): array
+    {
         if (!$this->exists($path)) {
             return [];
         }
@@ -102,7 +109,8 @@ final class FileSystem {
      *
      * Reads files sequentially in given order.
      */
-    public function readLinesFromFiles(array $files, int $start = 0, ?int $limit = null): array {
+    public function readLinesFromFiles(array $files, int $start = 0, ?int $limit = null): array
+    {
         $result = [];
         $offset = $start;
 
@@ -142,7 +150,8 @@ final class FileSystem {
     /**
      * Count file lines
      */
-    public function countLines(string $path): int {
+    public function countLines(string $path): int
+    {
         if (!$this->exists($path)) {
             return 0;
         }
@@ -164,14 +173,16 @@ final class FileSystem {
     /**
      * File exists
      */
-    public function exists(string $path): bool {
+    public function exists(string $path): bool
+    {
         return file_exists($path);
     }
 
     /**
      * Delete file
      */
-    public function delete(string $path): bool {
+    public function delete(string $path): bool
+    {
         if (!$this->exists($path)) {
             return false;
         }
@@ -181,14 +192,15 @@ final class FileSystem {
     /**
      * List files
      */
-    public function listFiles(string $directory, string $pattern = '*'): array {
+    public function listFiles(string $directory, string $pattern = '*'): array
+    {
         if (!is_dir($directory)) {
             return [];
         }
 
         $files = glob(rtrim($directory, '/') . '/' . $pattern);
         return $files ?: [];
-    } 
+    }
 
     /**
      * List only base files of all matching files
@@ -201,25 +213,27 @@ final class FileSystem {
      * return:
      * file.txt 
      */
-    public function listBaseFiles(string $directory, string $pattern = '*'): array { 
-        $files = $this->listFiles($directory, $pattern); 
-        $baseFiles = []; 
+    public function listBaseFiles(string $directory, string $pattern = '*'): array
+    {
+        $files = $this->listFiles($directory, $pattern);
+        $baseFiles = [];
 
-        forEach ($files as $file) {
-            $extension = pathinfo($file, PATHINFO_EXTENSION); 
-            $basename = pathinfo($file, PATHINFO_FILENAME); 
-            $basename = preg_replace('/-\d+$/', '', $basename); 
-            $baseFile = dirname($file). '/' . $basename . ($extension ? '.' . $extension : ''); 
-            $baseFiles[$baseFile] = $baseFile; 
+        foreach ($files as $file) {
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+            $basename = pathinfo($file, PATHINFO_FILENAME);
+            $basename = preg_replace('/-\d+$/', '', $basename);
+            $baseFile = dirname($file) . '/' . $basename . ($extension ? '.' . $extension : '');
+            $baseFiles[$baseFile] = $baseFile;
         }
-        natsort($baseFiles); 
-        return array_values($baseFiles); 
+        natsort($baseFiles);
+        return array_values($baseFiles);
     }
 
     /**
      * File size
      */
-    public function size(string $path): ?int {
+    public function size(string $path): ?int
+    {
         if (!$this->exists($path)) {
             return null;
         }
@@ -229,7 +243,8 @@ final class FileSystem {
     /**
      * Last modification timestamp
      */
-    public function lastModified(string $path): ?int {
+    public function lastModified(string $path): ?int
+    {
         if (!$this->exists($path)) {
             return null;
         }
@@ -246,7 +261,8 @@ final class FileSystem {
      *
      * Returns the last existing file.
      */
-    private function getCurrentRotatedFilename(string $path): string {
+    private function getCurrentRotatedFilename(string $path): string
+    {
         $files = $this->getRelatedRotatedFilenames($path);
         if (empty($files)) {
             return $path;
@@ -257,7 +273,8 @@ final class FileSystem {
     /**
      * Returns next rotated filename
      */
-    private function getNextRotatedFilename(string $path): string {
+    private function getNextRotatedFilename(string $path): string
+    {
         $directory = dirname($path);
         $filename = basename($path);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -285,7 +302,8 @@ final class FileSystem {
      * log-1.txt
      * log-2.txt
      */
-    public function getRelatedRotatedFilenames(string $path): array {
+    public function getRelatedRotatedFilenames(string $path): array
+    {
         if (!$this->exists($path)) {
             return [];
         }
@@ -311,7 +329,8 @@ final class FileSystem {
     /**
      * Ensure directory exists
      */
-    private function ensureDirectoryExists(string $directory): void {
+    private function ensureDirectoryExists(string $directory): void
+    {
         if (!is_dir($directory)) {
             mkdir(
                 $directory,

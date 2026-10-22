@@ -6,7 +6,8 @@ use App\Constants\Application;
 use App\Models\BaseModel;
 use Throwable;
 
-final class UserModel extends BaseModel {
+final class UserModel extends BaseModel
+{
     // ToDo: Use constant from application.php 
 
     private string $id;
@@ -17,10 +18,10 @@ final class UserModel extends BaseModel {
     private ?string $password_hash = null;
     private string $role;
     private string $status;
-    private string $preferred_language; 
+    private string $preferred_language;
     private string $preferred_camera_mode;
     private ?string $last_login = null;
-    private UserStatisticsModel $user_statistics; 
+    private UserStatisticsModel $user_statistics;
     private string $created_at;
     private string $updated_at;
     private ?string $reset_token = null;
@@ -104,22 +105,23 @@ final class UserModel extends BaseModel {
      * @param string $id
      * @return ?self
      */
-    public static function findById(string $id): ?self {
+    public static function findById(string $id): ?self
+    {
         $row = static::fetchOne(
-            "SELECT * FROM users WHERE id = :id LIMIT 1", 
+            "SELECT * FROM users WHERE id = :id LIMIT 1",
             [
                 'id' => $id
             ]
         );
 
         if (!$row) {
-            return null; 
+            return null;
         }
 
-        $user = self::fromArray($row); 
-        $user->user_statistics = UserStatisticsModel::findByUserId($id); 
+        $user = self::fromArray($row);
+        $user->user_statistics = UserStatisticsModel::findByUserId($id);
 
-        return $user; 
+        return $user;
     }
 
     /**
@@ -130,22 +132,23 @@ final class UserModel extends BaseModel {
      * @param string $email
      * @return ?self
      */
-    public static function findByEmail(string $email): ?self {
+    public static function findByEmail(string $email): ?self
+    {
         $row = static::fetchOne(
-            "SELECT * FROM users WHERE email = :email LIMIT 1", 
+            "SELECT * FROM users WHERE email = :email LIMIT 1",
             [
                 'email' => $email
             ]
         );
 
         if (!$row) {
-            return null; 
+            return null;
         }
 
-        $user = self::fromArray($row); 
-        $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
+        $user = self::fromArray($row);
+        $user->user_statistics = UserStatisticsModel::findByUserId($user->getId());
 
-        return $user; 
+        return $user;
     }
 
     /**
@@ -156,16 +159,17 @@ final class UserModel extends BaseModel {
      * @param string $role
      * @return ?self
      */
-    public static function findByRole(string $role): ?array {
-        $rows = static::fetchAll("SELECT * FROM users WHERE role = :role", ['role' => $role]); 
-        $users = []; 
+    public static function findByRole(string $role): ?array
+    {
+        $rows = static::fetchAll("SELECT * FROM users WHERE role = :role", ['role' => $role]);
+        $users = [];
 
         foreach ($rows as $row) {
-            $user = self::fromArray($row); 
-            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
-            $users[] = $user; 
+            $user = self::fromArray($row);
+            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId());
+            $users[] = $user;
         }
-        return $users; 
+        return $users;
     }
 
     /**
@@ -174,16 +178,17 @@ final class UserModel extends BaseModel {
      *
      * @return array
      */
-    public static function all(): array {
+    public static function all(): array
+    {
         $rows = static::fetchAll("SELECT * FROM users ORDER BY created_at DESC");
-        $users = []; 
+        $users = [];
 
         foreach ($rows as $row) {
-            $user = self::fromArray($row); 
-            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId()); 
-            $users[] = $user; 
+            $user = self::fromArray($row);
+            $user->user_statistics = UserStatisticsModel::findByUserId($user->getId());
+            $users[] = $user;
         }
-        return $users; 
+        return $users;
     }
 
     /**
@@ -193,7 +198,8 @@ final class UserModel extends BaseModel {
      *
      * @return int
      */
-    public static function countAll(): int {
+    public static function countAll(): int
+    {
         return static::count("SELECT COUNT(*) FROM users");
     }
 
@@ -205,9 +211,10 @@ final class UserModel extends BaseModel {
      * @param string $status
      * @return int
      */
-    public static function countByStatus(string $status): int {
+    public static function countByStatus(string $status): int
+    {
         return static::count(
-            "SELECT COUNT(*) FROM users WHERE status = :status", 
+            "SELECT COUNT(*) FROM users WHERE status = :status",
             ['status' => $status]
         );
     }
@@ -220,13 +227,14 @@ final class UserModel extends BaseModel {
      * @param string $role
      * @return int
      */
-    public static function countByRole(string $role): int {
+    public static function countByRole(string $role): int
+    {
         return static::count(
             "SELECT COUNT(*) FROM users WHERE role = :role",
             ['role' => $role]
         );
     }
-    
+
     /**
      * Create new user
      * 
@@ -239,7 +247,8 @@ final class UserModel extends BaseModel {
      * @param string $status
      * @return self
      */
-    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::INACTIVE): self {
+    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::INACTIVE): self
+    {
         $id = self::generateUUID();
         $password_hash = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
 
@@ -299,14 +308,16 @@ final class UserModel extends BaseModel {
      *
      * @return bool
      */
-    public function save(): bool {
+    public function save(): bool
+    {
         return $this->updateUser($this->toArray());
     }
 
     /**
      * Update User
      */
-    private function updateUser(array $user_array) {
+    private function updateUser(array $user_array)
+    {
         return static::execute(
             sprintf(
                 "UPDATE 
@@ -319,25 +330,26 @@ final class UserModel extends BaseModel {
                     preferred_language = :preferred_language, 
                     preferred_camera_mode = :preferred_camera_mode 
                 WHERE 
-                    id = :id", 
-                
-                Application::TABLE_USERS, 
+                    id = :id",
 
-                Application::USERNAME, 
-                Application::EMAIL, 
-                Application::ROLE, 
-                Application::STATUS, 
-                Application::PREFERRED_LANGUAGE, 
-                Application::PREFERRED_CAMERA_MODE, 
+                Application::TABLE_USERS,
+
+                Application::USERNAME,
+                Application::EMAIL,
+                Application::ROLE,
+                Application::STATUS,
+                Application::PREFERRED_LANGUAGE,
+                Application::PREFERRED_CAMERA_MODE,
 
                 Application::ID
-            ), [
-                'username' => $user_array[Application::USERNAME] ?? $this->username, 
-                'email' => $user_array[Application::EMAIL] ?? $this->email, 
-                'role' => $user_array[Application::ROLE] ?? $this->role, 
-                'status' => $user_array[Application::STATUS] ?? $this->status, 
-                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE] ?? $this->preferred_language, 
-                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE] ?? $this->preferred_camera_mode, 
+            ),
+            [
+                'username' => $user_array[Application::USERNAME] ?? $this->username,
+                'email' => $user_array[Application::EMAIL] ?? $this->email,
+                'role' => $user_array[Application::ROLE] ?? $this->role,
+                'status' => $user_array[Application::STATUS] ?? $this->status,
+                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE] ?? $this->preferred_language,
+                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE] ?? $this->preferred_camera_mode,
                 'id' => $this->id
             ]
         );
@@ -352,15 +364,16 @@ final class UserModel extends BaseModel {
      * @param string $email
      * @return bool
      */
-    public function updateProfile(string $username, string $email): bool {
+    public function updateProfile(string $username, string $email): bool
+    {
         $this->username = $username;
         $this->email = $email;
 
         return static::execute(
-            "UPDATE users SET username = :username, email = :email WHERE id = :id", 
+            "UPDATE users SET username = :username, email = :email WHERE id = :id",
             [
-                'username' => $username, 
-                'email' => $email, 
+                'username' => $username,
+                'email' => $email,
                 'id' => $this->id,
             ]
         );
@@ -373,14 +386,15 @@ final class UserModel extends BaseModel {
      * 
      * @return bool
      */
-    public function activate(): bool {
+    public function activate(): bool
+    {
         return static::execute(
-            "UPDATE users SET status = :status WHERE id = :id", 
+            "UPDATE users SET status = :status WHERE id = :id",
             [
-                'status' => Application::ACTIVE, 
+                'status' => Application::ACTIVE,
                 'id' => $this->id,
             ]
-        ); 
+        );
     }
 
     /**
@@ -390,14 +404,15 @@ final class UserModel extends BaseModel {
      *
      * @return bool
      */
-    public function deactivate(): bool {
+    public function deactivate(): bool
+    {
         return static::execute(
-            "UPDATE users SET status = :status WHERE id = :id", 
+            "UPDATE users SET status = :status WHERE id = :id",
             [
-                'status' => Application::INACTIVE, 
-                'id' => $this->id, 
+                'status' => Application::INACTIVE,
+                'id' => $this->id,
             ]
-        ); 
+        );
     }
 
     /**
@@ -407,9 +422,10 @@ final class UserModel extends BaseModel {
      *
      * @return bool
      */
-    public function delete(): bool {
+    public function delete(): bool
+    {
         return static::execute(
-            "DELETE FROM users WHERE id = :id", 
+            "DELETE FROM users WHERE id = :id",
             [
                 'id' => $this->id
             ]
@@ -423,7 +439,8 @@ final class UserModel extends BaseModel {
      *
      * @return bool
      */
-    public function updateLastLogin(): bool {
+    public function updateLastLogin(): bool
+    {
         return static::execute(
             sprintf(
                 "UPDATE 
@@ -431,12 +448,13 @@ final class UserModel extends BaseModel {
                 SET
                     last_login = NOW()
                 WHERE 
-                    id = :id", 
-                
-                Application::TABLE_USERS, 
-                Application::LAST_LOGIN, 
+                    id = :id",
+
+                Application::TABLE_USERS,
+                Application::LAST_LOGIN,
                 Application::ID
-            ), [
+            ),
+            [
                 'id' => $this->id
             ]
         );
@@ -451,7 +469,8 @@ final class UserModel extends BaseModel {
      * @param string $password
      * @return ?self
      */
-    public static function verify(string $email, string $password): ?self {
+    public static function verify(string $email, string $password): ?self
+    {
         $user = self::findByEmail($email);
         if ($user && $user->password_hash !== null && password_verify($password, $user->password_hash)) {
             return $user;
@@ -467,9 +486,10 @@ final class UserModel extends BaseModel {
      * @param string $password
      * @return bool
      */
-    public function verifyPassword(string $password): bool {
+    public function verifyPassword(string $password): bool
+    {
         if ($this->password_hash === null) {
-            return false; 
+            return false;
         }
         return password_verify($password, $this->password_hash);
     }
@@ -482,13 +502,14 @@ final class UserModel extends BaseModel {
      * @param string $new_password
      * @return bool
      */
-    public function updatePassword(string $new_password): bool {
+    public function updatePassword(string $new_password): bool
+    {
         $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
         return static::execute(
-            "UPDATE users SET password_hash = :hash WHERE id = :id", 
+            "UPDATE users SET password_hash = :hash WHERE id = :id",
             [
-                'hash' => $password_hash, 
-                'id' => $this->id, 
+                'hash' => $password_hash,
+                'id' => $this->id,
             ]
         );
     }
@@ -501,7 +522,8 @@ final class UserModel extends BaseModel {
      * @param string $email
      * @return ?string
      */
-    public static function createPasswordToken(string $email): ?string {
+    public static function createPasswordToken(string $email): ?string
+    {
         $user = self::findByEmail($email);
         if (!$user) {
             return null;
@@ -509,12 +531,12 @@ final class UserModel extends BaseModel {
 
         $token = bin2hex(random_bytes(32));
         $expires_at = date('Y-m-d H:i:s', time() + 3600);
-        
+
         static::execute(
-            "UPDATE users SET reset_token = :token, reset_token_expires_at = :expires WHERE id = :id", 
+            "UPDATE users SET reset_token = :token, reset_token_expires_at = :expires WHERE id = :id",
             [
                 'token' => $token,
-                'expires' => $expires_at, 
+                'expires' => $expires_at,
                 'id' => $user->id,
             ]
         );
@@ -529,9 +551,10 @@ final class UserModel extends BaseModel {
      * @param string $token
      * @return ?self
      */
-    public static function findByPasswordToken(string $token): ?self {
+    public static function findByPasswordToken(string $token): ?self
+    {
         $row = static::fetchOne(
-            "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1", 
+            "SELECT * FROM users WHERE reset_token = :token AND reset_token_expires_at > NOW() LIMIT 1",
             [
                 'token' => $token
             ]
@@ -546,12 +569,13 @@ final class UserModel extends BaseModel {
      *
      * @return bool
      */
-    public function clearPasswordToken(): bool {
+    public function clearPasswordToken(): bool
+    {
         $this->reset_token = null;
         $this->reset_expires_at = null;
 
         return static::execute(
-            "UPDATE users SET reset_token = NULL, reset_token_expires_at = NULL WHERE id = :id", 
+            "UPDATE users SET reset_token = NULL, reset_token_expires_at = NULL WHERE id = :id",
             [
                 'id' => $this->id
             ]
@@ -566,21 +590,22 @@ final class UserModel extends BaseModel {
      * @param array $data
      * @return self
      */
-    private static function fromArray(array $data): self {
+    private static function fromArray(array $data): self
+    {
         $user = new self();
         $user->id = $data['id'];
         $user->username = $data['username'];
         $user->email = $data['email'];
         $user->password_hash = $data['password_hash'];
         $user->role = $data['role'] ?? 'user';
-        $user->status = $data['status'] ?? 'active'; 
-        $user->preferred_language = $data ['preferred_language']; 
+        $user->status = $data['status'] ?? 'active';
+        $user->preferred_language = $data['preferred_language'];
         $user->preferred_camera_mode = $data['preferred_camera_mode'];
-        $user->last_login = $data['last_login']; 
-        
+        $user->last_login = $data['last_login'];
+
         $user->created_at = $data['created_at'];
         $user->updated_at = $data['updated_at'];
-        
+
         return $user;
     }
 
@@ -591,16 +616,17 @@ final class UserModel extends BaseModel {
      *
      * @return array
      */
-    private function toArray(): array {
+    private function toArray(): array
+    {
         $user_array[Application::ID] = $this->id;
         $user_array[Application::USERNAME] = $this->username;
         $user_array[Application::EMAIL] = $this->email;
         $user_array[Application::PASSWORD_HASH] = $this->password_hash;
         $user_array[Application::ROLE] = $this->role;
         $user_array[Application::STATUS] = $this->status;
-        $user_array[Application::PREFERRED_LANGUAGE] = $this->preferred_language; 
-        $user_array[Application::PREFERRED_CAMERA_MODE] = $this->preferred_camera_mode; 
-        $user_array[Application::LAST_LOGIN] = $this->last_login; 
+        $user_array[Application::PREFERRED_LANGUAGE] = $this->preferred_language;
+        $user_array[Application::PREFERRED_CAMERA_MODE] = $this->preferred_camera_mode;
+        $user_array[Application::LAST_LOGIN] = $this->last_login;
         $user_array[Application::CREATED_AT] = $this->created_at;
         $user_array[Application::UPDATED_AT] = $this->updated_at;
 
@@ -608,142 +634,170 @@ final class UserModel extends BaseModel {
     }
 
     // Get the value of id 
-    public function getId(): string {
+    public function getId(): string
+    {
         return $this->id;
     }
 
     // Get the value of username 
-    public function getUsername(): string {
+    public function getUsername(): string
+    {
         return $this->username;
     }
 
     // Get the value of first_name
-    public function getFirstName(): string {
+    public function getFirstName(): string
+    {
         return $this->first_name;
     }
 
     // Get the value of last_name
-    public function getLastName(): string {
+    public function getLastName(): string
+    {
         return $this->last_name;
     }
 
     // Get the value of email
-    public function getEmail(): string {
+    public function getEmail(): string
+    {
         return $this->email;
     }
 
     // Get the value of role
-    public function getRole(): string {
+    public function getRole(): string
+    {
         return $this->role;
     }
 
     // Check if User is User
-    public function isUser(): bool {
+    public function isUser(): bool
+    {
         return $this->role === Application::USER;
     }
 
     // Check if User is Admin
-    public function isAdmin(): bool {
+    public function isAdmin(): bool
+    {
         return $this->role === Application::ADMIN;
     }
 
     // Check if User is Moderator
-    public function isModerator(): bool {
+    public function isModerator(): bool
+    {
         return $this->role === Application::MODERATOR;
     }
 
     // Check if User is Game Master
-    public function isGameMaster(): bool {
+    public function isGameMaster(): bool
+    {
         return $this->role === Application::GAME_MASTER;
     }
 
     // Get the value of status
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
     // Check if User is active
-    public function isActive(): bool {
+    public function isActive(): bool
+    {
         return $this->status === Application::ACTIVE;
     }
 
     // Check if User is inactive
-    public function isInactive(): bool {
+    public function isInactive(): bool
+    {
         return $this->status === Application::INACTIVE;
     }
 
     // Check if User is closed
-    public function isClosed(): bool {
+    public function isClosed(): bool
+    {
         return $this->status === Application::CLOSED;
     }
 
     // Check if User is Blocked
-    public function isBlocked(): bool {
+    public function isBlocked(): bool
+    {
         return $this->status === Application::BLOCKED;
     }
 
     // Check if User is Banned
-    public function isBanned(): bool {
+    public function isBanned(): bool
+    {
         return $this->status === Application::BANNED;
     }
 
     // Get default language settings
-    public function getPreferredLanguage(): string {
-        return $this->preferred_language; 
+    public function getPreferredLanguage(): string
+    {
+        return $this->preferred_language;
     }
 
     // get default game camera mode
-    public function getPreferredCameraMode(): string { 
-        return $this->preferred_camera_mode; 
+    public function getPreferredCameraMode(): string
+    {
+        return $this->preferred_camera_mode;
     }
 
     // Get last login
-    public function getLastLogin() {
+    public function getLastLogin()
+    {
         return $this->last_login;
     }
 
     // Get user statistics
-    public function getUserStatistics(): UserStatisticsModel {
-        return $this->user_statistics; 
+    public function getUserStatistics(): UserStatisticsModel
+    {
+        return $this->user_statistics;
     }
 
-     // Get the value of created_at
-    public function getCreatedAt() {
+    // Get the value of created_at
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
 
     // Get the value of updated_at
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updated_at;
     }
 
     // Setter - Set username
-    public function setUsername(string $username): void {
-        $this->username = $username; 
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
     // Setter - Set email
-    public function setEmail(string $email): void {
-        $this->email = $email; 
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
 
     // Setter - Set role
-    public function setRole(string $role): void {
-        $this->role = $role; 
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
     }
 
     // Setter - Set status
-    public function setStatus(string $status): void {
-        $this->status = $status; 
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 
     // Setter - Set preferred language
-    public function setPreferredLanguage(string $language): void {
-        $this->preferred_language = $language; 
+    public function setPreferredLanguage(string $language): void
+    {
+        $this->preferred_language = $language;
     }
 
     // Setter - Set preferred camera mode
-    public function setPreferredCameraMode(string $camera_mode): void {
-        $this->preferred_camera_mode = $camera_mode; 
+    public function setPreferredCameraMode(string $camera_mode): void
+    {
+        $this->preferred_camera_mode = $camera_mode;
     }
 }
