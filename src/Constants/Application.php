@@ -3,6 +3,18 @@
 
 namespace App\Constants;
 
+use App\Constants\Database\DbColumnConstants;
+use App\Constants\Database\DbTableConstants;
+use App\Constants\Game\GameCameraModeConstants;
+use App\Constants\Game\GameFigureAreaConstants;
+use App\Constants\Game\GameRulesetConstants;
+use App\Constants\Game\GameStatusConstants;
+use App\Constants\Game\GameVisibilityConstants;
+use App\Constants\User\UserRelationConstants;
+use App\Constants\User\UserRole;
+use App\Constants\User\UserRoleConstants;
+use App\Constants\User\UserStatusConstants;
+
 class Application
 {
     /*
@@ -65,15 +77,15 @@ class Application
     /**
      * Defines database table names.
      */
-    public const DB_TABLE_USERS = 'users';
-    public const DB_TABLE_USER_STATISTICS = 'users_statistics';
-    public const DB_TABLE_GAMES = 'games';
-    public const DB_TABLE_GAME_RULE_SET = 'game_rule_set';
-    public const DB_TABLE_GAME_STATE = 'game_state';
-    public const DB_TABLE_GAME_STATE_PLAYERS = 'game_state_players';
-    public const DB_TABLE_GAME_STATE_FIGURES = 'game_state_figures';
-    public const DB_TABLE_GAME_HISTORY = 'game_history';
-    public const DB_TABLE_SYSTEM_SETTINGS = 'system_settings';
+    public const DB_TABLE_USERS = DbTableConstants::USERS;
+    public const DB_TABLE_USER_STATISTICS = DbTableConstants::USER_STATISTICS;
+    public const DB_TABLE_GAMES = DbTableConstants::GAMES;
+    public const DB_TABLE_GAME_RULE_SET = DbTableConstants::GAME_RULE_SET;
+    public const DB_TABLE_GAME_STATE = DbTableConstants::GAME_STATE;
+    public const DB_TABLE_GAME_STATE_PLAYERS = DbTableConstants::GAME_STATE_PLAYERS;
+    public const DB_TABLE_GAME_STATE_FIGURES = DbTableConstants::GAME_STATE_FIGURES;
+    public const DB_TABLE_GAME_HISTORY = DbTableConstants::GAME_HISTORY;
+    public const DB_TABLE_SYSTEM_SETTINGS = DbTableConstants::SYSTEM_SETTINGS;
 
 
     /*
@@ -83,105 +95,105 @@ class Application
     /**
      * Defines common database column names.
      */
-    public const DB_COLUMN_ID = 'id';
-    public const DB_COLUMN_NAME = 'name';
-    public const DB_COLUMN_GAME_NAME = 'name';
-    public const DB_COLUMN_GAME_ID = 'game_id';
-    public const DB_COLUMN_USER_ID = 'user_id';
-    public const DB_COLUMN_STATUS = 'status';
-    public const DB_COLUMN_CREATED_AT = 'created_at';
-    public const DB_COLUMN_UPDATED_AT = 'updated_at';
+    public const DB_COLUMN_ID = DbColumnConstants::ID;
+    public const DB_COLUMN_NAME = DbColumnConstants::NAME;
+    public const DB_COLUMN_GAME_NAME = DbColumnConstants::GAME_CREATION_ENABLED;
+    public const DB_COLUMN_GAME_ID = DbColumnConstants::GAME_ID;
+    public const DB_COLUMN_USER_ID = DbColumnConstants::USER_ID;
+    public const DB_COLUMN_STATUS = DbColumnConstants::STATUS;
+    public const DB_COLUMN_CREATED_AT = DbColumnConstants::CREATED_AT;
+    public const DB_COLUMN_UPDATED_AT = DbColumnConstants::UPDATED_AT;
 
     /**
      * Defines game database columns.
      */
-    public const DB_COLUMN_CREATED_BY_USER_ID = 'created_by_user_id';
-    public const DB_COLUMN_IS_PRIVATE = 'is_private';
-    public const DB_COLUMN_IS_LOCKED = 'is_locked';
-    public const DB_COLUMN_IS_TEST_GAME = 'is_test_game';
+    public const DB_COLUMN_CREATED_BY_USER_ID = DbColumnConstants::CREATED_BY_USER_ID;
+    public const DB_COLUMN_IS_PRIVATE = DbColumnConstants::IS_PRIVATE;
+    public const DB_COLUMN_IS_LOCKED = DbColumnConstants::IS_LOCKED;
+    public const DB_COLUMN_IS_TEST_GAME = DbColumnConstants::IS_TEST_GAME;
 
     /**
      * Defines game rule set database columns.
      */
-    public const DB_COLUMN_ALLOW_BOTS = 'allow_bots';
-    public const DB_COLUMN_ALL_FIGURES_START_AT_HOME = 'all_figures_start_at_home';
-    public const DB_COLUMN_LEAVE_HOME_ATTEMPT = 'leave_home_attempt';
-    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_MAX = 'leave_home_attempts_max';
-    public const DB_COLUMN_EXTRA_ROLL_ON_SIX_LIMIT = 'extra_roll_on_six_limit';
-    public const DB_COLUMN_FORCE_LEAVING_HOME_ON_SIX = 'force_leaving_home_on_six';
-    public const DB_COLUMN_FORCE_CAPTURE_ENEMY_FIGURES = 'force_capture_enemy_figures';
-    public const DB_COLUMN_FORCE_EXTRA_LAP_ON_OVERFLOW = 'force_extra_lap_on_overflow';
-    public const DB_COLUMN_ALLOW_STACK_OWN_FIGURES = 'allow_stack_own_figures';
-    public const DB_COLUMN_STRICT_GOAL_ORDER = 'strict_goal_order';
-    public const DB_COLUMN_START_FIELD_MUST_BE_CLEARED = 'start_field_must_be_cleared';
-    public const DB_COLUMN_ENUM_FIRST_FIGURE = 'first_figure';
-    public const DB_COLUMN_ENUM_ALL_FIGURES = 'all_figures';
+    public const DB_COLUMN_ALLOW_BOTS = DbColumnConstants::ALLOW_BOTS;
+    public const DB_COLUMN_ALL_FIGURES_START_AT_HOME = DbColumnConstants::ALL_FIGURES_START_AT_HOME;
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPT = DbColumnConstants::LEAVE_HOME_ATTEMPT;
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_MAX = DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX;
+    public const DB_COLUMN_EXTRA_ROLL_ON_SIX_LIMIT = DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT;
+    public const DB_COLUMN_FORCE_LEAVING_HOME_ON_SIX = DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX;
+    public const DB_COLUMN_FORCE_CAPTURE_ENEMY_FIGURES = DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES;
+    public const DB_COLUMN_FORCE_EXTRA_LAP_ON_OVERFLOW = DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW;
+    public const DB_COLUMN_ALLOW_STACK_OWN_FIGURES = DbColumnConstants::ALLOW_STACK_OWN_FIGURES;
+    public const DB_COLUMN_STRICT_GOAL_ORDER = DbColumnConstants::STRICT_GOAL_ORDER;
+    public const DB_COLUMN_START_FIELD_MUST_BE_CLEARED = DbColumnConstants::START_FIELD_MUST_BE_CLEARED;
+    public const DB_COLUMN_ENUM_FIRST_FIGURE = DbColumnConstants::ENUM_FIRST_FIGURE;
+    public const DB_COLUMN_ENUM_ALL_FIGURES = DbColumnConstants::ENUM_ALL_FIGURES;
 
     /**
      * Defines game state database columns.
      */
-    public const DB_COLUMN_CURRENT_PLAYER_INDEX = 'current_player_index';
-    public const DB_COLUMN_CURRENT_DICE_ROLL = 'current_dice_roll';
-    public const DB_COLUMN_CURRENT_TURN_COUNTER = 'current_turn_counter';
-    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_USED = 'leave_home_attempts_used';
-    public const DB_COLUMN_EXTRA_ROLLS_ON_SIX_USED = 'extra_rolls_on_six_used';
-    public const DB_COLUMN_WINNER_USER_ID = 'winner_user_id';
+    public const DB_COLUMN_CURRENT_PLAYER_INDEX = DbColumnConstants::CURRENT_PLAYER_INDEX;
+    public const DB_COLUMN_CURRENT_DICE_ROLL = DbColumnConstants::CURRENT_DICE_ROLL;
+    public const DB_COLUMN_CURRENT_TURN_COUNTER = DbColumnConstants::CURRENT_TURN_COUNTER;
+    public const DB_COLUMN_LEAVE_HOME_ATTEMPTS_USED = DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED;
+    public const DB_COLUMN_EXTRA_ROLLS_ON_SIX_USED = DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED;
+    public const DB_COLUMN_WINNER_USER_ID = DbColumnConstants::WINNER_USER_ID;
 
     /**
      * Defines game figure database columns.
      */
-    public const DB_COLUMN_FIGURE_INDEX = 'figure_index';
-    public const DB_COLUMN_POSITION = 'position';
-    public const DB_COLUMN_AREA = 'area';
+    public const DB_COLUMN_FIGURE_INDEX = DbColumnConstants::FIGURE_INDEX;
+    public const DB_COLUMN_POSITION = DbColumnConstants::POSITION;
+    public const DB_COLUMN_AREA = DbColumnConstants::AREA;
 
     /**
      * Defines game state player database columns.
      */
-    public const DB_COLUMN_PLAYER_INDEX = 'player_index';
+    public const DB_COLUMN_PLAYER_INDEX = DbColumnConstants::PLAYER_INDEX;
 
     /**
      * Defines game history database columns.
      */
-    public const DB_COLUMN_STATE_INDEX = 'state_index';
-    public const DB_COLUMN_STATE = 'state';
+    public const DB_COLUMN_STATE_INDEX = DbColumnConstants::STATE_INDEX;
+    public const DB_COLUMN_STATE = DbColumnConstants::STATE;
 
     /**
      * Defines user database columns.
      */
-    public const DB_COLUMN_USERNAME = 'username';
-    public const DB_COLUMN_FIRSTNAME = 'firstname';
-    public const DB_COLUMN_LASTNAME = 'lastname';
-    public const DB_COLUMN_EMAIL = 'email';
-    public const DB_COLUMN_ROLE = 'role';
-    public const DB_COLUMN_PREFERRED_LANGUAGE = 'preferred_language';
-    public const DB_COLUMN_PREFERRED_CAMERA_MODE = 'preferred_camera_mode';
-    public const DB_COLUMN_PASSWORD_HASH = 'password_hash';
-    public const DB_COLUMN_RESET_TOKEN = 'reset_token';
-    public const DB_COLUMN_RESET_TOKEN_EXPIRES_AT = 'reset_token_expires_at';
-    public const DB_COLUMN_LAST_LOGIN = 'last_login';
+    public const DB_COLUMN_USERNAME = DbColumnConstants::USERNAME;
+    public const DB_COLUMN_FIRSTNAME = DbColumnConstants::FIRSTNAME;
+    public const DB_COLUMN_LASTNAME = DbColumnConstants::LASTNAME;
+    public const DB_COLUMN_EMAIL = DbColumnConstants::EMAIL;
+    public const DB_COLUMN_ROLE = DbColumnConstants::ROLE;
+    public const DB_COLUMN_PREFERRED_LANGUAGE = DbColumnConstants::PREFERRED_LANGUAGE;
+    public const DB_COLUMN_PREFERRED_CAMERA_MODE = DbColumnConstants::PREFERRED_CAMERA_MODE;
+    public const DB_COLUMN_PASSWORD_HASH = DbColumnConstants::PASSWORD_HASH;
+    public const DB_COLUMN_RESET_TOKEN = DbColumnConstants::RESET_TOKEN;
+    public const DB_COLUMN_RESET_TOKEN_EXPIRES_AT = DbColumnConstants::RESET_TOKEN_EXPIRES_AT;
+    public const DB_COLUMN_LAST_LOGIN = DbColumnConstants::LAST_LOGIN;
 
     /**
      * Defines user statistics database columns.
      */
-    public const DB_COLUMN_LOGINS = 'logins';
-    public const DB_COLUMN_GAMES_CREATED = 'games_created';
-    public const DB_COLUMN_GAMES_PARTICIPATED = 'games_participated';
-    public const DB_COLUMN_GAMES_WON = 'games_won';
+    public const DB_COLUMN_LOGINS = DbColumnConstants::LOGINS;
+    public const DB_COLUMN_GAMES_CREATED = DbColumnConstants::GAMES_CREATED;
+    public const DB_COLUMN_GAMES_PARTICIPATED = DbColumnConstants::GAMES_PARTICIPATED;
+    public const DB_COLUMN_GAMES_WON = DbColumnConstants::GAMES_WON;
 
     /**
      * Defines system settings database columns.
      */
-    public const DB_COLUMN_REGISTRATION_ENABLED = 'registration_enabled';
-    public const DB_COLUMN_LOGIN_ENABLED = 'login_enabled';
-    public const DB_COLUMN_SYSTEM_ENABLED = 'system_enabled';
-    public const DB_COLUMN_LOGGING_DEBUG_ENABLED = 'logging_debug_enabled';
-    public const DB_COLUMN_GAME_CREATION_ENABLED = 'game_creation_enabled';
-    public const DB_COLUMN_GAME_PLAY_ENABLED = 'game_play_enabled';
-    public const DB_COLUMN_MAINTENANCE_MODE_ENABLED = 'maintenance_mode_enabled';
-    public const DB_COLUMN_MAINTENANCE_MESSAGE = 'maintenance_message';
-    public const DB_COLUMN_SYSTEM_NOTICE_ENABLED = 'system_notice_enabled';
-    public const DB_COLUMN_SYSTEM_NOTICE_MESSAGE = 'system_notice_message';
-    public const DB_COLUMN_UPDATED_BY = 'updated_by';
+    public const DB_COLUMN_REGISTRATION_ENABLED = DbColumnConstants::REGISTRATION_ENABLED;
+    public const DB_COLUMN_LOGIN_ENABLED = DbColumnConstants::LOGIN_ENABLED;
+    public const DB_COLUMN_SYSTEM_ENABLED = DbColumnConstants::SYSTEM_ENABLED;
+    public const DB_COLUMN_LOGGING_DEBUG_ENABLED = DbColumnConstants::LOGGING_DEBUG_ENABLED;
+    public const DB_COLUMN_GAME_CREATION_ENABLED = DbColumnConstants::GAME_CREATION_ENABLED;
+    public const DB_COLUMN_GAME_PLAY_ENABLED = DbColumnConstants::GAME_PLAY_ENABLED;
+    public const DB_COLUMN_MAINTENANCE_MODE_ENABLED = DbColumnConstants::MAINTENANCE_MODE_ENABLED;
+    public const DB_COLUMN_MAINTENANCE_MESSAGE = DbColumnConstants::MAINTENANCE_MESSAGE;
+    public const DB_COLUMN_SYSTEM_NOTICE_ENABLED = DbColumnConstants::SYSTEM_NOTICE_ENABLED;
+    public const DB_COLUMN_SYSTEM_NOTICE_MESSAGE = DbColumnConstants::SYSTEM_NOTICE_MESSAGE;
+    public const DB_COLUMN_UPDATED_BY = DbColumnConstants::UPDATED_BY;
 
 
     /*
@@ -191,26 +203,26 @@ class Application
     /**
      * Defines user roles.
      */
-    public const USER_ROLE_USER = 'user';
-    public const USER_ROLE_ADMIN = 'admin';
-    public const USER_ROLE_MODERATOR = 'moderator';
-    public const USER_ROLE_GAME_MASTER = 'game_master';
+    public const USER_ROLE_USER = UserRoleConstants::USER;
+    public const USER_ROLE_ADMIN = UserRoleConstants::ADMIN; 
+    public const USER_ROLE_MODERATOR = UserRoleConstants::MODERATOR;
+    public const USER_ROLE_GAME_MASTER = UserRoleConstants::GAME_MASTER;
 
     /**
      * Defines user account statuses.
      */
-    public const USER_STATUS_ACTIVE = 'ACTIVE';
-    public const USER_STATUS_INACTIVE = 'INACTIVE';
-    public const USER_STATUS_CLOSED = 'CLOSED';
-    public const USER_STATUS_BLOCKED = 'BLOCKED';
-    public const USER_STATUS_BANNED = 'BANNED';
+    public const USER_STATUS_ACTIVE = UserStatusConstants::ACTIVE;
+    public const USER_STATUS_INACTIVE = UserStatusConstants::INACTIVE;
+    public const USER_STATUS_CLOSED = UserStatusConstants::CLOSED;
+    public const USER_STATUS_BLOCKED = UserStatusConstants::BLOCKED;
+    public const USER_STATUS_BANNED = UserStatusConstants::BANNED;
 
     /**
      * Defines user relation types.
      */
-    public const USER_RELATION_CREATED = 'created';
-    public const USER_RELATION_PARTICIPATED = 'participated';
-    public const USER_RELATION_WON = 'won';
+    public const USER_RELATION_CREATED = UserRelationConstants::CREATED;
+    public const USER_RELATION_PARTICIPATED = UserRelationConstants::PARTICIPATED;
+    public const USER_RELATION_WON = UserRelationConstants::WON;
 
 
     /*
@@ -220,29 +232,29 @@ class Application
     /**
      * Defines game lifecycle statuses.
      */
-    public const GAME_STATUS_WAITING = 'WAITING';
-    public const GAME_STATUS_RUNNING = 'RUNNING';
-    public const GAME_STATUS_FINISHED = 'FINISHED';
-    public const GAME_STATUS_CANCELLED = 'CANCELLED';
+    public const GAME_STATUS_WAITING = GameStatusConstants::WAITING;
+    public const GAME_STATUS_RUNNING = GameStatusConstants::RUNNING;
+    public const GAME_STATUS_FINISHED = GameStatusConstants::FINISHED;
+    public const GAME_STATUS_CANCELLED = GameStatusConstants::CANCELLED;
 
     /**
      * Defines game rule set types.
      */
-    public const GAME_RULESET_CLASSIC = 'classic';
-    public const GAME_RULESET_ADVANCED = 'advanced';
-    public const GAME_RULESET_ORIGINAL = 'original';
-    public const GAME_RULESET_CUSTOM = 'custom';
+    public const GAME_RULESET_CLASSIC = GameRulesetConstants::CLASSIC;
+    public const GAME_RULESET_ADVANCED = GameRulesetConstants::ADVANCED;
+    public const GAME_RULESET_ORIGINAL = GameRulesetConstants::ORIGINAL;
+    public const GAME_RULESET_CUSTOM = GameRulesetConstants::CUSTOM;
 
     /**
      * Defines game camera modes.
      */
-    public const GAME_CAMERA_MODE_FIXED = 'fixed';
-    public const GAME_CAMERA_MODE_FOLLOW = 'follow_turn';
+    public const GAME_CAMERA_MODE_FIXED = GameCameraModeConstants::FIXED;
+    public const GAME_CAMERA_MODE_FOLLOW = GameCameraModeConstants::FOLLOW;
 
     /**
      * Defines game visibility values.
      */
-    public const GAME_VISIBILITY_PRIVATE = '';
+    public const GAME_VISIBILITY_PRIVATE = GameVisibilityConstants::PRIVATE;
 
     /**
      * Defines general game data keys.
@@ -253,9 +265,9 @@ class Application
     /**
      * Defines figure areas.
      */
-    public const FIGURE_AREA_HOME = 'home';
-    public const FIGURE_AREA_FIELD = 'field';
-    public const FIGURE_AREA_GOAL = 'goal';
+    public const FIGURE_AREA_HOME = GameFigureAreaConstants::HOME;
+    public const FIGURE_AREA_FIELD = GameFigureAreaConstants::FIELD;
+    public const FIGURE_AREA_GOAL = GameFigureAreaConstants::GOAL;
 
 
     /*
