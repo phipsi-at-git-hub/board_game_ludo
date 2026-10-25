@@ -4,7 +4,7 @@
 
 namespace App\Services\User;
 
-use App\Constants\Application;
+use App\Constants\GeneralConstants;
 use App\Core\Auth\Auth;
 use App\Models\User\UserModel;
 
@@ -34,7 +34,7 @@ final class UserService
         // Synchronize session locale when the current user updates their own profile
         $current_user = Auth::user();
         if ($current_user && $current_user->getId() === $user->getId()) {
-            $_SESSION[Application::LOCALE] = $user->getPreferredLanguage();
+            $_SESSION[GeneralConstants::LOCAL] = $user->getPreferredLanguage();
         }
 
         return true;

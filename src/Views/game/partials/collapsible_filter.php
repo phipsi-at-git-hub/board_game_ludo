@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\LocalizationConstants;
 use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -159,7 +160,7 @@ $filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array
                         type="text"
                         name="date_range"
                         data-ui="date-range"
-                        data-ui-localization="<?= Application::EN_US ?>"
+                        data-ui-localization="<?= LocalizationConstants::EN_US ?>"
                         data-ui-with-time="true" 
                         data-ui-with-reset="true" 
                         value="<?= htmlspecialchars($date_range ?? '') ?>">

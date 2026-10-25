@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\LocalizationConstants;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Core\Logging\LogEntry;
@@ -263,7 +264,7 @@ use App\Core\Logging\LogEntry;
                             type="text" 
                             name="date_range" 
                             data-ui="date-range" 
-                            data-ui-localization="<?= Application::EN_US ?>" 
+                            data-ui-localization="<?= LocalizationConstants::EN_US ?>" 
                             data-ui-with-time="true" 
                             value="<?= htmlspecialchars($date_range) ?>" > 
 

@@ -4,6 +4,7 @@
 namespace App\Core\Logging;
 
 use App\Constants\Application;
+use App\Constants\StorageTypeConstants;
 use App\Core\Application\App;
 
 final class LoggingConfiguration
@@ -37,7 +38,7 @@ final class LoggingConfiguration
      */
     private const CHANNELS = [
         self::CHANNEL_APPLICATION => [
-            'storage'        => Application::STORAGE_FILE,
+            'storage'        => StorageTypeConstants::FILE,
             'file'           => 'application',
             'minimum_level'  => self::LEVEL_INFO,                   // ToDo: Why? No one is ever checking this. And what for I ask?
             'retention_days' => 30,
@@ -45,7 +46,7 @@ final class LoggingConfiguration
         ],
 
         self::CHANNEL_SYSTEM => [
-            'storage'        => Application::STORAGE_FILE,
+            'storage'        => StorageTypeConstants::FILE,
             'file'           => 'system',
             'minimum_level'  => self::LEVEL_WARNING,                // ToDo: Why? No one is ever checking this. And what for I ask?
             'retention_days' => 90,
@@ -53,7 +54,7 @@ final class LoggingConfiguration
         ],
 
         self::CHANNEL_GAME => [
-            'storage' => Application::STORAGE_DATABASE,
+            'storage' => StorageTypeConstants::DATABASE,
         ]
     ];
 
@@ -83,7 +84,7 @@ final class LoggingConfiguration
      */
     public static function getChannelsWithFileStorage(): array
     {
-        return self::getChannelsByStorageType(Application::STORAGE_FILE);
+        return self::getChannelsByStorageType(StorageTypeConstants::FILE);
     }
 
     /**
@@ -91,7 +92,7 @@ final class LoggingConfiguration
      */
     public static function getChannelsWithDatabaseStorage(): array
     {
-        return self::getChannelsByStorageType(Application::STORAGE_DATABASE);
+        return self::getChannelsByStorageType(StorageTypeConstants::DATABASE);
     }
 
     /**

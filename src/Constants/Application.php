@@ -363,9 +363,9 @@ class Application
     /**
      * Defines the locale key and supported locale identifiers.
      */
-    public const LOCALIZATION_LOCALE_KEY = LocalizationConstants::KEY;
-    public const LOCALE_EN_US = LocalizationConstants::EN_US;
-    public const LOCALE_DE_DE = LocalizationConstants::DE_DE;
+    //public const LOCALIZATION_LOCALE_KEY = GeneralConstants::LOCAL;
+    //public const LOCALE_EN_US = LocalizationConstants::EN_US;
+    //public const LOCALE_DE_DE = LocalizationConstants::DE_DE;
 
 
     /*
@@ -375,8 +375,8 @@ class Application
     /**
      * Defines supported storage types.
      */
-    public const STORAGE_TYPE_FILE = StorageTypeConstants::FILE;
-    public const STORAGE_TYPE_DATABASE = StorageTypeConstants::DATABASE;
+    //public const STORAGE_TYPE_FILE = StorageTypeConstants::FILE;
+    //public const STORAGE_TYPE_DATABASE = StorageTypeConstants::DATABASE;
 
 
     /*
@@ -1022,17 +1022,17 @@ class Application
     /**
      * @deprecated Use LOCALIZATION_LOCALE_KEY instead.
      */
-    public const LOCALE = self::LOCALIZATION_LOCALE_KEY;
+    //public const LOCALE = self::LOCALIZATION_LOCALE_KEY;
 
     /**
      * @deprecated Use LOCALE_EN_US instead.
      */
-    public const EN_US = self::LOCALE_EN_US;
+    //public const EN_US = self::LOCALE_EN_US;
 
     /**
      * @deprecated Use LOCALE_DE_DE instead.
      */
-    public const DE_DE = self::LOCALE_DE_DE;
+    //public const DE_DE = self::LOCALE_DE_DE;
 
 
     /*
@@ -1042,12 +1042,12 @@ class Application
     /**
      * @deprecated Use STORAGE_TYPE_FILE instead.
      */
-    public const STORAGE_FILE = self::STORAGE_TYPE_FILE;
+    //public const STORAGE_FILE = self::STORAGE_TYPE_FILE;
 
     /**
      * @deprecated Use STORAGE_TYPE_DATABASE instead.
      */
-    public const STORAGE_DATABASE = self::STORAGE_TYPE_DATABASE;
+    //public const STORAGE_DATABASE = self::STORAGE_TYPE_DATABASE;
 
 
     /*

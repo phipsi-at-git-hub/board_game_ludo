@@ -2,6 +2,7 @@
 // src/Views/admin/user/partials/collapsible_filter.php
 
 use App\Constants\Application;
+use App\Constants\LocalizationConstants;
 use App\Core\Dto\User\UserFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -154,7 +155,7 @@ $filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($fi
                         type="text"
                         name="date_range_last_login"
                         data-ui="date-range"
-                        data-ui-localization="<?= Application::EN_US ?>"
+                        data-ui-localization="<?= LocalizationConstants::EN_US ?>"
                         data-ui-with-time="true" 
                         data-ui-with-reset="true" 
                         value="<?= htmlspecialchars($date_range ?? '') ?>">

@@ -3,6 +3,7 @@
 namespace App\Core\Auth;
 
 use App\Constants\Application;
+use App\Constants\GeneralConstants;
 use App\Models\User\UserModel;
 
 class Auth
@@ -25,7 +26,7 @@ class Auth
     {
         session_regenerate_id(true);
         $_SESSION[Application::USER_ID] = $user->getId();
-        $_SESSION[Application::LOCALE] = $user->getPreferredLanguage();
+        $_SESSION[GeneralConstants::LOCAL] = $user->getPreferredLanguage();
     }
 
     public static function logout(): void

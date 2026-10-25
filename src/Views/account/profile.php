@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\LocalizationConstants;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Models\User\UserModel;
@@ -149,24 +150,24 @@ use App\Models\User\UserModel;
                         data-auto-save="change" >
 
                         <option
-                            value="<?= Application::DE_DE ?>"
+                            value="<?= LocalizationConstants::DE_DE ?>"
                             <?= $current_user->getPreferredLanguage()
-                                === Application::DE_DE
+                                === LocalizationConstants::DE_DE
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get('languages.label.' . strtolower(Application::DE_DE)) ?>
+                            <?= Localization::get('languages.label.' . strtolower(LocalizationConstants::DE_DE)) ?>
 
                         </option>
 
                         <option
-                            value="<?= Application::EN_US ?>"
+                            value="<?= LocalizationConstants::EN_US ?>"
                             <?= $current_user->getPreferredLanguage()
-                                === Application::EN_US
+                                === LocalizationConstants::EN_US
                                 ? 'selected'
                                 : '' ?>>
 
-                            <?= Localization::get('languages.label.' . strtolower(Application::EN_US)) ?>
+                            <?= Localization::get('languages.label.' . strtolower(LocalizationConstants::EN_US)) ?>
 
                         </option>
 

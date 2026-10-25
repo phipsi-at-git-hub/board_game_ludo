@@ -2,12 +2,12 @@
 // Localization.php
 namespace App\Core;
 
-use App\Constants\Application;
+use App\Constants\LocalizationConstants;
 
 class Localization
 {
     private static array $translations = [];
-    private static string $locale = Application::EN_US;
+    private static string $locale = LocalizationConstants::EN_US;
 
     public static function load(string $translationsPath, string $locale): void
     {

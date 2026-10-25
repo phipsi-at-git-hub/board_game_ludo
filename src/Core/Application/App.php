@@ -3,7 +3,8 @@
 
 namespace App\Core\Application;
 
-use App\Constants\Application;
+use App\Constants\GeneralConstants;
+use App\Constants\LocalizationConstants;
 use App\Core\Asset;
 use App\Core\Debug;
 use App\Core\Config\Env;
@@ -141,7 +142,7 @@ final class App
     // Initialize localization 
     private function loadLocalization(): void
     {
-        $locale = $_SESSION[Application::LOCALE] ??  Application::EN_US;
+        $locale = $_SESSION[GeneralConstants::LOCAL] ??  LocalizationConstants::EN_US;
         Localization::load(TRANSLATIONS_PATH, $locale);
     }
 }

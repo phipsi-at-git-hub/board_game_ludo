@@ -14,4 +14,9 @@ final class GeneralConstants
      * Defines health identifier with no further connection.
      */
     public const HEALTH = 'health';
+
+    /**
+     * Defines local identifier with no further connection. 
+     */
+    public const LOCAL = 'locale';
 }
