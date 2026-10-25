@@ -3,6 +3,7 @@
 namespace App\Models\System;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
 final class SystemSettingsModel extends BaseModel
@@ -62,7 +63,7 @@ final class SystemSettingsModel extends BaseModel
                 FROM %s s
                 LIMIT 1",
 
-                Application::TABLE_SYSTEM_SETTINGS
+                DbTableConstants::SYSTEM_SETTINGS
             ),
             []
         );
@@ -101,7 +102,7 @@ final class SystemSettingsModel extends BaseModel
                 WHERE 
                     %s = :id",
 
-                Application::TABLE_SYSTEM_SETTINGS,
+                DbTableConstants::SYSTEM_SETTINGS,
 
                 Application::REGISTRATION_ENABLED,
                 Application::LOGIN_ENABLED,

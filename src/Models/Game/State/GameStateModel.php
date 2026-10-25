@@ -3,6 +3,7 @@
 namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
 final class GameStateModel extends BaseModel
@@ -107,7 +108,7 @@ final class GameStateModel extends BaseModel
                 WHERE 
                     game_id = :game_id",
 
-                Application::TABLE_STATE,
+                DbTableConstants::GAME_STATE,
 
                 Application::CURRENT_PLAYER_INDEX,
                 Application::CURRENT_DICE_ROLL,

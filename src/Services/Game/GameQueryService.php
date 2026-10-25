@@ -4,6 +4,7 @@
 namespace App\Services\Game;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 
 /**
  * GameQueryService
@@ -85,7 +86,7 @@ final class GameQueryService
             $conditions[] =
                 'EXISTS (
                     SELECT 1
-                    FROM ' . Application::TABLE_PLAYERS . ' p
+                    FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' p
                     WHERE p.' . Application::GAME_ID . ' = g.' . Application::ID . '
                       AND p.' . Application::USER_ID . ' = :user_player_id
                 )';
@@ -97,7 +98,7 @@ final class GameQueryService
             $conditions[] =
                 'EXISTS (
                     SELECT 1
-                    FROM ' . Application::TABLE_STATE . ' ws
+                    FROM ' . DbTableConstants::GAME_STATE . ' ws
                     WHERE ws.' . Application::GAME_ID . ' = g.' . Application::ID . '
                       AND ws.' . Application::WINNER_USER_ID . ' = :user_winner_id
                 )';
@@ -181,7 +182,7 @@ final class GameQueryService
         if ($playerCount !== null) {
             $this->conditions[] =
                 '(SELECT COUNT(*)
-                  FROM ' . Application::TABLE_PLAYERS . ' pc
+                  FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc
                   WHERE pc.' . Application::GAME_ID . ' = g.' . Application::ID . '
                 ) = :player_count';
 
@@ -193,7 +194,7 @@ final class GameQueryService
         if ($playerCountMin !== null) {
             $this->conditions[] =
                 '(SELECT COUNT(*)
-                  FROM ' . Application::TABLE_PLAYERS . ' pc_min
+                  FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc_min
                   WHERE pc_min.' . Application::GAME_ID . ' = g.' . Application::ID . '
                 ) >= :player_count_min';
 
@@ -205,7 +206,7 @@ final class GameQueryService
         if ($playerCountMax !== null) {
             $this->conditions[] =
                 '(SELECT COUNT(*)
-                  FROM ' . Application::TABLE_PLAYERS . ' pc_max
+                  FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc_max
                   WHERE pc_max.' . Application::GAME_ID . ' = g.' . Application::ID . '
                 ) <= :player_count_max';
 

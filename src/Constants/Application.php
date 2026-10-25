@@ -6,11 +6,12 @@ namespace App\Constants;
 use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Constants\Dto\GameDtoConstants;
-use App\Constants\Dto\GamePlayerDtoConstants;
-use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
-use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
+use App\Constants\Dto\GamePlayerDtoConstants;
+use App\Constants\EnvironmentConstants;
+use App\Constants\Game\GameCameraModeConstants;
+use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Game\GameRulesetConstants;
 use App\Constants\Game\GameStatusConstants;
 use App\Constants\Game\GameVisibilityConstants;
@@ -83,12 +84,12 @@ class Application
     //public const DB_TABLE_USERS = DbTableConstants::USERS;
     //public const DB_TABLE_USER_STATISTICS = DbTableConstants::USER_STATISTICS;
     //public const DB_TABLE_GAMES = DbTableConstants::GAMES;
-    public const DB_TABLE_GAME_RULE_SET = DbTableConstants::GAME_RULE_SET;
-    public const DB_TABLE_GAME_STATE = DbTableConstants::GAME_STATE;
-    public const DB_TABLE_GAME_STATE_PLAYERS = DbTableConstants::GAME_STATE_PLAYERS;
-    public const DB_TABLE_GAME_STATE_FIGURES = DbTableConstants::GAME_STATE_FIGURES;
-    public const DB_TABLE_GAME_HISTORY = DbTableConstants::GAME_HISTORY;
-    public const DB_TABLE_SYSTEM_SETTINGS = DbTableConstants::SYSTEM_SETTINGS;
+    //public const DB_TABLE_GAME_RULE_SET = DbTableConstants::GAME_RULE_SET;
+    //public const DB_TABLE_GAME_STATE = DbTableConstants::GAME_STATE;
+    //public const DB_TABLE_GAME_STATE_PLAYERS = DbTableConstants::GAME_STATE_PLAYERS;
+    //public const DB_TABLE_GAME_STATE_FIGURES = DbTableConstants::GAME_STATE_FIGURES;
+    //public const DB_TABLE_GAME_HISTORY = DbTableConstants::GAME_HISTORY;
+    //public const DB_TABLE_SYSTEM_SETTINGS = DbTableConstants::SYSTEM_SETTINGS;
 
 
     /*
@@ -503,32 +504,32 @@ class Application
     /**
      * @deprecated Use DB_TABLE_GAME_RULE_SET instead.
      */
-    public const TABLE_RULES = self::DB_TABLE_GAME_RULE_SET;
+    //public const TABLE_RULES = self::DB_TABLE_GAME_RULE_SET;
 
     /**
      * @deprecated Use DB_TABLE_GAME_STATE instead.
      */
-    public const TABLE_STATE = self::DB_TABLE_GAME_STATE;
+    //public const TABLE_STATE = self::DB_TABLE_GAME_STATE;
 
     /**
      * @deprecated Use DB_TABLE_GAME_STATE_PLAYERS instead.
      */
-    public const TABLE_PLAYERS = self::DB_TABLE_GAME_STATE_PLAYERS;
+    //public const TABLE_PLAYERS = self::DB_TABLE_GAME_STATE_PLAYERS;
 
     /**
      * @deprecated Use DB_TABLE_GAME_STATE_FIGURES instead.
      */
-    public const TABLE_FIGURES = self::DB_TABLE_GAME_STATE_FIGURES;
+    //public const TABLE_FIGURES = self::DB_TABLE_GAME_STATE_FIGURES;
 
     /**
      * @deprecated Use DB_TABLE_GAME_HISTORY instead.
      */
-    public const TABLE_HISTORY = self::DB_TABLE_GAME_HISTORY;
+    //public const TABLE_HISTORY = self::DB_TABLE_GAME_HISTORY;
 
     /**
      * @deprecated Use DB_TABLE_SYSTEM_SETTINGS instead.
      */
-    public const TABLE_SYSTEM_SETTINGS = self::DB_TABLE_SYSTEM_SETTINGS;
+    // public const TABLE_SYSTEM_SETTINGS = self::DB_TABLE_SYSTEM_SETTINGS;
 
 
     /*

@@ -4,6 +4,7 @@
 namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
 final class GameHistoryModel extends BaseModel
@@ -33,7 +34,7 @@ final class GameHistoryModel extends BaseModel
                     NOW()
                 )
                 ",
-                Application::TABLE_HISTORY,
+                DbTableConstants::GAME_HISTORY,
                 Application::ID,
                 Application::GAME_ID,
                 Application::STATE_INDEX,
@@ -65,7 +66,7 @@ final class GameHistoryModel extends BaseModel
                 WHERE %s = :game_id
                 ORDER BY %s ASC
                 ",
-                Application::TABLE_HISTORY,
+                DbTableConstants::GAME_HISTORY,
                 Application::GAME_ID,
                 Application::STATE_INDEX
             ),
@@ -89,7 +90,7 @@ final class GameHistoryModel extends BaseModel
                 ORDER BY %s DESC
                 LIMIT 1
                 ",
-                Application::TABLE_HISTORY,
+                DbTableConstants::GAME_HISTORY,
                 Application::GAME_ID,
                 Application::STATE_INDEX
             ),
@@ -112,7 +113,7 @@ final class GameHistoryModel extends BaseModel
                 WHERE %s = :game_id
                 ",
                 Application::STATE_INDEX,
-                Application::TABLE_HISTORY,
+                DbTableConstants::GAME_HISTORY,
                 Application::GAME_ID
             ),
             [
@@ -137,7 +138,7 @@ final class GameHistoryModel extends BaseModel
                     AND %s = :state_index
                 LIMIT 1
                 ",
-                Application::TABLE_HISTORY,
+                DbTableConstants::GAME_HISTORY,
                 Application::GAME_ID,
                 Application::STATE_INDEX
             ),

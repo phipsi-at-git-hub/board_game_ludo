@@ -886,7 +886,7 @@ final class GameModel extends BaseModel
             Application::CREATED_BY_USER_ID,
             Application::ID,
 
-            Application::TABLE_RULES,
+            DbTableConstants::GAME_RULE_SET,
             Application::ID,
             Application::GAME_ID
         );
@@ -936,7 +936,7 @@ final class GameModel extends BaseModel
                     WHERE %s = :game_id
                     LIMIT 1
                     ",
-                    Application::TABLE_STATE,
+                    DbTableConstants::GAME_STATE,
                     Application::GAME_ID
                 ),
                 [
@@ -969,7 +969,7 @@ final class GameModel extends BaseModel
 
                         Application::USERNAME,
 
-                        Application::TABLE_PLAYERS,
+                        DbTableConstants::GAME_STATE_PLAYERS,
 
                         DbTableConstants::USERS,
 
@@ -997,7 +997,7 @@ final class GameModel extends BaseModel
                         FROM %s
                         WHERE %s = :game_id
                         ",
-                        Application::TABLE_FIGURES,
+                        DbTableConstants::GAME_STATE_FIGURES,
                         Application::GAME_ID
                     ),
                     [
@@ -1060,7 +1060,7 @@ final class GameModel extends BaseModel
                         AND p.%s = :user_id
                     )
                     ",
-                    Application::TABLE_PLAYERS,
+                    DbTableConstants::GAME_STATE_PLAYERS,
                     Application::GAME_ID,
                     Application::ID,
                     Application::USER_ID
@@ -1094,7 +1094,7 @@ final class GameModel extends BaseModel
                     ",
                     Application::CREATED_BY_USER_ID,
 
-                    Application::TABLE_PLAYERS,
+                    DbTableConstants::GAME_STATE_PLAYERS,
 
                     Application::GAME_ID,
                     Application::ID,
@@ -1175,11 +1175,11 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1258,11 +1258,11 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1343,11 +1343,11 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1428,11 +1428,11 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1513,11 +1513,11 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1577,7 +1577,7 @@ final class GameModel extends BaseModel
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
-                Application::TABLE_RULES,
+                DbTableConstants::GAME_RULE_SET,
                 Application::ID,
                 Application::GAME_ID,
 
@@ -1619,7 +1619,7 @@ final class GameModel extends BaseModel
                 Application::CREATED_AT,
                 Application::UPDATED_AT,
 
-                Application::TABLE_STATE,
+                DbTableConstants::GAME_STATE,
 
                 Application::GAME_ID
             ),
@@ -1651,7 +1651,7 @@ final class GameModel extends BaseModel
                 Application::CREATED_AT,
                 Application::UPDATED_AT,
 
-                Application::TABLE_PLAYERS,
+                DbTableConstants::GAME_STATE_PLAYERS,
 
                 DbTableConstants::USERS,
                 Application::USER_ID,
@@ -1688,7 +1688,7 @@ final class GameModel extends BaseModel
                 Application::CREATED_AT,
                 Application::UPDATED_AT,
 
-                Application::TABLE_FIGURES,
+                DbTableConstants::GAME_STATE_FIGURES,
                 Application::GAME_ID
             ),
             ['game_id' => $game_id]
