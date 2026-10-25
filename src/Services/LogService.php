@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Date\DateRange;
 use App\Core\Logging\LogEntry;
 use App\Core\Logging\LoggingConfiguration;
@@ -48,7 +49,7 @@ final class LogService
         }
         foreach ($this->channels as $channel) {
             foreach ($this->dateRange->getDays() as $date) {
-                $entries = LoggingModel::find($channel, $date->format(Application::FILE_DATE_FORMAT));
+                $entries = LoggingModel::find($channel, $date->format(DateTimeFormatConstants::FILE_DATE));
                 foreach ($entries as $entry) {
                     if (!$this->dateRange->contains(new DateTimeImmutable($entry->getTimestamp()))) {
                         continue;

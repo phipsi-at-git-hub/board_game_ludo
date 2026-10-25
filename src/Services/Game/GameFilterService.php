@@ -5,6 +5,7 @@
 namespace App\Services\Game;
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Date\DateRange;
 use App\Models\User\UserModel;
 
@@ -251,8 +252,8 @@ final class GameFilterService
         $start = $dateRange->getStart();
         $end = $dateRange->getEnd();
 
-        $this->createdFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
-        $this->createdTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->createdFrom = $start?->format(DateTimeFormatConstants::FILE_DATE_TIME);
+        $this->createdTo = $end?->format(DateTimeFormatConstants::FILE_DATE_TIME);
 
         return $this;
     }

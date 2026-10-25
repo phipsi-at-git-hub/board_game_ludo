@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 
@@ -84,11 +85,11 @@ use App\Core\Localization;
                                 <div class="entry-row-badges">
 
                                     <span class="status-badge status-active">
-                                        <?= htmlspecialchars(date(Application::FILE_DATE_FORMAT, strtotime($entry->getTimestamp()))) ?>
+                                        <?= htmlspecialchars(date(DateTimeFormatConstants::FILE_DATE, strtotime($entry->getTimestamp()))) ?>
                                     </span>
 
                                     <span class="status-badge status-active">
-                                        <?= htmlspecialchars(date(Application::FILE_TIME_FORMAT, strtotime($entry->getTimestamp()))) ?>
+                                        <?= htmlspecialchars(date(DateTimeFormatConstants::FILE_TIME, strtotime($entry->getTimestamp()))) ?>
                                     </span>
 
                                     <?php if ($entry->getClass()): ?>

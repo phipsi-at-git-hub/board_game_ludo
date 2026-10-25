@@ -4,6 +4,7 @@
 namespace App\Core\Logging;
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Application\App;
 use App\Core\Utility\UUID;
 
@@ -52,7 +53,7 @@ final class LogEntry
         $entry->context = $context;
         $entry->channel = $channel;
 
-        $entry->timestamp = date(Application::FILE_DATE_TIME_FORMAT);
+        $entry->timestamp = date(DateTimeFormatConstants::FILE_DATE_TIME);
 
         $entry->request_id = $_SERVER['HTTP_X_REQUEST_ID'] ?? null;
         $entry->request_method = $_SERVER['REQUEST_METHOD'] ?? null;

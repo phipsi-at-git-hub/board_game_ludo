@@ -351,9 +351,9 @@ class Application
     /**
      * Defines date and time formats used for file-related values.
      */
-    public const DATE_FORMAT_FILE_DATE = DateTimeFormatConstants::FILE_DATE; 
-    public const DATE_FORMAT_FILE_TIME = DateTimeFormatConstants::FILE_TIME;
-    public const DATE_FORMAT_FILE_DATE_TIME = DateTimeFormatConstants::FILE_DATE_TIME;
+    //public const DATE_FORMAT_FILE_DATE = DateTimeFormatConstants::FILE_DATE; 
+    //public const DATE_FORMAT_FILE_TIME = DateTimeFormatConstants::FILE_TIME;
+    //public const DATE_FORMAT_FILE_DATE_TIME = DateTimeFormatConstants::FILE_DATE_TIME;
 
 
     /*
@@ -1002,17 +1002,17 @@ class Application
     /**
      * @deprecated Use DATE_FORMAT_FILE_DATE instead.
      */
-    public const FILE_DATE_FORMAT = self::DATE_FORMAT_FILE_DATE;
+    //public const FILE_DATE_FORMAT = self::DATE_FORMAT_FILE_DATE;
 
     /**
      * @deprecated Use DATE_FORMAT_FILE_TIME instead.
      */
-    public const FILE_TIME_FORMAT = self::DATE_FORMAT_FILE_TIME;
+    //public const FILE_TIME_FORMAT = self::DATE_FORMAT_FILE_TIME;
 
     /**
      * @deprecated Use DATE_FORMAT_FILE_DATE_TIME instead.
      */
-    public const FILE_DATE_TIME_FORMAT = self::DATE_FORMAT_FILE_DATE_TIME;
+    //public const FILE_DATE_TIME_FORMAT = self::DATE_FORMAT_FILE_DATE_TIME;
 
 
     /*

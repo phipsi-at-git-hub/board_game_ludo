@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Localization;
 use App\Core\Logging\LogEntry;
 
@@ -52,14 +53,14 @@ $timestamp = strtotime($entry->getTimestamp());
         <div class="form-row">
             <span><?= Localization::get('admin.logging.show.card.overview.date') ?></span>
             <span>
-                <?= htmlspecialchars(date(Application::FILE_DATE_FORMAT, $timestamp)) ?>
+                <?= htmlspecialchars(date(DateTimeFormatConstants::FILE_DATE, $timestamp)) ?>
             </span>
         </div>
 
         <div class="form-row">
             <span><?= Localization::get('admin.logging.show.card.overview.time') ?></span>
             <span>
-                <?= htmlspecialchars(date(Application::FILE_TIME_FORMAT, $timestamp)) ?>
+                <?= htmlspecialchars(date(DateTimeFormatConstants::FILE_TIME, $timestamp)) ?>
             </span>
         </div>
 

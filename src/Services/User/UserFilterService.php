@@ -4,6 +4,7 @@
 namespace App\Services\User;
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Core\Date\DateRange;
 
 /**
@@ -348,8 +349,8 @@ final class UserFilterService
         $start = $dateRange->getStart();
         $end = $dateRange->getEnd();
 
-        $this->lastLoginFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
-        $this->lastLoginTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->lastLoginFrom = $start?->format(DateTimeFormatConstants::FILE_DATE_TIME);
+        $this->lastLoginTo = $end?->format(DateTimeFormatConstants::FILE_DATE_TIME);
 
         return $this;
     }
@@ -412,8 +413,8 @@ final class UserFilterService
         $start = $dateRange->getStart();
         $end = $dateRange->getEnd();
 
-        $this->createdFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
-        $this->createdTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->createdFrom = $start?->format(DateTimeFormatConstants::FILE_DATE_TIME);
+        $this->createdTo = $end?->format(DateTimeFormatConstants::FILE_DATE_TIME);
 
         return $this;
     }
@@ -476,8 +477,8 @@ final class UserFilterService
         $start = $dateRange->getStart();
         $end = $dateRange->getEnd();
 
-        $this->updatedFrom = $start?->format(Application::FILE_DATE_TIME_FORMAT);
-        $this->updatedTo = $end?->format(Application::FILE_DATE_TIME_FORMAT);
+        $this->updatedFrom = $start?->format(DateTimeFormatConstants::FILE_DATE_TIME);
+        $this->updatedTo = $end?->format(DateTimeFormatConstants::FILE_DATE_TIME);
 
         return $this;
     }

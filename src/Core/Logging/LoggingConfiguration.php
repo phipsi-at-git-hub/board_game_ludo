@@ -4,6 +4,7 @@
 namespace App\Core\Logging;
 
 use App\Constants\Application;
+use App\Constants\DateTimeFormatConstants;
 use App\Constants\StorageTypeConstants;
 use App\Core\Application\App;
 
@@ -173,7 +174,7 @@ final class LoggingConfiguration
             '%s/%s-%s.log',
             LOG_PATH,
             self::CHANNELS[$channel]['file'],
-            date(Application::FILE_DATE_FORMAT)
+            date(DateTimeFormatConstants::FILE_DATE)
         );
     }
 
