@@ -2,7 +2,7 @@
 // Health/GameHealth.php
 namespace App\Health;
 
-use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Controllers\Api\ApiGameController;
 use App\Controllers\Api\ApiGameEngineController;
 use App\Core\Http\Http;
@@ -15,12 +15,12 @@ final class GameHealth
     public static function getStatus(): string
     {
         if (self::isHealthy()) {
-            return Application::GENERAL_HEALTHY;
+            return ApplicationConstants::RESULT_HEALTHY;
         }
         if (self::isGameEngineAvailable() && self::isApiGameEngineControllerAvailable()) {
-            return Application::GENERAL_WARNING;
+            return ApplicationConstants::RESULT_WARNING;
         }
-        return Application::GENERAL_CRITICAL;
+        return ApplicationConstants::RESULT_CRITICAL;
     }
 
     // Game engine aka game models available 

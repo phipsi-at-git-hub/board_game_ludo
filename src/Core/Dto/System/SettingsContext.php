@@ -4,6 +4,7 @@
 namespace App\Core\Dto\System;
 
 use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Core\Localization;
 use App\Models\System\SystemSettingsModel;
 use App\Services\SystemService;
@@ -60,25 +61,25 @@ final class SettingsContext
 
         // Overview State 
         $dto['system_state_label'] = $system_settings->isSystemEnabled() ? strtoupper(Localization::get('application.general.online')) : strtoupper(Localization::get('application.general.offline'));
-        $dto['system_state_status'] = $system_settings->isSystemEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL;
+        $dto['system_state_status'] = $system_settings->isSystemEnabled() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL;
 
         // Authentication Badge 
         $authentication_enabled = $system_settings->isAuthenticationEnabled();
-        $dto['authentication_status'] = $authentication_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL;
+        $dto['authentication_status'] = $authentication_enabled ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL;
         $dto['authentication_status_classes'] = 'status-' . $dto['authentication_status'];  // status is css class prefix
-        $dto['authentication_status_label'] = strtoupper($authentication_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
+        $dto['authentication_status_label'] = strtoupper($authentication_enabled ? ApplicationConstants::VALUE_ON : ApplicationConstants::VALUE_OFF);
 
         // Games Badge 
         $games_enabled = $system_settings->isGameEnabled();
-        $dto['games_status'] = $games_enabled ? Application::GENERAL_OK : Application::GENERAL_FAIL;
+        $dto['games_status'] = $games_enabled ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL;
         $dto['games_status_classes'] = 'status-' . $dto['games_status'];  // status is css class prefix
-        $dto['games_status_label'] = strtoupper($games_enabled ? Application::GENERAL_ON : Application::GENERAL_OFF);
+        $dto['games_status_label'] = strtoupper($games_enabled ? ApplicationConstants::VALUE_ON : ApplicationConstants::VALUE_OFF);
 
         // Maintenance Badge 
         $maintenance_enabled = $system_settings->isMaintenanceActive();
-        $dto['maintenance_status'] = !$maintenance_enabled ? Application::GENERAL_OK : Application::GENERAL_WARNING;
+        $dto['maintenance_status'] = !$maintenance_enabled ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_WARNING;
         $dto['maintenance_status_classes'] = 'status-' . $dto['maintenance_status'];  // status is css class prefix
-        $dto['maintenance_status_label'] = strtoupper(!$maintenance_enabled ? Application::GENERAL_OFF : Application::GENERAL_ON);
+        $dto['maintenance_status_label'] = strtoupper(!$maintenance_enabled ? ApplicationConstants::VALUE_OFF : ApplicationConstants::VALUE_ON);
 
         return $dto;
     }

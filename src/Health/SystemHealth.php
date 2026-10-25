@@ -3,9 +3,12 @@
 namespace App\Health;
 
 use App\Constants\Application;
+use App\Constants\ApplicationConstants;
+use App\Constants\EnvironmentConstants;
+use App\Constants\GeneralConstants;
 use App\Core\Application\App;
-use App\Core\Persistence\Database;
 use App\Core\Config\Env;
+use App\Core\Persistence\Database;
 use App\Services\SystemService;
 use Throwable;
 
@@ -36,12 +39,12 @@ final class SystemHealth
     public static function getStatus(): string
     {
         if (!self::checkDatabase() || !self::checkEnvironment()) {
-            return Application::GENERAL_CRITICAL;
+            return ApplicationConstants::RESULT_CRITICAL;
         }
         if (!self::isGameHealthy()) {
-            return Application::GENERAL_WARNING;
+            return ApplicationConstants::RESULT_WARNING;
         }
-        return Application::GENERAL_HEALTHY;
+        return ApplicationConstants::RESULT_HEALTHY;
     }
 
     // Health - Database
@@ -58,7 +61,7 @@ final class SystemHealth
             $size = $db->fetch("SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb FROM information_schema.tables WHERE table_schema = DATABASE()");
 
             return [
-                'status' => Application::GENERAL_OK,
+                'status' => ApplicationConstants::RESULT_OK,
                 'reachable' => true,
                 'latency_ms' => $time_latency,
                 'latency_state' => self::getDatabaseLatencyState($time_latency),
@@ -73,7 +76,7 @@ final class SystemHealth
             ];
         } catch (Throwable $e) {
             return [
-                'status' => Application::GENERAL_FAIL,
+                'status' => ApplicationConstants::RESULT_FAIL,
                 'reachable' => false,
                 'latency_ms' => null,
                 'latency_state' => null,
@@ -96,7 +99,7 @@ final class SystemHealth
         $disk_total_space = disk_total_space('/');
         $disk_space_used_percentage = self::getPercentage($disk_free_space, $disk_total_space);
         return [
-            'status' => (self::checkEnvironment()) ? Application::GENERAL_OK : Application::GENERAL_FAIL,
+            'status' => (self::checkEnvironment()) ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL,
             'app_env' => Env::get(),
             'is_dev' => Env::isDev(),
             'is_prod' => Env::isProd(),
@@ -116,7 +119,7 @@ final class SystemHealth
     public static function getGameDetails(): array
     {
         $game_health = GameHealth::getApiHealthDetails();
-        $game_health['latency_state'] = Application::GENERAL_FAIL;
+        $game_health['latency_state'] = ApplicationConstants::RESULT_FAIL;
         if (isset($game_health['status_ok']) && $game_health['status_ok'] === true && isset($game_health['latency'])) {
             $game_health['latency_state'] = self::getGameApiLatencyState($game_health['latency']);
         }
@@ -149,15 +152,15 @@ final class SystemHealth
     private static function getLatencyState(float|int|null $ms, int $ok, int $warning): string
     {
         if ($ms === null) {
-            return Application::GENERAL_FAIL;
+            return ApplicationConstants::RESULT_FAIL;
         }
         if ($ms <= $ok) {
-            return Application::GENERAL_OK;
+            return ApplicationConstants::RESULT_OK;
         }
         if ($ms <= $warning) {
-            return Application::GENERAL_WARNING;
+            return ApplicationConstants::RESULT_WARNING;
         }
-        return Application::GENERAL_FAIL;
+        return ApplicationConstants::RESULT_FAIL;
     }
 
     // Helper - Get latency state for DB
@@ -183,7 +186,7 @@ final class SystemHealth
     {
         try {
             $result = Database::getInstance()->fetch('SELECT 1 AS health');
-            return isset($result[Application::GENERAL_HEALTH]) && (int)$result[Application::GENERAL_HEALTH] === 1;
+            return isset($result[GeneralConstants::HEALTH]) && (int)$result[GeneralConstants::HEALTH] === 1;
         } catch (Throwable $e) {
             return false;
         }
@@ -205,7 +208,7 @@ final class SystemHealth
     {
         try {
             $env = Env::get();
-            return in_array($env, [Application::GENERAL_DEV, Application::GENERAL_PROD], true);
+            return in_array($env, [EnvironmentConstants::DEV, EnvironmentConstants::PROD], true);
         } catch (Throwable $e) {
             return false;
         }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Services\SystemService;
@@ -54,7 +54,7 @@ use App\Services\SystemService;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= $system_settings->isAuthenticationEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        class="status-badge status-<?= $system_settings->isAuthenticationEnabled() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL ?>" 
                         data-id="settings-authentication-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -62,7 +62,7 @@ use App\Services\SystemService;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="authentication_status_label" >
-                        <?= $system_settings->isAuthenticationEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
+                        <?= $system_settings->isAuthenticationEnabled() ? strtoupper(ApplicationConstants::VALUE_ON) : strtoupper(ApplicationConstants::VALUE_OFF) ?>
                     </span>
                 </span>
                 <span 
@@ -74,7 +74,7 @@ use App\Services\SystemService;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= $system_settings->isGameEnabled() ? Application::GENERAL_OK : Application::GENERAL_FAIL ?>" 
+                        class="status-badge status-<?= $system_settings->isGameEnabled() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_FAIL ?>" 
                         data-id="settings-games-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -82,7 +82,7 @@ use App\Services\SystemService;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="games_status_label" >
-                        <?= $system_settings->isGameEnabled() ? strtoupper(Application::GENERAL_ON) : strtoupper(Application::GENERAL_OFF) ?>
+                        <?= $system_settings->isGameEnabled() ? strtoupper(ApplicationConstants::VALUE_ON) : strtoupper(ApplicationConstants::VALUE_OFF) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.games') ?></span>
@@ -91,7 +91,7 @@ use App\Services\SystemService;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= !$system_settings->isMaintenanceModeEnabled() ? Application::GENERAL_OK : Application::GENERAL_WARNING ?>" 
+                        class="status-badge status-<?= !$system_settings->isMaintenanceModeEnabled() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_WARNING ?>" 
                         data-id="settings-maintenance-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -99,7 +99,7 @@ use App\Services\SystemService;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="maintenance_status_label" >
-                        <?= !$system_settings->isMaintenanceModeEnabled() ? strtoupper(Application::GENERAL_OFF) : strtoupper(Application::GENERAL_ON) ?>
+                        <?= !$system_settings->isMaintenanceModeEnabled() ? strtoupper(ApplicationConstants::VALUE_OFF) : strtoupper(ApplicationConstants::VALUE_ON) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>

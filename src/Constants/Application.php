@@ -8,7 +8,6 @@ use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Dto\GamePlayerDtoConstants;
-use App\Constants\EnvironmentConstants;
 use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Game\GameRulesetConstants;
@@ -27,37 +26,37 @@ class Application
     /**
      * Defines general application actions.
      */
-    public const ACTION_ACCESS = ApplicationConstants::ACTION_ACCESS; 
-    public const ACTION_JOIN = ApplicationConstants::ACTION_JOIN; 
-    public const ACTION_EDIT = ApplicationConstants::ACTION_EDIT;
-    public const ACTION_DELETE = ApplicationConstants::ACTION_DELETE;
+    //public const ACTION_ACCESS = ApplicationConstants::ACTION_ACCESS; 
+    //public const ACTION_JOIN = ApplicationConstants::ACTION_JOIN; 
+    //public const ACTION_EDIT = ApplicationConstants::ACTION_EDIT;
+    //public const ACTION_DELETE = ApplicationConstants::ACTION_DELETE;
 
     /**
      * Defines generic on/off and partial states.
      */
-    public const VALUE_ON = ApplicationConstants::VALUE_ON;
-    public const VALUE_OFF = ApplicationConstants::VALUE_OFF;
-    public const VALUE_PARTIAL = ApplicationConstants::VALUE_PARTIAL;
+    //public const VALUE_ON = ApplicationConstants::VALUE_ON;
+    //public const VALUE_OFF = ApplicationConstants::VALUE_OFF;
+    //public const VALUE_PARTIAL = ApplicationConstants::VALUE_PARTIAL;
 
     /**
      * Defines generic operation results.
      */
-    public const RESULT_OK = ApplicationConstants::RESULT_OK;
-    public const RESULT_FAIL = ApplicationConstants::RESULT_FAIL;
+    //public const RESULT_OK = ApplicationConstants::RESULT_OK;
+    //public const RESULT_FAIL = ApplicationConstants::RESULT_FAIL;
 
     /**
      * Defines application environments.
      */
-    public const ENVIRONMENT_DEV = EnvironmentConstants::DEV;
-    public const ENVIRONMENT_PROD = EnvironmentConstants::PROD;
+    //public const ENVIRONMENT_DEV = EnvironmentConstants::DEV;
+    //public const ENVIRONMENT_PROD = EnvironmentConstants::PROD;
 
     /**
      * Defines health check identifiers and health states.
      */
-    public const HEALTH_CHECK = HealthConstants::CHECK;
-    public const HEALTH_STATUS_HEALTHY = HealthConstants::STATUS_HEALTHY; 
-    public const HEALTH_STATUS_CRITICAL = HealthConstants::STATUS_CRITICAL;
-    public const HEALTH_STATUS_WARNING = HealthConstants::STATUS_WARNING;
+    //public const HEALTH_CHECK = 'health';
+    //public const HEALTH_STATUS_HEALTHY = ApplicationConstants::RESULT_HEALTHY; 
+    //public const HEALTH_STATUS_CRITICAL = ApplicationConstants::RESULT_CRITICAL;
+    //public const HEALTH_STATUS_WARNING = ApplicationConstants::RESULT_WARNING;
 
 
     /*
@@ -67,10 +66,10 @@ class Application
     /**
      * Defines response notification types.
      */
-    public const RESPONSE_TYPE_SUCCESS = ResponseTypeConstants::SUCCESS;
-    public const RESPONSE_TYPE_ERROR = ResponseTypeConstants::ERROR;
-    public const RESPONSE_TYPE_WARNING = ResponseTypeConstants::WARNING;
-    public const RESPONSE_TYPE_INFO = ResponseTypeConstants::INFO;
+    //public const RESPONSE_TYPE_SUCCESS = ResponseTypeConstants::SUCCESS;
+    //public const RESPONSE_TYPE_ERROR = ResponseTypeConstants::ERROR;
+    //public const RESPONSE_TYPE_WARNING = ResponseTypeConstants::WARNING;
+    //public const RESPONSE_TYPE_INFO = ResponseTypeConstants::INFO;
 
 
     /*
@@ -408,77 +407,77 @@ class Application
     /**
      * @deprecated Use ACTION_ACCESS instead.
      */
-    public const GENERAL_ACCESS = self::ACTION_ACCESS;
+    //public const GENERAL_ACCESS = self::ACTION_ACCESS;
 
     /**
      * @deprecated Use ACTION_JOIN instead.
      */
-    public const GENERAL_JOIN = self::ACTION_JOIN;
+    //public const GENERAL_JOIN = self::ACTION_JOIN;
 
     /**
      * @deprecated Use ACTION_EDIT instead.
      */
-    public const GENERAL_EDIT = self::ACTION_EDIT;
+    //public const GENERAL_EDIT = self::ACTION_EDIT;
 
     /**
      * @deprecated Use ACTION_DELETE instead.
      */
-    public const GENERAL_DELETE = self::ACTION_DELETE;
+    //public const GENERAL_DELETE = self::ACTION_DELETE;
 
     /**
      * @deprecated Use VALUE_ON instead.
      */
-    public const GENERAL_ON = self::VALUE_ON;
+    //public const GENERAL_ON = self::VALUE_ON;
 
     /**
      * @deprecated Use VALUE_OFF instead.
      */
-    public const GENERAL_OFF = self::VALUE_OFF;
+    //public const GENERAL_OFF = self::VALUE_OFF;
 
     /**
      * @deprecated Use VALUE_PARTIAL instead.
      */
-    public const GENERAL_PARTIAL = self::VALUE_PARTIAL;
+    //public const GENERAL_PARTIAL = self::VALUE_PARTIAL;
 
     /**
      * @deprecated Use RESULT_OK instead.
      */
-    public const GENERAL_OK = self::RESULT_OK;
+    //public const GENERAL_OK = self::RESULT_OK;
 
     /**
      * @deprecated Use RESULT_FAIL instead.
      */
-    public const GENERAL_FAIL = self::RESULT_FAIL;
+    //public const GENERAL_FAIL = self::RESULT_FAIL;
 
     /**
      * @deprecated Use HEALTH_CHECK instead.
      */
-    public const GENERAL_HEALTH = self::HEALTH_CHECK;
+    //public const GENERAL_HEALTH = self::HEALTH_CHECK;
 
     /**
      * @deprecated Use ENVIRONMENT_DEV instead.
      */
-    public const GENERAL_DEV = self::ENVIRONMENT_DEV;
+    //public const GENERAL_DEV = self::ENVIRONMENT_DEV;
 
     /**
      * @deprecated Use ENVIRONMENT_PROD instead.
      */
-    public const GENERAL_PROD = self::ENVIRONMENT_PROD;
+    //public const GENERAL_PROD = self::ENVIRONMENT_PROD;
 
     /**
      * @deprecated Use HEALTH_STATUS_HEALTHY instead.
      */
-    public const GENERAL_HEALTHY = self::HEALTH_STATUS_HEALTHY;
+    //public const GENERAL_HEALTHY = self::HEALTH_STATUS_HEALTHY;
 
     /**
      * @deprecated Use HEALTH_STATUS_CRITICAL instead.
      */
-    public const GENERAL_CRITICAL = self::HEALTH_STATUS_CRITICAL;
+    //public const GENERAL_CRITICAL = self::HEALTH_STATUS_CRITICAL;
 
     /**
      * @deprecated Use HEALTH_STATUS_WARNING instead.
      */
-    public const GENERAL_WARNING = self::HEALTH_STATUS_WARNING;
+    //public const GENERAL_WARNING = self::HEALTH_STATUS_WARNING;
 
 
     /*

@@ -2,7 +2,7 @@
 // src/Core/Http/Response.php
 namespace App\Core\Http;
 
-use App\Constants\Application;
+use App\Constants\ResponseTypeConstants;
 
 final class Response
 {
@@ -30,7 +30,7 @@ final class Response
     {
         return self::build(
             true,
-            Application::RESPONSE_TYPE_SUCCESS,
+            ResponseTypeConstants::SUCCESS,
             $message,
             $data,
             [], // no errors 
@@ -43,7 +43,7 @@ final class Response
     {
         return self::build(
             false,
-            Application::RESPONSE_TYPE_ERROR,
+            ResponseTypeConstants::ERROR,
             $message,
             [], // no data
             $errors
@@ -55,7 +55,7 @@ final class Response
     {
         return self::build(
             true,
-            Application::RESPONSE_TYPE_WARNING,
+            ResponseTypeConstants::WARNING,
             $message,
             $data
         );
@@ -66,7 +66,7 @@ final class Response
     {
         return self::build(
             true,
-            Application::RESPONSE_TYPE_INFO,
+            ResponseTypeConstants::INFO,
             $message,
             $data
         );

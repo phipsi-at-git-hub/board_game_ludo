@@ -1,9 +1,9 @@
 <?php
-// src/Constants/DateFormatConstants.php
+// src/Constants/DateTimeFormatConstants.php
 
 namespace App\Constants;
 
-final class DateFormatConstants
+final class DateTimeFormatConstants
 {
     /**
      * Defines date and time formats used for file-related values.

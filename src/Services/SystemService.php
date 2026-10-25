@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Models\System\SystemSettingsModel;
 use App\Models\User\UserModel;
 
@@ -174,38 +175,38 @@ final class SystemService
     public function getAuthenticationStatus(): string
     {
         if ($this->isRegistrationEnabled() && $this->isLoginEnabled()) {
-            return Application::GENERAL_ON;
+            return ApplicationConstants::VALUE_ON;
         }
 
         if ($this->isRegistrationEnabled() xor $this->isLoginEnabled()) {
-            return Application::GENERAL_PARTIAL;
+            return ApplicationConstants::VALUE_PARTIAL;
         }
-        return Application::GENERAL_OFF;
+        return ApplicationConstants::VALUE_OFF;
     }
 
     // Helper - Get system settings games status as String
     public function getGamesStatus(): string
     {
         if ($this->isGameCreationEnabled() && $this->isGamePlayEnabled()) {
-            return Application::GENERAL_ON;
+            return ApplicationConstants::VALUE_ON;
         }
 
         if ($this->isGameCreationEnabled() xor $this->isGamePlayEnabled()) {
-            return Application::GENERAL_PARTIAL;
+            return ApplicationConstants::VALUE_PARTIAL;
         }
-        return Application::GENERAL_OFF;
+        return ApplicationConstants::VALUE_OFF;
     }
 
     // Helper - Get system settings maintenance status as String
     public function getMaintenanceStatus(): string
     {
         if ($this->isMaintenanceModeEnabled() && $this->isSystemNoticeEnabled()) {
-            return Application::GENERAL_ON;
+            return ApplicationConstants::VALUE_ON;
         }
 
         if ($this->isMaintenanceModeEnabled() xor $this->isSystemNoticeEnabled()) {
-            return Application::GENERAL_PARTIAL;
+            return ApplicationConstants::VALUE_PARTIAL;
         }
-        return Application::GENERAL_OFF;
+        return ApplicationConstants::VALUE_OFF;
     }
 }
