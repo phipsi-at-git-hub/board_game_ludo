@@ -4,7 +4,6 @@
 namespace App\Constants;
 
 use App\Constants\Database\DbColumnConstants;
-use App\Constants\Database\DbTableConstants;
 use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
@@ -28,23 +27,23 @@ class Application
     /**
      * Defines general application actions.
      */
-    public const ACTION_ACCESS = 'access';
-    public const ACTION_JOIN = 'join';
-    public const ACTION_EDIT = 'edit';
-    public const ACTION_DELETE = 'delete';
+    public const ACTION_ACCESS = ApplicationConstants::ACTION_ACCESS; 
+    public const ACTION_JOIN = ApplicationConstants::ACTION_JOIN; 
+    public const ACTION_EDIT = ApplicationConstants::ACTION_EDIT;
+    public const ACTION_DELETE = ApplicationConstants::ACTION_DELETE;
 
     /**
      * Defines generic on/off and partial states.
      */
-    public const VALUE_ON = 'on';
-    public const VALUE_OFF = 'off';
-    public const VALUE_PARTIAL = 'partial';
+    public const VALUE_ON = ApplicationConstants::VALUE_ON;
+    public const VALUE_OFF = ApplicationConstants::VALUE_OFF;
+    public const VALUE_PARTIAL = ApplicationConstants::VALUE_PARTIAL;
 
     /**
      * Defines generic operation results.
      */
-    public const RESULT_OK = 'ok';
-    public const RESULT_FAIL = 'fail';
+    public const RESULT_OK = ApplicationConstants::RESULT_OK;
+    public const RESULT_FAIL = ApplicationConstants::RESULT_FAIL;
 
     /**
      * Defines application environments.
@@ -353,9 +352,9 @@ class Application
     /**
      * Defines date and time formats used for file-related values.
      */
-    public const DATE_FORMAT_FILE_DATE = DateFormatConstants::FILE_DATE; 
-    public const DATE_FORMAT_FILE_TIME = DateFormatConstants::FILE_TIME;
-    public const DATE_FORMAT_FILE_DATE_TIME = DateFormatConstants::FILE_DATE_TIME;
+    public const DATE_FORMAT_FILE_DATE = DateTimeFormatConstants::FILE_DATE; 
+    public const DATE_FORMAT_FILE_TIME = DateTimeFormatConstants::FILE_TIME;
+    public const DATE_FORMAT_FILE_DATE_TIME = DateTimeFormatConstants::FILE_DATE_TIME;
 
 
     /*
