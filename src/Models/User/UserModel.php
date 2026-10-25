@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 use Throwable;
 
@@ -54,7 +55,7 @@ final class UserModel extends BaseModel
 
             FROM %s u
             ",
-            Application::TABLE_USERS
+            DbTableConstants::USERS
         );
 
         // Additional Joins
@@ -272,7 +273,7 @@ final class UserModel extends BaseModel
                         :role,
                         :status
                     )",
-                    Application::TABLE_USERS,
+                    DbTableConstants::USERS,
                     Application::ID,
                     Application::USERNAME,
                     Application::EMAIL,
@@ -332,7 +333,7 @@ final class UserModel extends BaseModel
                 WHERE 
                     id = :id",
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
 
                 Application::USERNAME,
                 Application::EMAIL,
@@ -450,7 +451,7 @@ final class UserModel extends BaseModel
                 WHERE 
                     id = :id",
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::LAST_LOGIN,
                 Application::ID
             ),

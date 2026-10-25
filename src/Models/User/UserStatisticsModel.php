@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Core\Logging\Logger;
 use App\Models\BaseModel;
 use Throwable;
@@ -28,7 +29,7 @@ final class UserStatisticsModel extends BaseModel
         $row = static::fetchOne(
             sprintf(
                 "SELECT * FROM %s WHERE %s = :user_id LIMIT 1",
-                Application::TABLE_USERS_STATISTICS,
+                DbTableConstants::USER_STATISTICS,
                 Application::USER_ID
             ),
             [
@@ -63,7 +64,7 @@ final class UserStatisticsModel extends BaseModel
                     0,
                     0
                 )",
-                Application::TABLE_USERS_STATISTICS,
+                DbTableConstants::USER_STATISTICS,
                 Application::USER_ID,
                 Application::LOGINS,
                 Application::GAMES_CREATED,
@@ -207,7 +208,7 @@ final class UserStatisticsModel extends BaseModel
             return static::execute(
                 sprintf(
                     "UPDATE %s SET %s WHERE %s = :user_id",
-                    Application::TABLE_USERS_STATISTICS,
+                    DbTableConstants::USER_STATISTICS,
                     implode(', ', $updates),
                     Application::USER_ID
                 ),
@@ -240,7 +241,7 @@ final class UserStatisticsModel extends BaseModel
             $result = static::execute(
                 sprintf(
                     "UPDATE %s SET %s = %s + 1 WHERE %s = :user_id",
-                    Application::TABLE_USERS_STATISTICS,
+                    DbTableConstants::USER_STATISTICS,
                     $column,
                     $column,
                     Application::USER_ID

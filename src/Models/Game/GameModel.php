@@ -3,6 +3,7 @@
 namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Constants\Database\DbTableConstants;
 use App\Core\Auth\Auth;
 use App\Core\Dto\Game\GameEngineMove;
 use App\Core\Logging\Logger;
@@ -879,9 +880,9 @@ final class GameModel extends BaseModel
             Application::START_FIELD_MUST_BE_CLEARED,
 
 
-            Application::TABLE_GAMES,
+            DbTableConstants::GAMES,
 
-            Application::TABLE_USERS,
+            DbTableConstants::USERS,
             Application::CREATED_BY_USER_ID,
             Application::ID,
 
@@ -970,7 +971,7 @@ final class GameModel extends BaseModel
 
                         Application::TABLE_PLAYERS,
 
-                        Application::TABLE_USERS,
+                        DbTableConstants::USERS,
 
                         Application::USER_ID,
                         Application::ID,
@@ -1168,9 +1169,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1251,9 +1252,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1336,9 +1337,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1421,9 +1422,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1506,9 +1507,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1570,9 +1571,9 @@ final class GameModel extends BaseModel
                 Application::STRICT_GOAL_ORDER,
                 Application::START_FIELD_MUST_BE_CLEARED,
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::CREATED_BY_USER_ID,
                 Application::ID,
 
@@ -1652,7 +1653,7 @@ final class GameModel extends BaseModel
 
                 Application::TABLE_PLAYERS,
 
-                Application::TABLE_USERS,
+                DbTableConstants::USERS,
                 Application::USER_ID,
                 Application::ID,
 
@@ -1751,7 +1752,7 @@ final class GameModel extends BaseModel
                 sprintf(
                     "INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s, created_at, updated_at)
                     VALUES (:id, :name, :created_by_user_id, :status, :is_private, :is_locked, :is_test_game, NOW(), NOW())",
-                    Application::TABLE_GAMES,
+                    DbTableConstants::GAMES,
                     Application::ID,
                     Application::NAME,
                     Application::CREATED_BY_USER_ID,
@@ -1809,7 +1810,7 @@ final class GameModel extends BaseModel
                 WHERE 
                     id = :id",
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
 
                 Application::NAME,
                 Application::CREATED_BY_USER_ID,
@@ -1889,7 +1890,7 @@ final class GameModel extends BaseModel
                 WHERE
                     %s = :game_id",
 
-                Application::TABLE_GAMES,
+                DbTableConstants::GAMES,
                 Application::STATUS,
                 Application::ID
             ),

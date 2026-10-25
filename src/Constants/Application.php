@@ -80,9 +80,9 @@ class Application
     /**
      * Defines database table names.
      */
-    public const DB_TABLE_USERS = DbTableConstants::USERS;
-    public const DB_TABLE_USER_STATISTICS = DbTableConstants::USER_STATISTICS;
-    public const DB_TABLE_GAMES = DbTableConstants::GAMES;
+    //public const DB_TABLE_USERS = DbTableConstants::USERS;
+    //public const DB_TABLE_USER_STATISTICS = DbTableConstants::USER_STATISTICS;
+    //public const DB_TABLE_GAMES = DbTableConstants::GAMES;
     public const DB_TABLE_GAME_RULE_SET = DbTableConstants::GAME_RULE_SET;
     public const DB_TABLE_GAME_STATE = DbTableConstants::GAME_STATE;
     public const DB_TABLE_GAME_STATE_PLAYERS = DbTableConstants::GAME_STATE_PLAYERS;
@@ -488,17 +488,17 @@ class Application
     /**
      * @deprecated Use DB_TABLE_USERS instead.
      */
-    public const TABLE_USERS = self::DB_TABLE_USERS;
+    //public const TABLE_USERS = self::DB_TABLE_USERS;
 
     /**
      * @deprecated Use DB_TABLE_USER_STATISTICS instead.
      */
-    public const TABLE_USERS_STATISTICS = self::DB_TABLE_USER_STATISTICS;
+    //public const TABLE_USERS_STATISTICS = self::DB_TABLE_USER_STATISTICS;
 
     /**
      * @deprecated Use DB_TABLE_GAMES instead.
      */
-    public const TABLE_GAMES = self::DB_TABLE_GAMES;
+    //public const TABLE_GAMES = self::DB_TABLE_GAMES;
 
     /**
      * @deprecated Use DB_TABLE_GAME_RULE_SET instead.
