@@ -3,7 +3,7 @@
 
 namespace App\Constants\Game;
 
-class GameCameraModeConstants
+final class GameCameraModeConstants
 {
     /**
      * Defines game camera modes.

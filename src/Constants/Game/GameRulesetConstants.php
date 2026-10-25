@@ -3,7 +3,7 @@
 
 namespace App\Constants\Game;
 
-class GameRulesetConstants
+final class GameRulesetConstants
 {
     /**
      * Defines game rule set types.

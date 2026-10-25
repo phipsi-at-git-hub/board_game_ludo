@@ -3,7 +3,7 @@
 
 namespace App\Constants\Game;
 
-class GameVisibilityConstants
+final class GameVisibilityConstants
 {
     /**
      * Defines game visibility values.

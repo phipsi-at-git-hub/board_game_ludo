@@ -3,7 +3,7 @@
 
 namespace App\Constants\Database;
 
-class DbTableConstants
+final class DbTableConstants
 {
     /**
      * Defines database table names.

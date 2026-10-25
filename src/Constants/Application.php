@@ -5,13 +5,16 @@ namespace App\Constants;
 
 use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
+use App\Constants\Dto\GameDtoConstants;
+use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Constants\Game\GameCameraModeConstants;
+use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Game\GameFigureAreaConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Game\GameRulesetConstants;
 use App\Constants\Game\GameStatusConstants;
 use App\Constants\Game\GameVisibilityConstants;
 use App\Constants\User\UserRelationConstants;
-use App\Constants\User\UserRole;
 use App\Constants\User\UserRoleConstants;
 use App\Constants\User\UserStatusConstants;
 
@@ -45,16 +48,16 @@ class Application
     /**
      * Defines application environments.
      */
-    public const ENVIRONMENT_DEV = 'dev';
-    public const ENVIRONMENT_PROD = 'prod';
+    public const ENVIRONMENT_DEV = EnvironmentConstants::DEV;
+    public const ENVIRONMENT_PROD = EnvironmentConstants::PROD;
 
     /**
      * Defines health check identifiers and health states.
      */
-    public const HEALTH_CHECK = 'health';
-    public const HEALTH_STATUS_HEALTHY = 'healthy';
-    public const HEALTH_STATUS_CRITICAL = 'critical';
-    public const HEALTH_STATUS_WARNING = 'warning';
+    public const HEALTH_CHECK = HealthConstants::CHECK;
+    public const HEALTH_STATUS_HEALTHY = HealthConstants::STATUS_HEALTHY; 
+    public const HEALTH_STATUS_CRITICAL = HealthConstants::STATUS_CRITICAL;
+    public const HEALTH_STATUS_WARNING = HealthConstants::STATUS_WARNING;
 
 
     /*
@@ -64,10 +67,10 @@ class Application
     /**
      * Defines response notification types.
      */
-    public const RESPONSE_TYPE_SUCCESS = 'success';
-    public const RESPONSE_TYPE_ERROR = 'error';
-    public const RESPONSE_TYPE_WARNING = 'warning';
-    public const RESPONSE_TYPE_INFO = 'info';
+    public const RESPONSE_TYPE_SUCCESS = ResponseTypeConstants::SUCCESS;
+    public const RESPONSE_TYPE_ERROR = ResponseTypeConstants::ERROR;
+    public const RESPONSE_TYPE_WARNING = ResponseTypeConstants::WARNING;
+    public const RESPONSE_TYPE_INFO = ResponseTypeConstants::INFO;
 
 
     /*
@@ -277,51 +280,51 @@ class Application
     /**
      * Defines game DTO keys.
      */
-    public const DTO_GAME_ID = 'game_id';
-    public const DTO_GAME_NAME = 'game_name';
-    public const DTO_GAME_STATUS = 'game_status';
-    public const DTO_GAME_TURN = 'game_turn';
-    public const DTO_PLAYERS = 'players';
-    public const DTO_CURRENT_PLAYER_ID = 'current_player_id';
-    public const DTO_CURRENT_PLAYER_INDEX = 'current_player_index';
-    public const DTO_CURRENT_PLAYER_USERNAME = 'current_player_username';
-    public const DTO_WINNER_USER_ID = 'winner_user_id';
-    public const DTO_WINNER_PLAYER_INDEX = 'winner_player_index';
-    public const DTO_CURRENT_DICE_ROLL = 'current_dice_roll';
-    public const DTO_RULESET = 'ruleset';
+    public const DTO_GAME_ID = GameDtoConstants::GAME_ID;
+    public const DTO_GAME_NAME = GameDtoConstants::GAME_NAME;
+    public const DTO_GAME_STATUS = GameDtoConstants::GAME_STATUS;
+    public const DTO_GAME_TURN = GameDtoConstants::GAME_TURN;
+    public const DTO_PLAYERS = GameDtoConstants::PLAYERS;
+    public const DTO_CURRENT_PLAYER_ID = GameDtoConstants::CURRENT_PLAYER_ID;
+    public const DTO_CURRENT_PLAYER_INDEX = GameDtoConstants::CURRENT_PLAYER_INDEX;
+    public const DTO_CURRENT_PLAYER_USERNAME = GameDtoConstants::CURRENT_PLAYER_USERNAME;
+    public const DTO_WINNER_USER_ID = GameDtoConstants::WINNER_USER_ID;
+    public const DTO_WINNER_PLAYER_INDEX = GameDtoConstants::WINNER_PLAYER_INDEX;
+    public const DTO_CURRENT_DICE_ROLL = GameDtoConstants::CURRENT_DICE_ROLL;
+    public const DTO_RULESET = GameDtoConstants::RULESET;
 
     /**
      * Defines player DTO keys.
      */
-    public const DTO_USER_ID = 'user_id';
-    public const DTO_USERNAME = 'username';
-    public const DTO_PLAYER_INDEX = 'player_index';
-    public const DTO_PLAYER_COUNT_EMPTY = 'empty';
-    public const DTO_PLAYER_COUNT_LOW = 'low';
-    public const DTO_PLAYER_COUNT_READY = 'ready';
+    public const DTO_USER_ID = GamePlayerDtoConstants::USER_ID;
+    public const DTO_USERNAME = GamePlayerDtoConstants::USERNAME;
+    public const DTO_PLAYER_INDEX = GamePlayerDtoConstants::PLAYER_INDEX;
+    public const DTO_PLAYER_COUNT_EMPTY = GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
+    public const DTO_PLAYER_COUNT_LOW = GamePlayerDtoConstants::PLAYER_COUNT_LOW;
+    public const DTO_PLAYER_COUNT_READY = GamePlayerDtoConstants::PLAYER_COUNT_READY;
 
     /**
      * Defines figure DTO keys.
      */
-    public const DTO_FIGURES = 'figures';
-    public const DTO_FIGURE_INDEX = 'figure_index';
-    public const DTO_AREA = 'area';
-    public const DTO_POSITION = 'position';
+    public const DTO_FIGURES = GameFigureDtoConstants::FIGURES;
+    public const DTO_FIGURE_INDEX = GameFigureDtoConstants::FIGURE_INDEX;
+    public const DTO_AREA = GameFigureDtoConstants::AREA;
+    public const DTO_POSITION = GameFigureDtoConstants::POSITION;
 
     /**
      * Defines move DTO keys.
      */
-    public const DTO_MOVE = 'move';
-    public const DTO_FROM = 'from';
-    public const DTO_TO = 'to';
-    public const DTO_ABSOLUTE_TARGET = 'absolute_target';
-    public const DTO_IS_KICK = 'is_kick';
-    public const DTO_KICKED_PLAYER_ID = 'kicked_player_id';
-    public const DTO_KICKED_PLAYER_INDEX = 'kicked_player_index';
-    public const DTO_KICKED_FIGURE_INDEX = 'kicked_figure_index';
-    public const DTO_IS_GOAL_ENTRY = 'is_goal_entry';
-    public const DTO_IS_LAP_OVERFLOW = 'is_lap_overflow';
-    public const DTO_IS_PASS = 'is_pass';
+    public const DTO_MOVE = GameMoveDtoConstants::MOVE;
+    public const DTO_FROM = GameMoveDtoConstants::FROM;
+    public const DTO_TO = GameMoveDtoConstants::TO;
+    public const DTO_ABSOLUTE_TARGET = GameMoveDtoConstants::ABSOLUTE_TARGET;
+    public const DTO_IS_KICK = GameMoveDtoConstants::IS_KICK;
+    public const DTO_KICKED_PLAYER_ID = GameMoveDtoConstants::KICKED_PLAYER_ID;
+    public const DTO_KICKED_PLAYER_INDEX = GameMoveDtoConstants::KICKED_PLAYER_INDEX; 
+    public const DTO_KICKED_FIGURE_INDEX = GameMoveDtoConstants::KICKED_FIGURE_INDEX;
+    public const DTO_IS_GOAL_ENTRY = GameMoveDtoConstants::IS_GOAL_ENTRY;
+    public const DTO_IS_LAP_OVERFLOW = GameMoveDtoConstants::IS_LAP_OVERFLOW;
+    public const DTO_IS_PASS = GameMoveDtoConstants::IS_PASS;
 
 
     /*
@@ -331,15 +334,15 @@ class Application
     /**
      * Defines the server variable used to determine the request method.
      */
-    public const HTTP_SERVER_REQUEST_METHOD = 'REQUEST_METHOD';
+    public const HTTP_SERVER_REQUEST_METHOD = HttpMethodConstants::SERVER_REQUEST_METHOD;
 
     /**
      * Defines supported HTTP request methods.
      */
-    public const HTTP_METHOD_GET = 'GET';
-    public const HTTP_METHOD_POST = 'POST';
-    public const HTTP_METHOD_PUT = 'PUT';
-    public const HTTP_METHOD_DELETE = 'DELETE';
+    public const HTTP_METHOD_GET = HttpMethodConstants::GET;
+    public const HTTP_METHOD_POST = HttpMethodConstants::POST;
+    public const HTTP_METHOD_PUT = HttpMethodConstants::PUT;
+    public const HTTP_METHOD_DELETE = HttpMethodConstants::DELETE;
 
 
     /*
@@ -349,9 +352,9 @@ class Application
     /**
      * Defines date and time formats used for file-related values.
      */
-    public const DATE_FORMAT_FILE_DATE = 'Y-m-d';
-    public const DATE_FORMAT_FILE_TIME = 'H:i:s';
-    public const DATE_FORMAT_FILE_DATE_TIME = 'Y-m-d H:i:s';
+    public const DATE_FORMAT_FILE_DATE = DateFormatConstants::FILE_DATE; 
+    public const DATE_FORMAT_FILE_TIME = DateFormatConstants::FILE_TIME;
+    public const DATE_FORMAT_FILE_DATE_TIME = DateFormatConstants::FILE_DATE_TIME;
 
 
     /*
@@ -361,9 +364,9 @@ class Application
     /**
      * Defines the locale key and supported locale identifiers.
      */
-    public const LOCALIZATION_LOCALE_KEY = 'locale';
-    public const LOCALE_EN_US = 'en-us';
-    public const LOCALE_DE_DE = 'de-de';
+    public const LOCALIZATION_LOCALE_KEY = LocalizationConstants::KEY;
+    public const LOCALE_EN_US = LocalizationConstants::EN_US;
+    public const LOCALE_DE_DE = LocalizationConstants::DE_DE;
 
 
     /*
@@ -373,8 +376,8 @@ class Application
     /**
      * Defines supported storage types.
      */
-    public const STORAGE_TYPE_FILE = 'file';
-    public const STORAGE_TYPE_DATABASE = 'database';
+    public const STORAGE_TYPE_FILE = StorageTypeConstants::FILE;
+    public const STORAGE_TYPE_DATABASE = StorageTypeConstants::DATABASE;
 
 
     /*
@@ -384,8 +387,8 @@ class Application
     /**
      * Defines sort directions.
      */
-    public const SORT_DIRECTION_ASC = 'asc';
-    public const SORT_DIRECTION_DESC = 'desc';
+    public const SORT_DIRECTION_ASC = SortDirectionConstants::ASC;
+    public const SORT_DIRECTION_DESC = SortDirectionConstants::DESC;
 
     /**
      * Defines supported logging sort keys.

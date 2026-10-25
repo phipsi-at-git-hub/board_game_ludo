@@ -3,7 +3,7 @@
 
 namespace App\Constants\Database;
 
-class DbColumnConstants
+final class DbColumnConstants
 {
     /**
      * Defines common database column names.

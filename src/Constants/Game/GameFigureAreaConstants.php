@@ -3,7 +3,7 @@
 
 namespace App\Constants\Game;
 
-class GameFigureAreaConstants
+final class GameFigureAreaConstants
 {
     /**
      * Defines figure areas.

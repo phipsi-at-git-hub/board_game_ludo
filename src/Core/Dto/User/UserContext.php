@@ -3,6 +3,7 @@
 
 namespace App\Core\Dto\User;
 
+use App\Constants\Dto\UserDtoConstants;
 use App\Core\Localization;
 use App\Models\User\UserModel;
 
@@ -11,18 +12,18 @@ final class UserContext
     private static function create(): array
     {
         return [
-            'user_id' => null,
-            'username' => null,
-            'email' => null,
+            UserDtoConstants::USER_ID => null,
+            UserDtoConstants::USERNAME => null,
+            UserDtoConstants::EMAIL => null,
 
-            'preferred_language' => null,
-            'preferred_camera_mode' => null,
+            UserDtoConstants::PREFERRED_LANGUAGE => null,
+            UserDtoConstants::PREFERRED_CAMERA_MODE => null,
 
-            'preferred_language_label' => null,
-            'preferred_camera_mode_label' => null,
+            UserDtoConstants::PREFERRED_LANGUAGE_LABEL => null,
+            UserDtoConstants::PREFERRED_CAMERA_MODE_LABEL => null,
 
-            'role' => null,
-            'status' => null,
+            UserDtoConstants::ROLE => null,
+            UserDtoConstants::STATUS => null,
         ];
     }
 
@@ -30,18 +31,18 @@ final class UserContext
     {
         $dto = self::create();
 
-        $dto['user_id'] = $user->getId();
-        $dto['username'] = $user->getUsername();
-        $dto['email'] = $user->getEmail();
+        $dto[UserDtoConstants::USER_ID] = $user->getId();
+        $dto[UserDtoConstants::USERNAME] = $user->getUsername();
+        $dto[UserDtoConstants::EMAIL] = $user->getEmail();
 
-        $dto['preferred_language'] = $user->getPreferredLanguage();
-        $dto['preferred_camera_mode'] = $user->getPreferredCameraMode();
+        $dto[UserDtoConstants::PREFERRED_LANGUAGE] = $user->getPreferredLanguage();
+        $dto[UserDtoConstants::PREFERRED_CAMERA_MODE] = $user->getPreferredCameraMode();
 
-        $dto['preferred_language_label'] = strtoupper(Localization::get('application.languages.' . $user->getPreferredLanguage()));
-        $dto['preferred_camera_mode_label'] = strtoupper(Localization::get('application.camera_mode.' . $user->getPreferredCameraMode()));
+        $dto[UserDtoConstants::PREFERRED_LANGUAGE_LABEL] = strtoupper(Localization::get('application.languages.' . $user->getPreferredLanguage()));
+        $dto[UserDtoConstants::PREFERRED_CAMERA_MODE_LABEL] = strtoupper(Localization::get('application.camera_mode.' . $user->getPreferredCameraMode()));
 
-        $dto['role'] = $user->getRole();
-        $dto['status'] = $user->getStatus();
+        $dto[UserDtoConstants::ROLE] = $user->getRole();
+        $dto[UserDtoConstants::STATUS] = $user->getStatus();
 
         return $dto;
     }
