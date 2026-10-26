@@ -3,7 +3,6 @@
 
 namespace App\Core\Dto\User;
 
-use App\Constants\Application;
 use App\Constants\User\UserRoleConstants;
 use App\Constants\User\UserStatusConstants;
 

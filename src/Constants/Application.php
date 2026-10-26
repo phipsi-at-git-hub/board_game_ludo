@@ -8,11 +8,6 @@ use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Dto\GamePlayerDtoConstants;
-use App\Constants\Game\GameCameraModeConstants;
-use App\Constants\Game\GameFigureAreaConstants;
-use App\Constants\Game\GameRulesetConstants;
-use App\Constants\Game\GameStatusConstants;
-use App\Constants\Game\GameVisibilityConstants;
 
 class Application
 {
@@ -122,51 +117,6 @@ class Application
     public const DB_COLUMN_SYSTEM_NOTICE_ENABLED = DbColumnConstants::SYSTEM_NOTICE_ENABLED;
     public const DB_COLUMN_SYSTEM_NOTICE_MESSAGE = DbColumnConstants::SYSTEM_NOTICE_MESSAGE;
     public const DB_COLUMN_UPDATED_BY = DbColumnConstants::UPDATED_BY;
-
-
-    /*
-     * Game domain values
-     */
-
-    /**
-     * Defines game lifecycle statuses.
-     */
-    public const GAME_STATUS_WAITING = GameStatusConstants::WAITING;
-    public const GAME_STATUS_RUNNING = GameStatusConstants::RUNNING;
-    public const GAME_STATUS_FINISHED = GameStatusConstants::FINISHED;
-    public const GAME_STATUS_CANCELLED = GameStatusConstants::CANCELLED;
-
-    /**
-     * Defines game rule set types.
-     */
-    public const GAME_RULESET_CLASSIC = GameRulesetConstants::CLASSIC;
-    public const GAME_RULESET_ADVANCED = GameRulesetConstants::ADVANCED;
-    public const GAME_RULESET_ORIGINAL = GameRulesetConstants::ORIGINAL;
-    public const GAME_RULESET_CUSTOM = GameRulesetConstants::CUSTOM;
-
-    /**
-     * Defines game camera modes.
-     */
-    public const GAME_CAMERA_MODE_FIXED = GameCameraModeConstants::FIXED;
-    public const GAME_CAMERA_MODE_FOLLOW = GameCameraModeConstants::FOLLOW;
-
-    /**
-     * Defines game visibility values.
-     */
-    public const GAME_VISIBILITY_PRIVATE = GameVisibilityConstants::PRIVATE;
-
-    /**
-     * Defines general game data keys.
-     */
-    public const GAME_KEY_PLAYER_COUNT = 'player_count';
-    public const GAME_KEY_AVAILABLE_MOVES = 'available_moves';
-
-    /**
-     * Defines figure areas.
-     */
-    public const FIGURE_AREA_HOME = GameFigureAreaConstants::HOME;
-    public const FIGURE_AREA_FIELD = GameFigureAreaConstants::FIELD;
-    public const FIGURE_AREA_GOAL = GameFigureAreaConstants::GOAL;
 
 
     /*
@@ -548,119 +498,4 @@ class Application
      * @deprecated Use DB_COLUMN_UPDATED_BY instead.
      */
     public const UPDATED_BY = self::DB_COLUMN_UPDATED_BY;
-
-
-    /*
-     * Deprecated user aliases
-     */
-
-    /**
-     * @deprecated Use USER_ROLE_USER instead.
-     */
-    //public const USER = self::USER_ROLE_USER;
-
-    /**
-     * @deprecated Use USER_ROLE_ADMIN instead.
-     */
-    //public const ADMIN = self::USER_ROLE_ADMIN;
-
-    /**
-     * @deprecated Use USER_ROLE_MODERATOR instead.
-     */
-    //public const MODERATOR = self::USER_ROLE_MODERATOR;
-
-    /**
-     * @deprecated Use USER_ROLE_GAME_MASTER instead.
-     */
-    //public const GAME_MASTER = self::USER_ROLE_GAME_MASTER;
-
-    /**
-     * @deprecated Use USER_STATUS_ACTIVE instead.
-     */
-    //public const ACTIVE = self::USER_STATUS_ACTIVE;
-
-    /**
-     * @deprecated Use USER_STATUS_INACTIVE instead.
-     */
-    //public const INACTIVE = self::USER_STATUS_INACTIVE;
-
-    /**
-     * @deprecated Use USER_STATUS_CLOSED instead.
-     */
-    //public const CLOSED = self::USER_STATUS_CLOSED;
-
-    /**
-     * @deprecated Use USER_STATUS_BLOCKED instead.
-     */
-    //public const BLOCKED = self::USER_STATUS_BLOCKED;
-
-    /**
-     * @deprecated Use USER_STATUS_BANNED instead.
-     */
-    //public const BANNED = self::USER_STATUS_BANNED;
-
-
-    /*
-     * Deprecated game aliases
-     */
-
-    /**
-     * @deprecated Use GAME_STATUS_WAITING instead.
-     */
-    public const STATUS_WAITING = self::GAME_STATUS_WAITING;
-
-    /**
-     * @deprecated Use GAME_STATUS_RUNNING instead.
-     */
-    public const STATUS_RUNNING = self::GAME_STATUS_RUNNING;
-
-    /**
-     * @deprecated Use GAME_STATUS_FINISHED instead.
-     */
-    public const STATUS_FINISHED = self::GAME_STATUS_FINISHED;
-
-    /**
-     * @deprecated Use GAME_STATUS_CANCELLED instead.
-     */
-    public const STATUS_CANCELLED = self::GAME_STATUS_CANCELLED;
-
-    /**
-     * @deprecated Use GAME_CAMERA_MODE_FIXED instead.
-     */
-    public const CAMERA_MODE_FIXED = self::GAME_CAMERA_MODE_FIXED;
-
-    /**
-     * @deprecated Use GAME_CAMERA_MODE_FOLLOW instead.
-     */
-    public const CAMERA_MODE_FOLLOW = self::GAME_CAMERA_MODE_FOLLOW;
-
-    /**
-     * @deprecated Use GAME_VISIBILITY_PRIVATE instead.
-     */
-    public const VISIBILITY_PRIVATE = self::GAME_VISIBILITY_PRIVATE;
-
-    /**
-     * @deprecated Use GAME_KEY_PLAYER_COUNT instead.
-     */
-    public const PLAYER_COUNT = self::GAME_KEY_PLAYER_COUNT;
-
-    /**
-     * @deprecated Use GAME_KEY_AVAILABLE_MOVES instead.
-     */
-    public const AVAILABLE_MOVES = self::GAME_KEY_AVAILABLE_MOVES;
-
-    /**
-     * @deprecated Use FIGURE_AREA_HOME instead.
-     */
-    public const AREA_HOME = self::FIGURE_AREA_HOME;
-
-    /**
-     * @deprecated Use FIGURE_AREA_FIELD instead.
-     */
-    public const AREA_FIELD = self::FIGURE_AREA_FIELD;
-
-    /**
-     * @deprecated Use FIGURE_AREA_GOAL instead.
-     */
-    public const AREA_GOAL = self::FIGURE_AREA_GOAL;
 }

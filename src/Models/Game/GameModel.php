@@ -4,6 +4,9 @@ namespace App\Models\Game;
 
 use App\Constants\Application;
 use App\Constants\Database\DbTableConstants;
+use App\Constants\Game\GameConstants;
+use App\Constants\Game\GameFigureAreaConstants;
+use App\Constants\Game\GameStatusConstants;
 use App\Core\Auth\Auth;
 use App\Core\Dto\Game\GameEngineMove;
 use App\Core\Logging\Logger;
@@ -94,7 +97,7 @@ final class GameModel extends BaseModel
         if (!empty($move[Application::DTO_IS_KICK])) {
             $kicked_player = $this->getPlayerById($move[Application::DTO_KICKED_PLAYER_ID]);
             $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[Application::DTO_KICKED_FIGURE_INDEX]);
-            $kicked_figure->setArea(Application::AREA_HOME);
+            $kicked_figure->setArea(GameFigureAreaConstants::HOME);
             $kicked_figure->setPosition($kicked_player->getFirstEmptyHomePosition());
             $kicked_figure->save();
         }
@@ -207,10 +210,10 @@ final class GameModel extends BaseModel
             ];
 
             // HOME -> FIELD
-            if ($area === Application::AREA_HOME) {
+            if ($area === GameFigureAreaConstants::HOME) {
                 $absolute_position = $player->getStartOffset();
                 $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => Application::AREA_FIELD,
+                    Application::DTO_AREA => GameFigureAreaConstants::FIELD,
                     Application::DTO_POSITION => 0,
                 ];
                 $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
@@ -230,7 +233,7 @@ final class GameModel extends BaseModel
             /**
              * FIELD
              */
-            if ($area === Application::AREA_FIELD) {
+            if ($area === GameFigureAreaConstants::FIELD) {
                 $relative_position = $figure->getPosition();
                 $new_relative_position = $relative_position + $dice_value;
                 $can_figure_on_start_field_be_moved = $this->canFigureOnStartFieldBeMoved($player, $dice_value);
@@ -258,7 +261,7 @@ final class GameModel extends BaseModel
                         echo "neue Position: " . $absolute_position;
 
                         $move[Application::DTO_TO] = [
-                            Application::DTO_AREA => Application::AREA_FIELD,
+                            Application::DTO_AREA => GameFigureAreaConstants::FIELD,
                             Application::DTO_POSITION => $wrapped_relative_position,
                         ];
                         $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
@@ -279,7 +282,7 @@ final class GameModel extends BaseModel
 
                     // Common goal entry
                     $move[Application::DTO_TO] = [
-                        Application::DTO_AREA => Application::AREA_GOAL,
+                        Application::DTO_AREA => GameFigureAreaConstants::GOAL,
                         Application::DTO_POSITION => $steps_into_goal,
                     ];
 
@@ -293,7 +296,7 @@ final class GameModel extends BaseModel
                 $absolute_position = ($player->getStartOffset() + $new_relative_position) % self::FIELD_LENGTH;
 
                 $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => Application::AREA_FIELD,
+                    Application::DTO_AREA => GameFigureAreaConstants::FIELD,
                     Application::DTO_POSITION => $new_relative_position,
                 ];
 
@@ -315,11 +318,11 @@ final class GameModel extends BaseModel
             /**
              * GOAL
              */
-            if ($area === Application::AREA_GOAL) {
+            if ($area === GameFigureAreaConstants::GOAL) {
                 $new_goal_position = $figure->getPosition() + $dice_value;
 
                 $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => Application::AREA_GOAL,
+                    Application::DTO_AREA => GameFigureAreaConstants::GOAL,
                     Application::DTO_POSITION => $new_goal_position,
                 ];
 
@@ -350,7 +353,7 @@ final class GameModel extends BaseModel
         /**
          * 1. Step - Figure is in goal area already
          */
-        if ($area === Application::AREA_GOAL) {
+        if ($area === GameFigureAreaConstants::GOAL) {
             $current_goal_position = $figure->getPosition();
             $new_goal_position = $current_goal_position + $dice_value;
 
@@ -375,7 +378,7 @@ final class GameModel extends BaseModel
          * 2. Step - Figure is still in home area
          */
 
-        if ($area === Application::AREA_HOME) {
+        if ($area === GameFigureAreaConstants::HOME) {
             // Figure can only leave home area with a six
             if ($dice_value !== 6) {
                 return false;
@@ -402,7 +405,7 @@ final class GameModel extends BaseModel
         /**
          * 3. Step - Figure is on the field / board
          */
-        if ($area === Application::AREA_FIELD) {
+        if ($area === GameFigureAreaConstants::FIELD) {
             $relative_position = $figure->getPosition();
             $new_relative_position = $relative_position + $dice_value;
 
@@ -576,7 +579,7 @@ final class GameModel extends BaseModel
     // Game Engine - get absolute position on the field of given figure
     public function getAbsoluteFieldPosition(GameStatePlayerModel $player, GameStateFigureModel $figure): int
     {
-        if ($figure->getArea() !== Application::AREA_FIELD) {
+        if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
             return $figure->getPosition();
             throw new LogicException('Figure is not on field');
         }
@@ -600,7 +603,7 @@ final class GameModel extends BaseModel
         // Check if any and which figure is on start field
         for ($i = 0; $i < count($figures); $i++) {
             // Only figures on field has to be checked
-            if ($figures[$i]->getArea() !== Application::AREA_FIELD) {
+            if ($figures[$i]->getArea() !== GameFigureAreaConstants::FIELD) {
                 continue;
             }
 
@@ -632,7 +635,7 @@ final class GameModel extends BaseModel
     {
         $start_offset = $player->getStartOffset();
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() !== Application::AREA_FIELD) {
+            if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
                 continue;
             }
 
@@ -653,7 +656,7 @@ final class GameModel extends BaseModel
 
         foreach ($this->player_array as $other_player) {
             foreach ($other_player->getAllFigures() as $figure) {
-                if ($figure->getArea() !== Application::AREA_FIELD) {
+                if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
                     continue;
                 }
 
@@ -672,7 +675,7 @@ final class GameModel extends BaseModel
     private function isOwnFigureOnAbsolutePosition(GameStatePlayerModel $player, int $absolute_position): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() !== Application::AREA_FIELD) {
+            if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
                 continue;
             }
 
@@ -694,7 +697,7 @@ final class GameModel extends BaseModel
             }
 
             foreach ($other_player->getAllFigures() as $figure) {
-                if ($figure->getArea() !== Application::AREA_FIELD) {
+                if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
                     continue;
                 }
 
@@ -714,7 +717,7 @@ final class GameModel extends BaseModel
     // Game Engine - Check if figure can enter goal area
     private function canEnterGoal(GameStatePlayerModel $player, GameStateFigureModel $figure, int $dice_value): ?int
     {
-        if ($figure->getArea() !== Application::AREA_FIELD) {
+        if ($figure->getArea() !== GameFigureAreaConstants::FIELD) {
             return null;
         }
 
@@ -746,7 +749,7 @@ final class GameModel extends BaseModel
                 continue;
             }
 
-            if ($figure->getArea() !== Application::AREA_GOAL) {
+            if ($figure->getArea() !== GameFigureAreaConstants::GOAL) {
                 continue;
             }
 
@@ -761,7 +764,7 @@ final class GameModel extends BaseModel
     private function isGoalPositionOccupied(GameStatePlayerModel $player, int $target_goal_position): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() === Application::AREA_GOAL && $figure->getPosition() === $target_goal_position) {
+            if ($figure->getArea() === GameFigureAreaConstants::GOAL && $figure->getPosition() === $target_goal_position) {
                 return true;
             }
         }
@@ -789,7 +792,7 @@ final class GameModel extends BaseModel
         $slots = array_fill(0, self::GOAL_LENGTH, false);
         foreach ($player->getAllFigures() as $figure) {
             $position = $figure->getPosition();
-            if ($figure->getArea() !== Application::AREA_GOAL) {
+            if ($figure->getArea() !== GameFigureAreaConstants::GOAL) {
                 return false;
                 continue;
             }
@@ -819,7 +822,7 @@ final class GameModel extends BaseModel
     {
         $this->state_model->setWinnerUserId($player->getUserId());
         $this->state_model->save();
-        $this->status = Application::STATUS_FINISHED;
+        $this->status = GameStatusConstants::FINISHED;
         $this->save();
 
         // Update user statistics
@@ -1035,7 +1038,7 @@ final class GameModel extends BaseModel
     // Get all open games new
     public static function getAllOpenGamesNew(): array
     {
-        return self::findGames(true, false, [], ["g.status = :status"], ["status" => Application::STATUS_WAITING]);
+        return self::findGames(true, false, [], ["g.status = :status"], ["status" => GameStatusConstants::WAITING]);
     }
     // Database - Get all games created by the given user
     public static function getAllGamesCreatedByUserNew(string $user_id): array
@@ -1270,7 +1273,7 @@ final class GameModel extends BaseModel
                 Application::ID,
                 Application::CREATED_AT
             ),
-            ['status' => Application::STATUS_WAITING]
+            ['status' => GameStatusConstants::WAITING]
         );
         return array_map(fn($row) => self::fromArray($row), $rows);
     }
@@ -1765,7 +1768,7 @@ final class GameModel extends BaseModel
                     'id' => $game_id,
                     'name' => $game_name,
                     'created_by_user_id' => $user_id,
-                    'status' => Application::STATUS_WAITING,
+                    'status' => GameStatusConstants::WAITING,
                     'is_private' => $game_options[Application::IS_PRIVATE],
                     'is_locked' => 0,   // newly created games have to be unlocked     // $game_options[Application::IS_LOCKED],        // ToDo: remove this comments, since creating locked games is obsolete
                     'is_test_game' => $game_options[Application::IS_TEST_GAME]
@@ -1938,31 +1941,31 @@ final class GameModel extends BaseModel
     // Game - Update game status helper - Start game
     public function startGame(): void
     {
-        $this->updateStatus(Application::STATUS_RUNNING);
-        $this->setStatus(Application::STATUS_RUNNING);
+        $this->updateStatus(GameStatusConstants::RUNNING);
+        $this->setStatus(GameStatusConstants::RUNNING);
         $this->lockGame();
     }
 
     // Game - Update game status helper - finish game
     public function finishGame(): void
     {
-        $this->updateStatus(Application::STATUS_FINISHED);
-        $this->setStatus(Application::STATUS_FINISHED);
+        $this->updateStatus(GameStatusConstants::FINISHED);
+        $this->setStatus(GameStatusConstants::FINISHED);
     }
 
     // Game - Update game status helper - Set game to waiting
     // ToDo: Remove, since pausing a game is obsolete
     public function pauseGame(): void
     {
-        $this->updateStatus(Application::STATUS_WAITING);
-        $this->setStatus(Application::STATUS_WAITING);
+        $this->updateStatus(GameStatusConstants::WAITING);
+        $this->setStatus(GameStatusConstants::WAITING);
     }
 
     // Game - Update game status helper - Cancel game
     public function cancelGame(): void
     {
-        $this->updateStatus(Application::STATUS_CANCELLED);
-        $this->setStatus(Application::STATUS_CANCELLED);
+        $this->updateStatus(GameStatusConstants::CANCELLED);
+        $this->setStatus(GameStatusConstants::CANCELLED);
     }
 
     // Game - Reset Game State, Figures and Game Status helper
@@ -1979,8 +1982,8 @@ final class GameModel extends BaseModel
             }
 
             // Set game to waiting
-            $this->updateStatus(Application::STATUS_WAITING);
-            $this->setStatus(Application::STATUS_WAITING);
+            $this->updateStatus(GameStatusConstants::WAITING);
+            $this->setStatus(GameStatusConstants::WAITING);
             $this->unlockGame();
             GameHistoryModel::resetByGameId($this->id);
             $this->save();
@@ -2010,7 +2013,7 @@ final class GameModel extends BaseModel
     // Game - Join game - player 
     public function join(string $user_id): bool
     {
-        if ($this->status !== Application::STATUS_WAITING) {
+        if ($this->status !== GameStatusConstants::WAITING) {
             return false;
             throw new DomainException('Game cannot be joined');
         }
@@ -2043,7 +2046,7 @@ final class GameModel extends BaseModel
     // Game - Leave game - player
     public function leave(string $user_id): bool
     {
-        if ($this->status === Application::STATUS_RUNNING) {
+        if ($this->status === GameStatusConstants::RUNNING) {
             throw new DomainException('Game leave now');
         }
 
@@ -2131,7 +2134,7 @@ final class GameModel extends BaseModel
         $game->is_test_game = $row['is_test_game'] ?? null;
 
         if (array_key_exists(Application::USERNAME, $row)) $game->created_by_user_name = $row[Application::USERNAME];
-        if (array_key_exists(Application::PLAYER_COUNT, $row)) $game->player_count = (int) $row[Application::PLAYER_COUNT];
+        if (array_key_exists(GameConstants::PLAYER_COUNT, $row)) $game->player_count = (int) $row[GameConstants::PLAYER_COUNT];
 
         $game->rule_set_model = GameRuleSetModel::fromArray($row) ?? null;
 
@@ -2192,25 +2195,25 @@ final class GameModel extends BaseModel
     // Helper - Status is waiting
     public function isWaiting(): bool
     {
-        return $this->status === Application::STATUS_WAITING;
+        return $this->status === GameStatusConstants::WAITING;
     }
 
     // Helper - Status is running
     public function isRunning(): bool
     {
-        return $this->status === Application::STATUS_RUNNING;
+        return $this->status === GameStatusConstants::RUNNING;
     }
 
     // Helper - Status is finished
     public function isFinished(): bool
     {
-        return $this->status === Application::STATUS_FINISHED;
+        return $this->status === GameStatusConstants::FINISHED;
     }
 
     // Helper - Status is cancelled
     public function isCancelled(): bool
     {
-        return $this->status === Application::STATUS_CANCELLED;
+        return $this->status === GameStatusConstants::CANCELLED;
     }
 
     // Helper - Is private
@@ -2370,7 +2373,7 @@ final class GameModel extends BaseModel
     private function allFiguresInHome(GameStatePlayerModel $player): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() !== Application::AREA_HOME) {
+            if ($figure->getArea() !== GameFigureAreaConstants::HOME) {
                 return false;
             }
         }
@@ -2380,7 +2383,7 @@ final class GameModel extends BaseModel
     private function hasFiguresInHome(GameStatePlayerModel $player): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() === Application::AREA_HOME) {
+            if ($figure->getArea() === GameFigureAreaConstants::HOME) {
                 return true;
             }
         }
@@ -2391,7 +2394,7 @@ final class GameModel extends BaseModel
     private function hasNoFigureOnBoard(GameStatePlayerModel $player): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() === Application::AREA_FIELD) {
+            if ($figure->getArea() === GameFigureAreaConstants::FIELD) {
                 return false;
             }
         }
@@ -2402,7 +2405,7 @@ final class GameModel extends BaseModel
     private function hasFigureOnStartField(GameStatePlayerModel $player): bool
     {
         foreach ($player->getAllFigures() as $figure) {
-            if ($figure->getArea() === Application::AREA_FIELD && $figure->getPosition() === 0) {
+            if ($figure->getArea() === GameFigureAreaConstants::FIELD && $figure->getPosition() === 0) {
                 return true;
             }
         }
@@ -2426,14 +2429,14 @@ final class GameModel extends BaseModel
             return [
                 Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(),
                 Application::CURRENT_DICE_ROLL => 'NULL',
-                Application::AVAILABLE_MOVES => [],
+                GameConstants::AVAILABLE_MOVES => [],
                 Application::EXTRA_ROLLS_ON_SIX_USED => $this->state_model->getExtraRollsOnSixUsed()
             ];
         }
         return [
             Application::CURRENT_PLAYER_INDEX => $this->state_model->getCurrentPlayerIndex(),
             Application::CURRENT_DICE_ROLL => $this->state_model->getCurrentDiceRoll(),
-            Application::AVAILABLE_MOVES => $this->getAvailableMoves($user_id, $this->state_model->getCurrentDiceRoll()),
+            GameConstants::AVAILABLE_MOVES => $this->getAvailableMoves($user_id, $this->state_model->getCurrentDiceRoll()),
             Application::EXTRA_ROLLS_ON_SIX_USED => $this->state_model->getExtraRollsOnSixUsed()
         ];
     }
@@ -2555,11 +2558,10 @@ final class GameModel extends BaseModel
     public function setStatus(string $status): bool
     {
         if (
-            $status === Application::STATUS_CANCELLED
-            || $status === Application::STATUS_FINISHED
-            || $status === Application::STATUS_FINISHED
-            || $status === Application::STATUS_RUNNING
-            || $status === Application::STATUS_WAITING
+            $status === GameStatusConstants::CANCELLED
+            || $status === GameStatusConstants::FINISHED
+            || $status === GameStatusConstants::RUNNING
+            || $status === GameStatusConstants::WAITING
         ) {
             $this->status = $status;
             return true;

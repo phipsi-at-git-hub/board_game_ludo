@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\Game\GameStatusConstants;
 use App\Constants\LocalizationConstants;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -78,19 +79,19 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
                     data-min-selection="1" 
                     data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
 
-                    <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>" selected >
+                    <option value="<?= htmlspecialchars(GameStatusConstants::WAITING) ?>" selected >
                         <?= Localization::get('game.status.waiting') ?>
                     </option>
 
-                    <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>" selected >
+                    <option value="<?= htmlspecialchars(GameStatusConstants::RUNNING) ?>" selected >
                         <?= Localization::get('game.status.running') ?>
                     </option>
 
-                    <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>" selected >
+                    <option value="<?= htmlspecialchars(GameStatusConstants::FINISHED) ?>" selected >
                         <?= Localization::get('game.status.finished') ?>
                     </option>
 
-                    <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>" selected >
+                    <option value="<?= htmlspecialchars(GameStatusConstants::CANCELLED) ?>" selected >
                         <?= Localization::get('game.status.cancelled') ?>
                     </option>
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\Game\GameStatusConstants;
 use App\Constants\LocalizationConstants;
 use App\Constants\User\UserRelationConstants;
 use App\Core\Dto\Game\GameFilterContext;
@@ -22,10 +23,10 @@ $api_url = ($is_admin_view) ? '/api/admin/game/filter' : '/api/game/filter';
 
 $filter ??= null;
 // set filter presets
-$filterPresetStatusWaiting = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_WAITING, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusRunning = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_RUNNING, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusFinished = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_FINISHED, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusCancelled = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(Application::STATUS_CANCELLED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusWaiting = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::WAITING, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusRunning = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::RUNNING, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusFinished = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::FINISHED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusCancelled = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::CANCELLED, $filter->statuses)) ? 'selected' : ''; 
 
 $filterPresetUserRelationCreated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_CREATED, $filter->user_relations)) ? 'selected' : ''; 
 $filterPresetUserRelationParticipated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_PARTICIPATED, $filter->user_relations)) ? 'selected' : ''; 
@@ -94,19 +95,19 @@ $filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array
                         data-min-selection="1" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_WAITING) ?>" <?= $filterPresetStatusWaiting ?> >
+                        <option value="<?= htmlspecialchars(GameStatusConstants::WAITING) ?>" <?= $filterPresetStatusWaiting ?> >
                             <?= Localization::get('game.status.waiting') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_RUNNING) ?>" <?= $filterPresetStatusRunning ?> >
+                        <option value="<?= htmlspecialchars(GameStatusConstants::RUNNING) ?>" <?= $filterPresetStatusRunning ?> >
                             <?= Localization::get('game.status.running') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_FINISHED) ?>" <?= $filterPresetStatusFinished ?> >
+                        <option value="<?= htmlspecialchars(GameStatusConstants::FINISHED) ?>" <?= $filterPresetStatusFinished ?> >
                             <?= Localization::get('game.status.finished') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::STATUS_CANCELLED) ?>" <?= $filterPresetStatusCancelled ?> >
+                        <option value="<?= htmlspecialchars(GameStatusConstants::CANCELLED) ?>" <?= $filterPresetStatusCancelled ?> >
                             <?= Localization::get('game.status.cancelled') ?>
                         </option>
 

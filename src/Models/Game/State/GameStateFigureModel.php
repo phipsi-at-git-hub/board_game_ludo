@@ -3,6 +3,7 @@
 namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Constants\Game\GameFigureAreaConstants;
 use App\Models\BaseModel;
 
 final class GameStateFigureModel extends BaseModel
@@ -74,10 +75,10 @@ final class GameStateFigureModel extends BaseModel
     {
         $figures = [];
         for ($i = 0; $i < 4; $i++) {
-            $area = Application::AREA_HOME;
+            $area = GameFigureAreaConstants::HOME;
             $position = $i;
             if ($all_start_from_home === false && (int)$i === 3) {
-                $area = Application::AREA_FIELD;
+                $area = GameFigureAreaConstants::FIELD;
                 $position = 0;
             }
 
@@ -222,9 +223,9 @@ final class GameStateFigureModel extends BaseModel
     {
         // ToDo: make it proof
         if (
-            $area === Application::AREA_HOME
-            || $area === Application::AREA_FIELD
-            || $area === Application::AREA_GOAL
+            $area === GameFigureAreaConstants::HOME
+            || $area === GameFigureAreaConstants::FIELD
+            || $area === GameFigureAreaConstants::GOAL
         ) {
             //$this->storeArea($this->game_id, $this->user_id, $this->figure_index, $area);
             $this->area = $area;
@@ -299,18 +300,18 @@ final class GameStateFigureModel extends BaseModel
     // Helper - Is Figure at home
     public function isHome(): bool
     {
-        return ($this->area === Application::AREA_HOME);
+        return ($this->area === GameFigureAreaConstants::HOME);
     }
 
     // Helper - Is Figure on field
     public function isField(): bool
     {
-        return ($this->area === Application::AREA_FIELD);
+        return ($this->area === GameFigureAreaConstants::FIELD);
     }
 
     // Helper - Is Figure in goal
     public function isGoal(): bool
     {
-        return ($this->area === Application::AREA_GOAL);
+        return ($this->area === GameFigureAreaConstants::GOAL);
     }
 }

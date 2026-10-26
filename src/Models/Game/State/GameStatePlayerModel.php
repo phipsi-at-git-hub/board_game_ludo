@@ -3,6 +3,7 @@
 namespace App\Models\Game\State;
 
 use App\Constants\Application;
+use App\Constants\Game\GameFigureAreaConstants;
 use App\Models\BaseModel;
 
 final class GameStatePlayerModel extends BaseModel
@@ -242,12 +243,12 @@ final class GameStatePlayerModel extends BaseModel
         $index = 0;
         foreach ($this->getAllFigures() as $figure) {
             if ($all_figures_start_at_home === false && $index === 0) {
-                $figure->setFigure(Application::AREA_FIELD, $index);
+                $figure->setFigure(GameFigureAreaConstants::FIELD, $index);
                 $figure->save();
                 $index++;
                 continue;
             }
-            $figure->setFigure(Application::AREA_HOME, $index);
+            $figure->setFigure(GameFigureAreaConstants::HOME, $index);
             $figure->save();
             $index++;
         }
@@ -291,7 +292,7 @@ final class GameStatePlayerModel extends BaseModel
     {
         $occupied_home_positions = [];
         foreach ($this->figure_array as $figure) {
-            if ($figure->getArea() === Application::AREA_HOME) {
+            if ($figure->getArea() === GameFigureAreaConstants::HOME) {
                 $occupied_home_positions[] = $figure->getPosition();
             }
         }
@@ -310,7 +311,7 @@ final class GameStatePlayerModel extends BaseModel
         ];
 
         foreach ($this->figure_array as $figure) {
-            if ($figure->getArea() === Application::AREA_HOME) {
+            if ($figure->getArea() === GameFigureAreaConstants::HOME) {
                 $home_slots[$figure->getPosition()] = true;
             }
         }

@@ -4,6 +4,7 @@
 namespace App\Core\Dto\Game;
 
 use App\Constants\Application;
+use App\Constants\Game\GameStatusConstants;
 
 /**
  * GameFilterContext
@@ -38,10 +39,10 @@ final readonly class GameFilterContext
         $this->games_count = count($games);
 
         $this->available_statuses = [
-            Application::STATUS_WAITING,
-            Application::STATUS_RUNNING,
-            Application::STATUS_FINISHED,
-            Application::STATUS_CANCELLED,
+            GameStatusConstants::WAITING,
+            GameStatusConstants::RUNNING,
+            GameStatusConstants::FINISHED,
+            GameStatusConstants::CANCELLED,
         ];
         $this->available_user_relations = [
             Application::GAMES_CREATED,

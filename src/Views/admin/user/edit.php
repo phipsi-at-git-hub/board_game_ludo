@@ -1,6 +1,7 @@
 <?php
 
 use App\Constants\Application;
+use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\LocalizationConstants;
 use App\Constants\User\UserRoleConstants;
 use App\Constants\User\UserStatusConstants;
@@ -334,17 +335,17 @@ use App\Models\User\UserModel;
                         class="enhanced" >
 
                         <option
-                            value="<?= Application::CAMERA_MODE_FOLLOW ?>"
+                            value="<?= GameCameraModeConstants::FOLLOW ?>"
                             data-state="inactive"
-                            <?= $user->getPreferredCameraMode() === Application::CAMERA_MODE_FOLLOW ? 'selected' : '' ?> >
-                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FOLLOW)) ?>
+                            <?= $user->getPreferredCameraMode() === GameCameraModeConstants::FOLLOW ? 'selected' : '' ?> >
+                            <?= Localization::get('game.camera.mode.' . strtolower(GameCameraModeConstants::FOLLOW)) ?>
                         </option>
 
                         <option
-                            value="<?= Application::CAMERA_MODE_FIXED ?>"
+                            value="<?= GameCameraModeConstants::FIXED ?>"
                             data-state="active"
-                            <?= $user->getPreferredCameraMode() === Application::CAMERA_MODE_FIXED ? 'selected' : '' ?> >
-                            <?= Localization::get('game.camera.mode.' . strtolower(Application::CAMERA_MODE_FIXED)) ?>
+                            <?= $user->getPreferredCameraMode() === GameCameraModeConstants::FIXED ? 'selected' : '' ?> >
+                            <?= Localization::get('game.camera.mode.' . strtolower(GameCameraModeConstants::FIXED)) ?>
                         </option>
 
                     </select>

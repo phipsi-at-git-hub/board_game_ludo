@@ -3,6 +3,7 @@
 namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Constants\Game\GameRulesetConstants;
 use App\Models\BaseModel;
 
 final class GameRuleSetModel extends BaseModel
@@ -270,7 +271,7 @@ final class GameRuleSetModel extends BaseModel
     public function getAllRulesAsArray(): array
     {
         return [
-            Application::GAME_RULESET_ORIGINAL => [
+            GameRulesetConstants::ORIGINAL => [
                 Application::DTO_RULESET => $this->toArray(),
             ]
         ];
@@ -280,10 +281,10 @@ final class GameRuleSetModel extends BaseModel
     public static function getPresetsAsArray(): array
     {
         return [
-            Application::GAME_RULESET_CLASSIC => [
+            GameRulesetConstants::CLASSIC => [
                 Application::DTO_RULESET => self::createClassic()->toArray(),
             ],
-            Application::GAME_RULESET_ADVANCED => [
+            GameRulesetConstants::ADVANCED => [
                 Application::DTO_RULESET => self::createAdvanced()->toArray(),
             ],
         ];
@@ -294,12 +295,12 @@ final class GameRuleSetModel extends BaseModel
     {
         $current = $this->toArray();
         if ($current === self::createClassic()->toArray()) {
-            return Application::GAME_RULESET_CLASSIC;
+            return GameRulesetConstants::CLASSIC;
         }
         if ($current === self::createAdvanced()->toArray()) {
-            return Application::GAME_RULESET_ADVANCED;
+            return GameRulesetConstants::ADVANCED;
         }
-        return Application::GAME_RULESET_CUSTOM;
+        return GameRulesetConstants::CUSTOM;
     }
 
     /**

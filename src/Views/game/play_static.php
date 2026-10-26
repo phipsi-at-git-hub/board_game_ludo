@@ -1,5 +1,6 @@
 <?php
 use App\Constants\Application;
+use App\Constants\Game\GameFigureAreaConstants;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
 use App\Models\Game\GameModel;
@@ -78,7 +79,7 @@ use App\Models\User\UserModel;
             <li>
                 <?= Localization::get('game.play.figure') ?> <?= $index ?> -
                 <?= Localization::get('game.play.area') ?>: <?= $figure->getArea() ?>,
-                <?= Localization::get('game.play.position') ?>: <?= $figure->getPosition() ?? '–' ?><?php if ($figure->getArea() === Application::AREA_FIELD): ?>, <?= Localization::get('game.play.absolute_position') ?>: <?= $game->getAbsoluteFieldPosition($player, $figure) ?? '–' ?><?php endif; ?>
+                <?= Localization::get('game.play.position') ?>: <?= $figure->getPosition() ?? '–' ?><?php if ($figure->getArea() === GameFigureAreaConstants::FIELD): ?>, <?= Localization::get('game.play.absolute_position') ?>: <?= $game->getAbsoluteFieldPosition($player, $figure) ?? '–' ?><?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
