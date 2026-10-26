@@ -4,7 +4,9 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
+use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
+use App\Constants\SortingConstants;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Date\DateRange;
@@ -570,7 +572,7 @@ final class ApiAdminController extends BaseController
         );
 
         // Sort log entries
-        $log_service->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC);
+        $log_service->orderBy(FSFieldConstants::TIMESTAMP, SortingConstants::DESC);
 
         // Get filtered log entries
         $entries = $log_service->getEntries();

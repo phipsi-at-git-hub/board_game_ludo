@@ -8,6 +8,7 @@ use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Dto\GamePlayerDtoConstants;
+use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Game\GameRulesetConstants;
@@ -280,15 +281,15 @@ class Application
     /**
      * Defines sort directions.
      */
-    public const SORT_DIRECTION_ASC = SortDirectionConstants::ASC;
-    public const SORT_DIRECTION_DESC = SortDirectionConstants::DESC;
+    //public const SORT_DIRECTION_ASC = SortingConstants::ASC;
+    //public const SORT_DIRECTION_DESC = SortingConstants::DESC;
 
     /**
      * Defines supported logging sort keys.
      */
-    public const SORT_KEY_TIMESTAMP = 'timestamp';
-    public const SORT_KEY_CHANNEL = 'channel';
-    public const SORT_KEY_LOG_LEVEL = 'log_level';
+    //public const SORT_KEY_TIMESTAMP = FSFieldConstants::TIMESTAMP;
+    //public const SORT_KEY_CHANNEL = FSFieldConstants::CHANNEL;
+    //public const SORT_KEY_LOG_LEVEL = FSFieldConstants::LOG_LEVEL;
 
 
     /*
@@ -770,25 +771,25 @@ class Application
     /**
      * @deprecated Use SORT_DIRECTION_ASC instead.
      */
-    public const ORDER_ASC = self::SORT_DIRECTION_ASC;
+    //public const ORDER_ASC = self::SORT_DIRECTION_ASC;
 
     /**
      * @deprecated Use SORT_DIRECTION_DESC instead.
      */
-    public const ORDER_DESC = self::SORT_DIRECTION_DESC;
+    //public const ORDER_DESC = self::SORT_DIRECTION_DESC;
 
     /**
      * @deprecated Use SORT_KEY_TIMESTAMP instead.
      */
-    public const ORDER_BY_TIMESTAMP = self::SORT_KEY_TIMESTAMP;
+    //public const ORDER_BY_TIMESTAMP = self::SORT_KEY_TIMESTAMP;
 
     /**
      * @deprecated Use SORT_KEY_CHANNEL instead.
      */
-    public const ORDER_BY_CHANNEL = self::SORT_KEY_CHANNEL;
+    //public const ORDER_BY_CHANNEL = self::SORT_KEY_CHANNEL;
 
     /**
      * @deprecated Use SORT_KEY_LOG_LEVEL instead.
      */
-    public const ORDER_BY_LOG_LEVEL = self::SORT_KEY_LOG_LEVEL;
+    //public const ORDER_BY_LOG_LEVEL = self::SORT_KEY_LOG_LEVEL;
 }

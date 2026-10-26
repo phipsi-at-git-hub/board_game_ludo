@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
+use App\Constants\SortingConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -447,7 +449,7 @@ class AdminController extends BaseController
         ]);
 
         // Sort log entries
-        $logService->orderBy(Application::ORDER_BY_TIMESTAMP, Application::ORDER_DESC);
+        $logService->orderBy(FSFieldConstants::TIMESTAMP, SortingConstants::DESC);
 
         $date_range = $logService->getDateRangeAsString();
         $log_entries = $logService->getEntries();

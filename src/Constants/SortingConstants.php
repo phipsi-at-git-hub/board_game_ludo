@@ -1,12 +1,15 @@
 <?php
-// src/Constants/SortDirectionConstants.php
+// src/Constants/SortingConstants.php
 
 namespace App\Constants;
 
-final class SortDirectionConstants
+final class SortingConstants
 {
     /**
      * Defines sort directions.
+     * 
+     * Ascending
+     * Descending
      */
     public const ASC = 'asc';
     public const DESC = 'desc';

@@ -5,6 +5,8 @@ namespace App\Services;
 
 use App\Constants\Application;
 use App\Constants\DateTimeFormatConstants;
+use App\Constants\FileSystem\FSFieldConstants;
+use App\Constants\SortingConstants;
 use App\Core\Date\DateRange;
 use App\Core\Logging\LogEntry;
 use App\Core\Logging\LoggingConfiguration;
@@ -102,32 +104,32 @@ final class LogService
      * @param  mixed $direction
      * @return self
      */
-    public function orderBy(string $field = Application::ORDER_BY_TIMESTAMP, string $direction = Application::ORDER_ASC): self
+    public function orderBy(string $field = FSFieldConstants::TIMESTAMP, string $direction = SortingConstants::ASC): self
     {
-        if (!in_array($field, [Application::ORDER_BY_TIMESTAMP, Application::ORDER_BY_CHANNEL, Application::ORDER_BY_LOG_LEVEL], true)) {
-            $field = Application::ORDER_BY_TIMESTAMP;
+        if (!in_array($field, [FSFieldConstants::TIMESTAMP, FSFieldConstants::CHANNEL, FSFieldConstants::LOG_LEVEL], true)) {
+            $field = FSFieldConstants::TIMESTAMP;
         }
 
-        if (!in_array($direction, [Application::ORDER_ASC, Application::ORDER_DESC], true)) {
-            $direction = Application::ORDER_ASC;
+        if (!in_array($direction, [SortingConstants::ASC, SortingConstants::DESC], true)) {
+            $direction = SortingConstants::ASC;
         }
 
         usort($this->entries, function ($a, $b) use ($field, $direction) {
             switch ($field) {
-                case Application::ORDER_BY_CHANNEL:
+                case FSFieldConstants::CHANNEL:
                     $comparison = $a->getChannel() <=> $b->getChannel();
                     break;
 
-                case Application::ORDER_BY_LOG_LEVEL:
+                case FSFieldConstants::LOG_LEVEL:
                     $comparison = $a->getLevel() <=> $b->getLevel();
                     break;
 
-                case Application::ORDER_BY_TIMESTAMP:
+                case FSFieldConstants::TIMESTAMP:
                 default:
                     $comparison = new DateTimeImmutable($a->getTimestamp()) <=> new DateTimeImmutable($b->getTimestamp());
                     break;
             }
-            return $direction === Application::ORDER_DESC ? -$comparison : $comparison;
+            return $direction === SortingConstants::DESC ? -$comparison : $comparison;
         });
         return $this;
     }
