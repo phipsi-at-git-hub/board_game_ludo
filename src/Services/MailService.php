@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-use App\Constants\Application;
+use App\Constants\User\UserRoleConstants;
 use App\Core\Email\Email;
 use App\Core\Email\Mailer;
 use App\Core\Logging\LoggingConfiguration;
@@ -41,7 +41,7 @@ final class MailService
      */
     public function sendToAdministrators(string $subject, string $body, ?string $htmlBody = null): bool
     {
-        $administrators = UserModel::findByRole(Application::ADMIN);
+        $administrators = UserModel::findByRole(UserRoleConstants::ADMIN);
         $success = true;
 
         foreach ($administrators as $administrator) {

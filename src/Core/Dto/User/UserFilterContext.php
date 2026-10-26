@@ -4,6 +4,8 @@
 namespace App\Core\Dto\User;
 
 use App\Constants\Application;
+use App\Constants\User\UserRoleConstants;
+use App\Constants\User\UserStatusConstants;
 
 /**
  * UserFilterContext
@@ -36,16 +38,16 @@ final readonly class UserFilterContext
         $this->users_count = count($users);
 
         $this->availableStatuses = [
-            Application::ACTIVE,
-            Application::INACTIVE,
-            Application::CLOSED,
-            Application::BLOCKED,
+            UserStatusConstants::ACTIVE,
+            UserStatusConstants::INACTIVE,
+            UserStatusConstants::CLOSED,
+            UserStatusConstants::BLOCKED,
         ];
         $this->availableRoles = [
-            Application::USER,
-            Application::ADMIN,
-            Application::MODERATOR,
-            Application::GAME_MASTER,
+            UserRoleConstants::USER,
+            UserRoleConstants::ADMIN,
+            UserRoleConstants::MODERATOR,
+            UserRoleConstants::GAME_MASTER,
         ];
     }
 

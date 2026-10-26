@@ -2,6 +2,7 @@
 
 use App\Constants\Application;
 use App\Constants\LocalizationConstants;
+use App\Constants\User\UserRelationConstants;
 use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -130,15 +131,15 @@ $filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array
                         data-min-selection="<?= ($is_admin_view) ? '1' : '0' ?>" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                        <option value="<?= htmlspecialchars(Application::USER_RELATION_CREATED) ?>" <?= $filterPresetUserRelationCreated ?> >
+                        <option value="<?= htmlspecialchars(UserRelationConstants::CREATED) ?>" <?= $filterPresetUserRelationCreated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.created') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::USER_RELATION_PARTICIPATED) ?>" <?= $filterPresetUserRelationParticipated ?> >
+                        <option value="<?= htmlspecialchars(UserRelationConstants::PARTICIPATED) ?>" <?= $filterPresetUserRelationParticipated ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.participated') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::USER_RELATION_WON) ?>" <?= $filterPresetUserRelationWon ?> >
+                        <option value="<?= htmlspecialchars(UserRelationConstants::WON) ?>" <?= $filterPresetUserRelationWon ?> >
                             <?= Localization::get('admin.users.detail.card.games.list.filter.user_relation.won') ?>
                         </option>
 

@@ -3,7 +3,6 @@
 
 namespace App\Controllers\Api;
 
-use App\Constants\Application;
 use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
 use App\Constants\SortingConstants;

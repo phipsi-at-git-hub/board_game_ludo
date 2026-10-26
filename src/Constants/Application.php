@@ -8,15 +8,11 @@ use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Dto\GameFigureDtoConstants;
 use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Dto\GamePlayerDtoConstants;
-use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Game\GameRulesetConstants;
 use App\Constants\Game\GameStatusConstants;
 use App\Constants\Game\GameVisibilityConstants;
-use App\Constants\User\UserRelationConstants;
-use App\Constants\User\UserRoleConstants;
-use App\Constants\User\UserStatusConstants;
 
 class Application
 {
@@ -129,35 +125,6 @@ class Application
 
 
     /*
-     * User domain values
-     */
-
-    /**
-     * Defines user roles.
-     */
-    public const USER_ROLE_USER = UserRoleConstants::USER;
-    public const USER_ROLE_ADMIN = UserRoleConstants::ADMIN; 
-    public const USER_ROLE_MODERATOR = UserRoleConstants::MODERATOR;
-    public const USER_ROLE_GAME_MASTER = UserRoleConstants::GAME_MASTER;
-
-    /**
-     * Defines user account statuses.
-     */
-    public const USER_STATUS_ACTIVE = UserStatusConstants::ACTIVE;
-    public const USER_STATUS_INACTIVE = UserStatusConstants::INACTIVE;
-    public const USER_STATUS_CLOSED = UserStatusConstants::CLOSED;
-    public const USER_STATUS_BLOCKED = UserStatusConstants::BLOCKED;
-    public const USER_STATUS_BANNED = UserStatusConstants::BANNED;
-
-    /**
-     * Defines user relation types.
-     */
-    public const USER_RELATION_CREATED = UserRelationConstants::CREATED;
-    public const USER_RELATION_PARTICIPATED = UserRelationConstants::PARTICIPATED;
-    public const USER_RELATION_WON = UserRelationConstants::WON;
-
-
-    /*
      * Game domain values
      */
 
@@ -254,42 +221,6 @@ class Application
     public const DTO_IS_GOAL_ENTRY = GameMoveDtoConstants::IS_GOAL_ENTRY;
     public const DTO_IS_LAP_OVERFLOW = GameMoveDtoConstants::IS_LAP_OVERFLOW;
     public const DTO_IS_PASS = GameMoveDtoConstants::IS_PASS;
-
-
-    /*
-     * HTTP request values
-     */
-
-    /**
-     * Defines the server variable used to determine the request method.
-     */
-    //public const HTTP_SERVER_REQUEST_METHOD = HttpMethodConstants::SERVER_REQUEST_METHOD;
-
-    /**
-     * Defines supported HTTP request methods.
-     */
-    //public const HTTP_METHOD_GET = HttpMethodConstants::GET;
-    //public const HTTP_METHOD_POST = HttpMethodConstants::POST;
-    //public const HTTP_METHOD_PUT = HttpMethodConstants::PUT;
-    //public const HTTP_METHOD_DELETE = HttpMethodConstants::DELETE;
-
-
-    /*
-     * Sorting
-     */
-
-    /**
-     * Defines sort directions.
-     */
-    //public const SORT_DIRECTION_ASC = SortingConstants::ASC;
-    //public const SORT_DIRECTION_DESC = SortingConstants::DESC;
-
-    /**
-     * Defines supported logging sort keys.
-     */
-    //public const SORT_KEY_TIMESTAMP = FSFieldConstants::TIMESTAMP;
-    //public const SORT_KEY_CHANNEL = FSFieldConstants::CHANNEL;
-    //public const SORT_KEY_LOG_LEVEL = FSFieldConstants::LOG_LEVEL;
 
 
     /*
@@ -626,47 +557,47 @@ class Application
     /**
      * @deprecated Use USER_ROLE_USER instead.
      */
-    public const USER = self::USER_ROLE_USER;
+    //public const USER = self::USER_ROLE_USER;
 
     /**
      * @deprecated Use USER_ROLE_ADMIN instead.
      */
-    public const ADMIN = self::USER_ROLE_ADMIN;
+    //public const ADMIN = self::USER_ROLE_ADMIN;
 
     /**
      * @deprecated Use USER_ROLE_MODERATOR instead.
      */
-    public const MODERATOR = self::USER_ROLE_MODERATOR;
+    //public const MODERATOR = self::USER_ROLE_MODERATOR;
 
     /**
      * @deprecated Use USER_ROLE_GAME_MASTER instead.
      */
-    public const GAME_MASTER = self::USER_ROLE_GAME_MASTER;
+    //public const GAME_MASTER = self::USER_ROLE_GAME_MASTER;
 
     /**
      * @deprecated Use USER_STATUS_ACTIVE instead.
      */
-    public const ACTIVE = self::USER_STATUS_ACTIVE;
+    //public const ACTIVE = self::USER_STATUS_ACTIVE;
 
     /**
      * @deprecated Use USER_STATUS_INACTIVE instead.
      */
-    public const INACTIVE = self::USER_STATUS_INACTIVE;
+    //public const INACTIVE = self::USER_STATUS_INACTIVE;
 
     /**
      * @deprecated Use USER_STATUS_CLOSED instead.
      */
-    public const CLOSED = self::USER_STATUS_CLOSED;
+    //public const CLOSED = self::USER_STATUS_CLOSED;
 
     /**
      * @deprecated Use USER_STATUS_BLOCKED instead.
      */
-    public const BLOCKED = self::USER_STATUS_BLOCKED;
+    //public const BLOCKED = self::USER_STATUS_BLOCKED;
 
     /**
      * @deprecated Use USER_STATUS_BANNED instead.
      */
-    public const BANNED = self::USER_STATUS_BANNED;
+    //public const BANNED = self::USER_STATUS_BANNED;
 
 
     /*
@@ -732,64 +663,4 @@ class Application
      * @deprecated Use FIGURE_AREA_GOAL instead.
      */
     public const AREA_GOAL = self::FIGURE_AREA_GOAL;
-
-
-    /*
-     * Deprecated HTTP aliases
-     */
-
-    /**
-     * @deprecated Use HTTP_SERVER_REQUEST_METHOD instead.
-     */
-    //public const REQUEST_METHOD = self::HTTP_SERVER_REQUEST_METHOD;
-
-    /**
-     * @deprecated Use HTTP_METHOD_GET instead.
-     */
-    //public const REQUEST_METHOD_GET = self::HTTP_METHOD_GET;
-
-    /**
-     * @deprecated Use HTTP_METHOD_POST instead.
-     */
-    //public const REQUEST_METHOD_POST = self::HTTP_METHOD_POST;
-
-    /**
-     * @deprecated Use HTTP_METHOD_PUT instead.
-     */
-    //public const REQUEST_METHOD_PUT = self::HTTP_METHOD_PUT;
-
-    /**
-     * @deprecated Use HTTP_METHOD_DELETE instead.
-     */
-    //public const REQUEST_METHOD_DELETE = self::HTTP_METHOD_DELETE;
-
-
-    /*
-     * Deprecated sorting aliases
-     */
-
-    /**
-     * @deprecated Use SORT_DIRECTION_ASC instead.
-     */
-    //public const ORDER_ASC = self::SORT_DIRECTION_ASC;
-
-    /**
-     * @deprecated Use SORT_DIRECTION_DESC instead.
-     */
-    //public const ORDER_DESC = self::SORT_DIRECTION_DESC;
-
-    /**
-     * @deprecated Use SORT_KEY_TIMESTAMP instead.
-     */
-    //public const ORDER_BY_TIMESTAMP = self::SORT_KEY_TIMESTAMP;
-
-    /**
-     * @deprecated Use SORT_KEY_CHANNEL instead.
-     */
-    //public const ORDER_BY_CHANNEL = self::SORT_KEY_CHANNEL;
-
-    /**
-     * @deprecated Use SORT_KEY_LOG_LEVEL instead.
-     */
-    //public const ORDER_BY_LOG_LEVEL = self::SORT_KEY_LOG_LEVEL;
 }

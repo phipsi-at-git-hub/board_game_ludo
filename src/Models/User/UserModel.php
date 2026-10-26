@@ -4,6 +4,8 @@ namespace App\Models\User;
 
 use App\Constants\Application;
 use App\Constants\Database\DbTableConstants;
+use App\Constants\User\UserRoleConstants;
+use App\Constants\User\UserStatusConstants;
 use App\Models\BaseModel;
 use Throwable;
 
@@ -248,7 +250,7 @@ final class UserModel extends BaseModel
      * @param string $status
      * @return self
      */
-    public static function create(string $username, string $email, ?string $password = null, string $role = Application::USER, string $status = Application::INACTIVE): self
+    public static function create(string $username, string $email, ?string $password = null, string $role = UserRoleConstants::USER, string $status = UserStatusConstants::INACTIVE): self
     {
         $id = self::generateUUID();
         $password_hash = $password !== null ? password_hash($password, PASSWORD_DEFAULT) : null;
@@ -392,7 +394,7 @@ final class UserModel extends BaseModel
         return static::execute(
             "UPDATE users SET status = :status WHERE id = :id",
             [
-                'status' => Application::ACTIVE,
+                'status' => UserStatusConstants::ACTIVE,
                 'id' => $this->id,
             ]
         );
@@ -410,7 +412,7 @@ final class UserModel extends BaseModel
         return static::execute(
             "UPDATE users SET status = :status WHERE id = :id",
             [
-                'status' => Application::INACTIVE,
+                'status' => UserStatusConstants::INACTIVE,
                 'id' => $this->id,
             ]
         );
@@ -673,25 +675,25 @@ final class UserModel extends BaseModel
     // Check if User is User
     public function isUser(): bool
     {
-        return $this->role === Application::USER;
+        return $this->role === UserRoleConstants::USER;
     }
 
     // Check if User is Admin
     public function isAdmin(): bool
     {
-        return $this->role === Application::ADMIN;
+        return $this->role === UserRoleConstants::ADMIN;
     }
 
     // Check if User is Moderator
     public function isModerator(): bool
     {
-        return $this->role === Application::MODERATOR;
+        return $this->role === UserRoleConstants::MODERATOR;
     }
 
     // Check if User is Game Master
     public function isGameMaster(): bool
     {
-        return $this->role === Application::GAME_MASTER;
+        return $this->role === UserRoleConstants::GAME_MASTER;
     }
 
     // Get the value of status
@@ -703,31 +705,31 @@ final class UserModel extends BaseModel
     // Check if User is active
     public function isActive(): bool
     {
-        return $this->status === Application::ACTIVE;
+        return $this->status === UserStatusConstants::ACTIVE;
     }
 
     // Check if User is inactive
     public function isInactive(): bool
     {
-        return $this->status === Application::INACTIVE;
+        return $this->status === UserStatusConstants::INACTIVE;
     }
 
     // Check if User is closed
     public function isClosed(): bool
     {
-        return $this->status === Application::CLOSED;
+        return $this->status === UserStatusConstants::CLOSED;
     }
 
     // Check if User is Blocked
     public function isBlocked(): bool
     {
-        return $this->status === Application::BLOCKED;
+        return $this->status === UserStatusConstants::BLOCKED;
     }
 
     // Check if User is Banned
     public function isBanned(): bool
     {
-        return $this->status === Application::BANNED;
+        return $this->status === UserStatusConstants::BANNED;
     }
 
     // Get default language settings

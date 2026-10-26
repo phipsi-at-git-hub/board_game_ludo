@@ -2,7 +2,9 @@
 
 use App\Core\Security\Csrf; 
 use App\Core\Localization; 
-use App\Constants\Application; 
+use App\Constants\Application;
+use App\Constants\User\UserRoleConstants;
+
 ?>
 
 <div class="panel">
@@ -93,23 +95,23 @@ use App\Constants\Application;
                         data-ui="badge-select">
 
                         <option
-                            value="<?= Application::USER ?>"
+                            value="<?= UserRoleConstants::USER ?>"
                             selected>
                             <?= Localization::get('application.general.user') ?>
                         </option>
 
                         <option
-                            value="<?= Application::MODERATOR ?>">
+                            value="<?= UserRoleConstants::MODERATOR ?>">
                             <?= Localization::get('application.general.moderator') ?>
                         </option>
 
                         <option
-                            value="<?= Application::GAME_MASTER ?>">
+                            value="<?= UserRoleConstants::GAME_MASTER ?>">
                             <?= Localization::get('application.general.game_master') ?>
                         </option>
 
                         <option
-                            value="<?= Application::ADMIN ?>">
+                            value="<?= UserRoleConstants::ADMIN ?>">
                             <?= Localization::get('application.general.admin') ?>
                         </option>
 

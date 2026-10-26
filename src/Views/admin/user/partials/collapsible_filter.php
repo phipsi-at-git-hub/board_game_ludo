@@ -1,8 +1,9 @@
 <?php 
 // src/Views/admin/user/partials/collapsible_filter.php
 
-use App\Constants\Application;
 use App\Constants\LocalizationConstants;
+use App\Constants\User\UserRoleConstants;
+use App\Constants\User\UserStatusConstants;
 use App\Core\Dto\User\UserFilterContext;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -16,15 +17,15 @@ $is_admin_view ??= false;
 
 $filter ??= null;
 // set filter presets 
-$filterPresetStatusActive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::ACTIVE, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusInactive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::INACTIVE, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusClosed = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::CLOSED, $filter->statuses)) ? 'selected' : ''; 
-$filterPresetStatusBlocked = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(Application::BLOCKED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusActive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(UserStatusConstants::ACTIVE, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusInactive = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(UserStatusConstants::INACTIVE, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusClosed = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(UserStatusConstants::CLOSED, $filter->statuses)) ? 'selected' : ''; 
+$filterPresetStatusBlocked = ($filter instanceof UserFilterContext && is_array($filter->statuses) && in_array(UserStatusConstants::BLOCKED, $filter->statuses)) ? 'selected' : ''; 
 
-$filterPresetStatusUser = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::USER, $filter->roles)) ? 'selected' : ''; 
-$filterPresetStatusModerator = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::MODERATOR, $filter->roles)) ? 'selected' : ''; 
-$filterPresetStatusGameMaster = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::GAME_MASTER, $filter->roles)) ? 'selected' : ''; 
-$filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(Application::ADMIN, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusUser = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(UserRoleConstants::USER, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusModerator = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(UserRoleConstants::MODERATOR, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusGameMaster = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(UserRoleConstants::GAME_MASTER, $filter->roles)) ? 'selected' : ''; 
+$filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($filter->roles) && in_array(UserRoleConstants::ADMIN, $filter->roles)) ? 'selected' : ''; 
 
 ?>
 
@@ -84,19 +85,19 @@ $filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($fi
                         data-min-selection="1" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" >
 
-                        <option value="<?= htmlspecialchars(Application::ACTIVE) ?>" <?= $filterPresetStatusActive ?> >
+                        <option value="<?= htmlspecialchars(UserStatusConstants::ACTIVE) ?>" <?= $filterPresetStatusActive ?> >
                             <?= Localization::get('application.general.active') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::INACTIVE) ?>" <?= $filterPresetStatusInactive ?> >
+                        <option value="<?= htmlspecialchars(UserStatusConstants::INACTIVE) ?>" <?= $filterPresetStatusInactive ?> >
                             <?= Localization::get('application.general.inactive') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::CLOSED) ?>" <?= $filterPresetStatusClosed ?> >
+                        <option value="<?= htmlspecialchars(UserStatusConstants::CLOSED) ?>" <?= $filterPresetStatusClosed ?> >
                             <?= Localization::get('application.general.closed') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::BLOCKED) ?>" <?= $filterPresetStatusBlocked ?> >
+                        <option value="<?= htmlspecialchars(UserStatusConstants::BLOCKED) ?>" <?= $filterPresetStatusBlocked ?> >
                             <?= Localization::get('application.general.blocked') ?>
                         </option>
 
@@ -121,19 +122,19 @@ $filterPresetStatusAdmin = ($filter instanceof UserFilterContext && is_array($fi
                         data-min-selection="1" 
                         data-label-plural="<?= strtoupper(Localization::get('application.general.selected')) ?>" > 
 
-                        <option value="<?= htmlspecialchars(Application::USER) ?>" <?= $filterPresetStatusUser ?> >
+                        <option value="<?= htmlspecialchars(UserRoleConstants::USER) ?>" <?= $filterPresetStatusUser ?> >
                             <?= Localization::get('application.general.user') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::MODERATOR) ?>" <?= $filterPresetStatusModerator ?> >
+                        <option value="<?= htmlspecialchars(UserRoleConstants::MODERATOR) ?>" <?= $filterPresetStatusModerator ?> >
                             <?= Localization::get('application.general.moderator') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::GAME_MASTER) ?>" <?= $filterPresetStatusGameMaster ?> >
+                        <option value="<?= htmlspecialchars(UserRoleConstants::GAME_MASTER) ?>" <?= $filterPresetStatusGameMaster ?> >
                             <?= Localization::get('application.general.game_master') ?>
                         </option>
 
-                        <option value="<?= htmlspecialchars(Application::ADMIN) ?>" <?= $filterPresetStatusAdmin ?> >
+                        <option value="<?= htmlspecialchars(UserRoleConstants::ADMIN) ?>" <?= $filterPresetStatusAdmin ?> >
                             <?= Localization::get('application.general.admin') ?>
                         </option>
 

@@ -2,6 +2,8 @@
 
 use App\Constants\Application;
 use App\Constants\LocalizationConstants;
+use App\Constants\User\UserRoleConstants;
+use App\Constants\User\UserStatusConstants;
 use App\Core\Application\App;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
@@ -151,26 +153,26 @@ use App\Models\User\UserModel;
 
                         <option
                             value="USER"
-                            <?= $user->getRole() === Application::USER ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::USER)) ?>
+                            <?= $user->getRole() === UserRoleConstants::USER ? 'selected' : '' ?> >
+                            <?= Localization::get('application.general.' . strtolower(UserRoleConstants::USER)) ?>
                         </option>
 
                         <option
                             value="MODERATOR"
-                            <?= $user->getRole() === Application::MODERATOR ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::MODERATOR)) ?>
+                            <?= $user->getRole() === UserRoleConstants::MODERATOR ? 'selected' : '' ?> >
+                            <?= Localization::get('application.general.' . strtolower(UserRoleConstants::MODERATOR)) ?>
                         </option>
 
                         <option
                             value="GAME_MASTER"
-                            <?= $user->getRole() === Application::GAME_MASTER ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::GAME_MASTER)) ?>
+                            <?= $user->getRole() === UserRoleConstants::GAME_MASTER ? 'selected' : '' ?> >
+                            <?= Localization::get('application.general.' . strtolower(UserRoleConstants::GAME_MASTER)) ?>
                         </option>
 
                         <option
                             value="ADMIN"
-                            <?= $user->getRole() === Application::ADMIN ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::ADMIN)) ?>
+                            <?= $user->getRole() === UserRoleConstants::ADMIN ? 'selected' : '' ?> >
+                            <?= Localization::get('application.general.' . strtolower(UserRoleConstants::ADMIN)) ?>
                         </option>
 
                     </select>
@@ -219,14 +221,14 @@ use App\Models\User\UserModel;
                             value="INACTIVE"
                             data-state="inactive"
                             <?= $user->getStatus() === 'INACTIVE' ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::INACTIVE)) ?>
+                            <?= Localization::get('application.general.' . strtolower(UserStatusConstants::INACTIVE)) ?>
                         </option>
 
                         <option
                             value="ACTIVE"
                             data-state="active"
                             <?= $user->getStatus() === 'ACTIVE' ? 'selected' : '' ?> >
-                            <?= Localization::get('application.general.' . strtolower(Application::ACTIVE)) ?>
+                            <?= Localization::get('application.general.' . strtolower(UserStatusConstants::ACTIVE)) ?>
                         </option>
 
                     </select>

@@ -6,6 +6,7 @@ use App\Constants\Application;
 use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
 use App\Constants\SortingConstants;
+use App\Constants\User\UserStatusConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -143,7 +144,7 @@ class AdminController extends BaseController
         $role = $_POST['role'] ?? '';
 
         // Create User
-        $user = UserModel::create($username, $email, null, $role, Application::INACTIVE);
+        $user = UserModel::create($username, $email, null, $role, UserStatusConstants::INACTIVE);
         if (!$user) {
             // ToDo: Handle error
         }
