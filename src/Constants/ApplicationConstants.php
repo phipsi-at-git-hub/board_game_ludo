@@ -57,10 +57,4 @@ class ApplicationConstants
      */
     public const PLAYER_COUNT = 'player_count'; 
     public const AVAILABLE_MOVES = 'available_moves'; 
-
-    /**
-     * Defines general health-related application value. 
-     */
-
-    public const GENERAL_HEALTH = 'health'; 
 }

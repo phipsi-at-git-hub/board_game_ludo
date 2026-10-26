@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Constants\HttpMethodConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -370,7 +371,7 @@ class AdminController extends BaseController
     // System Settings - Update
     public function updateSystemSettings()
     {
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST) {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST) {
             $system_settings = SystemSettingsModel::findSystemSettings();
             $system_settings->updateBooleansToFalse();
             $system_settings->updateFromArray($_POST);

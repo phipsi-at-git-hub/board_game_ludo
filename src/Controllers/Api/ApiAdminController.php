@@ -4,6 +4,7 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
+use App\Constants\HttpMethodConstants;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
 use App\Core\Date\DateRange;
@@ -469,7 +470,7 @@ final class ApiAdminController extends BaseController
      */
     private function updateSettings(callable $callback): void
     {
-        if ($_SERVER[Application::REQUEST_METHOD] !== Application::REQUEST_METHOD_POST) {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] !== HttpMethodConstants::POST) {
             $this->jsonClean(
                 Response::error('Invalid request'),
                 400
@@ -524,7 +525,7 @@ final class ApiAdminController extends BaseController
      */
     public function loggingFilterView(): void
     {
-        if ($_SERVER[Application::REQUEST_METHOD] !== Application::REQUEST_METHOD_POST) {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] !== HttpMethodConstants::POST) {
             $this->jsonClean(
                 Response::error('Invalid request'),
                 400

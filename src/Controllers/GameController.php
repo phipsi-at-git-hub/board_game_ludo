@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Constants\HttpMethodConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -116,7 +117,7 @@ class GameController extends BaseController
      */
     public function store(): void
     {
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_NAME] !== '') {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_NAME] !== '') {
             $game_options = [
                 Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]),
             ];
@@ -198,7 +199,7 @@ class GameController extends BaseController
      */
     public function update(): void
     {
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_ID] !== '') {
             $game = GameModel::findById($_POST[Application::GAME_ID]);
             if (!$game) {
                 http_response_code(404);
@@ -555,7 +556,7 @@ class GameController extends BaseController
     public function createSoloTest(): void
     {
         $game = null;
-        if ($_SERVER[Application::REQUEST_METHOD] === Application::REQUEST_METHOD_POST && $_POST[Application::GAME_ID] !== '') {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_ID] !== '') {
             $game = GameModel::findById($_POST[Application::GAME_ID]);
             $game_id = $game->cloneGameWithOnePlayer();
             $game = GameModel::findById($game_id);

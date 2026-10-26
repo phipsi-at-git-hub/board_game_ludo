@@ -20,77 +20,6 @@ use App\Constants\User\UserStatusConstants;
 class Application
 {
     /*
-     * General application values
-     */
-
-    /**
-     * Defines general application actions.
-     */
-    //public const ACTION_ACCESS = ApplicationConstants::ACTION_ACCESS; 
-    //public const ACTION_JOIN = ApplicationConstants::ACTION_JOIN; 
-    //public const ACTION_EDIT = ApplicationConstants::ACTION_EDIT;
-    //public const ACTION_DELETE = ApplicationConstants::ACTION_DELETE;
-
-    /**
-     * Defines generic on/off and partial states.
-     */
-    //public const VALUE_ON = ApplicationConstants::VALUE_ON;
-    //public const VALUE_OFF = ApplicationConstants::VALUE_OFF;
-    //public const VALUE_PARTIAL = ApplicationConstants::VALUE_PARTIAL;
-
-    /**
-     * Defines generic operation results.
-     */
-    //public const RESULT_OK = ApplicationConstants::RESULT_OK;
-    //public const RESULT_FAIL = ApplicationConstants::RESULT_FAIL;
-
-    /**
-     * Defines application environments.
-     */
-    //public const ENVIRONMENT_DEV = EnvironmentConstants::DEV;
-    //public const ENVIRONMENT_PROD = EnvironmentConstants::PROD;
-
-    /**
-     * Defines health check identifiers and health states.
-     */
-    //public const HEALTH_CHECK = 'health';
-    //public const HEALTH_STATUS_HEALTHY = ApplicationConstants::RESULT_HEALTHY; 
-    //public const HEALTH_STATUS_CRITICAL = ApplicationConstants::RESULT_CRITICAL;
-    //public const HEALTH_STATUS_WARNING = ApplicationConstants::RESULT_WARNING;
-
-
-    /*
-     * Application responses
-     */
-
-    /**
-     * Defines response notification types.
-     */
-    //public const RESPONSE_TYPE_SUCCESS = ResponseTypeConstants::SUCCESS;
-    //public const RESPONSE_TYPE_ERROR = ResponseTypeConstants::ERROR;
-    //public const RESPONSE_TYPE_WARNING = ResponseTypeConstants::WARNING;
-    //public const RESPONSE_TYPE_INFO = ResponseTypeConstants::INFO;
-
-
-    /*
-     * Database tables
-     */
-
-    /**
-     * Defines database table names.
-     */
-    //public const DB_TABLE_USERS = DbTableConstants::USERS;
-    //public const DB_TABLE_USER_STATISTICS = DbTableConstants::USER_STATISTICS;
-    //public const DB_TABLE_GAMES = DbTableConstants::GAMES;
-    //public const DB_TABLE_GAME_RULE_SET = DbTableConstants::GAME_RULE_SET;
-    //public const DB_TABLE_GAME_STATE = DbTableConstants::GAME_STATE;
-    //public const DB_TABLE_GAME_STATE_PLAYERS = DbTableConstants::GAME_STATE_PLAYERS;
-    //public const DB_TABLE_GAME_STATE_FIGURES = DbTableConstants::GAME_STATE_FIGURES;
-    //public const DB_TABLE_GAME_HISTORY = DbTableConstants::GAME_HISTORY;
-    //public const DB_TABLE_SYSTEM_SETTINGS = DbTableConstants::SYSTEM_SETTINGS;
-
-
-    /*
      * Database columns
      */
 
@@ -333,50 +262,15 @@ class Application
     /**
      * Defines the server variable used to determine the request method.
      */
-    public const HTTP_SERVER_REQUEST_METHOD = HttpMethodConstants::SERVER_REQUEST_METHOD;
+    //public const HTTP_SERVER_REQUEST_METHOD = HttpMethodConstants::SERVER_REQUEST_METHOD;
 
     /**
      * Defines supported HTTP request methods.
      */
-    public const HTTP_METHOD_GET = HttpMethodConstants::GET;
-    public const HTTP_METHOD_POST = HttpMethodConstants::POST;
-    public const HTTP_METHOD_PUT = HttpMethodConstants::PUT;
-    public const HTTP_METHOD_DELETE = HttpMethodConstants::DELETE;
-
-
-    /*
-     * Date and time formats
-     */
-
-    /**
-     * Defines date and time formats used for file-related values.
-     */
-    //public const DATE_FORMAT_FILE_DATE = DateTimeFormatConstants::FILE_DATE; 
-    //public const DATE_FORMAT_FILE_TIME = DateTimeFormatConstants::FILE_TIME;
-    //public const DATE_FORMAT_FILE_DATE_TIME = DateTimeFormatConstants::FILE_DATE_TIME;
-
-
-    /*
-     * Localization
-     */
-
-    /**
-     * Defines the locale key and supported locale identifiers.
-     */
-    //public const LOCALIZATION_LOCALE_KEY = GeneralConstants::LOCAL;
-    //public const LOCALE_EN_US = LocalizationConstants::EN_US;
-    //public const LOCALE_DE_DE = LocalizationConstants::DE_DE;
-
-
-    /*
-     * Storage
-     */
-
-    /**
-     * Defines supported storage types.
-     */
-    //public const STORAGE_TYPE_FILE = StorageTypeConstants::FILE;
-    //public const STORAGE_TYPE_DATABASE = StorageTypeConstants::DATABASE;
+    //public const HTTP_METHOD_GET = HttpMethodConstants::GET;
+    //public const HTTP_METHOD_POST = HttpMethodConstants::POST;
+    //public const HTTP_METHOD_PUT = HttpMethodConstants::PUT;
+    //public const HTTP_METHOD_DELETE = HttpMethodConstants::DELETE;
 
 
     /*
@@ -403,132 +297,6 @@ class Application
      * These aliases preserve compatibility with existing code.
      * Migrate usages to the corresponding replacement constants.
      */
-
-    /**
-     * @deprecated Use ACTION_ACCESS instead.
-     */
-    //public const GENERAL_ACCESS = self::ACTION_ACCESS;
-
-    /**
-     * @deprecated Use ACTION_JOIN instead.
-     */
-    //public const GENERAL_JOIN = self::ACTION_JOIN;
-
-    /**
-     * @deprecated Use ACTION_EDIT instead.
-     */
-    //public const GENERAL_EDIT = self::ACTION_EDIT;
-
-    /**
-     * @deprecated Use ACTION_DELETE instead.
-     */
-    //public const GENERAL_DELETE = self::ACTION_DELETE;
-
-    /**
-     * @deprecated Use VALUE_ON instead.
-     */
-    //public const GENERAL_ON = self::VALUE_ON;
-
-    /**
-     * @deprecated Use VALUE_OFF instead.
-     */
-    //public const GENERAL_OFF = self::VALUE_OFF;
-
-    /**
-     * @deprecated Use VALUE_PARTIAL instead.
-     */
-    //public const GENERAL_PARTIAL = self::VALUE_PARTIAL;
-
-    /**
-     * @deprecated Use RESULT_OK instead.
-     */
-    //public const GENERAL_OK = self::RESULT_OK;
-
-    /**
-     * @deprecated Use RESULT_FAIL instead.
-     */
-    //public const GENERAL_FAIL = self::RESULT_FAIL;
-
-    /**
-     * @deprecated Use HEALTH_CHECK instead.
-     */
-    //public const GENERAL_HEALTH = self::HEALTH_CHECK;
-
-    /**
-     * @deprecated Use ENVIRONMENT_DEV instead.
-     */
-    //public const GENERAL_DEV = self::ENVIRONMENT_DEV;
-
-    /**
-     * @deprecated Use ENVIRONMENT_PROD instead.
-     */
-    //public const GENERAL_PROD = self::ENVIRONMENT_PROD;
-
-    /**
-     * @deprecated Use HEALTH_STATUS_HEALTHY instead.
-     */
-    //public const GENERAL_HEALTHY = self::HEALTH_STATUS_HEALTHY;
-
-    /**
-     * @deprecated Use HEALTH_STATUS_CRITICAL instead.
-     */
-    //public const GENERAL_CRITICAL = self::HEALTH_STATUS_CRITICAL;
-
-    /**
-     * @deprecated Use HEALTH_STATUS_WARNING instead.
-     */
-    //public const GENERAL_WARNING = self::HEALTH_STATUS_WARNING;
-
-
-    /*
-     * Deprecated database table aliases
-     */
-
-    /**
-     * @deprecated Use DB_TABLE_USERS instead.
-     */
-    //public const TABLE_USERS = self::DB_TABLE_USERS;
-
-    /**
-     * @deprecated Use DB_TABLE_USER_STATISTICS instead.
-     */
-    //public const TABLE_USERS_STATISTICS = self::DB_TABLE_USER_STATISTICS;
-
-    /**
-     * @deprecated Use DB_TABLE_GAMES instead.
-     */
-    //public const TABLE_GAMES = self::DB_TABLE_GAMES;
-
-    /**
-     * @deprecated Use DB_TABLE_GAME_RULE_SET instead.
-     */
-    //public const TABLE_RULES = self::DB_TABLE_GAME_RULE_SET;
-
-    /**
-     * @deprecated Use DB_TABLE_GAME_STATE instead.
-     */
-    //public const TABLE_STATE = self::DB_TABLE_GAME_STATE;
-
-    /**
-     * @deprecated Use DB_TABLE_GAME_STATE_PLAYERS instead.
-     */
-    //public const TABLE_PLAYERS = self::DB_TABLE_GAME_STATE_PLAYERS;
-
-    /**
-     * @deprecated Use DB_TABLE_GAME_STATE_FIGURES instead.
-     */
-    //public const TABLE_FIGURES = self::DB_TABLE_GAME_STATE_FIGURES;
-
-    /**
-     * @deprecated Use DB_TABLE_GAME_HISTORY instead.
-     */
-    //public const TABLE_HISTORY = self::DB_TABLE_GAME_HISTORY;
-
-    /**
-     * @deprecated Use DB_TABLE_SYSTEM_SETTINGS instead.
-     */
-    // public const TABLE_SYSTEM_SETTINGS = self::DB_TABLE_SYSTEM_SETTINGS;
-
 
     /*
      * Deprecated database column aliases
@@ -972,82 +740,27 @@ class Application
     /**
      * @deprecated Use HTTP_SERVER_REQUEST_METHOD instead.
      */
-    public const REQUEST_METHOD = self::HTTP_SERVER_REQUEST_METHOD;
+    //public const REQUEST_METHOD = self::HTTP_SERVER_REQUEST_METHOD;
 
     /**
      * @deprecated Use HTTP_METHOD_GET instead.
      */
-    public const REQUEST_METHOD_GET = self::HTTP_METHOD_GET;
+    //public const REQUEST_METHOD_GET = self::HTTP_METHOD_GET;
 
     /**
      * @deprecated Use HTTP_METHOD_POST instead.
      */
-    public const REQUEST_METHOD_POST = self::HTTP_METHOD_POST;
+    //public const REQUEST_METHOD_POST = self::HTTP_METHOD_POST;
 
     /**
      * @deprecated Use HTTP_METHOD_PUT instead.
      */
-    public const REQUEST_METHOD_PUT = self::HTTP_METHOD_PUT;
+    //public const REQUEST_METHOD_PUT = self::HTTP_METHOD_PUT;
 
     /**
      * @deprecated Use HTTP_METHOD_DELETE instead.
      */
-    public const REQUEST_METHOD_DELETE = self::HTTP_METHOD_DELETE;
-
-
-    /*
-     * Deprecated date and time aliases
-     */
-
-    /**
-     * @deprecated Use DATE_FORMAT_FILE_DATE instead.
-     */
-    //public const FILE_DATE_FORMAT = self::DATE_FORMAT_FILE_DATE;
-
-    /**
-     * @deprecated Use DATE_FORMAT_FILE_TIME instead.
-     */
-    //public const FILE_TIME_FORMAT = self::DATE_FORMAT_FILE_TIME;
-
-    /**
-     * @deprecated Use DATE_FORMAT_FILE_DATE_TIME instead.
-     */
-    //public const FILE_DATE_TIME_FORMAT = self::DATE_FORMAT_FILE_DATE_TIME;
-
-
-    /*
-     * Deprecated localization aliases
-     */
-
-    /**
-     * @deprecated Use LOCALIZATION_LOCALE_KEY instead.
-     */
-    //public const LOCALE = self::LOCALIZATION_LOCALE_KEY;
-
-    /**
-     * @deprecated Use LOCALE_EN_US instead.
-     */
-    //public const EN_US = self::LOCALE_EN_US;
-
-    /**
-     * @deprecated Use LOCALE_DE_DE instead.
-     */
-    //public const DE_DE = self::LOCALE_DE_DE;
-
-
-    /*
-     * Deprecated storage aliases
-     */
-
-    /**
-     * @deprecated Use STORAGE_TYPE_FILE instead.
-     */
-    //public const STORAGE_FILE = self::STORAGE_TYPE_FILE;
-
-    /**
-     * @deprecated Use STORAGE_TYPE_DATABASE instead.
-     */
-    //public const STORAGE_DATABASE = self::STORAGE_TYPE_DATABASE;
+    //public const REQUEST_METHOD_DELETE = self::HTTP_METHOD_DELETE;
 
 
     /*
