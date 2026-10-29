@@ -4,6 +4,7 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
+use App\Constants\Game\GameConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -301,7 +302,7 @@ final class ApiGameController extends BaseController
      */
     public function delete(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         $game = $this->requireGame($game_id);
         $success = $this->gameService->delete(
             $game,

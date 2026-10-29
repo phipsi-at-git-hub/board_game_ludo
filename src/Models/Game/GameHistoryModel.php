@@ -3,7 +3,7 @@
 
 namespace App\Models\Game;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
@@ -35,17 +35,17 @@ final class GameHistoryModel extends BaseModel
                 )
                 ",
                 DbTableConstants::GAME_HISTORY,
-                Application::ID,
-                Application::GAME_ID,
-                Application::STATE_INDEX,
-                Application::STATE,
-                Application::CREATED_AT
+                DbColumnConstants::ID,
+                DbColumnConstants::GAME_ID,
+                DbColumnConstants::STATE_INDEX,
+                DbColumnConstants::STATE,
+                DbColumnConstants::CREATED_AT
             ),
             [
-                Application::ID => self::generateUUID(),
-                Application::GAME_ID => $game_id,
-                Application::STATE_INDEX => $state_index,
-                Application::STATE => json_encode(
+                DbColumnConstants::ID => self::generateUUID(),
+                DbColumnConstants::GAME_ID => $game_id,
+                DbColumnConstants::STATE_INDEX => $state_index,
+                DbColumnConstants::STATE => json_encode(
                     $state,
                     JSON_THROW_ON_ERROR
                 )
@@ -67,11 +67,11 @@ final class GameHistoryModel extends BaseModel
                 ORDER BY %s ASC
                 ",
                 DbTableConstants::GAME_HISTORY,
-                Application::GAME_ID,
-                Application::STATE_INDEX
+                DbColumnConstants::GAME_ID,
+                DbColumnConstants::STATE_INDEX
             ),
             [
-                Application::GAME_ID => $game_id
+                DbColumnConstants::GAME_ID => $game_id
             ]
         );
     }
@@ -91,11 +91,11 @@ final class GameHistoryModel extends BaseModel
                 LIMIT 1
                 ",
                 DbTableConstants::GAME_HISTORY,
-                Application::GAME_ID,
-                Application::STATE_INDEX
+                DbColumnConstants::GAME_ID,
+                DbColumnConstants::STATE_INDEX
             ),
             [
-                Application::GAME_ID => $game_id
+                DbColumnConstants::GAME_ID => $game_id
             ]
         );
     }
@@ -112,12 +112,12 @@ final class GameHistoryModel extends BaseModel
                 FROM %s
                 WHERE %s = :game_id
                 ",
-                Application::STATE_INDEX,
+                DbColumnConstants::STATE_INDEX,
                 DbTableConstants::GAME_HISTORY,
-                Application::GAME_ID
+                DbColumnConstants::GAME_ID
             ),
             [
-                Application::GAME_ID => $game_id
+                DbColumnConstants::GAME_ID => $game_id
             ]
         );
         return ($row['max_index'] ?? -1) + 1;
@@ -139,12 +139,12 @@ final class GameHistoryModel extends BaseModel
                 LIMIT 1
                 ",
                 DbTableConstants::GAME_HISTORY,
-                Application::GAME_ID,
-                Application::STATE_INDEX
+                DbColumnConstants::GAME_ID,
+                DbColumnConstants::STATE_INDEX
             ),
             [
-                Application::GAME_ID => $game_id,
-                Application::STATE_INDEX => $state_index
+                DbColumnConstants::GAME_ID => $game_id,
+                DbColumnConstants::STATE_INDEX => $state_index
             ]
         );
     }

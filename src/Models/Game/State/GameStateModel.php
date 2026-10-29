@@ -2,13 +2,12 @@
 // src/Models/Game/State/GameStateModel.php
 namespace App\Models\Game\State;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
 final class GameStateModel extends BaseModel
 {
-    // ToDo: Use constant from application.php 
     private string $game_id;
     private int $current_player_index;
     private ?int $current_dice_roll;
@@ -44,7 +43,7 @@ final class GameStateModel extends BaseModel
     public function saveCurrentPlayerIndex(int $player_index): bool
     {
         $game_state_array = $this->toArray();
-        $game_state_array[Application::CURRENT_PLAYER_INDEX] = $player_index;
+        $game_state_array[DbColumnConstants::CURRENT_PLAYER_INDEX] = $player_index;
 
         return $this->updateCurrentState($this->game_id, $game_state_array);
     }
@@ -53,7 +52,7 @@ final class GameStateModel extends BaseModel
     public function saveCurrentDiceRoll(?int $dice_value): bool
     {
         $game_state_array = $this->toArray();
-        $game_state_array[Application::CURRENT_DICE_ROLL] = $dice_value;
+        $game_state_array[DbColumnConstants::CURRENT_DICE_ROLL] = $dice_value;
 
         return $this->updateCurrentState($this->game_id, $game_state_array);
     }
@@ -62,7 +61,7 @@ final class GameStateModel extends BaseModel
     public function saveLeaveHomeAttemptsUsed(int $leave_home_attempts_used): bool
     {
         $game_state_array = $this->toArray();
-        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $leave_home_attempts_used;
+        $game_state_array[DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED] = $leave_home_attempts_used;
 
         return $this->updateCurrentState($this->game_id, $game_state_array);
     }
@@ -71,7 +70,7 @@ final class GameStateModel extends BaseModel
     public function saveExtraRollsOnSixUsed(int $extra_rolls_on_six_used): bool
     {
         $game_state_array = $this->toArray();
-        $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $extra_rolls_on_six_used;
+        $game_state_array[DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED] = $extra_rolls_on_six_used;
 
         return $this->updateCurrentState($this->game_id, $game_state_array);
     }
@@ -80,7 +79,7 @@ final class GameStateModel extends BaseModel
     public function saveWinnerUserId(?string $winner_user_id): bool
     {
         $game_state_array = $this->toArray();
-        $game_state_array[Application::WINNER_USER_ID] = $winner_user_id;
+        $game_state_array[DbColumnConstants::WINNER_USER_ID] = $winner_user_id;
 
         return $this->updateCurrentState($this->game_id, $game_state_array);
     }
@@ -110,20 +109,20 @@ final class GameStateModel extends BaseModel
 
                 DbTableConstants::GAME_STATE,
 
-                Application::CURRENT_PLAYER_INDEX,
-                Application::CURRENT_DICE_ROLL,
-                Application::CURRENT_TURN_COUNTER,
-                Application::LEAVE_HOME_ATTEMPTS_USED,
-                Application::EXTRA_ROLLS_ON_SIX_USED,
-                Application::WINNER_USER_ID
+                DbColumnConstants::CURRENT_PLAYER_INDEX,
+                DbColumnConstants::CURRENT_DICE_ROLL,
+                DbColumnConstants::CURRENT_TURN_COUNTER,
+                DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED,
+                DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED,
+                DbColumnConstants::WINNER_USER_ID
             ),
             [
-                'current_player_index' => $state_array[Application::CURRENT_PLAYER_INDEX],
-                'current_dice_roll' => $state_array[Application::CURRENT_DICE_ROLL],
-                'current_turn_counter' => $state_array[Application::CURRENT_TURN_COUNTER],
-                'leave_home_attempts_used' => $state_array[Application::LEAVE_HOME_ATTEMPTS_USED],
-                'extra_rolls_on_six_used' => $state_array[Application::EXTRA_ROLLS_ON_SIX_USED],
-                'winner_user_id' => $state_array[Application::WINNER_USER_ID],
+                'current_player_index' => $state_array[DbColumnConstants::CURRENT_PLAYER_INDEX],
+                'current_dice_roll' => $state_array[DbColumnConstants::CURRENT_DICE_ROLL],
+                'current_turn_counter' => $state_array[DbColumnConstants::CURRENT_TURN_COUNTER],
+                'leave_home_attempts_used' => $state_array[DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED],
+                'extra_rolls_on_six_used' => $state_array[DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED],
+                'winner_user_id' => $state_array[DbColumnConstants::WINNER_USER_ID],
                 'game_id' => $game_id
             ]
         );
@@ -146,14 +145,14 @@ final class GameStateModel extends BaseModel
     public static function fromArray(array $row): self
     {
         $game_state = new self();
-        $game_state->game_id = $row[Application::GAME_ID];
+        $game_state->game_id = $row[DbColumnConstants::GAME_ID];
 
-        $game_state->current_player_index = self::hydrateInt($row, Application::CURRENT_PLAYER_INDEX);
-        $game_state->current_dice_roll = self::hydrateIntOrNull($row, Application::CURRENT_DICE_ROLL);
-        $game_state->current_turn_counter = self::hydrateInt($row, Application::CURRENT_TURN_COUNTER);
-        $game_state->leave_home_attempts_used = self::hydrateInt($row, Application::LEAVE_HOME_ATTEMPTS_USED);
-        $game_state->extra_rolls_on_six_used = self::hydrateInt($row, Application::EXTRA_ROLLS_ON_SIX_USED);
-        $game_state->winner_user_id = self::hydrateStringOrNull($row, Application::WINNER_USER_ID);
+        $game_state->current_player_index = self::hydrateInt($row, DbColumnConstants::CURRENT_PLAYER_INDEX);
+        $game_state->current_dice_roll = self::hydrateIntOrNull($row, DbColumnConstants::CURRENT_DICE_ROLL);
+        $game_state->current_turn_counter = self::hydrateInt($row, DbColumnConstants::CURRENT_TURN_COUNTER);
+        $game_state->leave_home_attempts_used = self::hydrateInt($row, DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED);
+        $game_state->extra_rolls_on_six_used = self::hydrateInt($row, DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED);
+        $game_state->winner_user_id = self::hydrateStringOrNull($row, DbColumnConstants::WINNER_USER_ID);
 
         $game_state->created_at = $row['created_at'];
         $game_state->updated_at = $row['updated_at'];
@@ -163,13 +162,13 @@ final class GameStateModel extends BaseModel
     // Helper - Create Array from GameStateModel
     private function toArray(): array
     {
-        $game_state_array[Application::GAME_ID] = $this->game_id;
-        $game_state_array[Application::CURRENT_PLAYER_INDEX] = $this->current_player_index;
-        $game_state_array[Application::CURRENT_DICE_ROLL] = $this->current_dice_roll;
-        $game_state_array[Application::CURRENT_TURN_COUNTER] = $this->current_turn_counter;
-        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_USED] = $this->leave_home_attempts_used;
-        $game_state_array[Application::EXTRA_ROLLS_ON_SIX_USED] = $this->extra_rolls_on_six_used;
-        $game_state_array[Application::WINNER_USER_ID] = $this->winner_user_id;
+        $game_state_array[DbColumnConstants::GAME_ID] = $this->game_id;
+        $game_state_array[DbColumnConstants::CURRENT_PLAYER_INDEX] = $this->current_player_index;
+        $game_state_array[DbColumnConstants::CURRENT_DICE_ROLL] = $this->current_dice_roll;
+        $game_state_array[DbColumnConstants::CURRENT_TURN_COUNTER] = $this->current_turn_counter;
+        $game_state_array[DbColumnConstants::LEAVE_HOME_ATTEMPTS_USED] = $this->leave_home_attempts_used;
+        $game_state_array[DbColumnConstants::EXTRA_ROLLS_ON_SIX_USED] = $this->extra_rolls_on_six_used;
+        $game_state_array[DbColumnConstants::WINNER_USER_ID] = $this->winner_user_id;
 
         return $game_state_array;
     }

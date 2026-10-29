@@ -3,8 +3,9 @@
 namespace App\Controllers\Api;
 
 use App\Constants\Application;
-use App\Core\BaseController;
+use App\Constants\Game\GameConstants;
 use App\Core\Auth\Auth;
+use App\Core\BaseController;
 use App\Core\History\Game\GameStateHistory;
 use App\Models\Game\GameModel;
 use DomainException;
@@ -15,7 +16,7 @@ class ApiGameEngineController extends BaseController
     public function state()
     {
         try {
-            $game_id = $_POST[Application::GAME_ID] ?? null;
+            $game_id = $_POST[GameConstants::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
             if (!$game) {
                 return $this->jsonClean(['success' => false, 'error' => 'Game not found'], 404);
@@ -37,7 +38,7 @@ class ApiGameEngineController extends BaseController
     public function rollDice()
     {
         try {
-            $game_id = $_POST[Application::GAME_ID] ?? null;
+            $game_id = $_POST[GameConstants::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
@@ -65,7 +66,7 @@ class ApiGameEngineController extends BaseController
     public function getAvailableMoves()
     {
         try {
-            $game_id = $_POST[Application::GAME_ID] ?? null;
+            $game_id = $_POST[GameConstants::GAME_ID] ?? null;
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
@@ -101,7 +102,7 @@ class ApiGameEngineController extends BaseController
     {
         $temp = $_POST;
         try {
-            $game_id = $_POST[Application::GAME_ID] ?? null;
+            $game_id = $_POST[GameConstants::GAME_ID] ?? null;
             $move = json_decode($_POST[Application::DTO_MOVE] ?? '[]', true);
             $game = GameModel::findById($game_id);
             $user = Auth::user();
@@ -155,7 +156,7 @@ class ApiGameEngineController extends BaseController
                 'error' => $e->getMessage()
             ], 400);
         }
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         $game = GameModel::findById($game_id);
         $user = Auth::user();
 

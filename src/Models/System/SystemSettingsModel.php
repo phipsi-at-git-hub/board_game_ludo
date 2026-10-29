@@ -3,9 +3,13 @@
 namespace App\Models\System;
 
 use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
 
+/**
+ * SystemSettingsModel
+ */
 final class SystemSettingsModel extends BaseModel
 {
     private string $id;
@@ -34,6 +38,11 @@ final class SystemSettingsModel extends BaseModel
     private const DEFAULT_SYSTEM_NOTICE_ENABLED = true;
     private const DEFAULT_SYSTEM_NOTICE_MESSAGE = 'system.message.system_recovery_mode';
 
+    /**
+     * initializeDefaultSettings
+     *
+     * @return self
+     */
     public static function initializeDefaultSettings(): self
     {
         $system_settings = new self;
@@ -52,6 +61,11 @@ final class SystemSettingsModel extends BaseModel
         return $system_settings;
     }
 
+    /**
+     * findSystemSettings
+     *
+     * @return self
+     */
     public static function findSystemSettings(): self
     {
         $system_settings = new self;
@@ -82,6 +96,11 @@ final class SystemSettingsModel extends BaseModel
         return $system_settings;
     }
 
+    /**
+     * update
+     *
+     * @return void
+     */
     public function update()
     {
         return static::execute(
@@ -104,70 +123,86 @@ final class SystemSettingsModel extends BaseModel
 
                 DbTableConstants::SYSTEM_SETTINGS,
 
-                Application::REGISTRATION_ENABLED,
-                Application::LOGIN_ENABLED,
-                Application::GAME_CREATION_ENABLED,
-                Application::GAME_PLAY_ENABLED,
-                Application::MAINTENANCE_MODE_ENABLED,
-                Application::MAINTENANCE_MESSAGE,
-                Application::SYSTEM_NOTICE_ENABLED,
-                Application::SYSTEM_NOTICE_MESSAGE,
-                Application::LOGGING_DEBUG_ENABLED,
-                Application::SYSTEM_ENABLED,
+                DbColumnConstants::REGISTRATION_ENABLED,
+                DbColumnConstants::LOGIN_ENABLED,
+                DbColumnConstants::GAME_CREATION_ENABLED,
+                DbColumnConstants::GAME_PLAY_ENABLED,
+                DbColumnConstants::MAINTENANCE_MODE_ENABLED,
+                DbColumnConstants::MAINTENANCE_MESSAGE,
+                DbColumnConstants::SYSTEM_NOTICE_ENABLED,
+                DbColumnConstants::SYSTEM_NOTICE_MESSAGE,
+                DbColumnConstants::LOGGING_DEBUG_ENABLED,
+                DbColumnConstants::SYSTEM_ENABLED,
 
-                Application::ID
+                DbColumnConstants::ID
             ),
             [
-                Application::REGISTRATION_ENABLED => (int)$this->registration_enabled,
-                Application::LOGIN_ENABLED => (int)$this->login_enabled,
-                Application::GAME_CREATION_ENABLED => (int)$this->game_creation_enabled,
-                Application::GAME_PLAY_ENABLED => (int)$this->game_play_enabled,
-                Application::MAINTENANCE_MODE_ENABLED => (int)$this->maintenance_mode_enabled,
-                Application::MAINTENANCE_MESSAGE => (string)$this->maintenance_message,
-                Application::SYSTEM_NOTICE_ENABLED => (int)$this->system_notice_enabled,
-                Application::SYSTEM_NOTICE_MESSAGE => (string)$this->system_notice_message,
-                Application::LOGGING_DEBUG_ENABLED => (int)$this->logging_debug_enabled,
-                Application::SYSTEM_ENABLED => (int)$this->system_enabled,
-                Application::ID => (string)$this->id
+                DbColumnConstants::REGISTRATION_ENABLED => (int)$this->registration_enabled,
+                DbColumnConstants::LOGIN_ENABLED => (int)$this->login_enabled,
+                DbColumnConstants::GAME_CREATION_ENABLED => (int)$this->game_creation_enabled,
+                DbColumnConstants::GAME_PLAY_ENABLED => (int)$this->game_play_enabled,
+                DbColumnConstants::MAINTENANCE_MODE_ENABLED => (int)$this->maintenance_mode_enabled,
+                DbColumnConstants::MAINTENANCE_MESSAGE => (string)$this->maintenance_message,
+                DbColumnConstants::SYSTEM_NOTICE_ENABLED => (int)$this->system_notice_enabled,
+                DbColumnConstants::SYSTEM_NOTICE_MESSAGE => (string)$this->system_notice_message,
+                DbColumnConstants::LOGGING_DEBUG_ENABLED => (int)$this->logging_debug_enabled,
+                DbColumnConstants::SYSTEM_ENABLED => (int)$this->system_enabled,
+                DbColumnConstants::ID => (string)$this->id
             ]
         );
     }
 
+    /**
+     * updateFromArray
+     *
+     * @param array $data
+     * @return void
+     */
     public function updateFromArray(array $data): void
     {
-        if (array_key_exists(Application::REGISTRATION_ENABLED, $data)) {
-            $this->registration_enabled = self::hydrateBoolean($data, Application::REGISTRATION_ENABLED);
+        if (array_key_exists(DbColumnConstants::REGISTRATION_ENABLED, $data)) {
+            $this->registration_enabled = self::hydrateBoolean($data, DbColumnConstants::REGISTRATION_ENABLED);
         }
-        if (array_key_exists(Application::LOGIN_ENABLED, $data)) {
-            $this->login_enabled = self::hydrateBoolean($data, Application::LOGIN_ENABLED);
+        if (array_key_exists(DbColumnConstants::LOGIN_ENABLED, $data)) {
+            $this->login_enabled = self::hydrateBoolean($data, DbColumnConstants::LOGIN_ENABLED);
         }
-        if (array_key_exists(Application::GAME_CREATION_ENABLED, $data)) {
-            $this->game_creation_enabled = self::hydrateBoolean($data, Application::GAME_CREATION_ENABLED);
+        if (array_key_exists(DbColumnConstants::GAME_CREATION_ENABLED, $data)) {
+            $this->game_creation_enabled = self::hydrateBoolean($data, DbColumnConstants::GAME_CREATION_ENABLED);
         }
-        if (array_key_exists(Application::GAME_PLAY_ENABLED, $data)) {
-            $this->game_play_enabled = self::hydrateBoolean($data, Application::GAME_PLAY_ENABLED);
+        if (array_key_exists(DbColumnConstants::GAME_PLAY_ENABLED, $data)) {
+            $this->game_play_enabled = self::hydrateBoolean($data, DbColumnConstants::GAME_PLAY_ENABLED);
         }
-        if (array_key_exists(Application::SYSTEM_ENABLED, $data)) {
-            $this->system_enabled = self::hydrateBoolean($data, Application::SYSTEM_ENABLED);
+        if (array_key_exists(DbColumnConstants::SYSTEM_ENABLED, $data)) {
+            $this->system_enabled = self::hydrateBoolean($data, DbColumnConstants::SYSTEM_ENABLED);
         }
-        if (array_key_exists(Application::LOGGING_DEBUG_ENABLED, $data)) {
-            $this->logging_debug_enabled = self::hydrateBoolean($data, Application::LOGGING_DEBUG_ENABLED);
+        if (array_key_exists(DbColumnConstants::LOGGING_DEBUG_ENABLED, $data)) {
+            $this->logging_debug_enabled = self::hydrateBoolean($data, DbColumnConstants::LOGGING_DEBUG_ENABLED);
         }
-        if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) {
-            $this->maintenance_mode_enabled = self::hydrateBoolean($data, Application::MAINTENANCE_MODE_ENABLED);
+        if (array_key_exists(DbColumnConstants::MAINTENANCE_MODE_ENABLED, $data)) {
+            $this->maintenance_mode_enabled = self::hydrateBoolean($data, DbColumnConstants::MAINTENANCE_MODE_ENABLED);
         }
-        if (array_key_exists(Application::MAINTENANCE_MESSAGE, $data)) {
-            $this->maintenance_message = self::hydrateString($data, Application::MAINTENANCE_MESSAGE);
+        if (array_key_exists(DbColumnConstants::MAINTENANCE_MESSAGE, $data)) {
+            $this->maintenance_message = self::hydrateString($data, DbColumnConstants::MAINTENANCE_MESSAGE);
         }
-        if (array_key_exists(Application::SYSTEM_NOTICE_ENABLED, $data)) {
-            $this->system_notice_enabled = self::hydrateBoolean($data, Application::SYSTEM_NOTICE_ENABLED);
+        if (array_key_exists(DbColumnConstants::SYSTEM_NOTICE_ENABLED, $data)) {
+            $this->system_notice_enabled = self::hydrateBoolean($data, DbColumnConstants::SYSTEM_NOTICE_ENABLED);
         }
-        if (array_key_exists(Application::SYSTEM_NOTICE_MESSAGE, $data)) {
-            $this->system_notice_message = self::hydrateString($data, Application::SYSTEM_NOTICE_MESSAGE);
+        if (array_key_exists(DbColumnConstants::SYSTEM_NOTICE_MESSAGE, $data)) {
+            $this->system_notice_message = self::hydrateString($data, DbColumnConstants::SYSTEM_NOTICE_MESSAGE);
         }
     }
 
-    // Helper - Set Booleans to false
+    /*
+     * Helper
+     */
+
+    /**
+     * updateBooleansToFalse
+     * 
+     * Helper - Set Booleans to false
+     *
+     * @return void
+     */
     public function updateBooleansToFalse(): void
     {
         $this->registration_enabled = false;
@@ -180,7 +215,13 @@ final class SystemSettingsModel extends BaseModel
         $this->system_notice_enabled = false;
     }
 
-    // Helper - Validate SystemSettings
+    /**
+     * isValid
+     * 
+     * Helper - Validate SystemSettings
+     *
+     * @return bool
+     */
     public function isValid(): bool
     {
         if ($this->updated_by === null) {
@@ -197,206 +238,395 @@ final class SystemSettingsModel extends BaseModel
         return true;
     }
 
-    // Helper - Create SystemSettings from Array
+    /**
+     * fromArray
+     * 
+     * Helper - Create SystemSettings from Array
+     *
+     * @param array $data
+     * @return self
+     */
     private static function fromArray(array $data): self
     {
         $system_settings = new self;
 
-        if (array_key_exists(Application::ID, $data)) $system_settings->id = (string)$data[Application::ID];
-        if (array_key_exists(Application::REGISTRATION_ENABLED, $data)) $system_settings->registration_enabled = (bool)$data[Application::REGISTRATION_ENABLED];
-        if (array_key_exists(Application::LOGIN_ENABLED, $data)) $system_settings->login_enabled = (bool)$data[Application::LOGIN_ENABLED];
-        if (array_key_exists(Application::SYSTEM_ENABLED, $data)) $system_settings->system_enabled = (bool)$data[Application::SYSTEM_ENABLED];
-        if (array_key_exists(Application::LOGGING_DEBUG_ENABLED, $data)) $system_settings->logging_debug_enabled = (bool)$data[Application::LOGGING_DEBUG_ENABLED];
-        if (array_key_exists(Application::GAME_CREATION_ENABLED, $data)) $system_settings->game_creation_enabled = (bool)$data[Application::GAME_CREATION_ENABLED];
-        if (array_key_exists(Application::GAME_PLAY_ENABLED, $data)) $system_settings->game_play_enabled = (bool)$data[Application::GAME_PLAY_ENABLED];
-        if (array_key_exists(Application::MAINTENANCE_MODE_ENABLED, $data)) $system_settings->maintenance_mode_enabled = (bool)$data[Application::MAINTENANCE_MODE_ENABLED];
-        if (array_key_exists(Application::MAINTENANCE_MESSAGE, $data)) $system_settings->maintenance_message = (string)$data[Application::MAINTENANCE_MESSAGE];
-        if (array_key_exists(Application::SYSTEM_NOTICE_ENABLED, $data)) $system_settings->system_notice_enabled = (bool)$data[Application::SYSTEM_NOTICE_ENABLED];
-        if (array_key_exists(Application::SYSTEM_NOTICE_MESSAGE, $data)) $system_settings->system_notice_message = (string)$data[Application::SYSTEM_NOTICE_MESSAGE];
-        if (array_key_exists(Application::UPDATED_AT, $data)) $system_settings->updated_at = (string)$data[Application::UPDATED_AT];
-        if (array_key_exists(Application::UPDATED_BY, $data)) $system_settings->updated_by = (string)$data[Application::UPDATED_BY];
-
-        /*
-        $system_settings->id = self::hydrateString($data, Application::ID); 
-        $system_settings->registration_enabled = self::hydrateBoolean($data, Application::REGISTRATION_ENABLED);
-        $system_settings->login_enabled = self::hydrateBoolean($data, Application::LOGIN_ENABLED);
-        $system_settings->system_enabled = self::hydrateBoolean($data, Application::SYSTEM_ENABLED);
-        $system_settings->game_creation_enabled = self::hydrateBoolean($data, Application::GAME_CREATION_ENABLED);
-        $system_settings->game_play_enabled = self::hydrateBoolean($data, Application::GAME_PLAY_ENABLED);
-        $system_settings->maintenance_mode_enabled = self::hydrateBoolean($data, Application::MAINTENANCE_MODE_ENABLED);
-        $system_settings->maintenance_message = self::hydrateStringOrNull($data, Application::MAINTENANCE_MESSAGE);
-        $system_settings->system_notice_enabled = self::hydrateBoolean($data, Application::SYSTEM_NOTICE_ENABLED);
-        $system_settings->system_notice_message = self::hydrateStringOrNull($data, Application::SYSTEM_NOTICE_MESSAGE);
-        $system_settings->updated_at = self::hydrateString($data, Application::UPDATED_AT);
-        $system_settings->updated_by = self::hydrateUUIDOrNull($data, Application::UPDATED_BY);
-        */
+        if (array_key_exists(DbColumnConstants::ID, $data)) $system_settings->id = (string)$data[DbColumnConstants::ID];
+        if (array_key_exists(DbColumnConstants::REGISTRATION_ENABLED, $data)) $system_settings->registration_enabled = (bool)$data[DbColumnConstants::REGISTRATION_ENABLED];
+        if (array_key_exists(DbColumnConstants::LOGIN_ENABLED, $data)) $system_settings->login_enabled = (bool)$data[DbColumnConstants::LOGIN_ENABLED];
+        if (array_key_exists(DbColumnConstants::SYSTEM_ENABLED, $data)) $system_settings->system_enabled = (bool)$data[DbColumnConstants::SYSTEM_ENABLED];
+        if (array_key_exists(DbColumnConstants::LOGGING_DEBUG_ENABLED, $data)) $system_settings->logging_debug_enabled = (bool)$data[DbColumnConstants::LOGGING_DEBUG_ENABLED];
+        if (array_key_exists(DbColumnConstants::GAME_CREATION_ENABLED, $data)) $system_settings->game_creation_enabled = (bool)$data[DbColumnConstants::GAME_CREATION_ENABLED];
+        if (array_key_exists(DbColumnConstants::GAME_PLAY_ENABLED, $data)) $system_settings->game_play_enabled = (bool)$data[DbColumnConstants::GAME_PLAY_ENABLED];
+        if (array_key_exists(DbColumnConstants::MAINTENANCE_MODE_ENABLED, $data)) $system_settings->maintenance_mode_enabled = (bool)$data[DbColumnConstants::MAINTENANCE_MODE_ENABLED];
+        if (array_key_exists(DbColumnConstants::MAINTENANCE_MESSAGE, $data)) $system_settings->maintenance_message = (string)$data[DbColumnConstants::MAINTENANCE_MESSAGE];
+        if (array_key_exists(DbColumnConstants::SYSTEM_NOTICE_ENABLED, $data)) $system_settings->system_notice_enabled = (bool)$data[DbColumnConstants::SYSTEM_NOTICE_ENABLED];
+        if (array_key_exists(DbColumnConstants::SYSTEM_NOTICE_MESSAGE, $data)) $system_settings->system_notice_message = (string)$data[DbColumnConstants::SYSTEM_NOTICE_MESSAGE];
+        if (array_key_exists(DbColumnConstants::UPDATED_AT, $data)) $system_settings->updated_at = (string)$data[DbColumnConstants::UPDATED_AT];
+        if (array_key_exists(DbColumnConstants::UPDATED_BY, $data)) $system_settings->updated_by = (string)$data[DbColumnConstants::UPDATED_BY];
 
         return $system_settings;
     }
 
-    // Helper - Create Array from SystemSettings
+    /**
+     * toArray
+     * 
+     * Helper - Create Array from SystemSettings
+     *
+     * @return array
+     */
     public function toArray(): array
     {
-        $system_settings_array[Application::REGISTRATION_ENABLED] = $this->registration_enabled;
-        $system_settings_array[Application::LOGIN_ENABLED] = $this->login_enabled;
-        $system_settings_array[Application::SYSTEM_ENABLED] = $this->system_enabled;
-        $system_settings_array[Application::LOGGING_DEBUG_ENABLED] = $this->logging_debug_enabled;
-        $system_settings_array[Application::GAME_CREATION_ENABLED] = $this->game_creation_enabled;
-        $system_settings_array[Application::GAME_PLAY_ENABLED] = $this->game_play_enabled;
-        $system_settings_array[Application::MAINTENANCE_MODE_ENABLED] = $this->maintenance_mode_enabled;
-        $system_settings_array[Application::MAINTENANCE_MESSAGE] = $this->maintenance_message;
-        $system_settings_array[Application::SYSTEM_NOTICE_ENABLED] = $this->system_notice_enabled;
-        $system_settings_array[Application::SYSTEM_NOTICE_MESSAGE] = $this->system_notice_message;
-        $system_settings_array[Application::UPDATED_BY] = $this->updated_by;
+        $system_settings_array[DbColumnConstants::REGISTRATION_ENABLED] = $this->registration_enabled;
+        $system_settings_array[DbColumnConstants::LOGIN_ENABLED] = $this->login_enabled;
+        $system_settings_array[DbColumnConstants::SYSTEM_ENABLED] = $this->system_enabled;
+        $system_settings_array[DbColumnConstants::LOGGING_DEBUG_ENABLED] = $this->logging_debug_enabled;
+        $system_settings_array[DbColumnConstants::GAME_CREATION_ENABLED] = $this->game_creation_enabled;
+        $system_settings_array[DbColumnConstants::GAME_PLAY_ENABLED] = $this->game_play_enabled;
+        $system_settings_array[DbColumnConstants::MAINTENANCE_MODE_ENABLED] = $this->maintenance_mode_enabled;
+        $system_settings_array[DbColumnConstants::MAINTENANCE_MESSAGE] = $this->maintenance_message;
+        $system_settings_array[DbColumnConstants::SYSTEM_NOTICE_ENABLED] = $this->system_notice_enabled;
+        $system_settings_array[DbColumnConstants::SYSTEM_NOTICE_MESSAGE] = $this->system_notice_message;
+        $system_settings_array[DbColumnConstants::UPDATED_BY] = $this->updated_by;
 
         return $system_settings_array;
     }
 
-    // Helper - get system notice message as string
+    /**
+     * getMaintenanceMessageString
+     * 
+     * Helper - get system notice message as string
+     *
+     * @return string
+     */
     public function getMaintenanceMessageString(): string
     {
         return ($this->maintenance_message) ?? '';
     }
 
-    // Helper - get system notice message as string
+    /**
+     * getSystemNoticeMessageString
+     * 
+     * Helper - get system notice message as string
+     *
+     * @return string
+     */
     public function getSystemNoticeMessageString(): string
     {
         return ($this->system_notice_message) ?? '';
     }
 
-    /**
+    /*
      * Getter
      */
-    // Getter - get array of model
+
+    /**
+     * getArrayOfModel
+     * 
+     * Getter - get array of model
+     *
+     * @return void
+     */
     public function getArrayOfModel()
     {
         return $this->toArray();
     }
-    // Getter - get registration enabled
+
+    /**
+     * getRegistrationEnabled
+     * 
+     * Getter - get registration enabled
+     *
+     * @return void
+     */
     public function getRegistrationEnabled()
     {
         return $this->registration_enabled;
     }
-    // Getter - get login enabled
+
+    /**
+     * getLoginEnabled
+     * 
+     * Getter - get login enabled
+     *
+     * @return void
+     */
     public function getLoginEnabled()
     {
         return $this->login_enabled;
     }
-    // Getter - get system enabled
+
+    /**
+     * getSystemEnabled
+     * 
+     * Getter - get system enabled
+     *
+     * @return void
+     */
     public function getSystemEnabled()
     {
         return $this->system_enabled;
     }
-    // Getter - get logging debug enabled
+
+    /**
+     * getLoggingDebugEnabled
+     * 
+     * Getter - get logging debug enabled
+     *
+     * @return void
+     */
     public function getLoggingDebugEnabled()
     {
         return $this->logging_debug_enabled;
     }
-    // Getter - get game creation enabled
+
+    /**
+     * getGameCreationEnabled
+     * 
+     * Getter - get game creation enabled
+     *
+     * @return void
+     */
     public function getGameCreationEnabled()
     {
         return $this->game_creation_enabled;
     }
-    // Getter - get game play enabled
+
+    /**
+     * getGamePlayEnabled
+     * 
+     * Getter - get game play enabled
+     *
+     * @return void
+     */
     public function getGamePlayEnabled()
     {
         return $this->game_play_enabled;
     }
-    // Getter - get maintenance mode enabled
+
+    /**
+     * getMaintenanceModeEnabled
+     * 
+     * Getter - get maintenance mode enabled
+     *
+     * @return void
+     */
     public function getMaintenanceModeEnabled()
     {
         return $this->maintenance_mode_enabled;
     }
-    // Getter - get maintenance message
+    
+    /**
+     * getMaintenanceMessage
+     * 
+     * Getter - get maintenance message
+     *
+     * @return void
+     */
     public function getMaintenanceMessage()
     {
         return $this->maintenance_message;
     }
-    // Getter - get system notice enabled
+
+    /**
+     * getSystemNoticeEnabled
+     * 
+     * Getter - get system notice enabled
+     *
+     * @return void
+     */
     public function getSystemNoticeEnabled()
     {
         return $this->system_notice_enabled;
     }
-    // Getter - get system notice message
+    
+    /**
+     * getSystemNoticeMessage
+     * 
+     * Getter - get system notice message
+     *
+     * @return void
+     */
     public function getSystemNoticeMessage()
     {
         return $this->system_notice_message;
     }
-    // Getter - get updated at
+
+    /**
+     * getUpdatedAt
+     * 
+     * Getter - get updated at
+     *
+     * @return void
+     */
     public function getUpdatedAt()
     {
         return $this->updated_at;
     }
-    // Getter - get updated by
+    
+    /**
+     * getUpdatedBy
+     * 
+     * Getter - get updated by
+     *
+     * @return void
+     */
     public function getUpdatedBy()
     {
         return $this->updated_by;
     }
 
-    /**
+    /*
      * Setter
      */
-    // Setter - set registration enabled
+    
+    /**
+     * setRegistrationEnabled
+     * 
+     * Setter - set registration enabled
+     *
+     * @param bool $registration_enabled
+     * @return void
+     */
     public function setRegistrationEnabled(bool $registration_enabled)
     {
         $this->registration_enabled = $registration_enabled;
         return $this;
     }
-    // Setter - set login enabled
+
+    /**
+     * setLoginEnabled
+     * 
+     * Setter - set login enabled
+     *
+     * @param bool $login_enabled
+     * @return void
+     */
     public function setLoginEnabled(bool $login_enabled)
     {
         $this->login_enabled = $login_enabled;
         return $this;
     }
-    // Setter - set system enabled
+    
+    /**
+     * setSystemEnabled
+     * 
+     * Setter - set system enabled
+     *
+     * @param bool $system_enabled
+     * @return void
+     */
     public function setSystemEnabled(bool $system_enabled)
     {
         $this->system_enabled = $system_enabled;
         return $this;
     }
-    // Setter - set logging debug enabled
+    
+    /**
+     * setLoggingDebugEnabled
+     * 
+     * Setter - set logging debug enabled
+     *
+     * @param bool $logging_debug_enabled
+     * @return void
+     */
     public function setLoggingDebugEnabled(bool $logging_debug_enabled)
     {
         $this->logging_debug_enabled = $logging_debug_enabled;
         return $this;
     }
-    // Setter - set game creation enabled
+    
+    /**
+     * setGameCreationEnabled
+     * 
+     * Setter - set game creation enabled
+     *
+     * @param bool $game_creation_enabled
+     * @return void
+     */
     public function setGameCreationEnabled(bool $game_creation_enabled)
     {
         $this->game_creation_enabled = $game_creation_enabled;
         return $this;
     }
-    // Setter - set game play enabled
+    
+    /**
+     * setGamePlayEnabled
+     * 
+     * Setter - set game play enabled
+     *
+     * @param bool $game_play_enabled
+     * @return void
+     */
     public function setGamePlayEnabled(bool $game_play_enabled)
     {
         $this->game_play_enabled = $game_play_enabled;
         return $this;
     }
-    // Setter - set maintenance mode enabled
+    
+    /**
+     * setMaintenanceModeEnabled
+     * 
+     * Setter - set maintenance mode enabled
+     *
+     * @param bool $maintenance_mode_enabled
+     * @return void
+     */
     public function setMaintenanceModeEnabled(bool $maintenance_mode_enabled)
     {
         $this->maintenance_mode_enabled = $maintenance_mode_enabled;
         return $this;
     }
-    // Setter - set maintenance message
+    
+    /**
+     * setMaintenanceMessage
+     * 
+     * Setter - set maintenance message
+     *
+     * @param string $maintenance_message
+     * @return void
+     */
     public function setMaintenanceMessage(string $maintenance_message)
     {
         $this->maintenance_message = $maintenance_message;
         return $this;
     }
-    // Setter - set system notice enabled
+    
+    /**
+     * setSystemNoticeEnabled
+     * 
+     * Setter - set system notice enabled
+     *
+     * @param bool $system_notice_enabled
+     * @return void
+     */
     public function setSystemNoticeEnabled(bool $system_notice_enabled)
     {
         $this->system_notice_enabled = $system_notice_enabled;
         return $this;
     }
-    // Setter - set system notice message
+
+    /**
+     * setSystemNoticeMessage
+     * 
+     * Setter - set system notice message
+     *
+     * @param string $system_notice_message
+     * @return void
+     */
     public function setSystemNoticeMessage(string $system_notice_message)
     {
         $this->system_notice_message = $system_notice_message;
         return $this;
     }
-    // Setter - set updated by
+    
+    /**
+     * setUpdatedBy
+     * 
+     * Setter - set updated by
+     *
+     * @param string $updated_by
+     * @return void
+     */
     public function setUpdatedBy(string $updated_by)
     {
         $this->updated_by = $updated_by;

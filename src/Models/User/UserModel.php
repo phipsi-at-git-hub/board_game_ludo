@@ -2,7 +2,7 @@
 // src/Models/User/UserModel.php
 namespace App\Models\User;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Constants\User\UserRoleConstants;
 use App\Constants\User\UserStatusConstants;
@@ -75,7 +75,7 @@ final class UserModel extends BaseModel
             "
             ORDER BY u.%s DESC
             ",
-            Application::CREATED_AT
+            DbColumnConstants::CREATED_AT
         );
 
         // Load Users
@@ -276,12 +276,12 @@ final class UserModel extends BaseModel
                         :status
                     )",
                     DbTableConstants::USERS,
-                    Application::ID,
-                    Application::USERNAME,
-                    Application::EMAIL,
-                    Application::PASSWORD_HASH,
-                    Application::ROLE,
-                    Application::STATUS
+                    DbColumnConstants::ID,
+                    DbColumnConstants::USERNAME,
+                    DbColumnConstants::EMAIL,
+                    DbColumnConstants::PASSWORD_HASH,
+                    DbColumnConstants::ROLE,
+                    DbColumnConstants::STATUS
                 ),
                 [
                     'id' => $id,
@@ -337,22 +337,22 @@ final class UserModel extends BaseModel
 
                 DbTableConstants::USERS,
 
-                Application::USERNAME,
-                Application::EMAIL,
-                Application::ROLE,
-                Application::STATUS,
-                Application::PREFERRED_LANGUAGE,
-                Application::PREFERRED_CAMERA_MODE,
+                DbColumnConstants::USERNAME,
+                DbColumnConstants::EMAIL,
+                DbColumnConstants::ROLE,
+                DbColumnConstants::STATUS,
+                DbColumnConstants::PREFERRED_LANGUAGE,
+                DbColumnConstants::PREFERRED_CAMERA_MODE,
 
-                Application::ID
+                DbColumnConstants::ID
             ),
             [
-                'username' => $user_array[Application::USERNAME] ?? $this->username,
-                'email' => $user_array[Application::EMAIL] ?? $this->email,
-                'role' => $user_array[Application::ROLE] ?? $this->role,
-                'status' => $user_array[Application::STATUS] ?? $this->status,
-                'preferred_language' => $user_array[Application::PREFERRED_LANGUAGE] ?? $this->preferred_language,
-                'preferred_camera_mode' => $user_array[Application::PREFERRED_CAMERA_MODE] ?? $this->preferred_camera_mode,
+                'username' => $user_array[DbColumnConstants::USERNAME] ?? $this->username,
+                'email' => $user_array[DbColumnConstants::EMAIL] ?? $this->email,
+                'role' => $user_array[DbColumnConstants::ROLE] ?? $this->role,
+                'status' => $user_array[DbColumnConstants::STATUS] ?? $this->status,
+                'preferred_language' => $user_array[DbColumnConstants::PREFERRED_LANGUAGE] ?? $this->preferred_language,
+                'preferred_camera_mode' => $user_array[DbColumnConstants::PREFERRED_CAMERA_MODE] ?? $this->preferred_camera_mode,
                 'id' => $this->id
             ]
         );
@@ -454,8 +454,8 @@ final class UserModel extends BaseModel
                     id = :id",
 
                 DbTableConstants::USERS,
-                Application::LAST_LOGIN,
-                Application::ID
+                DbColumnConstants::LAST_LOGIN,
+                DbColumnConstants::ID
             ),
             [
                 'id' => $this->id
@@ -621,17 +621,17 @@ final class UserModel extends BaseModel
      */
     private function toArray(): array
     {
-        $user_array[Application::ID] = $this->id;
-        $user_array[Application::USERNAME] = $this->username;
-        $user_array[Application::EMAIL] = $this->email;
-        $user_array[Application::PASSWORD_HASH] = $this->password_hash;
-        $user_array[Application::ROLE] = $this->role;
-        $user_array[Application::STATUS] = $this->status;
-        $user_array[Application::PREFERRED_LANGUAGE] = $this->preferred_language;
-        $user_array[Application::PREFERRED_CAMERA_MODE] = $this->preferred_camera_mode;
-        $user_array[Application::LAST_LOGIN] = $this->last_login;
-        $user_array[Application::CREATED_AT] = $this->created_at;
-        $user_array[Application::UPDATED_AT] = $this->updated_at;
+        $user_array[DbColumnConstants::ID] = $this->id;
+        $user_array[DbColumnConstants::USERNAME] = $this->username;
+        $user_array[DbColumnConstants::EMAIL] = $this->email;
+        $user_array[DbColumnConstants::PASSWORD_HASH] = $this->password_hash;
+        $user_array[DbColumnConstants::ROLE] = $this->role;
+        $user_array[DbColumnConstants::STATUS] = $this->status;
+        $user_array[DbColumnConstants::PREFERRED_LANGUAGE] = $this->preferred_language;
+        $user_array[DbColumnConstants::PREFERRED_CAMERA_MODE] = $this->preferred_camera_mode;
+        $user_array[DbColumnConstants::LAST_LOGIN] = $this->last_login;
+        $user_array[DbColumnConstants::CREATED_AT] = $this->created_at;
+        $user_array[DbColumnConstants::UPDATED_AT] = $this->updated_at;
 
         return $user_array;
     }

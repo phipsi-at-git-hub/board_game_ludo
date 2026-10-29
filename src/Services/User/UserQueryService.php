@@ -3,7 +3,7 @@
 
 namespace App\Services\User;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 
 /**
  * UserQueryService
@@ -81,7 +81,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::ID . ' = :user_id';
+            DbColumnConstants::ID . ' = :user_id';
 
         $this->params['user_id'] = $userId;
     }
@@ -103,7 +103,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::USERNAME . ' LIKE :username';
+            DbColumnConstants::USERNAME . ' LIKE :username';
 
         $this->params['username'] = '%' . $username . '%';
     }
@@ -125,7 +125,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::EMAIL . ' LIKE :email';
+            DbColumnConstants::EMAIL . ' LIKE :email';
 
         $this->params['email'] = '%' . $email . '%';
     }
@@ -156,7 +156,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::STATUS .
+            DbColumnConstants::STATUS .
             ' IN (' . implode(', ', $placeholders) . ')';
     }
 
@@ -186,7 +186,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::ROLE .
+            DbColumnConstants::ROLE .
             ' IN (' . implode(', ', $placeholders) . ')';
     }
 
@@ -207,7 +207,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::PREFERRED_LANGUAGE . ' = :preferred_language';
+            DbColumnConstants::PREFERRED_LANGUAGE . ' = :preferred_language';
 
         $this->params['preferred_language'] = $language;
     }
@@ -229,7 +229,7 @@ final class UserQueryService
         }
 
         $this->conditions[] =
-            Application::PREFERRED_CAMERA_MODE . ' = :preferred_camera_mode';
+            DbColumnConstants::PREFERRED_CAMERA_MODE . ' = :preferred_camera_mode';
 
         $this->params['preferred_camera_mode'] = $cameraMode;
     }
@@ -248,7 +248,7 @@ final class UserQueryService
 
         if ($lastLoginFrom !== null) {
             $this->conditions[] =
-                Application::LAST_LOGIN . ' >= :last_login_from';
+                DbColumnConstants::LAST_LOGIN . ' >= :last_login_from';
 
             $this->params['last_login_from'] = $lastLoginFrom;
         }
@@ -257,7 +257,7 @@ final class UserQueryService
 
         if ($lastLoginTo !== null) {
             $this->conditions[] =
-                Application::LAST_LOGIN . ' <= :last_login_to';
+                DbColumnConstants::LAST_LOGIN . ' <= :last_login_to';
 
             $this->params['last_login_to'] = $lastLoginTo;
         }
@@ -277,7 +277,7 @@ final class UserQueryService
 
         if ($createdFrom !== null) {
             $this->conditions[] =
-                Application::CREATED_AT . ' >= :created_from';
+                DbColumnConstants::CREATED_AT . ' >= :created_from';
 
             $this->params['created_from'] = $createdFrom;
         }
@@ -286,7 +286,7 @@ final class UserQueryService
 
         if ($createdTo !== null) {
             $this->conditions[] =
-                Application::CREATED_AT . ' <= :created_to';
+                DbColumnConstants::CREATED_AT . ' <= :created_to';
 
             $this->params['created_to'] = $createdTo;
         }
@@ -306,7 +306,7 @@ final class UserQueryService
 
         if ($updatedFrom !== null) {
             $this->conditions[] =
-                Application::UPDATED_AT . ' >= :updated_from';
+                DbColumnConstants::UPDATED_AT . ' >= :updated_from';
 
             $this->params['updated_from'] = $updatedFrom;
         }
@@ -315,7 +315,7 @@ final class UserQueryService
 
         if ($updatedTo !== null) {
             $this->conditions[] =
-                Application::UPDATED_AT . ' <= :updated_to';
+                DbColumnConstants::UPDATED_AT . ' <= :updated_to';
 
             $this->params['updated_to'] = $updatedTo;
         }

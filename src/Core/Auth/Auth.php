@@ -2,7 +2,7 @@
 // src/Core/Auth/Auth.php
 namespace App\Core\Auth;
 
-use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Constants\GeneralConstants;
 use App\Models\User\UserModel;
 
@@ -25,7 +25,7 @@ class Auth
     public static function login(UserModel $user): void
     {
         session_regenerate_id(true);
-        $_SESSION[Application::USER_ID] = $user->getId();
+        $_SESSION[ApplicationConstants::USER_ID] = $user->getId();
         $_SESSION[GeneralConstants::LOCAL] = $user->getPreferredLanguage();
     }
 

@@ -4,6 +4,7 @@
 namespace App\Core\Logging;
 
 use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Constants\DateTimeFormatConstants;
 use App\Core\Application\App;
 use App\Core\Utility\UUID;
@@ -80,7 +81,7 @@ final class LogEntry
     {
         $entry = new self();
 
-        $entry->id = $data[Application::ID] ?? null;
+        $entry->id = $data[ApplicationConstants::ID] ?? null;
         $entry->level = $data['level'];
         $entry->message = $data['message'];
         $entry->context = $data['context'] ?? [];
@@ -190,7 +191,7 @@ final class LogEntry
     public function toArray(): array
     {
         return [
-            Application::ID => $this->id,
+            ApplicationConstants::ID => $this->id,
 
             'timestamp' => $this->timestamp,
 

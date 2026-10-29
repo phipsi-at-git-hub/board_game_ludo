@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
+use App\Constants\Game\GameConstants;
 use App\Constants\HttpMethodConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
@@ -117,26 +119,26 @@ class GameController extends BaseController
      */
     public function store(): void
     {
-        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_NAME] !== '') {
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[GameConstants::GAME_NAME] !== '') {
             $game_options = [
-                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]),
+                DbColumnConstants::IS_PRIVATE => ($_POST[GameConstants::IS_PRIVATE]),
             ];
 
             $rule_set = [
-                Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_AT_HOME => ($_POST[Application::ALL_FIGURES_START_AT_HOME]),
-                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
-                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]),
-                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]),
-                Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
-                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]),
-                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]),
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
-                Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
-                Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
+                DbColumnConstants::ALLOW_BOTS => ($_POST[GameConstants::ALLOW_BOTS]),
+                DbColumnConstants::ALL_FIGURES_START_AT_HOME => ($_POST[GameConstants::ALL_FIGURES_START_AT_HOME]),
+                DbColumnConstants::START_FIELD_MUST_BE_CLEARED => ($_POST[GameConstants::START_FIELD_MUST_BE_CLEARED]),
+                DbColumnConstants::LEAVE_HOME_ATTEMPT => ($_POST[GameConstants::LEAVE_HOME_ATTEMPT]),
+                DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[GameConstants::LEAVE_HOME_ATTEMPTS_MAX]),
+                DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[GameConstants::EXTRA_ROLL_ON_SIX_LIMIT]),
+                DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX => ($_POST[GameConstants::FORCE_LEAVING_HOME_ON_SIX]),
+                DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[GameConstants::FORCE_CAPTURE_ENEMY_FIGURES]),
+                DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[GameConstants::FORCE_EXTRA_LAP_ON_OVERFLOW]),
+                DbColumnConstants::ALLOW_STACK_OWN_FIGURES => ($_POST[GameConstants::ALLOW_STACK_OWN_FIGURES]),
+                DbColumnConstants::STRICT_GOAL_ORDER => ($_POST[GameConstants::STRICT_GOAL_ORDER]),
             ];
 
-            $game_id = (new GameModel())->create($_SESSION[Application::USER_ID], $_POST[Application::GAME_NAME], $game_options, $rule_set);
+            $game_id = (new GameModel())->create($_SESSION[GameConstants::USER_ID], $_POST[GameConstants::GAME_NAME], $game_options, $rule_set);
 
             // Update user statistics 
             $user = Auth::user();
@@ -199,32 +201,32 @@ class GameController extends BaseController
      */
     public function update(): void
     {
-        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_ID] !== '') {
-            $game = GameModel::findById($_POST[Application::GAME_ID]);
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[GameConstants::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[DbColumnConstants::GAME_ID]);
             if (!$game) {
                 http_response_code(404);
                 die('Game not found');
             }
 
-            $game_name = $_POST[Application::GAME_NAME];
+            $game_name = $_POST[GameConstants::GAME_NAME];
 
             $game_options = [
-                Application::IS_PRIVATE => ($_POST[Application::IS_PRIVATE]),
-                Application::IS_LOCKED => (int)$game->isLocked(),
+                DbColumnConstants::IS_PRIVATE => ($_POST[GameConstants::IS_PRIVATE]),
+                DbColumnConstants::IS_LOCKED => (int)$game->isLocked(),
             ];
 
             $rule_set = [
-                Application::ALLOW_BOTS => ($_POST[Application::ALLOW_BOTS]),
-                Application::ALL_FIGURES_START_AT_HOME => (isset($_POST[Application::ALL_FIGURES_START_AT_HOME])) ? ($_POST[Application::ALL_FIGURES_START_AT_HOME]) : (int)$game->getRuleSetModel()->getAllFiguresStartAtHome(),
-                Application::START_FIELD_MUST_BE_CLEARED => ($_POST[Application::START_FIELD_MUST_BE_CLEARED]),
-                Application::LEAVE_HOME_ATTEMPT => ($_POST[Application::LEAVE_HOME_ATTEMPT]),
-                Application::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[Application::LEAVE_HOME_ATTEMPTS_MAX]),
-                Application::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[Application::EXTRA_ROLL_ON_SIX_LIMIT]),
-                Application::FORCE_LEAVING_HOME_ON_SIX => ($_POST[Application::FORCE_LEAVING_HOME_ON_SIX]),
-                Application::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[Application::FORCE_CAPTURE_ENEMY_FIGURES]),
-                Application::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[Application::FORCE_EXTRA_LAP_ON_OVERFLOW]),
-                Application::ALLOW_STACK_OWN_FIGURES => ($_POST[Application::ALLOW_STACK_OWN_FIGURES]),
-                Application::STRICT_GOAL_ORDER => ($_POST[Application::STRICT_GOAL_ORDER]),
+                DbColumnConstants::ALLOW_BOTS => ($_POST[GameConstants::ALLOW_BOTS]),
+                DbColumnConstants::ALL_FIGURES_START_AT_HOME => (isset($_POST[GameConstants::ALL_FIGURES_START_AT_HOME])) ? ($_POST[GameConstants::ALL_FIGURES_START_AT_HOME]) : (int)$game->getRuleSetModel()->getAllFiguresStartAtHome(),
+                DbColumnConstants::START_FIELD_MUST_BE_CLEARED => ($_POST[GameConstants::START_FIELD_MUST_BE_CLEARED]),
+                DbColumnConstants::LEAVE_HOME_ATTEMPT => ($_POST[GameConstants::LEAVE_HOME_ATTEMPT]),
+                DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX => ($_POST[GameConstants::LEAVE_HOME_ATTEMPTS_MAX]),
+                DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT => ($_POST[GameConstants::EXTRA_ROLL_ON_SIX_LIMIT]),
+                DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX => ($_POST[GameConstants::FORCE_LEAVING_HOME_ON_SIX]),
+                DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES => ($_POST[GameConstants::FORCE_CAPTURE_ENEMY_FIGURES]),
+                DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW => ($_POST[GameConstants::FORCE_EXTRA_LAP_ON_OVERFLOW]),
+                DbColumnConstants::ALLOW_STACK_OWN_FIGURES => ($_POST[GameConstants::ALLOW_STACK_OWN_FIGURES]),
+                DbColumnConstants::STRICT_GOAL_ORDER => ($_POST[GameConstants::STRICT_GOAL_ORDER]),
             ];
 
             $game->update($game_name, $game_options, $rule_set);
@@ -378,7 +380,7 @@ class GameController extends BaseController
      */
     public function start(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         if (!$game_id) {
             $this->redirect('/game/list');
             return;
@@ -404,7 +406,7 @@ class GameController extends BaseController
      */
     public function pause(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         if (!$game_id) {
             $this->redirect('/game/list');
             return;
@@ -429,7 +431,7 @@ class GameController extends BaseController
      */
     public function reset(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         if (!$game_id) {
             $this->redirect('/game/list');
             return;
@@ -454,7 +456,7 @@ class GameController extends BaseController
      */
     public function cancel(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         if (!$game_id) {
             $this->redirect('/game/list');
             return;
@@ -476,7 +478,7 @@ class GameController extends BaseController
      */
     public function delete(): void
     {
-        $game_id = $_POST[Application::GAME_ID] ?? null;
+        $game_id = $_POST[GameConstants::GAME_ID] ?? null;
         if (!$game_id) {
             $this->redirect('/game/list');
             return;
@@ -515,7 +517,7 @@ class GameController extends BaseController
         $current_roll = $game->getStateModel()->getCurrentDiceRoll();
         if ($current_roll !== null) {
             if ($game->isPlayersTurn($user)) {
-                $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $current_roll);
+                $moves = $game->getAvailableMoves($_SESSION[GameConstants::USER_ID], $current_roll);
             }
 
             // If no moves are available, offer at least one passing move
@@ -556,8 +558,8 @@ class GameController extends BaseController
     public function createSoloTest(): void
     {
         $game = null;
-        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[Application::GAME_ID] !== '') {
-            $game = GameModel::findById($_POST[Application::GAME_ID]);
+        if ($_SERVER[HttpMethodConstants::SERVER_REQUEST_METHOD] === HttpMethodConstants::POST && $_POST[GameConstants::GAME_ID] !== '') {
+            $game = GameModel::findById($_POST[GameConstants::GAME_ID]);
             $game_id = $game->cloneGameWithOnePlayer();
             $game = GameModel::findById($game_id);
             $user = Auth::user();
@@ -575,7 +577,7 @@ class GameController extends BaseController
     // Start a given solo test game
     public function startSoloTest(): void
     {
-        $game_id = $_POST[Application::GAME_ID];
+        $game_id = $_POST[GameConstants::GAME_ID];
         $game = GameModel::findById($game_id);
         $user = Auth::user();
         $moves = [];
@@ -583,7 +585,7 @@ class GameController extends BaseController
         $game->startGame();
 
         if ($game->getStateModel()->getCurrentDiceRoll() !== null) {
-            $moves = $game->getAvailableMoves($_SESSION[Application::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
+            $moves = $game->getAvailableMoves($_SESSION[GameConstants::USER_ID], $game->getStateModel()->getCurrentDiceRoll());
         }
 
         $this->redirect("/game/detail/$game_id");
@@ -593,7 +595,7 @@ class GameController extends BaseController
     public function roll()
     {
         $user = Auth::user();
-        $game_id = $_POST[Application::GAME_ID];
+        $game_id = $_POST[GameConstants::GAME_ID];
         $game = GameModel::findById($game_id);
 
         // Check if it's users turn
@@ -611,7 +613,7 @@ class GameController extends BaseController
     public function move()
     {
         $user = Auth::user();
-        $game_id = $_POST[Application::GAME_ID];
+        $game_id = $_POST[GameConstants::GAME_ID];
         $move = json_decode($_POST[Application::DTO_MOVE], true);
         $game = GameModel::findById($game_id);
 
@@ -623,9 +625,9 @@ class GameController extends BaseController
         // Check if a move is skipped
         if (!empty($move[Application::DTO_IS_PASS])) {
             // Turn may end directly
-            $game->passTurn($_SESSION[Application::USER_ID]);
+            $game->passTurn($_SESSION[GameConstants::USER_ID]);
         } else {
-            $game->applyMove($_SESSION[Application::USER_ID], $move);
+            $game->applyMove($_SESSION[GameConstants::USER_ID], $move);
         }
 
         $this->redirect("/game/play/$game_id");

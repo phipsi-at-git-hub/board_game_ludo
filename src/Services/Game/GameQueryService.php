@@ -3,7 +3,7 @@
 
 namespace App\Services\Game;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 
 /**
@@ -63,6 +63,11 @@ final class GameQueryService
 
     /**
      * Builds conditions for user-related filters.
+     * 
+     * buildUserConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildUserConditions(GameFilterService $filter): void
     {
@@ -77,7 +82,7 @@ final class GameQueryService
 
         if (in_array('created', $relations, true)) {
             $conditions[] =
-                'g.' . Application::CREATED_BY_USER_ID . ' = :user_creator_id';
+                'g.' . DbColumnConstants::CREATED_BY_USER_ID . ' = :user_creator_id';
 
             $this->params['user_creator_id'] = $userId;
         }
@@ -87,8 +92,8 @@ final class GameQueryService
                 'EXISTS (
                     SELECT 1
                     FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' p
-                    WHERE p.' . Application::GAME_ID . ' = g.' . Application::ID . '
-                      AND p.' . Application::USER_ID . ' = :user_player_id
+                    WHERE p.' . DbColumnConstants::GAME_ID . ' = g.' . DbColumnConstants::ID . '
+                      AND p.' . DbColumnConstants::USER_ID . ' = :user_player_id
                 )';
 
             $this->params['user_player_id'] = $userId;
@@ -99,8 +104,8 @@ final class GameQueryService
                 'EXISTS (
                     SELECT 1
                     FROM ' . DbTableConstants::GAME_STATE . ' ws
-                    WHERE ws.' . Application::GAME_ID . ' = g.' . Application::ID . '
-                      AND ws.' . Application::WINNER_USER_ID . ' = :user_winner_id
+                    WHERE ws.' . DbColumnConstants::GAME_ID . ' = g.' . DbColumnConstants::ID . '
+                      AND ws.' . DbColumnConstants::WINNER_USER_ID . ' = :user_winner_id
                 )';
 
             $this->params['user_winner_id'] = $userId;
@@ -125,6 +130,11 @@ final class GameQueryService
 
     /**
      * Builds conditions for game status filters.
+     * 
+     * buildStatusConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildStatusConditions(GameFilterService $filter): void
     {
@@ -144,12 +154,17 @@ final class GameQueryService
         }
 
         $this->conditions[] =
-            'g.' . Application::STATUS .
+            'g.' . DbColumnConstants::STATUS .
             ' IN (' . implode(', ', $placeholders) . ')';
     }
 
     /**
      * Builds conditions for the creation date range.
+     * 
+     * buildDateConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildDateConditions(GameFilterService $filter): void
     {
@@ -157,7 +172,7 @@ final class GameQueryService
 
         if ($createdFrom !== null) {
             $this->conditions[] =
-                'g.' . Application::CREATED_AT . ' >= :created_from';
+                'g.' . DbColumnConstants::CREATED_AT . ' >= :created_from';
 
             $this->params['created_from'] = $createdFrom;
         }
@@ -166,7 +181,7 @@ final class GameQueryService
 
         if ($createdTo !== null) {
             $this->conditions[] =
-                'g.' . Application::CREATED_AT . ' <= :created_to';
+                'g.' . DbColumnConstants::CREATED_AT . ' <= :created_to';
 
             $this->params['created_to'] = $createdTo;
         }
@@ -174,6 +189,11 @@ final class GameQueryService
 
     /**
      * Builds conditions for player count filters.
+     * 
+     * buildPlayerCountConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildPlayerCountConditions(GameFilterService $filter): void
     {
@@ -183,7 +203,7 @@ final class GameQueryService
             $this->conditions[] =
                 '(SELECT COUNT(*)
                   FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc
-                  WHERE pc.' . Application::GAME_ID . ' = g.' . Application::ID . '
+                  WHERE pc.' . DbColumnConstants::GAME_ID . ' = g.' . DbColumnConstants::ID . '
                 ) = :player_count';
 
             $this->params['player_count'] = $playerCount;
@@ -195,7 +215,7 @@ final class GameQueryService
             $this->conditions[] =
                 '(SELECT COUNT(*)
                   FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc_min
-                  WHERE pc_min.' . Application::GAME_ID . ' = g.' . Application::ID . '
+                  WHERE pc_min.' . DbColumnConstants::GAME_ID . ' = g.' . DbColumnConstants::ID . '
                 ) >= :player_count_min';
 
             $this->params['player_count_min'] = $playerCountMin;
@@ -207,7 +227,7 @@ final class GameQueryService
             $this->conditions[] =
                 '(SELECT COUNT(*)
                   FROM ' . DbTableConstants::GAME_STATE_PLAYERS . ' pc_max
-                  WHERE pc_max.' . Application::GAME_ID . ' = g.' . Application::ID . '
+                  WHERE pc_max.' . DbColumnConstants::GAME_ID . ' = g.' . DbColumnConstants::ID . '
                 ) <= :player_count_max';
 
             $this->params['player_count_max'] = $playerCountMax;
@@ -216,6 +236,11 @@ final class GameQueryService
 
     /**
      * Builds conditions for rule filters.
+     * 
+     * buildRuleConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildRuleConditions(GameFilterService $filter): void
     {
@@ -223,7 +248,7 @@ final class GameQueryService
 
         if ($allowBots !== null) {
             $this->conditions[] =
-                'r.' . Application::ALLOW_BOTS . ' = :allow_bots';
+                'r.' . DbColumnConstants::ALLOW_BOTS . ' = :allow_bots';
 
             $this->params['allow_bots'] = $allowBots ? 1 : 0;
         }
@@ -232,7 +257,7 @@ final class GameQueryService
 
         if ($strictGoalOrder !== null) {
             $this->conditions[] =
-                'r.' . Application::STRICT_GOAL_ORDER . ' = :strict_goal_order';
+                'r.' . DbColumnConstants::STRICT_GOAL_ORDER . ' = :strict_goal_order';
 
             $this->params['strict_goal_order'] =
                 $strictGoalOrder ? 1 : 0;
@@ -241,6 +266,11 @@ final class GameQueryService
 
     /**
      * Builds conditions for specific game IDs.
+     * 
+     * buildGameIdConditions
+     *
+     * @param GameFilterService $filter
+     * @return void
      */
     private function buildGameIdConditions(GameFilterService $filter): void
     {
@@ -260,7 +290,7 @@ final class GameQueryService
         }
 
         $this->conditions[] =
-            'g.' . Application::ID .
+            'g.' . DbColumnConstants::ID .
             ' IN (' . implode(', ', $placeholders) . ')';
     }
 }

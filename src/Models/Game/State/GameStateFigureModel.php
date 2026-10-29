@@ -2,13 +2,12 @@
 // src/Models/Game/State/GameStateFigureModel.php
 namespace App\Models\Game\State;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Models\BaseModel;
 
 final class GameStateFigureModel extends BaseModel
 {
-    // ToDo: Use constant from application.php 
     private string $game_id;
     private string $user_id;
     private string $user_name;
@@ -108,7 +107,7 @@ final class GameStateFigureModel extends BaseModel
     public function savePosition(string $game_id, string $user_id, int $figure_index, int $figure_position): bool
     {
         $game_state_figure_array = $this->toArray();
-        $game_state_figure_array[Application::POSITION] = $figure_position;
+        $game_state_figure_array[DbColumnConstants::POSITION] = $figure_position;
 
         return $this->updateFigure($game_id, $user_id, $figure_index, $game_state_figure_array);
     }
@@ -117,7 +116,7 @@ final class GameStateFigureModel extends BaseModel
     public function saveArea(string $game_id, string $user_id, int $figure_index, string $figure_area): bool
     {
         $game_state_figure_array = $this->toArray();
-        $game_state_figure_array[Application::AREA] = $figure_area;
+        $game_state_figure_array[DbColumnConstants::AREA] = $figure_area;
         var_dump($game_state_figure_array);
 
         return $this->updateFigure($game_id, $user_id, $figure_index, $game_state_figure_array);
@@ -131,8 +130,8 @@ final class GameStateFigureModel extends BaseModel
                 "UPDATE game_state_figures SET area = :area, position = :position WHERE game_id = :game_id AND user_id = :user_id AND figure_index = :figure_index"
             ),
             [
-                'position' => $figure_array[Application::POSITION],
-                'area' => $figure_array[Application::AREA],
+                'position' => $figure_array[DbColumnConstants::POSITION],
+                'area' => $figure_array[DbColumnConstants::AREA],
                 'game_id' => $game_id,
                 'user_id' => $user_id,
                 'figure_index' => $figure_index
@@ -273,14 +272,14 @@ final class GameStateFigureModel extends BaseModel
     {
         $game_state_figure = new self();
 
-        $game_state_figure->game_id = self::hydrateString($row, Application::GAME_ID);
-        $game_state_figure->user_id = self::hydrateString($row, Application::USER_ID);
-        if (array_key_exists(Application::USERNAME, $row))  $game_state_figure->user_name = $row[Application::USERNAME];
-        $game_state_figure->figure_index = self::hydrateInt($row, Application::FIGURE_INDEX);
-        $game_state_figure->position = self::hydrateInt($row, Application::POSITION);
-        $game_state_figure->area = self::hydrateString($row, Application::AREA);
-        $game_state_figure->created_at = $row[Application::CREATED_AT];
-        $game_state_figure->updated_at = $row[Application::UPDATED_AT];
+        $game_state_figure->game_id = self::hydrateString($row, DbColumnConstants::GAME_ID);
+        $game_state_figure->user_id = self::hydrateString($row, DbColumnConstants::USER_ID);
+        if (array_key_exists(DbColumnConstants::USERNAME, $row))  $game_state_figure->user_name = $row[DbColumnConstants::USERNAME];
+        $game_state_figure->figure_index = self::hydrateInt($row, DbColumnConstants::FIGURE_INDEX);
+        $game_state_figure->position = self::hydrateInt($row, DbColumnConstants::POSITION);
+        $game_state_figure->area = self::hydrateString($row, DbColumnConstants::AREA);
+        $game_state_figure->created_at = $row[DbColumnConstants::CREATED_AT];
+        $game_state_figure->updated_at = $row[DbColumnConstants::UPDATED_AT];
 
         return $game_state_figure;
     }
@@ -288,11 +287,11 @@ final class GameStateFigureModel extends BaseModel
     // Helper - Create Array from GameStateFigureModel
     private function toArray(): array
     {
-        $game_state_figure[Application::GAME_ID] = $this->game_id;
-        $game_state_figure[Application::USER_ID] = $this->user_id;
-        $game_state_figure[Application::FIGURE_INDEX] = $this->figure_index;
-        $game_state_figure[Application::POSITION] = $this->position;
-        $game_state_figure[Application::AREA] = $this->area;
+        $game_state_figure[DbColumnConstants::GAME_ID] = $this->game_id;
+        $game_state_figure[DbColumnConstants::USER_ID] = $this->user_id;
+        $game_state_figure[DbColumnConstants::FIGURE_INDEX] = $this->figure_index;
+        $game_state_figure[DbColumnConstants::POSITION] = $this->position;
+        $game_state_figure[DbColumnConstants::AREA] = $this->area;
 
         return $game_state_figure;
     }

@@ -3,6 +3,7 @@
 namespace App\Models\Game;
 
 use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Game\GameRulesetConstants;
 use App\Models\BaseModel;
 
@@ -25,7 +26,7 @@ final class GameRuleSetModel extends BaseModel
     private const DEFAULT_ALLOW_BOTS = false;
     private const DEFAULT_ALL_FIGURES_START_AT_HOME = false;
     private const DEFAULT_START_FIELD_MUST_BE_CLEARED = true;
-    private const DEFAULT_LEAVE_HOME_ATTEMPT = Application::ENUM_FIRST_FIGURE;
+    private const DEFAULT_LEAVE_HOME_ATTEMPT = DbColumnConstants::ENUM_FIRST_FIGURE;
     private const DEFAULT_LEAVE_HOME_ATTEMPTS_MAX = 3;
     private const DEFAULT_EXTRA_ROLL_ON_SIX_LIMIT = 255;
     private const DEFAULT_FORCE_LEAVING_HOME_ON_SIX = true;
@@ -127,17 +128,17 @@ final class GameRuleSetModel extends BaseModel
             )",
             [
                 'game_id' => $game_id,
-                'allow_bots' => (int)$rules[Application::ALLOW_BOTS],
-                'all_figures_start_at_home' => (int)$rules[Application::ALL_FIGURES_START_AT_HOME],
-                'leave_home_attempt' => (string)$rules[Application::LEAVE_HOME_ATTEMPT],
-                'leave_home_attempts_max' => (int)$rules[Application::LEAVE_HOME_ATTEMPTS_MAX],
-                'extra_roll_on_six_limit' => (int)$rules[Application::EXTRA_ROLL_ON_SIX_LIMIT],
-                'force_leaving_home_on_six' => (int)$rules[Application::FORCE_LEAVING_HOME_ON_SIX],
-                'force_capture_enemy_figures' => (int)$rules[Application::FORCE_CAPTURE_ENEMY_FIGURES],
-                'force_extra_lap_on_overflow' => (int)$rules[Application::FORCE_EXTRA_LAP_ON_OVERFLOW],
-                'allow_stack_own_figures' => (int)$rules[Application::ALLOW_STACK_OWN_FIGURES],
-                'strict_goal_order' => (int)$rules[Application::STRICT_GOAL_ORDER],
-                'start_field_must_be_cleared' => (int)$rules[Application::START_FIELD_MUST_BE_CLEARED],
+                'allow_bots' => (int)$rules[DbColumnConstants::ALLOW_BOTS],
+                'all_figures_start_at_home' => (int)$rules[DbColumnConstants::ALL_FIGURES_START_AT_HOME],
+                'leave_home_attempt' => (string)$rules[DbColumnConstants::LEAVE_HOME_ATTEMPT],
+                'leave_home_attempts_max' => (int)$rules[DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX],
+                'extra_roll_on_six_limit' => (int)$rules[DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT],
+                'force_leaving_home_on_six' => (int)$rules[DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX],
+                'force_capture_enemy_figures' => (int)$rules[DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES],
+                'force_extra_lap_on_overflow' => (int)$rules[DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW],
+                'allow_stack_own_figures' => (int)$rules[DbColumnConstants::ALLOW_STACK_OWN_FIGURES],
+                'strict_goal_order' => (int)$rules[DbColumnConstants::STRICT_GOAL_ORDER],
+                'start_field_must_be_cleared' => (int)$rules[DbColumnConstants::START_FIELD_MUST_BE_CLEARED],
             ]
         );
     }
@@ -226,17 +227,17 @@ final class GameRuleSetModel extends BaseModel
     {
         $rule_set = new self();
 
-        if (array_key_exists(Application::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[Application::ALLOW_BOTS];
-        if (array_key_exists(Application::ALL_FIGURES_START_AT_HOME, $row)) $rule_set->all_figures_start_at_home = (bool) $row[Application::ALL_FIGURES_START_AT_HOME];
-        if (array_key_exists(Application::LEAVE_HOME_ATTEMPT, $row)) $rule_set->leave_home_attempt = (string) $row[Application::LEAVE_HOME_ATTEMPT];
-        if (array_key_exists(Application::LEAVE_HOME_ATTEMPTS_MAX, $row)) $rule_set->leave_home_attempts_max = (int) $row[Application::LEAVE_HOME_ATTEMPTS_MAX];
-        if (array_key_exists(Application::EXTRA_ROLL_ON_SIX_LIMIT, $row)) $rule_set->extra_roll_on_six_limit = (int) $row[Application::EXTRA_ROLL_ON_SIX_LIMIT];
-        if (array_key_exists(Application::FORCE_LEAVING_HOME_ON_SIX, $row)) $rule_set->force_leaving_home_on_six = (bool) $row[Application::FORCE_LEAVING_HOME_ON_SIX];
-        if (array_key_exists(Application::FORCE_CAPTURE_ENEMY_FIGURES, $row)) $rule_set->force_capture_enemy_figures = (bool) $row[Application::FORCE_CAPTURE_ENEMY_FIGURES];
-        if (array_key_exists(Application::FORCE_EXTRA_LAP_ON_OVERFLOW, $row)) $rule_set->force_extra_lap_on_overflow = (bool) $row[Application::FORCE_EXTRA_LAP_ON_OVERFLOW];
-        if (array_key_exists(Application::ALLOW_STACK_OWN_FIGURES, $row)) $rule_set->allow_stack_own_figures = (bool) $row[Application::ALLOW_STACK_OWN_FIGURES];
-        if (array_key_exists(Application::STRICT_GOAL_ORDER, $row)) $rule_set->strict_goal_order = (bool) $row[Application::STRICT_GOAL_ORDER];
-        if (array_key_exists(Application::START_FIELD_MUST_BE_CLEARED, $row)) $rule_set->start_field_must_be_cleared = (bool) $row[Application::START_FIELD_MUST_BE_CLEARED];
+        if (array_key_exists(DbColumnConstants::ALLOW_BOTS, $row)) $rule_set->allow_bots = (bool) $row[DbColumnConstants::ALLOW_BOTS];
+        if (array_key_exists(DbColumnConstants::ALL_FIGURES_START_AT_HOME, $row)) $rule_set->all_figures_start_at_home = (bool) $row[DbColumnConstants::ALL_FIGURES_START_AT_HOME];
+        if (array_key_exists(DbColumnConstants::LEAVE_HOME_ATTEMPT, $row)) $rule_set->leave_home_attempt = (string) $row[DbColumnConstants::LEAVE_HOME_ATTEMPT];
+        if (array_key_exists(DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX, $row)) $rule_set->leave_home_attempts_max = (int) $row[DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX];
+        if (array_key_exists(DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT, $row)) $rule_set->extra_roll_on_six_limit = (int) $row[DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT];
+        if (array_key_exists(DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX, $row)) $rule_set->force_leaving_home_on_six = (bool) $row[DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX];
+        if (array_key_exists(DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES, $row)) $rule_set->force_capture_enemy_figures = (bool) $row[DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES];
+        if (array_key_exists(DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW, $row)) $rule_set->force_extra_lap_on_overflow = (bool) $row[DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW];
+        if (array_key_exists(DbColumnConstants::ALLOW_STACK_OWN_FIGURES, $row)) $rule_set->allow_stack_own_figures = (bool) $row[DbColumnConstants::ALLOW_STACK_OWN_FIGURES];
+        if (array_key_exists(DbColumnConstants::STRICT_GOAL_ORDER, $row)) $rule_set->strict_goal_order = (bool) $row[DbColumnConstants::STRICT_GOAL_ORDER];
+        if (array_key_exists(DbColumnConstants::START_FIELD_MUST_BE_CLEARED, $row)) $rule_set->start_field_must_be_cleared = (bool) $row[DbColumnConstants::START_FIELD_MUST_BE_CLEARED];
 
         return $rule_set;
     }
@@ -246,17 +247,17 @@ final class GameRuleSetModel extends BaseModel
     {
         $game_state_array = [];
 
-        $game_state_array[Application::ALLOW_BOTS] = $this->allow_bots;
-        $game_state_array[Application::ALL_FIGURES_START_AT_HOME] = $this->all_figures_start_at_home;
-        $game_state_array[Application::LEAVE_HOME_ATTEMPT] = $this->leave_home_attempt;
-        $game_state_array[Application::LEAVE_HOME_ATTEMPTS_MAX] = $this->leave_home_attempts_max;
-        $game_state_array[Application::EXTRA_ROLL_ON_SIX_LIMIT] = $this->extra_roll_on_six_limit;
-        $game_state_array[Application::FORCE_LEAVING_HOME_ON_SIX] = $this->force_leaving_home_on_six;
-        $game_state_array[Application::FORCE_CAPTURE_ENEMY_FIGURES] = $this->force_capture_enemy_figures;
-        $game_state_array[Application::FORCE_EXTRA_LAP_ON_OVERFLOW] = $this->force_extra_lap_on_overflow;
-        $game_state_array[Application::ALLOW_STACK_OWN_FIGURES] = $this->allow_stack_own_figures;
-        $game_state_array[Application::STRICT_GOAL_ORDER] = $this->strict_goal_order;
-        $game_state_array[Application::START_FIELD_MUST_BE_CLEARED] = $this->start_field_must_be_cleared;
+        $game_state_array[DbColumnConstants::ALLOW_BOTS] = $this->allow_bots;
+        $game_state_array[DbColumnConstants::ALL_FIGURES_START_AT_HOME] = $this->all_figures_start_at_home;
+        $game_state_array[DbColumnConstants::LEAVE_HOME_ATTEMPT] = $this->leave_home_attempt;
+        $game_state_array[DbColumnConstants::LEAVE_HOME_ATTEMPTS_MAX] = $this->leave_home_attempts_max;
+        $game_state_array[DbColumnConstants::EXTRA_ROLL_ON_SIX_LIMIT] = $this->extra_roll_on_six_limit;
+        $game_state_array[DbColumnConstants::FORCE_LEAVING_HOME_ON_SIX] = $this->force_leaving_home_on_six;
+        $game_state_array[DbColumnConstants::FORCE_CAPTURE_ENEMY_FIGURES] = $this->force_capture_enemy_figures;
+        $game_state_array[DbColumnConstants::FORCE_EXTRA_LAP_ON_OVERFLOW] = $this->force_extra_lap_on_overflow;
+        $game_state_array[DbColumnConstants::ALLOW_STACK_OWN_FIGURES] = $this->allow_stack_own_figures;
+        $game_state_array[DbColumnConstants::STRICT_GOAL_ORDER] = $this->strict_goal_order;
+        $game_state_array[DbColumnConstants::START_FIELD_MUST_BE_CLEARED] = $this->start_field_must_be_cleared;
 
         return $game_state_array;
     }

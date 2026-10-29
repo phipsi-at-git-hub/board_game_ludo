@@ -2,7 +2,7 @@
 // src/Models/User/UserStatisticsModel.php
 namespace App\Models\User;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Core\Logging\Logger;
 use App\Models\BaseModel;
@@ -30,7 +30,7 @@ final class UserStatisticsModel extends BaseModel
             sprintf(
                 "SELECT * FROM %s WHERE %s = :user_id LIMIT 1",
                 DbTableConstants::USER_STATISTICS,
-                Application::USER_ID
+                DbColumnConstants::USER_ID
             ),
             [
                 'user_id' => $user_id
@@ -65,11 +65,11 @@ final class UserStatisticsModel extends BaseModel
                     0
                 )",
                 DbTableConstants::USER_STATISTICS,
-                Application::USER_ID,
-                Application::LOGINS,
-                Application::GAMES_CREATED,
-                Application::GAMES_PARTICIPATED,
-                Application::GAMES_WON
+                DbColumnConstants::USER_ID,
+                DbColumnConstants::LOGINS,
+                DbColumnConstants::GAMES_CREATED,
+                DbColumnConstants::GAMES_PARTICIPATED,
+                DbColumnConstants::GAMES_WON
             ),
             [
                 'user_id' => $user_id
@@ -89,7 +89,7 @@ final class UserStatisticsModel extends BaseModel
     public function updateLogins(int $logins): bool
     {
         $this->logins = $logins;
-        return $this->update([Application::LOGINS => $this->logins]);
+        return $this->update([DbColumnConstants::LOGINS => $this->logins]);
     }
 
     /**
@@ -103,7 +103,7 @@ final class UserStatisticsModel extends BaseModel
     public function updateGamesCreated(int $games_created): bool
     {
         $this->games_created = $games_created;
-        return $this->update([Application::GAMES_CREATED => $this->games_created]);
+        return $this->update([DbColumnConstants::GAMES_CREATED => $this->games_created]);
     }
 
     /**
@@ -117,7 +117,7 @@ final class UserStatisticsModel extends BaseModel
     public function updateGamesParticipated(int $games_participated): bool
     {
         $this->games_participated = $games_participated;
-        return $this->update([Application::GAMES_PARTICIPATED => $this->games_participated]);
+        return $this->update([DbColumnConstants::GAMES_PARTICIPATED => $this->games_participated]);
     }
 
     /**
@@ -131,7 +131,7 @@ final class UserStatisticsModel extends BaseModel
     public function updateGamesWon(int $games_won): bool
     {
         $this->games_won = $games_won;
-        return $this->update([Application::GAMES_WON => $this->games_won]);
+        return $this->update([DbColumnConstants::GAMES_WON => $this->games_won]);
     }
 
     /**
@@ -143,7 +143,7 @@ final class UserStatisticsModel extends BaseModel
      */
     public function incrementLogins(): bool
     {
-        return $this->increment(Application::LOGINS);
+        return $this->increment(DbColumnConstants::LOGINS);
     }
 
     /**
@@ -155,7 +155,7 @@ final class UserStatisticsModel extends BaseModel
      */
     public function incrementGamesCreated(): bool
     {
-        return $this->increment(Application::GAMES_CREATED);
+        return $this->increment(DbColumnConstants::GAMES_CREATED);
     }
 
     /**
@@ -167,7 +167,7 @@ final class UserStatisticsModel extends BaseModel
      */
     public function incrementGamesParticipated(): bool
     {
-        return $this->increment(Application::GAMES_PARTICIPATED);
+        return $this->increment(DbColumnConstants::GAMES_PARTICIPATED);
     }
 
     /**
@@ -179,7 +179,7 @@ final class UserStatisticsModel extends BaseModel
      */
     public function incrementGamesWon(): bool
     {
-        return $this->increment(Application::GAMES_WON);
+        return $this->increment(DbColumnConstants::GAMES_WON);
     }
 
     /**
@@ -210,7 +210,7 @@ final class UserStatisticsModel extends BaseModel
                     "UPDATE %s SET %s WHERE %s = :user_id",
                     DbTableConstants::USER_STATISTICS,
                     implode(', ', $updates),
-                    Application::USER_ID
+                    DbColumnConstants::USER_ID
                 ),
                 $params
             );
@@ -244,7 +244,7 @@ final class UserStatisticsModel extends BaseModel
                     DbTableConstants::USER_STATISTICS,
                     $column,
                     $column,
-                    Application::USER_ID
+                    DbColumnConstants::USER_ID
                 ),
                 [
                     'user_id' => $this->user_id
@@ -282,11 +282,11 @@ final class UserStatisticsModel extends BaseModel
     {
         $statistics = new self();
 
-        $statistics->user_id = self::hydrateUUIDOrNull($data, Application::USER_ID);
-        $statistics->logins = self::hydrateInt($data, Application::LOGINS);
-        $statistics->games_created = self::hydrateInt($data, Application::GAMES_CREATED);
-        $statistics->games_participated = self::hydrateInt($data, Application::GAMES_PARTICIPATED);
-        $statistics->games_won = self::hydrateInt($data, Application::GAMES_WON);
+        $statistics->user_id = self::hydrateUUIDOrNull($data, DbColumnConstants::USER_ID);
+        $statistics->logins = self::hydrateInt($data, DbColumnConstants::LOGINS);
+        $statistics->games_created = self::hydrateInt($data, DbColumnConstants::GAMES_CREATED);
+        $statistics->games_participated = self::hydrateInt($data, DbColumnConstants::GAMES_PARTICIPATED);
+        $statistics->games_won = self::hydrateInt($data, DbColumnConstants::GAMES_WON);
 
         return $statistics;
     }

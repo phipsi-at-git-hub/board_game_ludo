@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Constants\Application;
+use App\Constants\ApplicationConstants;
 use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
 use App\Constants\SortingConstants;
@@ -474,7 +475,7 @@ class AdminController extends BaseController
     // Logging - Detail view log entry
     public function loggingShow(): void
     {
-        $id = $_POST[Application::ID] ?? null;
+        $id = $_POST[ApplicationConstants::ID] ?? null;
         $channel = $_POST['channel'] ?? null;
         $timestamp = $_POST['timestamp'] ?? null;
 

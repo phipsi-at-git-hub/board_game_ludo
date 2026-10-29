@@ -2,13 +2,12 @@
 // src/Models/Game/State/GameStatePlayerModel.php
 namespace App\Models\Game\State;
 
-use App\Constants\Application;
+use App\Constants\Database\DbColumnConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Models\BaseModel;
 
 final class GameStatePlayerModel extends BaseModel
 {
-    // ToDo: Use constant from application.php 
     private string $game_id;
     private string $user_id;
     private string $user_name;
@@ -217,12 +216,12 @@ final class GameStatePlayerModel extends BaseModel
     {
         $game_state_player = new self();
 
-        $game_state_player->game_id = $row[Application::GAME_ID];
-        $game_state_player->user_id = $row[Application::USER_ID];
-        if (array_key_exists(Application::USERNAME, $row))  $game_state_player->user_name = $row[Application::USERNAME];
-        $game_state_player->player_index = $row[Application::PLAYER_INDEX];
-        $game_state_player->created_at = $row[Application::CREATED_AT];
-        $game_state_player->updated_at = $row[Application::UPDATED_AT];
+        $game_state_player->game_id = $row[DbColumnConstants::GAME_ID];
+        $game_state_player->user_id = $row[DbColumnConstants::USER_ID];
+        if (array_key_exists(DbColumnConstants::USERNAME, $row))  $game_state_player->user_name = $row[DbColumnConstants::USERNAME];
+        $game_state_player->player_index = $row[DbColumnConstants::PLAYER_INDEX];
+        $game_state_player->created_at = $row[DbColumnConstants::CREATED_AT];
+        $game_state_player->updated_at = $row[DbColumnConstants::UPDATED_AT];
 
         return $game_state_player;
     }
@@ -230,9 +229,9 @@ final class GameStatePlayerModel extends BaseModel
     // Helper - Create Array from GameStatePlayerModel
     private function toArray(): array
     {
-        $game_state_player[Application::GAME_ID] = $this->game_id;
-        $game_state_player[Application::USER_ID] = $this->user_id;
-        $game_state_player[Application::PLAYER_INDEX] = $this->player_index;
+        $game_state_player[DbColumnConstants::GAME_ID] = $this->game_id;
+        $game_state_player[DbColumnConstants::USER_ID] = $this->user_id;
+        $game_state_player[DbColumnConstants::PLAYER_INDEX] = $this->player_index;
 
         return $game_state_player;
     }
