@@ -1,6 +1,5 @@
 <?php
 
-use App\Constants\Application;
 use App\Constants\DateTimeFormatConstants;
 use App\Core\Localization;
 use App\Core\Logging\LogEntry;

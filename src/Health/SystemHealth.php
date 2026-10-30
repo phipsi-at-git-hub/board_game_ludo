@@ -2,7 +2,6 @@
 // Health/SystemHealth.php
 namespace App\Health;
 
-use App\Constants\Application;
 use App\Constants\ApplicationConstants;
 use App\Constants\EnvironmentConstants;
 use App\Constants\GeneralConstants;

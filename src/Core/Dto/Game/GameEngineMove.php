@@ -3,40 +3,42 @@
 
 namespace App\Core\Dto\Game;
 
-use App\Constants\Application;
+use App\Constants\Dto\GameDtoConstants;
+use App\Constants\Dto\GameFigureDtoConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
 
 final class GameEngineMove
 {
     public static function create(): array
     {
         return [
-            Application::DTO_GAME_TURN => null,
-            Application::DTO_FIGURE_INDEX => null,
-            Application::DTO_FROM => [
-                Application::DTO_AREA => null,
-                Application::DTO_POSITION => null
+            GameDtoConstants::GAME_TURN => null,
+            GameFigureDtoConstants::FIGURE_INDEX => null,
+            GameMoveDtoConstants::FROM => [
+                GameFigureDtoConstants::AREA => null,
+                GameFigureDtoConstants::POSITION => null
             ],
-            Application::DTO_TO => [
-                Application::DTO_AREA => null,
-                Application::DTO_POSITION => null
+            GameMoveDtoConstants::TO => [
+                GameFigureDtoConstants::AREA => null,
+                GameFigureDtoConstants::POSITION => null
             ],
-            Application::DTO_WINNER_USER_ID => null,
-            Application::DTO_WINNER_PLAYER_INDEX => null,
-            Application::DTO_IS_PASS => false,
-            Application::DTO_ABSOLUTE_TARGET => null,
-            Application::DTO_IS_KICK => false,
-            Application::DTO_KICKED_PLAYER_ID => null,
-            Application::DTO_KICKED_PLAYER_INDEX => null,
-            Application::DTO_KICKED_FIGURE_INDEX => null,
-            Application::DTO_IS_GOAL_ENTRY => false,
-            Application::DTO_IS_LAP_OVERFLOW => false,
+            GameDtoConstants::WINNER_USER_ID => null,
+            GameDtoConstants::WINNER_PLAYER_INDEX => null,
+            GameMoveDtoConstants::IS_PASS => false,
+            GameMoveDtoConstants::ABSOLUTE_TARGET => null,
+            GameMoveDtoConstants::IS_KICK => false,
+            GameMoveDtoConstants::KICKED_PLAYER_ID => null,
+            GameMoveDtoConstants::KICKED_PLAYER_INDEX => null,
+            GameMoveDtoConstants::KICKED_FIGURE_INDEX => null,
+            GameMoveDtoConstants::IS_GOAL_ENTRY => false,
+            GameMoveDtoConstants::IS_LAP_OVERFLOW => false,
         ];
     }
 
     public static function createPass(): array
     {
         $move = self::create();
-        $move[Application::DTO_IS_PASS] = true;
+        $move[GameMoveDtoConstants::IS_PASS] = true;
         return $move;
     }
 }

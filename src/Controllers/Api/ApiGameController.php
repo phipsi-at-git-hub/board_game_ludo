@@ -3,7 +3,6 @@
 
 namespace App\Controllers\Api;
 
-use App\Constants\Application;
 use App\Constants\Game\GameConstants;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;

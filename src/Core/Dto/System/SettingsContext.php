@@ -3,7 +3,6 @@
 
 namespace App\Core\Dto\System;
 
-use App\Constants\Application;
 use App\Constants\ApplicationConstants;
 use App\Core\Localization;
 use App\Models\System\SystemSettingsModel;

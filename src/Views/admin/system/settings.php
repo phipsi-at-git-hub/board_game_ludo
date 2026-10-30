@@ -91,7 +91,7 @@ use App\Services\SystemService;
             <div>
                 <span class="stat-value">
                     <span 
-                        class="status-badge status-<?= !$system_settings->isMaintenanceModeEnabled() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_WARNING ?>" 
+                        class="status-badge status-<?= !$system_settings->isMaintenanceActive() ? ApplicationConstants::RESULT_OK : ApplicationConstants::RESULT_WARNING ?>" 
                         data-id="settings-maintenance-badge" 
                         data-bind-sources="system-settings-form" 
                         data-bind-1-type="class" 
@@ -99,7 +99,7 @@ use App\Services\SystemService;
                         data-bind-1-classes-fixed="status-badge" 
                         data-bind-2-type="text" 
                         data-bind-2-dto-key="maintenance_status_label" >
-                        <?= !$system_settings->isMaintenanceModeEnabled() ? strtoupper(ApplicationConstants::VALUE_OFF) : strtoupper(ApplicationConstants::VALUE_ON) ?>
+                        <?= !$system_settings->isMaintenanceActive() ? strtoupper(ApplicationConstants::VALUE_OFF) : strtoupper(ApplicationConstants::VALUE_ON) ?>
                     </span>
                 </span>
                 <span class="stat-text"><?= Localization::get('admin.system_settings.card.maintenance') ?></span>

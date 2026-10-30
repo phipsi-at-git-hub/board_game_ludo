@@ -1,5 +1,6 @@
 <?php
-use App\Constants\Application;
+use App\Constants\Dto\GameFigureDtoConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Core\Localization;
 use App\Core\Security\Csrf;
@@ -47,22 +48,22 @@ use App\Models\User\UserModel;
         <h3><?= Localization::get('game.play.possible_moves') ?></h3>
 
         <?php foreach ($moves as $move): ?>
-            <?php if (!empty($move[Application::DTO_IS_PASS])): ?>
+            <?php if (!empty($move[GameMoveDtoConstants::IS_PASS])): ?>
                 <form method="POST" action="/game/move">
                     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                     <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                    <input type="hidden" name="<?= Application::DTO_MOVE ?>" value='<?= json_encode($move, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                    <input type="hidden" name="<?= GameMoveDtoConstants::MOVE ?>" value='<?= json_encode($move, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
                     <button type="submit"><?= Localization::get('game.play.pass_turn') ?></button>
                 </form>
             <?php else: ?>
                 <form method="POST" action="/game/move">
                     <input type="hidden" name="_csrf_token" value="<?= Csrf::generate() ?>">
                     <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                    <input type="hidden" name="<?= Application::DTO_MOVE ?>" value='<?= json_encode($move, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                    <input type="hidden" name="<?= GameMoveDtoConstants::MOVE ?>" value='<?= json_encode($move, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
                     <button type="submit">
-                        <?= Localization::get('game.play.figure') ?> <?= $move[Application::DTO_FIGURE_INDEX] ?> :
-                        <?= Localization::get('game.play.position') ?> <?= $move[Application::DTO_FROM][Application::DTO_AREA] ?? '–' ?> / <?= $move[Application::DTO_FROM][Application::DTO_POSITION] ?? '–' ?> →
-                        <?= Localization::get('game.play.position') ?> <?= $move[Application::DTO_TO][Application::DTO_AREA] ?? '–' ?> / <?= $move[Application::DTO_TO][Application::DTO_POSITION] ?? '–' ?>
+                        <?= Localization::get('game.play.figure') ?> <?= $move[GameFigureDtoConstants::FIGURE_INDEX] ?> :
+                        <?= Localization::get('game.play.position') ?> <?= $move[GameMoveDtoConstants::FROM][GameFigureDtoConstants::AREA] ?? '–' ?> / <?= $move[GameMoveDtoConstants::FROM][GameFigureDtoConstants::POSITION] ?? '–' ?> →
+                        <?= Localization::get('game.play.position') ?> <?= $move[GameMoveDtoConstants::TO][GameFigureDtoConstants::AREA] ?? '–' ?> / <?= $move[GameMoveDtoConstants::TO][GameFigureDtoConstants::POSITION] ?? '–' ?>
                     </button>
                 </form>
             <?php endif; ?>
@@ -86,5 +87,5 @@ use App\Models\User\UserModel;
 <?php endforeach; ?>
 
 <pre>
-<?= print_r($game->getDebugState($user->getId(), $game->getStateModel()->getCurrentDiceRoll()), true) ?>
+<?= print_r($game->getDebugState($user->getId()), true) ?>
 </pre>

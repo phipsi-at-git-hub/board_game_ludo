@@ -2,7 +2,6 @@
 // src/Models/System/SystemSettingsModel.php
 namespace App\Models\System;
 
-use App\Constants\Application;
 use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
 use App\Models\BaseModel;
@@ -324,9 +323,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get array of model
      *
-     * @return void
+     * @return array
      */
-    public function getArrayOfModel()
+    public function getArrayOfModel(): array
     {
         return $this->toArray();
     }
@@ -336,9 +335,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get registration enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getRegistrationEnabled()
+    public function getRegistrationEnabled(): bool
     {
         return $this->registration_enabled;
     }
@@ -348,9 +347,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get login enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getLoginEnabled()
+    public function getLoginEnabled(): bool
     {
         return $this->login_enabled;
     }
@@ -360,9 +359,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get system enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getSystemEnabled()
+    public function getSystemEnabled(): bool
     {
         return $this->system_enabled;
     }
@@ -372,9 +371,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get logging debug enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getLoggingDebugEnabled()
+    public function getLoggingDebugEnabled(): bool
     {
         return $this->logging_debug_enabled;
     }
@@ -384,9 +383,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get game creation enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getGameCreationEnabled()
+    public function getGameCreationEnabled(): bool
     {
         return $this->game_creation_enabled;
     }
@@ -396,9 +395,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get game play enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getGamePlayEnabled()
+    public function getGamePlayEnabled(): bool 
     {
         return $this->game_play_enabled;
     }
@@ -408,9 +407,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get maintenance mode enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getMaintenanceModeEnabled()
+    public function getMaintenanceModeEnabled(): bool 
     {
         return $this->maintenance_mode_enabled;
     }
@@ -420,9 +419,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get maintenance message
      *
-     * @return void
+     * @return ?string
      */
-    public function getMaintenanceMessage()
+    public function getMaintenanceMessage(): ?string
     {
         return $this->maintenance_message;
     }
@@ -432,9 +431,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get system notice enabled
      *
-     * @return void
+     * @return bool
      */
-    public function getSystemNoticeEnabled()
+    public function getSystemNoticeEnabled(): bool
     {
         return $this->system_notice_enabled;
     }
@@ -444,9 +443,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get system notice message
      *
-     * @return void
+     * @return ?string
      */
-    public function getSystemNoticeMessage()
+    public function getSystemNoticeMessage(): ?string
     {
         return $this->system_notice_message;
     }
@@ -456,9 +455,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get updated at
      *
-     * @return void
+     * @return string
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }
@@ -468,9 +467,9 @@ final class SystemSettingsModel extends BaseModel
      * 
      * Getter - get updated by
      *
-     * @return void
+     * @return string
      */
-    public function getUpdatedBy()
+    public function getUpdatedBy(): string 
     {
         return $this->updated_by;
     }

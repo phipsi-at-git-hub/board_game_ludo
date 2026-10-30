@@ -1,6 +1,5 @@
 <?php
 
-use App\Constants\Application;
 use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Models\User\UserModel;

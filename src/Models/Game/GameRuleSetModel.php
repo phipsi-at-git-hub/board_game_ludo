@@ -2,8 +2,8 @@
 // src/Models/Game/GameRuleSetModel.php
 namespace App\Models\Game;
 
-use App\Constants\Application;
 use App\Constants\Database\DbColumnConstants;
+use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Game\GameRulesetConstants;
 use App\Models\BaseModel;
 
@@ -273,7 +273,7 @@ final class GameRuleSetModel extends BaseModel
     {
         return [
             GameRulesetConstants::ORIGINAL => [
-                Application::DTO_RULESET => $this->toArray(),
+                GameDtoConstants::RULESET => $this->toArray(),
             ]
         ];
     }
@@ -283,10 +283,10 @@ final class GameRuleSetModel extends BaseModel
     {
         return [
             GameRulesetConstants::CLASSIC => [
-                Application::DTO_RULESET => self::createClassic()->toArray(),
+                GameDtoConstants::RULESET => self::createClassic()->toArray(),
             ],
             GameRulesetConstants::ADVANCED => [
-                Application::DTO_RULESET => self::createAdvanced()->toArray(),
+                GameDtoConstants::RULESET => self::createAdvanced()->toArray(),
             ],
         ];
     }

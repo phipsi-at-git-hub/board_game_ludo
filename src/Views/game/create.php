@@ -1,7 +1,7 @@
 <?php
 
 use App\Core\Security\Csrf;
-use App\Constants\Application;
+use App\Constants\Dto\GameDtoConstants;
 use App\Constants\Game\GameConstants;
 use App\Core\Localization;
 
@@ -52,7 +52,7 @@ use App\Core\Localization;
                 <div class="form-row">
                     <span><?= Localization::get('game.create.card.game.ruleset') ?></span>
 
-                    <select name="<?= Application::DTO_RULESET ?>" data-ui="switch">
+                    <select name="<?= GameDtoConstants::RULESET ?>" data-ui="switch">
                         <option value="classic" data-state="active" selected>
                             <?= Localization::get('game.ruleset.classic') ?>
                         </option>

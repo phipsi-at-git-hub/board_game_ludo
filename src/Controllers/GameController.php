@@ -2,8 +2,9 @@
 // GameController.php
 namespace App\Controllers;
 
-use App\Constants\Application;
 use App\Constants\Database\DbColumnConstants;
+use App\Constants\Dto\GameFigureDtoConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Game\GameConstants;
 use App\Constants\HttpMethodConstants;
 use App\Core\Application\App;
@@ -523,9 +524,9 @@ class GameController extends BaseController
             // If no moves are available, offer at least one passing move
             if (empty($moves)) {
                 $moves[] = [
-                    Application::DTO_IS_PASS => true,
-                    Application::DTO_FIGURE_INDEX => null,
-                    Application::DTO_TO => null,
+                    GameMoveDtoConstants::IS_PASS => true,
+                    GameFigureDtoConstants::FIGURE_INDEX => null,
+                    GameMoveDtoConstants::TO => null,
                 ];
             }
         }
@@ -614,7 +615,7 @@ class GameController extends BaseController
     {
         $user = Auth::user();
         $game_id = $_POST[GameConstants::GAME_ID];
-        $move = json_decode($_POST[Application::DTO_MOVE], true);
+        $move = json_decode($_POST[GameMoveDtoConstants::MOVE], true);
         $game = GameModel::findById($game_id);
 
         // Check if it's users turn
@@ -623,7 +624,7 @@ class GameController extends BaseController
         }
 
         // Check if a move is skipped
-        if (!empty($move[Application::DTO_IS_PASS])) {
+        if (!empty($move[GameMoveDtoConstants::IS_PASS])) {
             // Turn may end directly
             $game->passTurn($_SESSION[GameConstants::USER_ID]);
         } else {

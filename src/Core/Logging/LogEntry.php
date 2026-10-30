@@ -3,7 +3,6 @@
 
 namespace App\Core\Logging;
 
-use App\Constants\Application;
 use App\Constants\ApplicationConstants;
 use App\Constants\DateTimeFormatConstants;
 use App\Core\Application\App;

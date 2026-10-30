@@ -1,6 +1,5 @@
 <?php
 
-use App\Constants\Application;
 use App\Constants\Game\GameCameraModeConstants;
 use App\Constants\LocalizationConstants;
 use App\Core\Security\Csrf;

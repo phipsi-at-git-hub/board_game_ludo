@@ -1,6 +1,6 @@
 <?php 
 
-use App\Constants\Application;
+use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Core\Localization;
 use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
@@ -63,11 +63,11 @@ $is_admin_view ??= false;
             }
 
             if ($player_count === 0) {
-                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_EMPTY;
+                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
             } elseif ($player_count === 1) {
-                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_LOW;
+                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_LOW;
             } else {
-                $players_class = 'player-count-category-' . Application::DTO_PLAYER_COUNT_READY;
+                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_READY;
             }
 
             $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 

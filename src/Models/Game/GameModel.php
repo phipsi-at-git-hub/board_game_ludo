@@ -2,9 +2,12 @@
 // src/Models/Game/GameModel.php
 namespace App\Models\Game;
 
-use App\Constants\Application;
 use App\Constants\Database\DbColumnConstants;
 use App\Constants\Database\DbTableConstants;
+use App\Constants\Dto\GameDtoConstants;
+use App\Constants\Dto\GameFigureDtoConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
+use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Constants\Game\GameConstants;
 use App\Constants\Game\GameFigureAreaConstants;
 use App\Constants\Game\GameStatusConstants;
@@ -84,7 +87,7 @@ final class GameModel extends BaseModel
         // Check if it's users turn 
         $this->assertPlayerTurn($user_id);
         // Check if turn counter is validate
-        $this->validateTurnCounter($move[Application::DTO_GAME_TURN]);
+        $this->validateTurnCounter($move[GameDtoConstants::GAME_TURN]);
 
         $current_player = $this->getCurrentPlayer();
 
@@ -106,21 +109,21 @@ final class GameModel extends BaseModel
         }
 
         // 5. Execute Move
-        $figure_index = $move[Application::DTO_FIGURE_INDEX];
+        $figure_index = $move[GameFigureDtoConstants::FIGURE_INDEX];
         $figure = $current_player->getFigureByFigureIndex($this->getId(), $current_player->getUserId(), $figure_index);
 
         // Execute Kicks
-        if (!empty($move[Application::DTO_IS_KICK])) {
-            $kicked_player = $this->getPlayerById($move[Application::DTO_KICKED_PLAYER_ID]);
-            $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[Application::DTO_KICKED_FIGURE_INDEX]);
+        if (!empty($move[GameMoveDtoConstants::IS_KICK])) {
+            $kicked_player = $this->getPlayerById($move[GameMoveDtoConstants::KICKED_PLAYER_ID]);
+            $kicked_figure = $kicked_player->getFigureByFigureIndex($this->getId(), $kicked_player->getUserId(), $move[GameMoveDtoConstants::KICKED_FIGURE_INDEX]);
             $kicked_figure->setArea(GameFigureAreaConstants::HOME);
             $kicked_figure->setPosition($kicked_player->getFirstEmptyHomePosition());
             $kicked_figure->save();
         }
 
         // Move Figure
-        $figure->setArea($move[Application::DTO_TO][Application::DTO_AREA]);
-        $figure->setPosition($move[Application::DTO_TO][Application::DTO_POSITION] ?? null);
+        $figure->setArea($move[GameMoveDtoConstants::TO][GameFigureDtoConstants::AREA]);
+        $figure->setPosition($move[GameMoveDtoConstants::TO][GameFigureDtoConstants::POSITION] ?? null);
         $current_player->setFigureByFigureIndex($figure);
         $figure->save();
 
@@ -221,36 +224,36 @@ final class GameModel extends BaseModel
 
             $area = $figure->getArea();
             $move = [
-                Application::DTO_GAME_TURN => $this->state_model->getCurrentTurnCounter(),
-                Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(),
-                Application::DTO_FROM => [
-                    Application::DTO_AREA => $area,
-                    Application::DTO_POSITION => $figure->getPosition(),
+                GameDtoConstants::GAME_TURN => $this->state_model->getCurrentTurnCounter(),
+                GameFigureDtoConstants::FIGURE_INDEX => $figure->getFigureIndex(),
+                GameMoveDtoConstants::FROM => [
+                    GameFigureDtoConstants::AREA => $area,
+                    GameFigureDtoConstants::POSITION => $figure->getPosition(),
                 ],
-                Application::DTO_TO => null,
-                Application::DTO_ABSOLUTE_TARGET => null,
-                Application::DTO_IS_KICK => false,
-                Application::DTO_KICKED_PLAYER_ID => null,
-                Application::DTO_KICKED_FIGURE_INDEX => null,
-                Application::DTO_IS_GOAL_ENTRY => false,
-                Application::DTO_IS_LAP_OVERFLOW => false,
+                GameMoveDtoConstants::TO => null,
+                GameMoveDtoConstants::ABSOLUTE_TARGET => null,
+                GameMoveDtoConstants::IS_KICK => false,
+                GameMoveDtoConstants::KICKED_PLAYER_ID => null,
+                GameMoveDtoConstants::KICKED_FIGURE_INDEX => null,
+                GameMoveDtoConstants::IS_GOAL_ENTRY => false,
+                GameMoveDtoConstants::IS_LAP_OVERFLOW => false,
             ];
 
             // HOME -> FIELD
             if ($area === GameFigureAreaConstants::HOME) {
                 $absolute_position = $player->getStartOffset();
-                $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => GameFigureAreaConstants::FIELD,
-                    Application::DTO_POSITION => 0,
+                $move[GameMoveDtoConstants::TO] = [
+                    GameFigureDtoConstants::AREA => GameFigureAreaConstants::FIELD,
+                    GameFigureDtoConstants::POSITION => 0,
                 ];
-                $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
+                $move[GameMoveDtoConstants::ABSOLUTE_TARGET] = $absolute_position;
 
                 $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
                 if ($enemy !== null) {
-                    $move[Application::DTO_IS_KICK] = true;
-                    $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
-                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
+                    $move[GameMoveDtoConstants::IS_KICK] = true;
+                    $move[GameMoveDtoConstants::KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[GameMoveDtoConstants::KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
+                    $move[GameMoveDtoConstants::KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
                 $moves[] = $move;
@@ -287,20 +290,20 @@ final class GameModel extends BaseModel
 
                         echo "neue Position: " . $absolute_position;
 
-                        $move[Application::DTO_TO] = [
-                            Application::DTO_AREA => GameFigureAreaConstants::FIELD,
-                            Application::DTO_POSITION => $wrapped_relative_position,
+                        $move[GameMoveDtoConstants::TO] = [
+                            GameFigureDtoConstants::AREA => GameFigureAreaConstants::FIELD,
+                            GameFigureDtoConstants::POSITION => $wrapped_relative_position,
                         ];
-                        $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
-                        $move[Application::DTO_IS_LAP_OVERFLOW] = true;
+                        $move[GameMoveDtoConstants::ABSOLUTE_TARGET] = $absolute_position;
+                        $move[GameMoveDtoConstants::IS_LAP_OVERFLOW] = true;
 
                         $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
 
                         if ($enemy !== null) {
-                            $move[Application::DTO_IS_KICK] = true;
-                            $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                            $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
-                            $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
+                            $move[GameMoveDtoConstants::IS_KICK] = true;
+                            $move[GameMoveDtoConstants::KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                            $move[GameMoveDtoConstants::KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
+                            $move[GameMoveDtoConstants::KICKED_FIGURE_INDEX] = $enemy['figure']->getId();
                         }
 
                         $moves[] = $move;
@@ -308,12 +311,12 @@ final class GameModel extends BaseModel
                     }
 
                     // Common goal entry
-                    $move[Application::DTO_TO] = [
-                        Application::DTO_AREA => GameFigureAreaConstants::GOAL,
-                        Application::DTO_POSITION => $steps_into_goal,
+                    $move[GameMoveDtoConstants::TO] = [
+                        GameFigureDtoConstants::AREA => GameFigureAreaConstants::GOAL,
+                        GameFigureDtoConstants::POSITION => $steps_into_goal,
                     ];
 
-                    $move[Application::DTO_IS_GOAL_ENTRY] = true;
+                    $move[GameMoveDtoConstants::IS_GOAL_ENTRY] = true;
 
                     $moves[] = $move;
                     continue;
@@ -322,20 +325,20 @@ final class GameModel extends BaseModel
                 // Common field movement
                 $absolute_position = ($player->getStartOffset() + $new_relative_position) % self::FIELD_LENGTH;
 
-                $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => GameFigureAreaConstants::FIELD,
-                    Application::DTO_POSITION => $new_relative_position,
+                $move[GameMoveDtoConstants::TO] = [
+                    GameFigureDtoConstants::AREA => GameFigureAreaConstants::FIELD,
+                    GameFigureDtoConstants::POSITION => $new_relative_position,
                 ];
 
-                $move[Application::DTO_ABSOLUTE_TARGET] = $absolute_position;
+                $move[GameMoveDtoConstants::ABSOLUTE_TARGET] = $absolute_position;
 
                 $enemy = $this->getEnemyFiguresOnAbsolutePosition($player, $absolute_position);
 
                 if ($enemy !== null) {
-                    $move[Application::DTO_IS_KICK] = true;
-                    $move[Application::DTO_KICKED_PLAYER_ID] = $enemy['player']->getUserId();
-                    $move[Application::DTO_KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
-                    $move[Application::DTO_KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
+                    $move[GameMoveDtoConstants::IS_KICK] = true;
+                    $move[GameMoveDtoConstants::KICKED_PLAYER_ID] = $enemy['player']->getUserId();
+                    $move[GameMoveDtoConstants::KICKED_PLAYER_INDEX] = $enemy['player']->getPlayerIndex();
+                    $move[GameMoveDtoConstants::KICKED_FIGURE_INDEX] = $enemy['figure']->getFigureIndex();
                 }
 
                 $moves[] = $move;
@@ -348,9 +351,9 @@ final class GameModel extends BaseModel
             if ($area === GameFigureAreaConstants::GOAL) {
                 $new_goal_position = $figure->getPosition() + $dice_value;
 
-                $move[Application::DTO_TO] = [
-                    Application::DTO_AREA => GameFigureAreaConstants::GOAL,
-                    Application::DTO_POSITION => $new_goal_position,
+                $move[GameMoveDtoConstants::TO] = [
+                    GameFigureDtoConstants::AREA => GameFigureAreaConstants::GOAL,
+                    GameFigureDtoConstants::POSITION => $new_goal_position,
                 ];
 
                 $moves[] = $move;
@@ -361,10 +364,10 @@ final class GameModel extends BaseModel
         // No move possible -> Offer pass-Move 
         if (empty($moves)) {
             $moves[] = [
-                Application::DTO_FIGURE_INDEX => null,
-                Application::DTO_FROM => null,
-                Application::DTO_TO => null,
-                Application::DTO_IS_PASS => true,
+                GameFigureDtoConstants::FIGURE_INDEX => null,
+                GameMoveDtoConstants::FROM => null,
+                GameMoveDtoConstants::TO => null,
+                GameMoveDtoConstants::IS_PASS => true,
             ];
         }
 
@@ -555,7 +558,7 @@ final class GameModel extends BaseModel
             // We only allow passing here if the player cannot move a character
             $can_move = false;
             foreach ($available_moves as $move) {
-                if (empty($move[Application::DTO_IS_PASS])) {
+                if (empty($move[GameMoveDtoConstants::IS_PASS])) {
                     $can_move = true;
                     break;
                 }
@@ -2470,32 +2473,32 @@ final class GameModel extends BaseModel
 
             foreach ($player->getAllFigures() as $figure) {
                 $figures[] = [
-                    Application::DTO_FIGURE_INDEX => $figure->getFigureIndex(),
-                    Application::DTO_AREA => $figure->getArea(),
+                    GameFigureDtoConstants::FIGURE_INDEX => $figure->getFigureIndex(),
+                    GameFigureDtoConstants::AREA => $figure->getArea(),
                     //Application::DTO_POSITION => $figure->getPosition()
-                    Application::DTO_POSITION => ($this->getAbsoluteFieldPosition($player, $figure)) ?? $figure->getPosition()
+                    GameFigureDtoConstants::POSITION => ($this->getAbsoluteFieldPosition($player, $figure)) ?? $figure->getPosition()
                 ];
             }
 
             $players[] = [
-                Application::DTO_USER_ID => $player->getUserId(),
-                Application::DTO_PLAYER_INDEX => $player->getPlayerIndex(),
-                Application::DTO_USERNAME => $player->getUsername(),
-                Application::DTO_FIGURES => $figures
+                GamePlayerDtoConstants::USER_ID => $player->getUserId(),
+                GamePlayerDtoConstants::PLAYER_INDEX => $player->getPlayerIndex(),
+                GamePlayerDtoConstants::USERNAME => $player->getUsername(),
+                GameFigureDtoConstants::FIGURES => $figures
             ];
         }
 
         return [
-            Application::DTO_GAME_ID => $this->getId(),
-            Application::DTO_GAME_NAME => $this->getName(),
-            Application::DTO_GAME_STATUS => $this->getStatus(),
-            Application::DTO_CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(),
-            Application::DTO_CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(),
-            Application::DTO_CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(),
-            Application::DTO_WINNER_USER_ID => $this->state_model->getWinnerUserId(),
-            Application::DTO_WINNER_PLAYER_INDEX => $this->getWinnerPlayerIndex(),
-            Application::DTO_CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(),
-            Application::DTO_PLAYERS => $players
+            GameDtoConstants::GAME_ID => $this->getId(),
+            GameDtoConstants::GAME_NAME => $this->getName(),
+            GameDtoConstants::GAME_STATUS => $this->getStatus(),
+            GameDtoConstants::CURRENT_PLAYER_ID => $this->getCurrentPlayer()->getUserId(),
+            GameDtoConstants::CURRENT_PLAYER_INDEX => $this->getCurrentPlayer()->getPlayerIndex(),
+            GameDtoConstants::CURRENT_PLAYER_USERNAME => $this->getCurrentPlayer()->getUsername(),
+            GameDtoConstants::WINNER_USER_ID => $this->state_model->getWinnerUserId(),
+            GameDtoConstants::WINNER_PLAYER_INDEX => $this->getWinnerPlayerIndex(),
+            GameDtoConstants::CURRENT_DICE_ROLL => $this->getStateModel()->getCurrentDiceRoll(),
+            GameDtoConstants::PLAYERS => $players
         ];
     }
 
@@ -2909,12 +2912,12 @@ final class GameModel extends BaseModel
     {
         foreach ($available_moves as $available_move) {
             if (
-                $move[Application::DTO_FIGURE_INDEX] === $available_move[Application::DTO_FIGURE_INDEX]
-                && $move[Application::DTO_TO][Application::DTO_AREA] === $available_move[Application::DTO_TO][Application::DTO_AREA]
-                && ($move[Application::DTO_TO][Application::DTO_POSITION] ?? null) === ($available_move[Application::DTO_TO][Application::DTO_POSITION] ?? null)
-                && ($move[Application::DTO_IS_KICK] ?? false) === ($available_move[Application::DTO_IS_KICK] ?? false)
-                && ($move[Application::DTO_IS_GOAL_ENTRY] ?? null) === ($available_move[Application::DTO_IS_GOAL_ENTRY] ?? null)
-                && ($move[Application::DTO_IS_LAP_OVERFLOW] ?? null) === ($available_move[Application::DTO_IS_LAP_OVERFLOW] ?? null)
+                $move[GameFigureDtoConstants::FIGURE_INDEX] === $available_move[GameFigureDtoConstants::FIGURE_INDEX]
+                && $move[GameMoveDtoConstants::TO][GameFigureDtoConstants::AREA] === $available_move[GameMoveDtoConstants::TO][GameFigureDtoConstants::AREA]
+                && ($move[GameMoveDtoConstants::TO][GameFigureDtoConstants::POSITION] ?? null) === ($available_move[GameMoveDtoConstants::TO][GameFigureDtoConstants::POSITION] ?? null)
+                && ($move[GameMoveDtoConstants::IS_KICK] ?? false) === ($available_move[GameMoveDtoConstants::IS_KICK] ?? false)
+                && ($move[GameMoveDtoConstants::IS_GOAL_ENTRY] ?? null) === ($available_move[GameMoveDtoConstants::IS_GOAL_ENTRY] ?? null)
+                && ($move[GameMoveDtoConstants::IS_LAP_OVERFLOW] ?? null) === ($available_move[GameMoveDtoConstants::IS_LAP_OVERFLOW] ?? null)
             ) {
                 return true;
             }
@@ -3016,9 +3019,9 @@ final class GameModel extends BaseModel
      * Helper - Debug State 
      *
      * @param string $user_id
-     * @return void
+     * @return array
      */
-    public function getDebugState(string $user_id)
+    public function getDebugState(string $user_id): array
     {
         if ($this->state_model->getCurrentDiceRoll() === null) {
             return [
@@ -3127,12 +3130,12 @@ final class GameModel extends BaseModel
         $count = (isset($this->player_count)) ? $this->player_count : count($this->player_array);
 
         if ($count === 0) {
-            return Application::DTO_PLAYER_COUNT_EMPTY;
+            return GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
         }
         if ($count === 1) {
-            return Application::DTO_PLAYER_COUNT_LOW;
+            return GamePlayerDtoConstants::PLAYER_COUNT_LOW;
         }
-        return Application::DTO_PLAYER_COUNT_READY;
+        return GamePlayerDtoConstants::PLAYER_COUNT_READY;
     }
 
     /**
@@ -3140,9 +3143,9 @@ final class GameModel extends BaseModel
      * 
      * Get the value of status
      *
-     * @return void
+     * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }

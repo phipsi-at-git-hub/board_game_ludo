@@ -2,7 +2,8 @@
 // src/Controller/Api/ApiGameEngineController.php
 namespace App\Controllers\Api;
 
-use App\Constants\Application;
+use App\Constants\Dto\GameFigureDtoConstants;
+use App\Constants\Dto\GameMoveDtoConstants;
 use App\Constants\Game\GameConstants;
 use App\Core\Auth\Auth;
 use App\Core\BaseController;
@@ -82,9 +83,9 @@ class ApiGameEngineController extends BaseController
             // If no moves are available, offer at least one passing move
             if (empty($moves)) {
                 $moves[] = [
-                    Application::DTO_IS_PASS => true,
-                    Application::DTO_FIGURE_INDEX => null,
-                    Application::DTO_TO => null
+                    GameMoveDtoConstants::IS_PASS => true,
+                    GameFigureDtoConstants::FIGURE_INDEX => null,
+                    GameMoveDtoConstants::TO => null
                 ];
             }
 
@@ -103,7 +104,7 @@ class ApiGameEngineController extends BaseController
         $temp = $_POST;
         try {
             $game_id = $_POST[GameConstants::GAME_ID] ?? null;
-            $move = json_decode($_POST[Application::DTO_MOVE] ?? '[]', true);
+            $move = json_decode($_POST[GameMoveDtoConstants::MOVE] ?? '[]', true);
             $game = GameModel::findById($game_id);
             $user = Auth::user();
 
@@ -114,7 +115,7 @@ class ApiGameEngineController extends BaseController
             }
 
             try {
-                if (!empty($move[Application::DTO_IS_PASS])) {
+                if (!empty($move[GameMoveDtoConstants::IS_PASS])) {
                     $game->passTurn($user->getId());
                 } else {
                     $game->applyMove($user->getId(), $move);

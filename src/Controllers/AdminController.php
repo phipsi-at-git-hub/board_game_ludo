@@ -2,7 +2,6 @@
 // AdminController.php
 namespace App\Controllers;
 
-use App\Constants\Application;
 use App\Constants\ApplicationConstants;
 use App\Constants\FileSystem\FSFieldConstants;
 use App\Constants\HttpMethodConstants;
