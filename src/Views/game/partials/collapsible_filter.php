@@ -1,8 +1,8 @@
 <?php
 
-use App\Constants\Application;
 use App\Constants\Game\GameStatusConstants;
 use App\Constants\LocalizationConstants;
+use App\Constants\User\UserConstants;
 use App\Constants\User\UserRelationConstants;
 use App\Core\Dto\Game\GameFilterContext;
 use App\Core\Localization;
@@ -28,9 +28,9 @@ $filterPresetStatusRunning = ($filter instanceof GameFilterContext && is_array($
 $filterPresetStatusFinished = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::FINISHED, $filter->statuses)) ? 'selected' : ''; 
 $filterPresetStatusCancelled = ($filter instanceof GameFilterContext && is_array($filter->statuses) && in_array(GameStatusConstants::CANCELLED, $filter->statuses)) ? 'selected' : ''; 
 
-$filterPresetUserRelationCreated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_CREATED, $filter->user_relations)) ? 'selected' : ''; 
-$filterPresetUserRelationParticipated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_PARTICIPATED, $filter->user_relations)) ? 'selected' : ''; 
-$filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(Application::GAMES_WON, $filter->user_relations)) ? 'selected' : ''; 
+$filterPresetUserRelationCreated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(UserConstants::GAMES_CREATED, $filter->user_relations)) ? 'selected' : ''; 
+$filterPresetUserRelationParticipated = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(UserConstants::GAMES_PARTICIPATED, $filter->user_relations)) ? 'selected' : ''; 
+$filterPresetUserRelationWon = ($filter instanceof GameFilterContext && is_array($filter->user_relations) && in_array(UserConstants::GAMES_WON, $filter->user_relations)) ? 'selected' : ''; 
 
 ?>
 

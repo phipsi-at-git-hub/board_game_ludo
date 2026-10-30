@@ -4,8 +4,8 @@
 
 namespace App\Services\Game;
 
-use App\Constants\Application;
 use App\Constants\DateTimeFormatConstants;
+use App\Constants\User\UserConstants;
 use App\Core\Date\DateRange;
 use App\Models\User\UserModel;
 
@@ -114,16 +114,16 @@ final class GameFilterService
     {
         $userRelations = [];
         foreach ($games as $game) {
-            if (!in_array(Application::GAMES_CREATED, $userRelations) && $game->isCreator($user)) {
-                $userRelations[] = Application::GAMES_CREATED;
+            if (!in_array(UserConstants::GAMES_CREATED, $userRelations) && $game->isCreator($user)) {
+                $userRelations[] = UserConstants::GAMES_CREATED;
             }
 
-            if (!in_array(Application::GAMES_PARTICIPATED, $userRelations) && $game->isParticipant($user)) {
-                $userRelations[] = Application::GAMES_PARTICIPATED;
+            if (!in_array(UserConstants::GAMES_PARTICIPATED, $userRelations) && $game->isParticipant($user)) {
+                $userRelations[] = UserConstants::GAMES_PARTICIPATED;
             }
 
-            if (!in_array(Application::GAMES_WON, $userRelations) && $game->isWinner($user)) {
-                $userRelations[] = Application::GAMES_WON;
+            if (!in_array(UserConstants::GAMES_WON, $userRelations) && $game->isWinner($user)) {
+                $userRelations[] = UserConstants::GAMES_WON;
             }
         }
         return $userRelations;

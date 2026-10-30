@@ -3,8 +3,8 @@
 
 namespace App\Core\Dto\Game;
 
-use App\Constants\Application;
 use App\Constants\Game\GameStatusConstants;
+use App\Constants\User\UserConstants;
 
 /**
  * GameFilterContext
@@ -45,9 +45,9 @@ final readonly class GameFilterContext
             GameStatusConstants::CANCELLED,
         ];
         $this->available_user_relations = [
-            Application::GAMES_CREATED,
-            Application::GAMES_PARTICIPATED,
-            Application::GAMES_WON,
+            UserConstants::GAMES_CREATED,
+            UserConstants::GAMES_PARTICIPATED,
+            UserConstants::GAMES_WON,
         ];
     }
 
