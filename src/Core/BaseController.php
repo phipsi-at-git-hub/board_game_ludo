@@ -4,11 +4,14 @@ namespace App\Core;
 
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
+use App\Core\Renderer\ViewRenderer;
 use App\Services\SystemService;
 
 abstract class BaseController
 {
     protected App $app;
+
+    private ?ViewRenderer $viewRenderer = null; 
 
     // Constructor 
     public function __construct(App $app)
@@ -16,8 +19,39 @@ abstract class BaseController
         $this->app = $app;
     }
 
+    private function getViewRenderer(): ViewRenderer
+    {
+        return $this->viewRenderer ??= $this->app->resolve(ViewRenderer::class); 
+    }
+
+    protected function render(
+        string $view, 
+        array $data = [], 
+        string $pageTitle = '', 
+        array $cssArray = [], 
+        array $jsArray = []
+    ): void {
+        $this->getViewRenderer()->renderFullPath(
+            $view, 
+            $data, 
+            $pageTitle, 
+            $cssArray, 
+            $jsArray
+        ); 
+    }
+
+    protected function renderView(
+        string $view, 
+        array $data = [] 
+    ): string {
+        return $this->getViewRenderer()->renderFullPathString(
+            $view, 
+            $data
+        ); 
+    }
+
     // Renderer
-    protected function render(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void
+    protected function render1(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void
     {
         if (!$view) {
             return;
@@ -49,7 +83,7 @@ abstract class BaseController
     }
 
     // Renderer for view fragment
-    protected function renderView(string $view, array $data = []): string
+    protected function renderView1(string $view, array $data = []): string
     {
         if (!$view) {
             return '';
