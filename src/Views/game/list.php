@@ -1,10 +1,13 @@
 <?php
 
 use App\Core\Localization; 
+use App\Core\Renderer\ViewRenderer;
 
 /**
  * @var array $games
  * @var Object $current_user
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 $user = $current_user;
@@ -37,7 +40,15 @@ $is_admin_view ??= false;
         data-bind-1-type="view">
 
         <!-- include games entries partials -->
-        <?php include VIEWS_PATH . '/game/partials/entries.php' ?>
+        <?= $viewRenderer->renderPartialString(
+            'game', 
+            'entries', 
+            [
+                'is_admin_view' => $is_admin_view, 
+                'games' => $games
+            ]
+        ) ?>
+        <?php //include VIEWS_PATH . '/game/partials/entries.php' ?>
 
     </div>
 

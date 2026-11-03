@@ -280,6 +280,7 @@ $is_admin_view = true;
         <!-- Game Filter -->
 
         <!-- include filter partials -->
+        <?php // ToDo: Use ViewRender->renderPartialString() ?>
         <?php include VIEWS_PATH . '/game/partials/filter.php' ?>
 
         <!-- Games -->
@@ -291,6 +292,7 @@ $is_admin_view = true;
             data-bind-1-type="view">
 
             <!-- include games entries partials -->
+            <?php // ToDo: Use ViewRender->renderPartialString() ?>
             <?php include VIEWS_PATH . '/game/partials/entries.php' ?>
 
         </div>

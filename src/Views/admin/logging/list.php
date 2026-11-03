@@ -297,6 +297,7 @@ use App\Core\Logging\LogEntry;
             data-bind-1-view-key="entries" 
             data-bind-1-type="view" >
 
+            <?php // ToDo: Use ViewRender->renderPartialString() ?>
             <?php include VIEWS_PATH . '/admin/logging/partials/entries.php'; ?>
 
         </div>

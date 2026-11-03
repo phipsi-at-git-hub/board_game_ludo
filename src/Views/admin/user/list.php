@@ -40,6 +40,7 @@ use App\Core\Localization;
     </div>
 
     <!-- include filter partials -->
+    <?php // ToDo: Use ViewRender->renderPartialString() ?>
     <?php include VIEWS_PATH . '/admin/user/partials/collapsible_filter.php' ?>
 
     <div
@@ -49,6 +50,7 @@ use App\Core\Localization;
         data-bind-1-type="view">
 
         <!-- include games entries partials -->
+        <?php // ToDo: Use ViewRender->renderPartialString() ?>
         <?php include VIEWS_PATH . '/admin/user/partials/entries.php' ?>
 
     </div>

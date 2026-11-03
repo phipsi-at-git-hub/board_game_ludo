@@ -28,6 +28,7 @@ use App\Core\Asset;
     <body>
 
         <!-- Navigational Bar -->
+        <?php // ToDo: Use ViewRender->renderPartialString() ?>
         <?php include VIEWS_PATH . '/partials/navbar.php'; ?>
 
         <!-- Main Content -->
@@ -36,6 +37,7 @@ use App\Core\Asset;
         </div>
 
         <!-- Modal Window --> 
+        <?php // ToDo: Use ViewRender->renderPartialString() ?>
         <?php include VIEWS_PATH . '/partials/modal.php' ?>
 
         <script src="<?= Asset::js('shared/navigation.js') ?>"></script> 

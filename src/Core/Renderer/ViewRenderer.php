@@ -18,6 +18,13 @@ final class ViewRenderer
     private readonly App $app; 
 
     /**
+     * Context 
+     * 
+     * Each render level receives its own isolated context. 
+     */
+    private array $contextStack = []; 
+
+    /**
      * __construct
      *
      * @param App $app
@@ -54,7 +61,7 @@ final class ViewRenderer
         array $jsArray = [] 
     ): void {
         $viewPath = $this->resolveStructuredPath($structure, $view); 
-        $viewData = $this->prepareData($data, true); 
+        $viewData = $this->prepareData($data, true, !$this->hasActiveContext()); 
         $content = $this->renderFile($viewPath,$viewData); 
 
         $this->renderLayout(
@@ -85,7 +92,7 @@ final class ViewRenderer
 
         return $this->renderFile(
             $path, 
-            $this->prepareData($data) 
+            $this->prepareData($data, false, !$this->hasActiveContext()) 
         ); 
     }
 
@@ -96,19 +103,22 @@ final class ViewRenderer
      *
      * @param ?string $structure
      * @param string $view
-     * @param array $data
+     * @param array $data 
+     * @param array $overwrite 
      * @return string
      */
     public function renderPartialString (
         ?string $structure, 
         string $view, 
-        array $data = [] 
+        array $data = [], 
+        array $overwrite = []  
     ): string {
         $path = $this->resolveStructuredPath($structure, $view, true); 
 
         return $this->renderFile(
             $path, 
-            $this->prepareData($data)
+            $this->prepareData($data, false, !$this->hasActiveContext()), 
+            $overwrite
         ); 
     }
 
@@ -132,7 +142,7 @@ final class ViewRenderer
         array $jsArray = [] 
     ): void {
         $viewPath = $this->resolveFullPath($view); 
-        $viewData = $this->prepareData($data, true); 
+        $viewData = $this->prepareData($data, true, !$this->hasActiveContext()); 
         $content = $this->renderFile($viewPath, $viewData); 
 
         $this->renderLayout(
@@ -162,7 +172,7 @@ final class ViewRenderer
 
         return $this->renderFile(
             $path, 
-            $this->prepareData($data)
+            $this->prepareData($data, false, !$this->hasActiveContext())
         ); 
     }
 
@@ -215,12 +225,19 @@ final class ViewRenderer
      *
      * @param string $filePath
      * @param array $data
+     * @param array $overwrite
      * @return string
      */
     private function renderFile(
         string $filePath, 
-        array $data 
+        array $data, 
+        array $overwrite = []
     ): string {
+        $context = $this->buildContext($data, $overwrite); 
+
+        // Push the current context
+        $this->contextStack[] = $context; 
+
         $bufferLevel = ob_get_level(); 
         ob_start(); 
 
@@ -229,14 +246,77 @@ final class ViewRenderer
             (static function (string $filePath, array $data): void {
                 extract($data, EXTR_SKIP); 
                 require $filePath; 
-            })($filePath, $data); 
+            })($filePath, $context); 
+
+            // Flush any additional buffers opened by the view
+            while (ob_get_level() > $bufferLevel + 1) {
+                ob_end_flush(); 
+            }
+
             return (string) ob_get_clean(); 
         } catch (Throwable $exception) {
+            // Clean up buffers opened during rendering
             while (ob_get_level() > $bufferLevel) {
                 ob_end_clean(); 
             } 
             throw $exception; 
+        } finally {
+            // Always restore the parent context
+            array_pop($this->contextStack); 
         }
+    }
+
+    /**
+     * buildContext
+     * 
+     * Merge the current context with the data of the next render level. 
+     * Existing variables are readonly by default. 
+     *
+     * @param array $data
+     * @param array $overwrite
+     * @return array
+     */
+    private function buildContext(
+        array $data, 
+        array $overwrite = [] 
+    ): array {
+        if (!$this->hasActiveContext()) {
+            return $data; 
+        }
+
+        $parentContext = $this->contextStack[
+            array_key_last($this->contextStack)
+        ]; 
+
+        $context = $parentContext; 
+
+        $overwriteKeys = array_fill_keys(
+            array_map('strval', $overwrite), 
+            true 
+        ); 
+
+        foreach ($data as $key => $value) {
+            if (
+                !array_key_exists($key, $context) || 
+                isset($overwriteKeys[(string) $key])
+            ) {
+                $context[$key] = $value; 
+            }
+        }
+
+        return $context; 
+    }
+
+    /**
+     * hasActiveContext
+     * 
+     * Check whether a parent render context exists. 
+     *
+     * @return bool
+     */
+    private function hasActiveContext(): bool 
+    {
+        return !empty($this->contextStack); 
     }
 
     /** 
@@ -357,11 +437,11 @@ final class ViewRenderer
      */
     private function prepareData(
         array $data, 
-        bool $includeSystemSettings = false 
+        bool $includeSystemSettings = false, 
+        bool $includeCurrentUser = true  
     ): array {
-        $data['current_user'] = null; 
-        if (Auth::user()) {
-            $data['current_user'] = Auth::user(); 
+        if ($includeCurrentUser) {
+            $data['current_user'] = Auth::user() ?: null; 
         }
 
         if ($includeSystemSettings) {

@@ -92,6 +92,7 @@ $api_delete = false;
         data-id="<?= $game->getId() ?>">
 
         <!-- include game entry -->
+        <?php // ToDo: Use ViewRender->renderPartialString() ?>
         <?php include __DIR__ . '/partials/entry.php'; ?>
 
     </div>
@@ -99,12 +100,14 @@ $api_delete = false;
     <!-- Admin Partials -->
     <?php 
     if ($is_admin_view && $show_metadata) { 
+        // ToDo: Use ViewRender->renderPartialString() 
         include VIEWS_PATH . '/admin/game/partials/metadata.php';   
     } 
     ?>
 
     <?php 
     if ($is_admin_view && $show_history) { 
+        // ToDo: Use ViewRender->renderPartialString() 
         include VIEWS_PATH . '/admin/game/partials/history.php';   
     } 
     ?>
@@ -123,6 +126,7 @@ $api_delete = false;
             data-bind-1-view-key="players" 
             data-bind-1-type="view" >
         
+            <?php // ToDo: Use ViewRender->renderPartialString() ?>
             <?php include VIEWS_PATH . '/game/partials/players.php' ?>
 
         </div>

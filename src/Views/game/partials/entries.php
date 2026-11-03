@@ -1,7 +1,7 @@
 <?php 
 
-use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Core\Localization;
+use App\Core\Renderer\ViewRenderer;
 use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
@@ -10,6 +10,8 @@ use App\Policies\GamePolicy;
  * @var UserModel $current_user
  * @var array $games
  * @var GameModel $game
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 $is_detail_view ??= false;
@@ -34,43 +36,9 @@ $is_admin_view ??= false;
             $is_owner = GamePolicy::isOwner($game, $current_user);
             $is_admin = $current_user->isAdmin();
 
-            $can_edit = GamePolicy::canEdit($game, $current_user);
-            $can_cancel = GamePolicy::canCancel($game, $current_user); 
-            $can_delete = GamePolicy::canDelete($game, $current_user);
-
-            $can_join = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canJoin($game, $current_user);
-            $can_leave = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canLeave($game, $current_user);
-
             if ($game->isPrivate() && !$is_owner && !$game->isRunning() && !$is_admin_view && !$is_admin) {
                 continue;
             }
-
-            $player_count = $game->getPlayerCount();
-            $player_max = $game->getPlayerMax();
-
-            if ($game->isWaiting()) {
-                $status_class = 'status-waiting';
-                $status_text = Localization::get('game.status.waiting');
-            } elseif ($game->isRunning()) {
-                $status_class = 'status-running';
-                $status_text = Localization::get('game.status.running');
-            } elseif ($game->isFinished()) {
-                $status_class = 'status-finished';
-                $status_text = Localization::get('game.status.finished');
-            } elseif ($game->isCancelled()) {
-                $status_class = 'status-cancelled';
-                $status_text = Localization::get('game.status.cancelled');
-            }
-
-            if ($player_count === 0) {
-                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
-            } elseif ($player_count === 1) {
-                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_LOW;
-            } else {
-                $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_READY;
-            }
-
-            $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 
             ?>
 
@@ -83,7 +51,13 @@ $is_admin_view ??= false;
                 onclick="window.location='<?= ($is_admin_view) ? '/admin' : '' ?>/game/detail/<?= $game->getId() ?>'">
                 
                 <!-- include game entry -->
-                <?php include VIEWS_PATH . '/game/partials/entry.php' ?>
+                <?= $viewRenderer->renderPartialString(
+                    'game', 
+                    'entry', 
+                    [
+                        'game' => $game, 
+                    ]
+                ) ?>
 
             </div>
 
