@@ -37,7 +37,7 @@ final class ViewRenderer
      * 
      * Render a complete page using a structured view path. 
      *
-     * @param string $structure
+     * @param ?string $structure
      * @param string $view
      * @param array $data
      * @param string $pageTitle
@@ -46,7 +46,7 @@ final class ViewRenderer
      * @return void
      */
     public function render(
-        string $structure, 
+        ?string $structure, 
         string $view, 
         array $data = [], 
         string $pageTitle = '', 
@@ -71,13 +71,13 @@ final class ViewRenderer
      * 
      * Render a structured view and return its HTML. 
      *
-     * @param string $structure
+     * @param ?string $structure
      * @param string $view
      * @param array $data
      * @return string
      */
     public function renderString(
-        string $structure, 
+        ?string $structure, 
         string $view, 
         array $data = []
     ): string {
@@ -94,13 +94,13 @@ final class ViewRenderer
      * 
      * Render a structured partial and return its HTML. 
      *
-     * @param string $structure
+     * @param ?string $structure
      * @param string $view
      * @param array $data
      * @return string
      */
     public function renderPartialString (
-        string $structure, 
+        ?string $structure, 
         string $view, 
         array $data = [] 
     ): string {
@@ -248,17 +248,18 @@ final class ViewRenderer
      * 
      * Resolve a structured view or partial path. 
      *
-     * @param string $structure
+     * @param ?string $structure
      * @param string $view
      * @param bool $partial
      * @return string
      */
     private function resolveStructuredPath(
-        string $structure, 
+        ?string $structure, 
         string $view, 
         bool $partial = false
     ): string {
-        $parts = [$structure]; 
+        // If $structure is empty $parts array only uses $view and maybe with 'partials' before that
+        $parts = !empty($structure) ? [$structure] : []; 
         if ($partial) {
             $parts[] = 'partials'; 
         } 

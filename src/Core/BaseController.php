@@ -5,12 +5,13 @@ namespace App\Core;
 use App\Core\Application\App;
 use App\Core\Auth\Auth;
 use App\Core\Renderer\ViewRenderer;
-use App\Services\SystemService;
 
+/**
+ * BaseController
+ */
 abstract class BaseController
 {
     protected App $app;
-
     private ?ViewRenderer $viewRenderer = null; 
 
     // Constructor 
@@ -24,6 +25,16 @@ abstract class BaseController
         return $this->viewRenderer ??= $this->app->resolve(ViewRenderer::class); 
     }
 
+    /**
+     * render
+     *
+     * @param string $view
+     * @param array $data
+     * @param string $pageTitle
+     * @param array $cssArray
+     * @param array $jsArray
+     * @return void
+     */
     protected function render(
         string $view, 
         array $data = [], 
@@ -40,6 +51,13 @@ abstract class BaseController
         ); 
     }
 
+    /**
+     * renderView
+     *
+     * @param string $view
+     * @param array $data
+     * @return string
+     */
     protected function renderView(
         string $view, 
         array $data = [] 
@@ -50,66 +68,25 @@ abstract class BaseController
         ); 
     }
 
-    // Renderer
-    protected function render1(string $view, array $data = [], string $page_title = '', array $css_array = [], array $js_array = []): void
-    {
-        if (!$view) {
-            return;
-        }
-
-        // Prepare variables
-        if (!$page_title) {
-            $page_title = htmlspecialchars(Localization::get('application.general.title'));
-        }
-
-        // current_user should always be available in views
-        $data['current_user'] = null;
-
-        if (Auth::user()) {
-            $data['current_user'] = Auth::user();
-        }
-
-        // system_settings should always be available in views
-        $data['system_settings'] = $this->app->resolve(SystemService::class);
-
-        extract($data);
-
-        // Create View and render it
-        ob_start();
-        require VIEWS_PATH . '/' . $view . '.php';
-        $content = ob_get_clean();
-
-        require VIEWS_PATH . '/layout.php';
-    }
-
-    // Renderer for view fragment
-    protected function renderView1(string $view, array $data = []): string
-    {
-        if (!$view) {
-            return '';
-        }
-
-        $data['current_user'] = null;
-
-        if (Auth::user()) {
-            $data['current_user'] = Auth::user();
-        }
-
-        extract($data);
-        ob_start();
-        require VIEWS_PATH . '/' . $view . '.php';
-        return ob_get_clean();
-    }
-
-    // Redirect
+    /**
+     * redirect
+     *
+     * @param string $url
+     * @return void
+     */
     protected function redirect(string $url): void
     {
         header("Location: $url");
         exit;
     }
 
-    // JSON
     // ToDo: Clean this up and only use jsonClean in the future
+    /**
+     * json
+     *
+     * @param array $data
+     * @return void
+     */
     protected function json(array $data): void
     {
         header('Content-Type: application/json');
@@ -117,6 +94,13 @@ abstract class BaseController
         exit;
     }
 
+    /**
+     * jsonClean
+     *
+     * @param array $data
+     * @param int $status
+     * @return void
+     */
     protected function jsonClean(array $data, int $status = 200): void
     {
         ob_clean();
