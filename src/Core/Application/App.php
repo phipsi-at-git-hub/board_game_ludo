@@ -8,6 +8,7 @@ use App\Constants\LocalizationConstants;
 use App\Core\Asset;
 use App\Core\Debug;
 use App\Core\Config\Env;
+use App\Core\Handler\ErrorHandler;
 use App\Core\Localization;
 use App\Services\Game\GameService;
 use App\Services\SystemService;
@@ -120,17 +121,24 @@ final class App
     // Configure PHP runtime 
     private function configureErrorHandling(): void
     {
+        error_reporting(E_ALL); 
+
         if (Env::isDev()) {
             ini_set('display_errors', '1');
             ini_set('display_startup_errors', '1');
-            error_reporting(E_ALL);
+            //error_reporting(E_ALL);
 
             Asset::buildAssets();
             Debug::start();
         } else {
             ini_set('display_errors', '0');
-            error_reporting(0);
+            ini_set('display_startup_errors', '0'); 
+            //error_reporting(0);
         }
+
+        // Use own ErrorHandler
+        // Remove this to use PHP defaults
+        ErrorHandler::register(); 
     }
 
     // Load helper functions 

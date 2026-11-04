@@ -17,7 +17,7 @@ final class Env
 
     public static function isDev(): bool
     {
-        return self::get() === 'dev' || self::get() === ' development';
+        return self::get() === 'dev' || self::get() === 'development';
     }
 
     public static function isProd(): bool
