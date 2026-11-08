@@ -42,7 +42,7 @@ abstract class BaseController
         array $cssArray = [], 
         array $jsArray = []
     ): void {
-        $this->getViewRenderer()->renderFullPath(
+        $this->getViewRenderer()->renderPageFullPath(
             $view, 
             $data, 
             $pageTitle, 
@@ -62,7 +62,7 @@ abstract class BaseController
         string $view, 
         array $data = [] 
     ): string {
-        return $this->getViewRenderer()->renderFullPathString(
+        return $this->getViewRenderer()->buildViewFullPathString(
             $view, 
             $data
         ); 

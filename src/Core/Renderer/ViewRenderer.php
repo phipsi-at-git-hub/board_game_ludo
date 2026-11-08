@@ -52,7 +52,7 @@ final class ViewRenderer
      * @param array $jsArray
      * @return void
      */
-    public function render(
+    public function renderPage(
         ?string $structure, 
         string $view, 
         array $data = [], 
@@ -62,7 +62,7 @@ final class ViewRenderer
     ): void {
         $viewPath = $this->resolveStructuredPath($structure, $view); 
         $viewData = $this->prepareData($data, true, !$this->hasActiveContext()); 
-        $content = $this->renderFile($viewPath,$viewData); 
+        $content = $this->buildFile($viewPath,$viewData); 
 
         $this->renderLayout(
             $content, 
@@ -74,32 +74,54 @@ final class ViewRenderer
     }
 
     /**
-     * renderString
+     * buildViewString
      * 
-     * Render a structured view and return its HTML. 
+     * Build a structured view and return its HTML. 
      *
      * @param ?string $structure
      * @param string $view
      * @param array $data
      * @return string
      */
-    public function renderString(
+    public function buildViewString(
         ?string $structure, 
         string $view, 
         array $data = []
     ): string {
         $path = $this->resolveStructuredPath($structure, $view); 
 
-        return $this->renderFile(
+        return $this->buildFile(
             $path, 
             $this->prepareData($data, false, !$this->hasActiveContext()) 
+        ); 
+    } 
+
+    /**
+     * RenderView
+     * 
+     * Render a structures view 
+     *
+     * @param ?string $structure
+     * @param string $view
+     * @param array $data
+     * @return void
+     */
+    public function RenderView(
+        ?string $structure, 
+        string $view, 
+        array $data = [] 
+    ): void {
+        echo $this->buildViewString(
+            $structure, 
+            $view, 
+            $data
         ); 
     }
 
     /**
-     * renderPartialString
+     * buildPartialString
      * 
-     * Render a structured partial and return its HTML. 
+     * Build a structured partial and return its HTML. 
      *
      * @param ?string $structure
      * @param string $view
@@ -107,7 +129,7 @@ final class ViewRenderer
      * @param array $overwrite 
      * @return string
      */
-    public function renderPartialString (
+    public function buildPartialString(
         ?string $structure, 
         string $view, 
         array $data = [], 
@@ -115,9 +137,34 @@ final class ViewRenderer
     ): string {
         $path = $this->resolveStructuredPath($structure, $view, true); 
 
-        return $this->renderFile(
+        return $this->buildFile(
             $path, 
             $this->prepareData($data, false, !$this->hasActiveContext()), 
+            $overwrite
+        ); 
+    }
+
+    /**
+     * renderPartial 
+     * 
+     * Render a structured partial 
+     *
+     * @param ?string $structure
+     * @param string $view
+     * @param array $data
+     * @param array $overwrite
+     * @return void
+     */
+    public function renderPartial(
+        ?string $structure, 
+        string $view, 
+        array $data = [], 
+        array $overwrite = [] 
+    ): void {
+        echo $this->buildPartialString(
+            $structure, 
+            $view, 
+            $data, 
             $overwrite
         ); 
     }
@@ -134,7 +181,7 @@ final class ViewRenderer
      * @param array $jsArray
      * @return void
      */
-    public function renderFullPath(
+    public function renderPageFullPath(
         string $view, 
         array $data = [], 
         string $pageTitle = '', 
@@ -143,7 +190,7 @@ final class ViewRenderer
     ): void {
         $viewPath = $this->resolveFullPath($view); 
         $viewData = $this->prepareData($data, true, !$this->hasActiveContext()); 
-        $content = $this->renderFile($viewPath, $viewData); 
+        $content = $this->buildFile($viewPath, $viewData); 
 
         $this->renderLayout(
             $content, 
@@ -164,13 +211,13 @@ final class ViewRenderer
      * @param array $data
      * @return string
      */
-    public function renderFullPathString(
+    public function buildViewFullPathString(
         string $view, 
         array $data = [] 
     ): string {
         $path = $this->resolveFullPath($view); 
 
-        return $this->renderFile(
+        return $this->buildFile(
             $path, 
             $this->prepareData($data, false, !$this->hasActiveContext())
         ); 
@@ -212,14 +259,14 @@ final class ViewRenderer
         $data['css_array'] = $cssArray; 
         $data['js_array'] = $jsArray; 
 
-        echo $this->renderFile(
+        echo $this->buildFile(
             $this->resolveFullPath('layout'), 
             $data 
         ); 
     }
 
     /**
-     * renderFile
+     * buildFile
      * 
      * Render a PHP file and return its output. 
      *
@@ -228,7 +275,7 @@ final class ViewRenderer
      * @param array $overwrite
      * @return string
      */
-    private function renderFile(
+    private function buildFile(
         string $filePath, 
         array $data, 
         array $overwrite = []

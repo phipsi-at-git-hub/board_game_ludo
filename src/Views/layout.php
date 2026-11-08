@@ -1,5 +1,6 @@
 <?php
 use App\Core\Asset;
+use App\Core\Renderer\ViewRenderer;
 
 /** 
  * @var String $page_title
@@ -7,6 +8,8 @@ use App\Core\Asset;
  * @var array $js_array 
  * @var String $content 
  * @var String $content_css_class 
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 ?>
 
@@ -28,8 +31,7 @@ use App\Core\Asset;
     <body>
 
         <!-- Navigational Bar -->
-        <?php // ToDo: Use ViewRender->renderPartialString() ?>
-        <?php include VIEWS_PATH . '/partials/navbar.php'; ?>
+        <?php $viewRenderer->renderPartial(null, 'navbar'); ?>
 
         <!-- Main Content -->
         <div class="content-container <?= $content_css_class ?? '' ?>">
@@ -37,8 +39,7 @@ use App\Core\Asset;
         </div>
 
         <!-- Modal Window --> 
-        <?php // ToDo: Use ViewRender->renderPartialString() ?>
-        <?php include VIEWS_PATH . '/partials/modal.php' ?>
+        <?php $viewRenderer->renderPartial(null, 'modal');  ?>
 
         <script src="<?= Asset::js('shared/navigation.js') ?>"></script> 
         <script src="<?= Asset::js('app/shortcuts.js') ?>"></script> 

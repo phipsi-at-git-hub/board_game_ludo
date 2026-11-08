@@ -51,7 +51,7 @@ $is_admin_view ??= false;
                 onclick="window.location='<?= ($is_admin_view) ? '/admin' : '' ?>/game/detail/<?= $game->getId() ?>'">
                 
                 <!-- include game entry -->
-                <?= $viewRenderer->renderPartialString(
+                <?php $viewRenderer->renderPartial(
                     'game', 
                     'entry', 
                     [

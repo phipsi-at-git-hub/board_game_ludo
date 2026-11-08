@@ -41,7 +41,7 @@ $is_admin_view ??= false;
         data-bind-1-type="view">
 
         <!-- include games entries partials -->
-        <?= $viewRenderer->renderPartialString(
+        <?php $viewRenderer->renderPartial(
             'game', 
             'entries', 
             [
