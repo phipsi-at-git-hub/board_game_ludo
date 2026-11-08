@@ -1,9 +1,10 @@
 <?php
 
 use App\Constants\LocalizationConstants;
-use App\Core\Security\Csrf;
 use App\Core\Localization;
 use App\Core\Logging\LogEntry;
+use App\Core\Renderer\ViewRenderer;
+use App\Core\Security\Csrf;
 
 /**
  * @var array $available_channels
@@ -13,6 +14,8 @@ use App\Core\Logging\LogEntry;
  * @var String $date_range 
  * @var LogEntry[] $entries
  * @var array $statistics
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 ?>
@@ -297,8 +300,15 @@ use App\Core\Logging\LogEntry;
             data-bind-1-view-key="entries" 
             data-bind-1-type="view" >
 
-            <?php // ToDo: Use ViewRender->renderPartialString() ?>
-            <?php include VIEWS_PATH . '/admin/logging/partials/entries.php'; ?>
+            <?php 
+            $viewRenderer->renderPartial(
+                'admin/logging', 
+                'entries', 
+                [
+                    'entries' => $entries
+                ]
+            )
+            ?>
 
         </div>
 

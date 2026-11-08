@@ -1,7 +1,7 @@
 <?php
 
 use App\Core\Localization;
-use App\Models\GameModel;
+use App\Models\Game\GameModel;
 
 /**
  * Required:

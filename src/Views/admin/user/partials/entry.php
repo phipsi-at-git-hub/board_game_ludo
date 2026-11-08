@@ -1,9 +1,12 @@
 <?php
 
+use App\Core\Renderer\ViewRenderer;
 use App\Models\User\UserModel;
 
 /**
  * @var UserModel $user
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 ?>
 
@@ -42,7 +45,13 @@ use App\Models\User\UserModel;
 
         </div>
 
-        <?php include VIEWS_PATH . '/admin/user/partials/actions.php'; ?>
+        <!-- include actions entries partials -->
+        <?php 
+        $viewRenderer->renderPartial(
+            'admin/user', 
+            'actions'
+        ); 
+        ?>
 
     </div>
 

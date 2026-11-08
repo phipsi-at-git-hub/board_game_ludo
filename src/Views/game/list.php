@@ -31,8 +31,15 @@ $is_admin_view ??= false;
     </div>
 
     <!-- include filter partials -->
-    <?php // ToDo: Use ViewRender->renderPartialString() ?>
-    <?php include VIEWS_PATH . '/game/partials/collapsible_filter.php' ?>
+    <?php 
+    $viewRenderer->renderPartial(
+        'game', 
+        'collapsible_filter', 
+        [
+            'user' => $user
+        ]
+    ); 
+    ?>
 
     <div
         data-id="games-filter-games"

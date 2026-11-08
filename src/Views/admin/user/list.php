@@ -1,9 +1,12 @@
 <?php
 
 use App\Core\Localization;
+use App\Core\Renderer\ViewRenderer;
 
 /**
  * @var array $users
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 ?>
 
@@ -40,8 +43,12 @@ use App\Core\Localization;
     </div>
 
     <!-- include filter partials -->
-    <?php // ToDo: Use ViewRender->renderPartialString() ?>
-    <?php include VIEWS_PATH . '/admin/user/partials/collapsible_filter.php' ?>
+    <?php 
+    $viewRenderer->renderPartial(
+        'admin/user', 
+        'collapsible_filter'
+    ); 
+    ?>
 
     <div
         data-id="users-filter"
@@ -50,8 +57,12 @@ use App\Core\Localization;
         data-bind-1-type="view">
 
         <!-- include games entries partials -->
-        <?php // ToDo: Use ViewRender->renderPartialString() ?>
-        <?php include VIEWS_PATH . '/admin/user/partials/entries.php' ?>
+        <?php 
+        $viewRenderer->renderPartial(
+            'admin/user', 
+            'entries'
+        ); 
+        ?>
 
     </div>
 

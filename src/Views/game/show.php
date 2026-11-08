@@ -3,11 +3,14 @@
 use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Constants\Game\GameConstants;
 use App\Core\Localization; 
+use App\Core\Renderer\ViewRenderer;
 use App\Policies\GamePolicy;
 
 /**
  * @var Object $game
  * @var Object $current_user 
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 $can_edit_rules = false;

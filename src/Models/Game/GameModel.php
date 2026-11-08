@@ -3084,9 +3084,9 @@ final class GameModel extends BaseModel
      * 
      * Get the value of created_by_user_name
      *
-     * @return void
+     * @return string
      */
-    public function getCreatedByUserName()
+    public function getCreatedByUserName(): string
     {
         return $this->created_by_user_name;
     }
@@ -3155,9 +3155,9 @@ final class GameModel extends BaseModel
      * 
      * Get the value of created_at
      *
-     * @return void
+     * @return string
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): string
     {
         return $this->created_at;
     }
@@ -3167,9 +3167,9 @@ final class GameModel extends BaseModel
      * 
      * Get the value of updated_at
      *
-     * @return void
+     * @return string
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }

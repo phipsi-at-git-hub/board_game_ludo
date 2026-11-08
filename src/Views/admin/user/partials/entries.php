@@ -1,11 +1,14 @@
 <?php
 
 use App\Core\Localization;
+use App\Core\Renderer\ViewRenderer;
 use App\Models\User\UserModel;
 
 /**
  * @var array $users
  * @var UserModel $user
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 ?>
@@ -19,7 +22,16 @@ use App\Models\User\UserModel;
             <div class="card entry-row"
                 onclick="window.location='/admin/user/detail/<?= $user->getId() ?>'">
 
-                <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
+                <!-- include games entries partials --> 
+                <?php 
+                $viewRenderer->renderPartial(
+                    'admin/user', 
+                    'entry', 
+                    [
+                        'user' => $user 
+                    ]
+                ); 
+                ?>
 
             </div>
 

@@ -1,7 +1,8 @@
 <?php
 
-use App\Core\Security\Csrf;
 use App\Core\Localization;
+use App\Core\Renderer\ViewRenderer;
+use App\Core\Security\Csrf;
 use App\Models\User\UserModel;
 
 /**
@@ -12,6 +13,8 @@ use App\Models\User\UserModel;
  * @var DateTimeImmutable $date_start
  * @var DateTimeImmutable $date_end
  * @var String $date_range
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 $is_detail_view = true;
@@ -54,8 +57,15 @@ $is_admin_view = true;
     <!-- User -->
 
     <div class="card entry-detail" >
+        <!-- include entry partials -->
 
-        <?php include VIEWS_PATH . '/admin/user/partials/entry.php'; ?>
+        <?php 
+        $viewRenderer->renderPartial(
+            'admin/user', 
+            'entry', 
+            []
+        )
+        ?>
 
     </div>
 
@@ -280,8 +290,16 @@ $is_admin_view = true;
         <!-- Game Filter -->
 
         <!-- include filter partials -->
-        <?php // ToDo: Use ViewRender->renderPartialString() ?>
-        <?php include VIEWS_PATH . '/game/partials/filter.php' ?>
+        <?php 
+        $viewRenderer->renderPartial(
+            'game', 
+            'filter', 
+            [
+                'is_detail_view' => $is_detail_view, 
+                'is_admin_view' => $is_admin_view
+            ]
+        )
+        ?>
 
         <!-- Games -->
 
@@ -292,8 +310,16 @@ $is_admin_view = true;
             data-bind-1-type="view">
 
             <!-- include games entries partials -->
-            <?php // ToDo: Use ViewRender->renderPartialString() ?>
-            <?php include VIEWS_PATH . '/game/partials/entries.php' ?>
+            <?php 
+            $viewRenderer->renderPartial(
+                'game', 
+                'entries', 
+                [
+                    'is_detail_view' => $is_detail_view, 
+                    'is_admin_view' => $is_admin_view
+                ]
+            )
+            ?>
 
         </div>
 

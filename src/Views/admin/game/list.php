@@ -11,7 +11,6 @@ use App\Core\Renderer\ViewRenderer;
 
 $is_admin_view = true; 
 
-// ToDo: Use ViewRender->renderPartialString()
 $viewRenderer->renderView(
     'game', 
     'list', 
@@ -19,6 +18,5 @@ $viewRenderer->renderView(
         'is_admin_view' => $is_admin_view
     ]
 ); 
-//include VIEWS_PATH . '/game/list.php';
 
 ?>
