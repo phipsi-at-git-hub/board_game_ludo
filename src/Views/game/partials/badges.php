@@ -1,19 +1,29 @@
 <?php
 
+use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Core\Localization;
+use App\Policies\GamePolicy;
 
 /**
  * Required:
  * @var object $game
- * @var object $current_user
- * @var string $status_class
- * @var string $status_text
- * @var string $players_class
- * @var int $player_count
- * @var int $player_max
- * @var string $ruleset_text
- * @var bool $is_owner
- */
+ * @var object $current_user 
+ */ 
+
+$is_owner = GamePolicy::isOwner($game, $current_user);
+
+$player_count = $game->getPlayerCount();
+$player_max = $game->getPlayerMax();
+
+if ($player_count === 0) {
+    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
+} elseif ($player_count === 1) {
+    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_LOW;
+} else {
+    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_READY;
+}
+
+$ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 ?>
 
 <div class="game-row-badges">

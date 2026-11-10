@@ -1,7 +1,7 @@
 <?php
 
-use App\Constants\Dto\GamePlayerDtoConstants;
 use App\Core\Localization;
+use App\Core\Renderer\ViewRenderer;
 use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
@@ -11,12 +11,13 @@ use App\Policies\GamePolicy;
  * @var GameModel $game 
  * @var UserModel $current_user
  * @var string $status_text 
+ * 
+ * @var ViewRenderer $viewRenderer
  */
 
 $is_detail_view ??= false;
 $is_admin_view ??= false; 
 
-$is_owner = GamePolicy::isOwner($game, $current_user);
 $is_admin = $current_user->isAdmin();
 
 $can_edit = GamePolicy::canEdit($game, $current_user);
@@ -25,9 +26,6 @@ $can_delete = GamePolicy::canDelete($game, $current_user);
 
 $can_join = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canJoin($game, $current_user);
 $can_leave = ($is_detail_view || $is_admin_view) ? false : GamePolicy::canLeave($game, $current_user);
-
-$player_count = $game->getPlayerCount();
-$player_max = $game->getPlayerMax();
 
 if ($game->isWaiting()) {
     $status_class = 'status-waiting';
@@ -42,16 +40,6 @@ if ($game->isWaiting()) {
     $status_class = 'status-cancelled';
     $status_text = Localization::get('game.status.cancelled');
 }
-
-if ($player_count === 0) {
-    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_EMPTY;
-} elseif ($player_count === 1) {
-    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_LOW;
-} else {
-    $players_class = 'player-count-category-' . GamePlayerDtoConstants::PLAYER_COUNT_READY;
-}
-
-$ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 
 ?>
 
@@ -85,10 +73,18 @@ $ruleset_text = Localization::get('game.ruleset.' . $game->getRuleSetModel()->ge
 
 <div class="game-row-footer">
     
-    <?php // ToDo: Use ViewRender->renderPartialString() ?>
-    <?php include VIEWS_PATH . '/game/partials/badges.php'; ?>
+    <?php 
+    $viewRenderer->renderPartial(
+        'game', 
+        'badges'
+    ); 
+    ?>
 
-    <?php // ToDo: Use ViewRender->renderPartialString() ?>
-    <?php include VIEWS_PATH . '/game/partials/actions.php'; ?>
+    <?php 
+    $viewRenderer->renderPartial(
+        'game', 
+        'actions'
+    ); 
+    ?>
 
 </div>
