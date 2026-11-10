@@ -17,31 +17,20 @@ $can_edit_rules = false;
 $can_edit_options = false;
 
 $is_admin_view ??= false; 
+
 $show_metadata ??= false; 
 $show_history ??= false; 
 $show_start_pause = true; 
-
 $show_players_card = true; 
 
 $is_owner = GamePolicy::isOwner($game, $current_user);
 $is_admin = $current_user->isAdmin();
-$can_create_test = GamePolicy::canCreateTestGame($game, $current_user); 
-
-$can_start = GamePolicy::canStart($game, $current_user); 
-$can_play = GamePolicy::canPlay($game, $current_user); 
-$can_pause = GamePolicy::canPause($game, $current_user);    // ToDo: Remove, since pausing a game is obsolete
-
-$can_edit = GamePolicy::canEdit($game, $current_user);
-$can_reset = GamePolicy::canReset($game, $current_user); 
-$can_cancel = GamePolicy::canCancel($game, $current_user); 
-$can_delete = GamePolicy::canDelete($game, $current_user);
-
-$can_join = GamePolicy::canJoin($game, $current_user);
-$can_leave = GamePolicy::canLeave($game, $current_user);
 
 $player_count = $game->getPlayerCount();
 $player_max = $game->getPlayerMax();
 
+$status_class = ''; 
+$status_text = ''; 
 if ($game->isWaiting()) {
     $status_class = 'status-waiting';
     $status_text = Localization::get('game.status.waiting');
@@ -95,23 +84,40 @@ $api_delete = false;
         data-id="<?= $game->getId() ?>">
 
         <!-- include game entry -->
-        <?php // ToDo: Use ViewRender->renderPartialString() ?>
-        <?php include __DIR__ . '/partials/entry.php'; ?>
+        <?php 
+        $viewRenderer->renderPartial(
+            'game', 
+            'entry', 
+            [
+                'is_admin_view' => $is_admin_view, 
+                'show_start_pause' => $show_start_pause, 
+                'show_players_card' => $show_players_card
+            ]
+        ) 
+        ?>
 
     </div>
 
     <!-- Admin Partials -->
     <?php 
     if ($is_admin_view && $show_metadata) { 
-        // ToDo: Use ViewRender->renderPartialString() 
-        include VIEWS_PATH . '/admin/game/partials/metadata.php';   
+        $viewRenderer->renderPartial(
+            'admin/game', 
+            'metadata', 
+            [
+                'status_class' => $status_class, 
+                'status_text' => $status_text 
+            ]
+        ); 
     } 
     ?>
 
     <?php 
     if ($is_admin_view && $show_history) { 
-        // ToDo: Use ViewRender->renderPartialString() 
-        include VIEWS_PATH . '/admin/game/partials/history.php';   
+        $viewRenderer->renderPartial(
+            'admin/game', 
+            'history'
+        ); 
     } 
     ?>
 
@@ -129,8 +135,12 @@ $api_delete = false;
             data-bind-1-view-key="players" 
             data-bind-1-type="view" >
         
-            <?php // ToDo: Use ViewRender->renderPartialString() ?>
-            <?php include VIEWS_PATH . '/game/partials/players.php' ?>
+            <?php 
+            $viewRenderer->renderPartial(
+                'game', 
+                'players' 
+            ); 
+            ?>
 
         </div>
 

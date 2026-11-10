@@ -5,8 +5,9 @@ use App\Models\Game\GameModel;
 
 /**
  * Required:
- * @var GameModel $game
- * @var string $status_text
+ * @var GameModel $game 
+ * @var string $status_class 
+ * @var string $status_text 
  */
 
 ?>

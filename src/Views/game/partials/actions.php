@@ -1,42 +1,30 @@
 <?php
 
-use App\Core\Security\Csrf;
 use App\Core\Localization;
+use App\Core\Security\Csrf;
+use App\Policies\GamePolicy;
 
 /**
  * Required:
  * @var object $game
  * @var object $current_user
  *
- * Optional:
- * @var bool $can_join
- * @var bool $can_leave
- * @var bool $can_edit
- * @var bool $can_delete
- * @var bool $can_start
- * @var bool $can_pause // ToDo: Remove, since pausing a game is obsolete
- * @var bool $can_play
- * @var bool $can_reset
- * @var bool $can_cancel
- * @var bool $can_create_test
  */
 
-$can_join ??= false;
-$can_leave ??= false;
+$can_join = GamePolicy::canJoin($game, $current_user);
+$can_leave = GamePolicy::canLeave($game, $current_user);
 
-$can_edit ??= false;
-$can_delete ??= false;
+$can_edit = GamePolicy::canEdit($game, $current_user);
+$can_delete = GamePolicy::canDelete($game, $current_user);
 
-$can_start ??= false;
-$can_pause ??= false;   // ToDo: Remove, since pausing a game is obsolete
-$can_play ??= false;
+$can_start = GamePolicy::canStart($game, $current_user); 
+$can_play = GamePolicy::canPlay($game, $current_user); 
 
-$can_reset ??= false;
-$can_cancel ??= false;
-$can_create_test ??= false;
+$can_reset = GamePolicy::canReset($game, $current_user); 
+$can_cancel = GamePolicy::canCancel($game, $current_user); 
+$can_create_test = GamePolicy::canCreateTestGame($game, $current_user); 
 
 $show_start_pause ??= false; 
-
 $show_players_card ??= false; 
 $api_delete ??= true; 
 ?>
@@ -164,38 +152,6 @@ $api_delete ??= true;
         </form>
 
     <?php endif; ?>
-
-    <!-- PAUSE -->
-
-    <!--
-    <?php if ($show_start_pause && $can_pause): ?>
-
-        <form
-            method="POST"
-            action="/game/pause">
-
-            <input
-                type="hidden"
-                name="_csrf_token"
-                value="<?= Csrf::generate() ?>">
-
-            <input
-                type="hidden"
-                name="game_id"
-                value="<?= $game->getId() ?>">
-
-            <button
-                type="submit"
-                class="btn btn-secondary">
-
-                <?= Localization::get('application.general.btn.pause') ?>
-
-            </button>
-
-        </form>
-
-    <?php endif; ?>
-    -->
 
     <!-- SOLO TEST -->
 
