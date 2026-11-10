@@ -173,7 +173,7 @@ $timestamp = strtotime($entry->getTimestamp());
 
         <?php if (!empty($entry->getContext())): ?>
 
-            <div class="nested-card">
+            <div class="nested-card entry-raw">
 
                 <h3>
                     <?= Localization::get('admin.logging.show.card.meta.nested.context.title') ?>
