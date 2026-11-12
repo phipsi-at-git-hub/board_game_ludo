@@ -8,73 +8,143 @@ use App\Models\Game\GameModel;
 use App\Models\User\UserModel;
 use App\Policies\GamePolicy;
 
-final class GameContext
+/**
+ * GameContext
+ */
+final readonly class GameContext
 {
-    private static function create(): array
+    public ?string $game_id; 
+    public ?string $game_name; 
+
+    public ?string $status; 
+    public ?string $ruleset; 
+
+    public int $player_count; 
+    public string $player_count_label; 
+    public string $player_count_category; 
+    public int $player_max; 
+
+    public bool $is_private; 
+    public string $is_private_label; 
+
+    public bool $is_locked; 
+    public string $is_locked_label; 
+
+    public bool $is_joined; 
+
+    public bool $is_owner; 
+    public string $is_owner_label; 
+
+    public bool $is_admin; 
+
+    public array $permissions; 
+
+    /**
+     * __construct
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return void
+     */
+    public function __construct(
+        GameModel $game, 
+        UserModel $user, 
+    )
     {
-        return [
-            'game_id' => null,
-            'game_name' => null,
+        $this->game_id = $game->getId(); 
+        $this->game_name = $game->getName(); 
 
-            'status' => null,
-            'ruleset' => null,
+        $this->status = $game->getStatus(); 
+        $this->ruleset = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset()); 
 
-            'player_count' => 0,
-            'player_max' => 0,
+        $this->player_count = $game->getPlayerCount(); 
+        $this->player_count_label = $game->getPlayerCount() . '/' . $game->getPlayerMax(); 
+        $this->player_count_category = 'player-count-category-' . $game->getPlayerCountCategory(); 
+        $this->player_max = $game->getPlayerMax(); 
 
-            'is_private' => false,
-            'is_locked' => false,
+        $this->is_private = $game->isPrivate(); 
+        $this->is_private_label = strtoupper(
+            $game->isPrivate() 
+                ? Localization::get('application.general.label.private') 
+                : Localization::get('application.general.label.public')
+        );
 
-            'is_joined' => false,
-            'is_owner' => false,
-            'is_admin' => false,
+        $this->is_locked = $game->isLocked(); 
+        $this->is_locked_label = strtoupper(
+            $game->isLocked() 
+                ? Localization::get('application.general.label.locked') 
+                : Localization::get('application.general.label.open')
+        ); 
 
-            'permissions' => [],
-        ];
+        $this->is_joined = $game->hasPlayer($user->getId()); 
+
+        $this->is_owner = $game->getCreatedByUserId() === $user->getId(); 
+        $this->is_owner_label = $this->is_owner 
+            ? strtoupper(Localization::get('application.general.label.owner')) 
+            : ''; 
+
+        $this->is_admin = $user->isAdmin(); 
+
+        $this->permissions = [
+            'join' => GamePolicy::canJoin($game, $user), 
+            'leave' => GamePolicy::canLeave($game, $user), 
+
+            'edit' => GamePolicy::canEdit($game, $user), 
+            'delete' => GamePolicy::canDelete($game, $user), 
+
+            'start' => GamePolicy::canStart($game, $user), 
+            'pause' => GamePolicy::canPause($game, $user), 
+
+            'reset' => GamePolicy::canReset($game, $user), 
+            'cancel' => GamePolicy::canCancel($game, $user), 
+        ]; 
     }
 
-    public static function fromGame(GameModel $game, UserModel $user): array
+    public static function fromGame(
+        GameModel $game, 
+        UserModel $user, 
+    ): array {
+        $context = new self(
+            game: $game, 
+            user: $user, 
+        ); 
+
+        return $context->jsonSerialize(); 
+    } 
+
+    /**
+     * jsonSerialize
+     *
+     * @return array
+     */
+    public function jsonSerialize(): array 
     {
-        $dto = self::create();
+        return [
+            'game_id' => $this->game_id, 
+            'game_name' => $this->game_name, 
 
-        $dto['game_id'] = $game->getId();
-        $dto['game_name'] = $game->getName();
+            'status' =>$this->status, 
+            'ruleset' => $this->ruleset, 
 
-        $dto['status'] = $game->getStatus();
+            'player_count' => $this->player_count, 
+            'player_count_label' => $this->player_count_label, 
+            'player_count_category' => $this->player_count_category, 
+            'player_max' => $this->player_max, 
 
-        $dto['ruleset'] = Localization::get('game.ruleset.' . $game->getRuleSetModel()->getPreset());
+            'is_private' => $this->is_private, 
+            'is_private_label' => $this->is_private_label, 
 
-        $dto['player_count'] = $game->getPlayerCount();
-        $dto['player_count_label'] = $game->getPlayerCount() . '/' . $game->getPlayerMax();
-        $dto['player_count_category'] = 'player-count-category-' . $game->getPlayerCountCategory();     // player-count-category is css class prefix
-        $dto['player_max'] = $game->getPlayerMax();
+            'is_locked' => $this->is_locked, 
+            'is_locked_label' => $this->is_locked_label, 
 
-        $dto['is_private'] = $game->isPrivate();
-        $dto['is_private_label'] = strtoupper($game->isPrivate() ? Localization::get('application.general.label.private') : Localization::get('application.general.label.public')); // $game->isPrivate();
+            'is_joined' => $this->is_joined, 
 
-        $dto['is_locked'] = $game->isLocked();
-        $dto['is_locked_label'] = strtoupper($game->isLocked() ? Localization::get('application.general.label.locked') : Localization::get('application.general.label.open')); // $game->isLocked();
+            'is_owner' => $this->is_owner, 
+            'is_owner_label' => $this->is_owner_label, 
 
-        $dto['is_joined'] = $game->hasPlayer($user->getId());
+            'is_admin' => $this->is_admin, 
 
-        $dto['is_owner'] = $game->getCreatedByUserId() === $user->getId();
-        $dto['is_owner_label'] = ($game->getCreatedByUserId() === $user->getId()) ? strtoupper(Localization::get('application.general.label.owner')) : ''; // $game->getCreatedByUserId() === $user->getId()
-
-        $dto['is_admin'] = $user->isAdmin();
-
-        $dto['permissions'] = [
-            'join' => GamePolicy::canJoin($game, $user),
-            'leave' => GamePolicy::canLeave($game, $user),
-
-            'edit' => GamePolicy::canEdit($game, $user),
-            'delete' => GamePolicy::canDelete($game, $user),
-
-            'start' => GamePolicy::canStart($game, $user),
-            'pause' => GamePolicy::canPause($game, $user),  // ToDo: Remove, since pausing a game is obsolete
-
-            'reset' => GamePolicy::canReset($game, $user),
-            'cancel' => GamePolicy::canCancel($game, $user),
-        ];
-        return $dto;
+            'permissions' => $this->permissions, 
+        ]; 
     }
 }
