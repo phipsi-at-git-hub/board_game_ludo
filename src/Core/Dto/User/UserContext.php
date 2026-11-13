@@ -7,43 +7,80 @@ use App\Constants\Dto\UserDtoConstants;
 use App\Core\Localization;
 use App\Models\User\UserModel;
 
-final class UserContext
+/**
+ * UserContext
+ */
+final readonly class UserContext
 {
-    private static function create(): array
+    public string $user_id; 
+    public string $username; 
+    public string $email; 
+
+    public string $preferred_language; 
+    public string $preferred_language_label; 
+
+    public string $preferred_camera_mode; 
+    public string $preferred_camera_mode_label; 
+
+    public string $role; 
+    public string $status; 
+
+    /**
+     * __construct
+     *
+     * @param UserModel $user
+     * @return void
+     */
+    public function __construct(UserModel $user)
     {
-        return [
-            UserDtoConstants::USER_ID => null,
-            UserDtoConstants::USERNAME => null,
-            UserDtoConstants::EMAIL => null,
+        $this->user_id = $user->getId(); 
+        $this->username = $user->getUsername(); 
+        $this->email = $user->getEmail(); 
 
-            UserDtoConstants::PREFERRED_LANGUAGE => null,
-            UserDtoConstants::PREFERRED_CAMERA_MODE => null,
+        $this->preferred_language = $user->getPreferredLanguage(); 
+        $this->preferred_language_label = strtoupper(Localization::get('application.languages.' . $user->getPreferredLanguage())); 
 
-            UserDtoConstants::PREFERRED_LANGUAGE_LABEL => null,
-            UserDtoConstants::PREFERRED_CAMERA_MODE_LABEL => null,
+        $this->preferred_camera_mode = $user->getPreferredCameraMode(); 
+        $this->preferred_camera_mode_label = strtoupper(Localization::get('application.camera_mode.' . $user->getPreferredCameraMode())); 
 
-            UserDtoConstants::ROLE => null,
-            UserDtoConstants::STATUS => null,
-        ];
+        $this->role = $user->getRole(); 
+        $this->status = $user->getStatus(); 
     }
 
+    /**
+     * fromUser
+     * 
+     * Returns an array for compatibility reasons. 
+     *
+     * @param UserModel $user
+     * @return array
+     */
     public static function fromUser(UserModel $user): array
     {
-        $dto = self::create();
+        $context = new self(user: $user); 
 
-        $dto[UserDtoConstants::USER_ID] = $user->getId();
-        $dto[UserDtoConstants::USERNAME] = $user->getUsername();
-        $dto[UserDtoConstants::EMAIL] = $user->getEmail();
+        return $context->jsonSerialize(); 
+    }
 
-        $dto[UserDtoConstants::PREFERRED_LANGUAGE] = $user->getPreferredLanguage();
-        $dto[UserDtoConstants::PREFERRED_CAMERA_MODE] = $user->getPreferredCameraMode();
+    /**
+     * jsonSerialize
+     *
+     * @return array
+     */
+    public function jsonSerialize(): array {
+        return [
+            UserDtoConstants::USER_ID => $this->user_id, 
+            UserDtoConstants::USERNAME => $this->username, 
+            UserDtoConstants::EMAIL => $this->email, 
 
-        $dto[UserDtoConstants::PREFERRED_LANGUAGE_LABEL] = strtoupper(Localization::get('application.languages.' . $user->getPreferredLanguage()));
-        $dto[UserDtoConstants::PREFERRED_CAMERA_MODE_LABEL] = strtoupper(Localization::get('application.camera_mode.' . $user->getPreferredCameraMode()));
+            UserDtoConstants::PREFERRED_LANGUAGE => $this->preferred_language, 
+            UserDtoConstants::PREFERRED_LANGUAGE_LABEL => $this->preferred_language_label, 
 
-        $dto[UserDtoConstants::ROLE] = $user->getRole();
-        $dto[UserDtoConstants::STATUS] = $user->getStatus();
+            UserDtoConstants::PREFERRED_CAMERA_MODE => $this->preferred_camera_mode, 
+            UserDtoConstants::PREFERRED_CAMERA_MODE_LABEL => $this->preferred_camera_mode_label, 
 
-        return $dto;
+            UserDtoConstants::ROLE => $this->role, 
+            UserDtoConstants::STATUS => $this->status, 
+        ]; 
     }
 }
