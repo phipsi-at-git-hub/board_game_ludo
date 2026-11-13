@@ -52,7 +52,9 @@ final readonly class GameFilterContext
     }
 
     /**
-     * fromFilter
+     * fromFilter 
+     * 
+     * Returns an array for compatibility reasons. 
      *
      * @param array $statuses
      * @param array $user_relations

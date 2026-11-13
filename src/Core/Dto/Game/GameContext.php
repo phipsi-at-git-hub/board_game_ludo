@@ -100,6 +100,15 @@ final readonly class GameContext
         ]; 
     }
 
+    /**
+     * fromGame
+     * 
+     * Returns an array for compatibility reasons. 
+     *
+     * @param GameModel $game
+     * @param UserModel $user
+     * @return array
+     */
     public static function fromGame(
         GameModel $game, 
         UserModel $user, 
